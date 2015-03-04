@@ -3,8 +3,9 @@ var gulp    = require('gulp'),
     concat  = require('gulp-concat'),
     listing = require('gulp-task-listing'),
     uglify  = require('gulp-uglify'),
-    ngHtml2Js = require("gulp-ng-html2js");
-    fs      = require('fs');
+    ngHtml2Js = require("gulp-ng-html2js"),
+    watch     = require('gulp-watch'),
+    fs        = require('fs');
 
 var plugins = fs.readdirSync('plugins');
 var core = function(bridge) {
@@ -56,6 +57,11 @@ plugins.map(function(plugin) {
   });
   gulp.task(plugin + '-android', ['core', plugin + '-partials'], function() {
     build('android', plugin);
+  });
+  gulp.task(plugin + '-watch', function () {
+      watch('./plugins/' + plugin + '/**/*', function () {
+          gulp.start(plugin + '-dev');
+      });
   });
 })
 
