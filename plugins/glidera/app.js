@@ -7,6 +7,12 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
 
   $stateProvider
     // route for signup
+    .state("home", {
+      url: "/",
+      templateUrl: "/partials/index.html",
+      controller: "mainCtrl",
+    })
+    // route for signup
     .state("signup", {
       url: "/signup/",
       templateUrl: "/partials/signup.html",

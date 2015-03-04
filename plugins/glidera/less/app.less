@@ -37,6 +37,13 @@ body {
 
   .container {
     padding-bottom: 50px;
+
+    &.phone-size {
+      width: 384px;
+      height: 640px;
+      overflow: scroll;
+      outline: 1px solid @ab-blue-light;
+    }
   }
 
   .help-block {
@@ -107,8 +114,8 @@ body {
 
   // exchange functions
   .buy-sell {
-    margin-top: 40px;
-    margin-bottom: 60px;
+    margin-top: 20px;
+    margin-bottom: 40px;
   }
 
   .exchange-balances {
@@ -177,16 +184,6 @@ body {
 
 
 
-footer {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  margin: 0 auto;
-  padding: 10px 25px;
-  background: @ab-blue-gray;
-}
-
-
 
 
 
@@ -196,34 +193,29 @@ footer {
   position: relative;
   left: 0;
   right: 0;
-  -webkit-transition:all .25s ease-in;
-    -moz-transition:all .25s ease-in;
-    -o-transition:all .25s ease-in;
-    transition:all .25s ease-in;
+    -webkit-transition: 400ms cubic-bezier(0.250, 0.100, 0.250, 1.000) all;
+    -moz-transition: 400ms cubic-bezier(0.250, 0.100, 0.250, 1.000) all;
+    -ms-transition: 400ms cubic-bezier(0.250, 0.100, 0.250, 1.000) all;
+    -o-transition: 400ms cubic-bezier(0.250, 0.100, 0.250, 1.000) all;
+    transition: 400ms cubic-bezier(0.250, 0.100, 0.250, 1.000) all;
 }
 
 [ui-view].ng-enter {
-  opacity: 0;
-  -webkit-transform:scale3d(0.5, 0.5, 0.5);
-  -moz-transform:scale3d(0.5, 0.5, 0.5);
-  transform:scale3d(0.5, 0.5, 0.5);
+  left: 100%;
 }
 
 [ui-view].ng-enter-active {
-  opacity: 1;
-  -webkit-transform:scale3d(1, 1, 1);
-  -moz-transform:scale3d(1, 1, 1);
-  transform:scale3d(1, 1, 1);
+  left: 0;
 }
 
 [ui-view].ng-leave {
-  opacity: 1;
-  -webkit-transform:translate3d(0, 0, 0);
-  -moz-transform:translate3d(0, 0, 0);
-  transform:translate3d(0, 0, 0);
+  left: 0;
 }
 
 [ui-view].ng-leave-active {
-  opacity: 0;
+  left: -100%;
 }
+
+
+
 
