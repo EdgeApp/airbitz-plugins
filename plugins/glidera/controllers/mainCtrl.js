@@ -6,6 +6,8 @@ app.controller('mainCtrl', [
 '$stateParams',
 function ($scope, $state, $stateParams) {
 
+  Airbitz.ui.title('Glidera');
+
   // default exchange data
   $scope.exchange = {
     'name': 'Glidera',
