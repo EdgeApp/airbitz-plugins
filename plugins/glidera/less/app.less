@@ -1,0 +1,229 @@
+@ab-blue: #2291cf;
+@ab-blue-gray: #446275;
+@ab-blue-dark: #0f5791;
+@ab-blue-light: #64a6cb;
+
+@ab-green: #80c342;
+@ab-green-gray: #7e9867;
+@ab-green-light: #7e9867;
+@ab-green-dark: #437e0d;
+
+@ab-gray: #999;
+@ab-gray-dark: #333;
+@ab-gray-light: #ccc;
+
+
+
+body {
+  margin: 20px 0 40px;
+  color: white;
+  background: @ab-blue-dark;
+  font-family: Lato;
+
+
+  h1,h2,h3,h4,h5,h6 {
+    color: white;
+  }
+
+  hr {
+    margin: 20px 0;
+    border-color: @ab-blue-light;
+
+    &.page {
+      margin: 80px 0;
+      border-color: white;
+    }
+  }
+
+  .container {
+    padding-bottom: 50px;
+  }
+
+  .help-block {
+    color: @ab-gray;
+  }
+
+  .well {
+    background: none;
+    border-color: @ab-blue-light
+  }
+
+  .list-group {
+
+    .list-group-item,
+    a.list-group-item {
+      color: white;
+      background: @ab-blue-dark;
+      font-size: 20px;
+      border-color: @ab-blue-light;
+
+      &.header {
+        background: @ab-blue-light;
+      }
+
+      &:hover, &:active, &:focus {
+        background: @ab-blue-light;
+      }
+
+      &:hover, &:active, &:focus, &:visited {
+        text-decoration: none;
+      }
+
+    }
+  }
+
+  .label {
+
+    &.label-outline {
+      border: 1px solid white;
+    }
+  }
+
+  // exchange options list
+  .exchange-options {
+    margin: 40px 0;
+
+    .list-group-item i {
+      width: 24px;
+      margin-right: 10px;
+    }
+  }
+
+
+  // exchange signup
+  .exchange-sign-up {
+
+    h2 {
+      margin-bottom: 20px;
+    }
+  }
+
+
+  // exchange
+  .exchange-email-edit {
+    margin: 60px 0;
+  }
+
+
+  // exchange functions
+  .buy-sell {
+    margin-top: 40px;
+    margin-bottom: 60px;
+  }
+
+  .exchange-balances {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+
+  .exchange-payment-options {
+    margin-top: 20px;
+    margin-bottom: 20px;
+
+    .list-group-item i {
+      width: 24px;
+      margin-right: 10px;
+    }
+  }
+
+  .exchange-payment-list {
+    margin-top: 20px;
+    margin-bottom: 20px;
+
+    .list-group-item i {
+      width: 24px;
+      margin-right: 10px;
+    }
+
+    .ending {
+      color: @ab-blue-light;
+      font-weight: 300;
+    }
+  }
+
+
+  // exchange add bank account
+
+
+
+
+  // exchange add credit card
+
+
+
+  // exchange buy sell interface
+  .exchange-buy-sell-interface {
+
+    input[type=text] {
+      padding: 24px 12px;
+      font-size: 150%;
+    }
+
+    .fiat-value {
+      padding: 3px 12px;
+      font-size: 150%;
+      color: @ab-blue-light;
+    }
+
+    .buy-sell-next {
+    }
+  }
+
+
+}
+
+
+
+
+
+
+footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  margin: 0 auto;
+  padding: 10px 25px;
+  background: @ab-blue-gray;
+}
+
+
+
+
+
+
+
+[ui-view].ng-enter, [ui-view].ng-leave {
+  position: relative;
+  left: 0;
+  right: 0;
+  -webkit-transition:all .25s ease-in;
+    -moz-transition:all .25s ease-in;
+    -o-transition:all .25s ease-in;
+    transition:all .25s ease-in;
+}
+
+[ui-view].ng-enter {
+  opacity: 0;
+  -webkit-transform:scale3d(0.5, 0.5, 0.5);
+  -moz-transform:scale3d(0.5, 0.5, 0.5);
+  transform:scale3d(0.5, 0.5, 0.5);
+}
+
+[ui-view].ng-enter-active {
+  opacity: 1;
+  -webkit-transform:scale3d(1, 1, 1);
+  -moz-transform:scale3d(1, 1, 1);
+  transform:scale3d(1, 1, 1);
+}
+
+[ui-view].ng-leave {
+  opacity: 1;
+  -webkit-transform:translate3d(0, 0, 0);
+  -moz-transform:translate3d(0, 0, 0);
+  transform:translate3d(0, 0, 0);
+}
+
+[ui-view].ng-leave-active {
+  opacity: 0;
+}
+

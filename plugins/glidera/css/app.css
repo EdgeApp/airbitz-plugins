@@ -1,0 +1,153 @@
+body {
+  margin: 20px 0 40px;
+  color: white;
+  background: #0f5791;
+  font-family: Lato;
+}
+body h1,
+body h2,
+body h3,
+body h4,
+body h5,
+body h6 {
+  color: white;
+}
+body hr {
+  margin: 20px 0;
+  border-color: #64a6cb;
+}
+body hr.page {
+  margin: 80px 0;
+  border-color: white;
+}
+body .container {
+  padding-bottom: 50px;
+}
+body .help-block {
+  color: #999999;
+}
+body .well {
+  background: none;
+  border-color: #64a6cb;
+}
+body .list-group .list-group-item,
+body .list-group a.list-group-item {
+  color: white;
+  background: #0f5791;
+  font-size: 20px;
+  border-color: #64a6cb;
+}
+body .list-group .list-group-item.header,
+body .list-group a.list-group-item.header {
+  background: #64a6cb;
+}
+body .list-group .list-group-item:hover,
+body .list-group a.list-group-item:hover,
+body .list-group .list-group-item:active,
+body .list-group a.list-group-item:active,
+body .list-group .list-group-item:focus,
+body .list-group a.list-group-item:focus {
+  background: #64a6cb;
+}
+body .list-group .list-group-item:hover,
+body .list-group a.list-group-item:hover,
+body .list-group .list-group-item:active,
+body .list-group a.list-group-item:active,
+body .list-group .list-group-item:focus,
+body .list-group a.list-group-item:focus,
+body .list-group .list-group-item:visited,
+body .list-group a.list-group-item:visited {
+  text-decoration: none;
+}
+body .label.label-outline {
+  border: 1px solid white;
+}
+body .exchange-options {
+  margin: 40px 0;
+}
+body .exchange-options .list-group-item i {
+  width: 24px;
+  margin-right: 10px;
+}
+body .exchange-sign-up h2 {
+  margin-bottom: 20px;
+}
+body .exchange-email-edit {
+  margin: 60px 0;
+}
+body .buy-sell {
+  margin-top: 40px;
+  margin-bottom: 60px;
+}
+body .exchange-balances {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+body .exchange-payment-options {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+body .exchange-payment-options .list-group-item i {
+  width: 24px;
+  margin-right: 10px;
+}
+body .exchange-payment-list {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+body .exchange-payment-list .list-group-item i {
+  width: 24px;
+  margin-right: 10px;
+}
+body .exchange-payment-list .ending {
+  color: #64a6cb;
+  font-weight: 300;
+}
+body .exchange-buy-sell-interface input[type=text] {
+  padding: 24px 12px;
+  font-size: 150%;
+}
+body .exchange-buy-sell-interface .fiat-value {
+  padding: 3px 12px;
+  font-size: 150%;
+  color: #64a6cb;
+}
+footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  margin: 0 auto;
+  padding: 10px 25px;
+  background: #446275;
+}
+[ui-view].ng-enter,
+[ui-view].ng-leave {
+  position: relative;
+  left: 0;
+  right: 0;
+  -webkit-transition: all 0.25s ease-in;
+  -moz-transition: all 0.25s ease-in;
+  -o-transition: all 0.25s ease-in;
+  transition: all 0.25s ease-in;
+}
+[ui-view].ng-enter {
+  opacity: 0;
+  -webkit-transform: scale3d(0.5, 0.5, 0.5);
+  -moz-transform: scale3d(0.5, 0.5, 0.5);
+  transform: scale3d(0.5, 0.5, 0.5);
+}
+[ui-view].ng-enter-active {
+  opacity: 1;
+  -webkit-transform: scale3d(1, 1, 1);
+  -moz-transform: scale3d(1, 1, 1);
+  transform: scale3d(1, 1, 1);
+}
+[ui-view].ng-leave {
+  opacity: 1;
+  -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+}
+[ui-view].ng-leave-active {
+  opacity: 0;
+}
