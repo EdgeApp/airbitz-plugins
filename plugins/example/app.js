@@ -15,21 +15,32 @@ window.onload = function() {
     var title = 'Example App';
     Airbitz.ui.title(title);
     Airbitz.ui.title('Loading wallets...');
-    Airbitz.core.wallets({success: function(data) {
-      $.each(data, function(index, wallet) {
-          $td1 = $('<td />').append(wallet.name);
-          $td2 = $('<td />').append(Airbitz.core.formatSatoshi(wallet.balance, true));
-          $td3 = $('<td />').append(fiat(wallet.balance, wallet.currencyNum));
-          $d = $('<tr/>').append($td1).append($td2).append($td3);
-          $d.click(function() {
-              selected = wallet;
-              $('#request').html('Receive Request for ' + wallet.name);
-              $('#requestPanel').show()
-          });
-          $('#wallets tbody').append($d);
-          Airbitz.ui.title(title);
-      });
-    }});
+    var reloadWallets = function () {
+      Airbitz.core.wallets({success: function(data) {
+        $table = $('#wallets tbody');
+        $table.empty();
+        $.each(data, function(index, wallet) {
+            $td1 = $('<td />').append(wallet.name);
+            $td2 = $('<td />').append(Airbitz.core.formatSatoshi(wallet.balance, true));
+            $td3 = $('<td />').append(fiat(wallet.balance, wallet.currencyNum));
+            $d = $('<tr/>').append($td1).append($td2).append($td3);
+            $d.click(function() {
+                selected = wallet;
+                $('#request').html('Receive Request for ' + wallet.name);
+                $('#requestPanel').show()
+            });
+            $table.append($d);
+            Airbitz.ui.title(title);
+
+            // Update exchange rate
+            $('#exchange-rates .panel-body').html(fiat(100000000, wallet.currencyNum));
+        });
+      }});
+    };
+    Airbitz.core.addExchangeRateListener(840, function() {
+      reloadWallets();
+    });
+    reloadWallets();
     $('#requestPanel').hide()
     $('#request').click(function() {
         Airbitz.ui.title('Loading receive request...');
