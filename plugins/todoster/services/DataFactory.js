@@ -4,7 +4,7 @@ var app = angular.module('todoicus');
 var DataFactory = function() {
   // simple service to share between two controllers
   var factory = {};
-  var storage_array = [];
+  var storage_array = Airbitz.readData('todoster');
   var idCounter = 0;
 
   factory.addData = function(data) {
@@ -13,6 +13,8 @@ var DataFactory = function() {
     
     storage_array.push(data)
     idCounter++;
+
+    Airbitz.readData('todoster', storage_array);
   };
 
   factory.getStorageArray = function() {
@@ -29,10 +31,14 @@ var DataFactory = function() {
       }
     }
     storage_array.splice(index, 1);
+
+    Airbitz.readData('todoster', storage_array);
   };
   
   factory.clearData = function() {
     storage_array.splice(0, storage_array.length);
+
+    Airbitz.readData('todoster', storage_array);
   };
 
 

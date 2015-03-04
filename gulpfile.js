@@ -3,6 +3,7 @@ var gulp    = require('gulp'),
     concat  = require('gulp-concat'),
     copy    = require('gulp-copy'),
     listing = require('gulp-task-listing'),
+    uglify  = require('gulp-uglify'),
     fs      = require('fs');
 
 var plugins = fs.readdirSync('plugins');
@@ -33,8 +34,14 @@ gulp.task('core', function() {
 plugins.map(function(plugin) {
   var build = function(platform, plugin) {
     gulp.src('./plugins/' + plugin + '/index.html')
-    .pipe(inline({ base: './plugins/' + plugin }))
-    .pipe(inline({ base: './build/intermediates' }))
+    .pipe(inline({
+      base: './plugins/' + plugin,
+      js: uglify({compress:false, preserveComments:false})
+    }))
+    .pipe(inline({
+      base: './build/intermediates',
+      js: uglify({compress:false, preserveComments:false})
+    }))
     .pipe(gulp.dest('build/' + platform + '/' + plugin));
   };
   gulp.task(plugin + '-dev', ['coredev'], function() {
