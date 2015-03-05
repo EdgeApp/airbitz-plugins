@@ -72,6 +72,7 @@ function ($scope, $state, $stateParams) {
 
   // --- verify phone number
   $scope.verifyPhone = function(){
+    Airbitz.ui.title('Glidera: Verify Phone');
     $state.go('verifyPhone');
   };
 

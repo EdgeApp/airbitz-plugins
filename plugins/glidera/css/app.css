@@ -2,7 +2,7 @@ body {
   margin: 20px 0 40px;
   color: white;
   background: #0f5791;
-  font-family: Lato;
+  font-family: Lato, sans-serif;
 }
 body h1,
 body h2,
