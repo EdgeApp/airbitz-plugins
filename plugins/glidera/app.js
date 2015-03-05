@@ -1,5 +1,9 @@
 
-var app = angular.module('exchangeGlidera', ['ui.router', 'ngAnimate']);
+var app = angular.module('exchangeGlidera', [
+  // 3rd party custom
+  'ui.router',
+  // 'ngAnimate',
+  ]);
 
 app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
 
