@@ -21,13 +21,16 @@ body hr.page {
   border-color: white;
 }
 body .container {
-  padding-bottom: 50px;
+  padding-bottom: 20px;
 }
 body .container.phone-size {
   width: 384px;
   height: 640px;
   overflow: scroll;
   outline: 1px solid #64a6cb;
+}
+body .btn.btn-link {
+  color: #64a6cb;
 }
 body .help-block {
   color: #999999;
@@ -42,6 +45,7 @@ body .list-group a.list-group-item {
   background: #0f5791;
   font-size: 20px;
   border-color: #64a6cb;
+  cursor: pointer;
 }
 body .list-group .list-group-item.header,
 body .list-group a.list-group-item.header {
@@ -109,6 +113,9 @@ body .exchange-payment-list .ending {
   color: #64a6cb;
   font-weight: 300;
 }
+body .row.next-cancel {
+  margin-top: 40px;
+}
 body .exchange-buy-sell-interface input[type=text] {
   padding: 24px 12px;
   font-size: 150%;
@@ -118,26 +125,60 @@ body .exchange-buy-sell-interface .fiat-value {
   font-size: 150%;
   color: #64a6cb;
 }
+.am-fade-and-slide-right {
+  animation-duration: 0.3s;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: backwards;
+}
+.am-fade-and-slide-right.am-fade-and-slide-right-add,
+.am-fade-and-slide-right.ng-hide-remove,
+.am-fade-and-slide-right.ng-move {
+  animation-name: fadeAndSlideFromRight;
+}
+.am-fade-and-slide-right.am-fade-and-slide-right-remove,
+.am-fade-and-slide-right.ng-hide {
+  animation-name: fadeAndSlideToRight;
+}
+.am-fade-and-slide-right.ng-enter {
+  visibility: hidden;
+  animation-name: fadeAndSlideFromRight;
+  animation-play-state: paused;
+}
+.am-fade-and-slide-right.ng-enter.ng-enter-active {
+  visibility: visible;
+  animation-play-state: running;
+}
+.am-fade-and-slide-right.ng-leave {
+  animation-name: fadeAndSlideToRight;
+  animation-play-state: paused;
+}
+.am-fade-and-slide-right.ng-leave.ng-leave-active {
+  animation-play-state: running;
+}
 [ui-view].ng-enter,
 [ui-view].ng-leave {
   position: relative;
+  top: 0;
   left: 0;
-  right: 0;
-  -webkit-transition: 400ms cubic-bezier(0.25, 0.1, 0.25, 1) all;
-  -moz-transition: 400ms cubic-bezier(0.25, 0.1, 0.25, 1) all;
-  -ms-transition: 400ms cubic-bezier(0.25, 0.1, 0.25, 1) all;
-  -o-transition: 400ms cubic-bezier(0.25, 0.1, 0.25, 1) all;
-  transition: 400ms cubic-bezier(0.25, 0.1, 0.25, 1) all;
+  -webkit-transition: 200ms cubic-bezier(0.25, 0.1, 0.25, 1) all;
+  -moz-transition: 200ms cubic-bezier(0.25, 0.1, 0.25, 1) all;
+  -ms-transition: 200ms cubic-bezier(0.25, 0.1, 0.25, 1) all;
+  -o-transition: 200ms cubic-bezier(0.25, 0.1, 0.25, 1) all;
+  transition: 200ms cubic-bezier(0.25, 0.1, 0.25, 1) all;
 }
 [ui-view].ng-enter {
+  opacity: 0;
   left: 100%;
 }
 [ui-view].ng-enter-active {
+  opacity: 1;
   left: 0;
 }
 [ui-view].ng-leave {
+  opacity: 1;
   left: 0;
 }
 [ui-view].ng-leave-active {
+  opacity: 0;
   left: -100%;
 }

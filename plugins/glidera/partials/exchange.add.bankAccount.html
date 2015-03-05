@@ -20,7 +20,12 @@
         <input type="text" id="inputBankRoutingNumber" class="form-control" placeholder="1234234534564567" required="true" autofocus="" autocomplete="off">
       </div>
 
-      <button class="btn btn-lg btn-block btn-success" type="submit">Next</button>
+      <div class="next-cancel row text-right">
+        <div class="col-xs-12">
+          <button ng-click="loadExchange()" class="btn btn-lg btn-link">Cancel</button>
+          <button ng-click="loadExchange()" class="btn btn-lg btn-success">Next</button>
+        </div>
+      </div>
 
     </form>
 

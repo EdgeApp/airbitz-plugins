@@ -1,0 +1,27 @@
+<div class="row text-center">
+  <h2 class="col-xs-12"><i class="fa fa-envelope"> </i>2 Factor Verification</h2>
+  <h3 class="col-xs-12">Check SMS messages on:</h3>
+  <h3 class="col-xs-12"><label class="label label-outline">{{account.phone||"321-555-1212"}}</label></h3>
+  <h3 class="col-xs-12">for a verification code from:</h3>
+  <h3 class="col-xs-12"><label class="label label-outline">{{exchange.phoneVerificationNumber}}</label></h3>
+</div>
+
+<div class="row text-center" style="margin-top: 40px">
+
+  <form action="" class="form col-xs-offset-2 col-xs-8">
+
+      <div class="form-group">
+        <label for="inputVerificationCode" class="sr-only">Verification Code</label>
+        <input ng-model="account.verificationCode" type="text" id="inputVerificationCode" class="form-control" placeholder="Verification Code" autofocus="true" autocomplete="off">
+      </div>
+
+  </form>
+
+</div>
+
+<div class="row text-right" style="margin-top: 40px;">
+  <div class="col-xs-12">
+    <button ng-click="verifyPhone()" class="buy-sell-next btn btn-lg btn-link">Change Phone</button>
+    <button ng-click="submit2FA(account.verificationCode, 'exchange')" class="buy-sell-next btn btn-lg btn-success">Validate</button>
+  </div>
+</div>

@@ -1,0 +1,25 @@
+<div class="row text-center">
+  <h3 class="col-xs-12">You are about to</h3>
+  <h3 class="col-xs-12"><label class="label label-info">{{exchange.order.type||"BUY"}}</label></h3>
+  <h3 class="col-xs-12"><label class="label label-default">{{exchange.order.amount||"3.14"}} {{exchange.order.currency||"BTC"}}</label> for <label class="label label-default">{{exchange.order.currencySymbol||"$"}}{{exchange.order.getExchangeRate()||"5555.91"}} {{exchange.order.currency||"USD"}}</label></h3>
+  <h3 class="col-xs-12">At a rate of <label class="label label-outline">$1769.40</label> per <label class="label label-outline">BTC</label></h3>
+  <h3 class="col-xs-12">Using <label class="label label-warning">{{exchange.order.paymentMethod||"Visa 4494"}}</label> payment</h3>
+  <h3 class="col-xs-12">Into wallet <label class="label label-primary">{{exchange.order.depositDestination||"Travel Spending"}}</label></h3>
+</div>
+
+<div class="row text-center" style="margin: 30px 0;">
+  <p class="col-xs-12">This transaction may take up to {{exchange.maxOrderTime||'60 minutes'}} to complete on this exchange.</p>
+</div>
+
+<div class="row text-center">
+  <div class="col-xs-12">
+    <button ng-click="exchange.editOrder()" class="btn btn-lg btn-link"><i class="fa fa-times"></i> Edit</button>
+    <button ng-click="exchange.executeOrder()" class="btn btn-lg btn-success"><i class="fa fa-checkmark"></i> Confirm</button>
+  </div>
+</div>
+
+<div class="row text-center" style="margin-top: 20px;">
+  <div class="col-xs-12">
+    <label class="label label-outline" style="border-radius: 100px; font-size: 14px;">{{exchange.orderTimeout||"60"}} seconds</label>
+  </div>
+</div>

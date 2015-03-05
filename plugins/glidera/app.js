@@ -24,6 +24,18 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
       templateUrl: "/partials/signup.verify.email.html",
       controller: "mainCtrl",
     })
+    // route for phone verification
+    .state("verifyPhone", {
+      url: "/signup/verify/phone/",
+      templateUrl: "/partials/signup.verify.phone.html",
+      controller: "mainCtrl",
+    })
+    // route for two factor verifications
+    .state("verify2FA", {
+      url: "/signup/verify/twofa/",
+      templateUrl: "/partials/exchange.verify.twofactor.html",
+      controller: "mainCtrl",
+    })
     // route for exchange
     .state("exchange", {
       url: "/exchange/",
@@ -44,15 +56,29 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
     })
 
     // route for buying on exchange
-    .state("exchangeBuy", {
-      url: "/exchange/buy/",
-      templateUrl: "/partials/exchange.buy.html",
+    .state("exchangeOrder", {
+      url: "/exchange/order/",
+      templateUrl: "/partials/exchange.order.html",
       controller: "mainCtrl",
     })
     // route for selling on exchange
     .state("exchangeSell", {
       url: "/exchange/sell/",
-      templateUrl: "/partials/exchange.buy.html",
+      templateUrl: "/partials/exchange.order.html",
+      controller: "mainCtrl",
+    })
+
+    // route for selling on exchange
+    .state("reviewOrder", {
+      url: "/exchange/order/review/",
+      templateUrl: "/partials/exchange.order.review.html",
+      controller: "mainCtrl",
+    })
+
+    // route for selling on exchange
+    .state("executeOrder", {
+      url: "/exchange/order/execute/",
+      templateUrl: "/partials/exchange.order.execute.html",
       controller: "mainCtrl",
     })
 

@@ -1,0 +1,34 @@
+<div class="row">
+  <h2 class="col-xs-12"><i class="fa fa-phone"></i> Verify Phone Number</h2>
+</div>
+
+<hr />
+
+<div class="row text-center">
+  <h3 class="col-xs-12">Verification codes sent from:</h3>
+  <h3 class="col-xs-12"><label class="label label-outline">{{exchange.phoneVerificationNumber}}</label></h3>
+</div>
+
+<div class="row text-center" style="margin-top: 40px">
+
+  <form action="" class="form col-xs-offset-2 col-xs-8">
+
+      <div class="form-group">
+        <label for="inputPhone" class="sr-only">Verification Code</label>
+        <input ng-model="account.phone" type="text" id="inputPhone" class="form-control" placeholder="Valid Phone #" autofocus="true" autocomplete="off">
+      </div>
+
+  </form>
+
+</div>
+
+<div class="row" style="margin: 20px 0">
+  <p><label class="label label-warning">Note</label> Phone must be able to receive SMS text messages.</p>
+</div>
+
+<div class="row text-right" style="margin-top: 40px;">
+  <div class="col-xs-12">
+    <button ng-click="loadExchange()" class="buy-sell-next btn btn-lg btn-link">Later</button>
+    <button ng-click="submitPhone(account.phone)" class="buy-sell-next btn btn-lg btn-success">Confirm</button>
+  </div>
+</div>

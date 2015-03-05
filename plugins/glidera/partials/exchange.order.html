@@ -39,15 +39,16 @@
         <label class="fiat-value">$311.00</label>
 
         <div class="btn-group pull-right" data-toggle-name="btc-fiat-toggle" data-toggle="buttons-radio">
-          <button type="button" value="default" data-toggle="button" class="btn btn-success active">BTC</button>
+          <button type="button" value="default" data-toggle="button" class="btn btn-warning active">BTC</button>
           <button type="button" value="distance" data-toggle="button"
           class="btn">USD</button>
         </div>
       </div>
 
-      <div class="row">
+      <div class="row text-right" style="margin-top: 40px;">
         <div class="col-xs-12">
-          <button class="buy-sell-next btn btn-lg btn-block btn-success">Next</button>
+          <button ng-click="loadExchange()" class="buy-sell-next btn btn-lg btn-link">Cancel</button>
+          <button ng-click="exchange.reviewOrder()" class="buy-sell-next btn btn-lg btn-success">Next</button>
         </div>
       </div>
 
