@@ -1,13 +1,3 @@
-<!-- <div class="exchange-balances row">
-  <div class="col-xs-12">
-    <ul class="list-group">
-      <li class="list-group-item header">Balances <i class="pull-right fa fa-refresh" style="padding-top: 5px;"></i></li>
-      <li class="list-group-item"><i class="fa fa-dollar"></i> {{exchange.getFiatBalance()}}</li>
-      <li class="list-group-item"><i class="fa fa-bitcoin"></i> {{exchange.getBtcBalance()}}</li>
-    </ul>
-  </div>
-</div>
- -->
 <div class="buy-sell row">
   <div class="col-xs-6">
     <button ng-click="exchange.buy()" class="buy-button btn-success btn-lg btn-block btn"><i class="fa fa-bitcoin"></i> BUY</button>
@@ -21,7 +11,7 @@
   <div class="col-xs-12">
     <ul class=" list-group">
       <a ng-click="exchange.addBankAccount()" class="list-group-item"><i class="fa fa-bank"></i> Add Bank Account</a>
-      <a ng-click="exchange.addCreditCard()" class="list-group-item"><i class="fa fa-credit-card"></i> Add Credit Card</a>
+      <a ng-show="exchange.supportsCreditCards()" ng-click="exchange.addCreditCard()" class="list-group-item"><i class="fa fa-credit-card"></i> Add Credit Card</a>
     </ul>
   </div>
 </div>

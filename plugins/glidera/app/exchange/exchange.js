@@ -53,17 +53,6 @@ angular.module('app.exchange', ['app.dataFactory'])
   }]);
     /*
     // ------ exchange stubs
-    $scope.loadExchange = function(){
-      $state.go('exchange');
-    };
-
-    $scope.exchange.getBtcBalance = function(){
-      return 13.37010101;
-    };
-    $scope.exchange.getFiatBalance = function(){
-      return 1337.01;
-    };
-
     $scope.exchange.buy = function(){
       $state.go('exchangeOrder');
     };
