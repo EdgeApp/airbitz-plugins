@@ -1,6 +1,6 @@
 
 angular.module('app.dataFactory', [])
-.factory('DataFactory', function() {
+.factory('DataFactory', ['$q', function($q) {
   // account prepopulate dummy data
   var account = {
     'firstName': 'Ricky',
@@ -37,11 +37,15 @@ angular.module('app.dataFactory', [])
     return account;
   }
   factory.saveAccount = function() {
-    return true;
-  }
+    return $q(function(resolve, reject) {
+      setTimeout(function() {
+        resolve(true);
+      }, 500);
+    });
+  };
   factory.getExchange = function() {
     return exchange;
   }
   return factory;
-});
+}]);
 

@@ -12,12 +12,15 @@ angular.module('app.signup', ['app.dataFactory'])
     };
 
     $scope.submitSignUp = function(account) {
-      $state.go('verifyEmail');
-      DataFactory.saveAccount();
+      Airbitz.ui.title('Saving...');
+      DataFactory.saveAccount().then(function() {
+        $state.go('verifyEmail');
+      });
     };
   }])
 .controller('verifyEmailController', ['$scope', '$state', 'DataFactory',
     function($scope, $state, DataFactory) {
+      Airbitz.ui.title('Verify Email');
       $scope.exchange = DataFactory.getExchange();
       $scope.account = DataFactory.getAccount();
 
@@ -28,7 +31,10 @@ angular.module('app.signup', ['app.dataFactory'])
         alert('Account Email: ' + email);
       };
       $scope.verifyEmail = function(){
-        $state.go('verifyPhone');
+        Airbitz.ui.title('Saving...');
+        DataFactory.saveAccount().then(function() {
+          $state.go('verifyPhone');
+        });
       };
     }])
 .controller('verifyPhoneController', ['$scope', '$state', 'DataFactory',
