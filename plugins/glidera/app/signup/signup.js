@@ -2,7 +2,7 @@
 angular.module('app.signup', ['app.dataFactory'])
 .controller('signupController', ['$scope', '$state', 'DataFactory',
   function ($scope, $state, DataFactory) {
-    Airbitz.ui.title('Glidera');
+    Airbitz.ui.title('Glidera Signup');
 
     $scope.exchange = DataFactory.getExchange();
     $scope.account = DataFactory.getAccount();
@@ -20,19 +20,18 @@ angular.module('app.signup', ['app.dataFactory'])
   }])
 .controller('verifyEmailController', ['$scope', '$state', 'DataFactory',
     function($scope, $state, DataFactory) {
-      Airbitz.ui.title('Verify Email');
+      Airbitz.ui.title('Glidera: Verify Email');
+
       $scope.exchange = DataFactory.getExchange();
       $scope.account = DataFactory.getAccount();
 
-      $scope.changeEmail = function(email){
-        alert('Account Email: ' + email);
-      };
       $scope.resendEmail = function(email){
-        alert('Account Email: ' + email);
+        alert('Resending to: ' + email);
       };
       $scope.verifyEmail = function(){
         Airbitz.ui.title('Saving...');
         DataFactory.saveAccount().then(function() {
+          $scope.account.setRegistrationStatus(true);
           $state.go('verifyPhone');
         });
       };
@@ -59,6 +58,8 @@ angular.module('app.signup', ['app.dataFactory'])
     }])
 .controller('verify2faController', ['$scope', '$state', 'DataFactory',
     function($scope, $state, DataFactory) {
+      Airbitz.ui.title('Glidera: 2FA');
+
       $scope.submit2FA = function(code, redirect){
         alert('Send: ' + code + ' to Glider to check if valid.');
         if(redirect){

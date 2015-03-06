@@ -1,25 +1,15 @@
+<div class="row">
+  <h2 class="col-xs-12"><i class="fa {{exchange.icon}}"></i> {{exchange.name}} Account</h2>
+</div>
+
+<hr />
+
 <div class="row" style="margin-top: 20px;">
   <form class="exchange-sign-up col-xs-12">
-<!--     <h2><i class="fa {{exchange.icon}}"></i> {{exchange.name}} Sign Up</h2> -->
-<!--
-    <ul class="list-group">
-      <li ng-bind="account.email" class="list-group-item">Email</li>
-      <li ng-bind="account.street" class="list-group-item">Street Address</li>
-      <li ng-bind="account.city" class="list-group-item">City</li>
-      <li ng-bind="account.zip" class="list-group-item">State</li>
-      <li ng-bind="account.state" class="list-group-item">State</li>
-      <li class="list-group-item">{{exchange.countryCode}}</li>
-      <li ng-bind="account.dob" class="list-group-item">Country</li>
-    </ul> -->
 
     <div class="form-group">
       <label for="inputFirstName" class="">Name</label>
       <input ng-model="account.firstName" type="text" id="inputFirstName" class="form-control" placeholder="First: Ricky" autofocus="true" autocomplete="off">
-    </div>
-
-    <div class="form-group">
-      <label for="inputMiddleName" class="sr-only">Middle</label>
-      <input ng-model="account.middleName" type="text" id="inputMiddleName" class="form-control" placeholder="Middle: Bobby" autofocus="" autocomplete="off">
     </div>
 
     <div class="form-group">
@@ -32,27 +22,27 @@
       <input ng-model="account.email" type="text" id="inputEmail" class="form-control" placeholder="jimmy@hendrix.com" autofocus="" autocomplete="off">
     </div>
 
-    <div class="form-group">
+    <div ng-show="account.getRegistrationStatus()" class="form-group">
       <label for="inputAddress" class="">Address</label>
       <input ng-model="account.street" type="text" id="inputAddressStreet" class="form-control" placeholder="Street Address" autofocus="" autocomplete="off">
     </div>
 
-    <div class="form-group">
+    <div ng-show="account.getRegistrationStatus()" class="form-group">
       <label for="inputAddress" class="sr-only">Address 2</label>
       <input ng-model="account.street2" type="text" id="inputAddressStreet" class="form-control" placeholder="Street Address 2" autofocus="" autocomplete="off">
     </div>
 
-    <div class="form-group">
+    <div ng-show="account.getRegistrationStatus()" class="form-group">
       <label for="inputAddressCity" class="sr-only">City</label>
       <input ng-model="account.city" type="text" id="inputAddressCity" class="form-control" placeholder="City" autofocus="" autocomplete="off">
     </div>
 
-    <div class="form-group">
-      <label for="inputAddressZip" class="sr-only">City</label>
+    <div ng-show="account.getRegistrationStatus()" class="form-group">
+      <label for="inputAddressZip" class="sr-only">Zip</label>
       <input ng-model="account.zip" type="text" id="inputAddressZip" class="form-control" placeholder="19512" autofocus="" autocomplete="off">
     </div>
 
-    <div class="row">
+    <div ng-show="account.getRegistrationStatus()" class="row">
       <div class="form-group col-xs-6">
         <select ng-model="account.state" class="form-control">
           <option value="0">-- Select a State --</option>
@@ -117,7 +107,7 @@
       </div>
     </div>
 
-    <div class="form-group">
+    <div ng-show="account.getRegistrationStatus()" class="form-group">
       <label for="inputDob" class="">Date of Birth</label>
       <input ng-model="account.dob" type="text" id="inputDob" class="form-control" placeholder="07-04-1776" autofocus="" autocomplete="off" value="">
     </div>
@@ -128,6 +118,7 @@
         <button ng-click="submitSignUp(account)" class="btn btn-lg btn-success">Next</button>
       </div>
     </div>
+
 
   </form>
 </div>

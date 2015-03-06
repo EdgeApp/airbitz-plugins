@@ -14,7 +14,15 @@ angular.module('app.dataFactory', [])
     'state': 'PA',
     'country': 'US',
     'dob': '01-22-1980',
+    'registered': false
   };
+
+  account.getRegistrationStatus = function() {
+    return account.registered;
+  }
+  account.setRegistrationStatus = function(status) {
+    account.registered = status;
+  }
 
   // default exchange data
   var exchange = {
