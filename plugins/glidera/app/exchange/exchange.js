@@ -9,6 +9,7 @@ angular.module('app.exchange', ['app.dataFactory'])
   function ($scope, $state, DataFactory) {
     $scope.exchange = DataFactory.getExchange();
     $scope.account = DataFactory.getAccount();
+    $scope.accountStatus = DataFactory.getAccountStatus();
 
     $scope.exchange.buy = function(){
       $state.go('exchangeOrder');

@@ -1,6 +1,8 @@
 
 angular.module('app.dataFactory', [])
 .factory('DataFactory', ['$q', function($q) {
+  var factory = {};
+
   // account prepopulate dummy data
   var account = {
     'firstName': 'Ricky',
@@ -14,15 +16,29 @@ angular.module('app.dataFactory', [])
     'state': 'PA',
     'country': 'US',
     'dob': '01-22-1980',
-    'registered': false
+    'registered': false,
+    'status': 'BASIC_INFO_NOT_VERIFIED'
   };
 
   account.getRegistrationStatus = function() {
     return this.registered;
-  }
+  };
   account.setRegistrationStatus = function(status) {
     this.registered = status;
-  }
+  };
+
+  factory.getAccountStatus = function() {
+    switch(account.status) {
+      case 'BASIC_INFO_NOT_VERIFIED':
+        return 'Info Not Verified';
+      case 'BASIC_INFO_VERIFIED_BANK_ACCOUNT_NEEDED':
+        return 'Bank Account Needed';
+      case 'BASIC_INFO_VERIFIED':
+        return 'Info Needed';
+      default:
+        return 'ACCOUNT UNKNOWN';
+    }
+  };
 
   // default exchange data
   var exchange = {
@@ -34,14 +50,16 @@ angular.module('app.dataFactory', [])
     'depositBankName1': 'Bank of America',
     'depositBankAccount1': '90001923932',
     'depositBankName2': 'METRO BANK',
-    'depositBankAccount2': '23002223932',
+    'depositBankAccount2'
+    : '23002223932',
     'orderTimeout': '60',
     'depositTimeout': '3600',
     'verificationCode': 'someCode',
     'depositId': 'GLIDER-USA-002',
+    'supportsBankAccounts': true,
+    'supportsCreditCards': false,
   };
 
-  var factory = {};
   factory.getAccount = function() {
     return account;
   }
@@ -55,7 +73,6 @@ angular.module('app.dataFactory', [])
   factory.getExchange = function() {
     return exchange;
   }
-
 
   // default bank account data
   var bankAccount = {

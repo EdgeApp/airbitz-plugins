@@ -9,9 +9,10 @@
 
 <div class="exchange-payment-options row">
   <div class="col-xs-12">
-    <ul class=" list-group">
-      <a ng-click="exchange.addBankAccount()" class="list-group-item"><i class="fa fa-bank"></i> Add Bank Account</a>
-      <a ng-show="exchange.supportsCreditCards()" ng-click="exchange.addCreditCard()" class="list-group-item"><i class="fa fa-credit-card"></i> Add Credit Card</a>
+    <ul class="list-group">
+      <li ng-click="userAccount()" class="list-group-item"><i class="fa fa-user"></i> User Account</li>
+      <li ng-if="exchange.supportsBankAccounts" ng-click="exchange.addBankAccount()" class="list-group-item"><i class="fa fa-bank"></i> Add Bank Account</li>
+      <li ng-if="exchange.supportsCreditCards" ng-click="exchange.addCreditCard()" class="list-group-item"><i class="fa fa-credit-card"></i> Add Credit Card</li>
     </ul>
   </div>
 </div>
@@ -27,7 +28,10 @@
 </div>
 
 <div class="row" style="margin-top: 130px;">
-  <div class="col-xs-12">
+  <div class="col-xs-6">
     <button ui-sref="home" class="btn btn-danger">Log Out</button>
+  </div>
+  <div class="col-xs-6 text-right">
+    <button ui-sref="account" class="btn btn-default"><i class="fa fa-user"></i> {{ accountStatus }}</button>
   </div>
 </div>
