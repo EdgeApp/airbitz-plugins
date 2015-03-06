@@ -1,8 +1,29 @@
-<div class="row">
-  <h2 class="col-xs-12 text-left"><i class="fa fa-bank"></i> Add Bank Account</h2>
-</div>
 
-<hr />
+<div ng-if="bankAccount.status === 'PENDING'">
+
+  <h3>Verify Account</h3>
+
+  <div class="row">
+    <p class="col-xs-12" style="margin-top: 15px; margin-bottom: 15px;">Please check your account for two deposits from <label class="label label-info">{{ exchange.depositId }}</label> and input them below.</p>
+    <div class="col-xs-6">
+      <label for="inputDepositAmount1" class="">Deposit 1</label>
+      <input type="text" id="inputDepositAmount1" class="form-control" placeholder=".35" autofocus="" autocomplete="off">
+    </div>
+    <div class="col-xs-6">
+      <label for="inputDepositAmount2" class="">Deposit 2</label>
+      <input type="text" id="inputDepositAmount2" class="form-control" placeholder="1.05" autofocus="" autocomplete="off">
+    </div>
+  </div>
+
+  <div class="row" style="margin-top: 15px;">
+    <div class="col-xs-12 text-right">
+      <button class="btn btn-warning">Verify</button>
+    </div>
+  </div>
+
+  <hr />
+
+</div>
 
 <div class="exchange-add-bank-account row">
 
@@ -11,19 +32,32 @@
     <form action="" class="form">
 
       <div class="form-group">
+        <label for="inputBankAccountDescription" class="">Description</label>
+        <input ng-model="bankAccount.description" type="text" id="inputBankAccountDescription" class="form-control" placeholder="Personal Checking" autofocus="" autocomplete="off">
+      </div>
+
+      <div class="form-group">
+        <label for="inputAccountType" class="">Account Type</label>
+        <select ng-model="bankAccount.bankAccountType" id="inputAccountType" class="form-control">
+          <option value="CHECKING">Checking</option>
+          <option value="SAVINGS">Savings</option>
+        </select>
+      </div>
+
+      <div class="form-group">
         <label for="inputBankAccountNumber" class="">Account Number</label>
-        <input type="text" id="inputBankAccountNumber" class="form-control" placeholder="1234234534564567" required="true" autofocus="" autocomplete="off">
+        <input ng-model="bankAccount.accountNumber" type="text" id="inputBankAccountNumber" class="form-control" placeholder="1234234534564567" autofocus="" autocomplete="off">
       </div>
 
       <div class="form-group">
         <label for="inputBankRoutingNumber" class="">Routing Number</label>
-        <input type="text" id="inputBankRoutingNumber" class="form-control" placeholder="1234234534564567" required="true" autofocus="" autocomplete="off">
+        <input ng-model="bankAccount.routingNumber" type="text" id="inputBankRoutingNumber" class="form-control" placeholder="123123123" autofocus="" autocomplete="off">
       </div>
 
       <div class="next-cancel row text-right">
         <div class="col-xs-12">
-          <button ng-click="loadExchange()" class="btn btn-lg btn-link">Cancel</button>
-          <button ng-click="loadExchange()" class="btn btn-lg btn-success">Next</button>
+          <button ui-sref="exchange" class="btn btn-lg btn-link">Cancel</button>
+          <button ng-click="saveBankAccount()" class="btn btn-lg btn-success">Save</button>
         </div>
       </div>
 

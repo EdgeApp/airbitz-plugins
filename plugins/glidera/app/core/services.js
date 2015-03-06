@@ -18,10 +18,10 @@ angular.module('app.dataFactory', [])
   };
 
   account.getRegistrationStatus = function() {
-    return account.registered;
+    return this.registered;
   }
   account.setRegistrationStatus = function(status) {
-    account.registered = status;
+    this.registered = status;
   }
 
   // default exchange data
@@ -38,6 +38,7 @@ angular.module('app.dataFactory', [])
     'orderTimeout': '60',
     'depositTimeout': '3600',
     'verificationCode': 'someCode',
+    'depositId': 'GLIDER-USA-002',
   };
 
   var factory = {};
@@ -54,6 +55,48 @@ angular.module('app.dataFactory', [])
   factory.getExchange = function() {
     return exchange;
   }
+
+
+  // default bank account data
+  var bankAccount = {
+    'description': 'Glidera',
+    'bankAccountType': 'CHECKING',
+    'accountNumber': '77223399339',
+    'routingNumber': '10022291191',
+    'isPrimary': 'true',
+    'status': 'PENDING',
+  };
+
+  factory.getBankAccount = function() {
+    return bankAccount;
+  }
+
+  // MAPS TO: https://sandbox.glidera.com/documentation.xhtml#apiReference-createBankAccount
+  factory.createBankAccount = function(bankAccount) {
+    console.log(bankAccount);
+    return $q(function(resolve, reject) {
+      setTimeout(function() {
+        resolve(true);
+      }, 500);
+    });
+  }
+  // MAPS TO: https://sandbox.glidera.com/documentation.xhtml#apiReference-verifyBankAccount
+  factory.verifyBankAccount = function() {
+
+  }
+  // MAPS TO: https://sandbox.glidera.com/documentation.xhtml#apiReference-updateBankAccount
+  factory.updateBankAccount = function(account) {
+    return $q(function(resolve, reject) {
+      setTimeout(function() {
+        resolve(true);
+      }, 500);
+    });
+  }
+  // MAPS TO: https://sandbox.glidera.com/documentation.xhtml#apiReference-deleteBankAccount
+  factory.deleteBankAccount = function() {
+
+  }
+
   return factory;
 }]);
 

@@ -30,6 +30,26 @@ angular.module('app.exchange', ['app.dataFactory'])
   function ($scope, $state, DataFactory) {
     $scope.exchange = DataFactory.getExchange();
     $scope.account = DataFactory.getAccount();
+    $scope.bankAccount = {};
+    $scope.bankAccount.bankAccountType = 'CHECKING';
+
+    $scope.saveBankAccount = function() {
+      DataFactory.createBankAccount($scope.bankAccount).then(function() {
+        $state.go('exchange');
+      });
+    };
+  }])
+.controller('updateAccountController', ['$scope', '$state', 'DataFactory',
+  function ($scope, $state, DataFactory) {
+    $scope.exchange = DataFactory.getExchange();
+    $scope.account = DataFactory.getAccount();
+    $scope.bankAccount = DataFactory.getBankAccount();
+
+    $scope.saveBankAccount = function() {
+      DataFactory.updateBankAccount().then(function() {
+        $state.go('exchange');
+      });
+    };
   }])
 .controller('addCreditCardController', ['$scope', '$state', 'DataFactory',
   function ($scope, $state, DataFactory) {
