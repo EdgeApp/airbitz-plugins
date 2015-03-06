@@ -19,10 +19,13 @@
 
 <div class="exchange-payment-list row">
   <div class="col-xs-12">
-    <ul class="exchange-payment-options list-group">
+    <ul class="exchange-payment-options list-group" ng-model="bankAccounts">
       <li class="list-group-item header">Payment Methods</li>
-      <a class="list-group-item"><i class="fa fa-cc-visa"></i> Visa <span class="ending pull-right">[..5566]</span></a>
-      <a class="list-group-item"><i class="fa fa-bank"></i> Wells Fargo <span class="ending pull-right">[..3456]</span></a>
+
+      <li class="list-group-item" ng-repeat="account in bankAccounts">
+        <i class="fa fa-bank"></i>{{account.description}}
+          <span class="ending pull-right">{{account.accountNumber}}</span>
+      </li>
     </ul>
   </div>
 </div>

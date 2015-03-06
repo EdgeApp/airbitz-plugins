@@ -11,6 +11,13 @@ angular.module('app.exchange', ['app.dataFactory'])
     $scope.account = DataFactory.getAccount();
     $scope.accountStatus = DataFactory.getAccountStatus();
 
+    DataFactory.getBankAccounts().then(function(bankAccounts) {
+      $scope.bankAccounts = bankAccounts;
+    }, function() {
+      // TODO: error
+      alert('TODO: Error! Error!');
+    });
+
     $scope.exchange.buy = function(){
       $state.go('exchangeOrder');
     };
@@ -37,6 +44,9 @@ angular.module('app.exchange', ['app.dataFactory'])
     $scope.saveBankAccount = function() {
       DataFactory.createBankAccount($scope.bankAccount).then(function() {
         $state.go('exchange');
+      }, function() {
+        // TODO: error
+        alert('TODO: Error! Error!');
       });
     };
   }])

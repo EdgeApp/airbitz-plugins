@@ -1,8 +1,7 @@
 
-angular.module('app.dataFactory', [])
-.factory('DataFactory', ['$q', function($q) {
+angular.module('app.dataFactory', ['app.glidera'])
+.factory('DataFactory', ['$q', 'glideraFactory', function($q, glideraFactory) {
   var factory = {};
-
   // account prepopulate dummy data
   var account = {
     'firstName': 'Ricky',
@@ -84,6 +83,17 @@ angular.module('app.dataFactory', [])
     'status': 'PENDING',
   };
 
+  factory.getBankAccounts = function() {
+      return $q(function(resolve, reject) {
+        glideraFactory.getBankAccounts(function(e, s, b) {
+          if (e === null) {
+            resolve(b.bankAccounts);
+          } else {
+            reject();
+          }
+        });
+      });
+  };
   factory.getBankAccount = function() {
     return bankAccount;
   }
@@ -92,27 +102,52 @@ angular.module('app.dataFactory', [])
   factory.createBankAccount = function(bankAccount) {
     console.log(bankAccount);
     return $q(function(resolve, reject) {
-      setTimeout(function() {
-        resolve(true);
-      }, 500);
+      glideraFactory.createBankAccount(
+        '123456',
+        bankAccount.routingNumber,
+        bankAccount.accountNumber,
+        bankAccount.description,
+        bankAccount.bankAccountType, function(e, s, b) {
+        if (s === 200) {
+          resolve(b.bankAccountUuid);
+        } else {
+          reject();
+        }
+      });
     });
-  }
+  };
+
   // MAPS TO: https://sandbox.glidera.com/documentation.xhtml#apiReference-verifyBankAccount
   factory.verifyBankAccount = function() {
 
-  }
+  };
+
   // MAPS TO: https://sandbox.glidera.com/documentation.xhtml#apiReference-updateBankAccount
-  factory.updateBankAccount = function(account) {
+  factory.updateBankAccount = function(bankAccount) {
+    console.log(bankAccount);
     return $q(function(resolve, reject) {
-      setTimeout(function() {
-        resolve(true);
-      }, 500);
+      glideraFactory.updateBankAccount(accountId, desc, setPrimary, function(e, s, b) {
+        if (e === null || b.success === true) {
+          resolve();
+        } else {
+          reject();
+        }
+      });
     });
-  }
+  };
+
   // MAPS TO: https://sandbox.glidera.com/documentation.xhtml#apiReference-deleteBankAccount
   factory.deleteBankAccount = function() {
-
-  }
+    return $q(function(resolve, reject) {
+      glideraFactory.deleteBankAccount(accountId, function(e, s, b) {
+        if (e === null && s == 200) {
+          resolve();
+        } else {
+          reject();
+        }
+      });
+    });
+  };
 
   return factory;
 }]);
