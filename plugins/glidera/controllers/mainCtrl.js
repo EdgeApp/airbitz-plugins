@@ -2,14 +2,31 @@ var app = angular.module('exchangeGlidera');
 
 app.controller('mainCtrl', [
 '$scope',
+'$rootScope',
 '$state',
 '$stateParams',
-function ($scope, $state, $stateParams) {
+function ($scope, $rootScope, $state, $stateParams) {
 
   Airbitz.ui.title('Glidera');
 
+  var styles = {
+    // appear from right
+    front: '.enter-setup {   position:absolute;   -webkit-transition: 0.5s ease-out all;   -webkit-transform:translate3d(100%,0,0)  }  .enter-setup.enter-start {   position:absolute;  -webkit-transform:translate3d(0,0,0)}  .leave-setup {   position:absolute;   -webkit-transition: 0.5s ease-out all;   -webkit-transform:translate3d(0,0,0)} .leave-setup.leave-start {   position:absolute;  -webkit-transform:translate3d(-100%,0,0) };',
+    // appear from left
+    back: '.enter-setup {   position:absolute;   -webkit-transition: 0.5s ease-out all; -webkit-transform:translate3d(-100%,0,0)}  .enter-setup.enter-start {   position:absolute;   -webkit-transform:translate3d(0,0,0) }  .leave-setup {   position:absolute;   -webkit-transition: 0.5s ease-out all;  -webkit-transform:translate3d(0,0,0)} .leave-setup.leave-start {   position:absolute;  -webkit-transform:translate3d(100%,0,0) };'
+  };
+
+  $scope.direction = function(dir) {
+    // update the animations classes
+    console.log(dir);
+    $rootScope.style = styles[dir];
+  };
+
+  $scope.direction('front');
+
+
   // account prepopulate dummy data
-  $scope.account = {
+  $rootScope.account = {
     'firstName': 'Ricky',
     'middleName': 'Walleye',
     'lastName': 'Bobby',
@@ -38,6 +55,8 @@ function ($scope, $state, $stateParams) {
     'depositTimeout': '3600',
     'verificationCode': 'someCode',
   };
+
+
 
   $scope.getAccount = function(){
     if($scope.account) {
