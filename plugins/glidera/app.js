@@ -1,90 +1,84 @@
 
-var app = angular.module('exchangeGlidera', [
-  // 3rd party custom
-  'ui.router',
-  'ngAnimate',
-  ]);
+var app = angular.module('app', ['app.core', 'app.exchange', 'app.signup']);
 
 app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
 
   $urlRouterProvider.otherwise('/');
 
   $stateProvider
-    // route for signup
+    // route for signup TODO, move partial
     .state("home", {
       url: "/",
-      templateUrl: "/partials/index.html",
-      controller: "mainCtrl",
+      templateUrl: "core/partials/index.html",
+      controller: "homeController",
     })
     // route for signup
     .state("signup", {
       url: "/signup/",
-      templateUrl: "/partials/signup.html",
-      controller: "mainCtrl",
+      templateUrl: "signup/partials/signup.html",
+      controller: "signupController",
     })
     // route for email verification
     .state("verifyEmail", {
       url: "/signup/verify/email/",
-      templateUrl: "/partials/signup.verify.email.html",
-      controller: "mainCtrl",
+      templateUrl: "signup/partials/verify.email.html",
+      controller: "verifyEmailController",
     })
     // route for phone verification
     .state("verifyPhone", {
       url: "/signup/verify/phone/",
-      templateUrl: "/partials/signup.verify.phone.html",
-      controller: "mainCtrl",
+      templateUrl: "signup/partials/verify.phone.html",
+      controller: "verifyPhoneController",
     })
     // route for two factor verifications
     .state("verify2FA", {
       url: "/signup/verify/twofa/",
-      templateUrl: "/partials/exchange.verify.twofactor.html",
-      controller: "mainCtrl",
+      templateUrl: "exchange/partials/verify.twofactor.html",
+      controller: "verify2faController",
     })
     // route for exchange
     .state("exchange", {
       url: "/exchange/",
-      templateUrl: "/partials/exchange.html",
-      controller: "mainCtrl",
+      templateUrl: "exchange/partials/exchange.html",
+      controller: "dashboardController",
     })
     // route for adding exchange bank account
     .state("exchangeAddBankAccount", {
       url: "/exchange/add/bankAccount/",
-      templateUrl: "/partials/exchange.add.bankAccount.html",
-      controller: "mainCtrl",
+      templateUrl: "exchange/partials/add.bankAccount.html",
+      controller: "addAccountController",
     })
     // route for adding exchange credit card
     .state("exchangeAddCreditCard", {
       url: "/exchange/add/creditCard/",
-      templateUrl: "/partials/exchange.add.creditCard.html",
-      controller: "mainCtrl",
+      templateUrl: "exchange/partials/add.creditCard.html",
+      controller: "addCreditCardController",
     })
 
     // route for buying on exchange
     .state("exchangeOrder", {
       url: "/exchange/order/",
-      templateUrl: "/partials/exchange.order.html",
-      controller: "mainCtrl",
+      templateUrl: "exchange/partials/order.html",
+      controller: "orderController",
     })
     // route for selling on exchange
     .state("exchangeSell", {
       url: "/exchange/sell/",
-      templateUrl: "/partials/exchange.order.html",
-      controller: "mainCtrl",
+      templateUrl: "exchange/partials/order.html",
+      controller: "orderController",
     })
 
     // route for selling on exchange
     .state("reviewOrder", {
       url: "/exchange/order/review/",
-      templateUrl: "/partials/exchange.order.review.html",
-      controller: "mainCtrl",
+      templateUrl: "exchange/partials/order.review.html",
+      controller: "revirewOrderController",
     })
 
     // route for selling on exchange
     .state("executeOrder", {
       url: "/exchange/order/execute/",
-      templateUrl: "/partials/exchange.order.execute.html",
-      controller: "mainCtrl",
+      templateUrl: "exchange/partials/order.execute.html",
+      controller: "executeOrderController",
     })
-
-
 }]);

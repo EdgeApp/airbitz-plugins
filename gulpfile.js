@@ -44,10 +44,10 @@ plugins.map(function(plugin) {
     .pipe(gulp.dest('build/' + platform + '/' + plugin));
   };
   gulp.task(plugin + '-partials', function() {
-    return gulp.src("./plugins/glidera/partials/*.html")
+    return gulp.src(["./plugins/glidera/partials/*.html",
+                     "./plugins/glidera/**/partials/*.html"])
       .pipe(ngHtml2Js({
-          moduleName: "exchangeGlidera",
-          prefix: "/partials/"
+          moduleName: "app"
       }))
       .pipe(concat('partials.js'))
       .pipe(gulp.dest("./build/intermediates/js/"));
@@ -64,17 +64,6 @@ plugins.map(function(plugin) {
       });
   });
 })
-
-gulp.task('partials', function() {
-    gulp.src("./plugins/glidera/partials/*.html")
-      .pipe(ngHtml2Js({
-          moduleName: "exchangeGlidera",
-          prefix: "/partials/"
-      }))
-      .pipe(concat('partials.js'))
-      .pipe(gulp.dest("./plugins/glidera/vendors/js/"));
-});
-
 
 gulp.task('help', listing);
 gulp.task('default', ['help']);

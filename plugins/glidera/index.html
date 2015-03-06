@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="exchangeGlidera">
+<html ng-app="app">
 <head>
   <meta name=viewport content="width=device-width, initial-scale=1">
   <meta name="description" content="Glidera Exchange Interface for Airbitz" />
@@ -13,10 +13,10 @@
 
 </head>
 
-<body ng-controller="mainCtrl">
+<body>
 
   <div class="container">
-    <div class="screen {{ screenClass||'default' }}" ui-view ng-cloak ng-animate="{enter: 'enter', leave: 'leave'}">
+    <div class="screen" ui-view ng-cloak ng-animate="{enter: 'enter', leave: 'leave'}">
       <h1 class="text-center">
         <i class="fa fa-spinner fa-spin"></i> Loading
       </h1>
@@ -29,11 +29,12 @@
   <script src="vendors/js/angular-ui-router.js" type="text/javascript"></script>
   <script src="vendors/js/angular-animate.js" type="text/javascript"></script>
 
+  <script src="core/core.js" type="text/javascript"></script>
+  <script src="signup/signup.js" type="text/javascript"></script>
+  <script src="exchange/exchange.js" type="text/javascript"></script>
   <script src="app.js" type="text/javascript"></script>
   <script src="js/partials.js" type="text/javascript"></script>
-  <script src="controllers/mainCtrl.js" type="text/javascript"></script>
-  <!-- <script src="controllers/exchangeCtrl.js" type="text/javascript"></script> -->
-  <!-- <script src="services/DataFactory.js" type="text/javascript"></script> -->
+  <script src="services/DataFactory.js" type="text/javascript"></script>
 </body>
 </html>
 
