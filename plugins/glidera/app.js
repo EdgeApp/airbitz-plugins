@@ -1,5 +1,5 @@
 
-var app = angular.module('app', ['app.core', 'app.exchange', 'app.signup']);
+var app = angular.module('app', ['app.core', 'app.history', 'app.exchange', 'app.signup']);
 
 app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
 
