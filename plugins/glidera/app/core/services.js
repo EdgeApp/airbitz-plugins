@@ -1,31 +1,100 @@
 
-angular.module('app.dataFactory', ['app.glidera', 'app.constants'])
-.factory('DataFactory', [
-  '$q', '$filter', 'StateFactory', 'ExchangeFactory', 'glideraFactory',
-  function($q, $filter, StateFactory, ExchangeFactory, glideraFactory) {
-  var factory = {};
-  // account prepopulate dummy data
-  var account = {
-    'firstName': '',
-    'middleName': '',
-    'lastName': '',
-    'email': '',
-    'address1': '',
-    'address2': '',
-    'city': '',
-    'zipCode': '',
-    'state': '',
-    'birthDate': '',
-    'registered': true,
-    'status': ''
-  };
+angular.module('app.dataFactory', ['app.glidera', 'app.constants']).
+factory('UserFactory', [
+  '$q', '$filter', 'States', 'ExchangeFactory', 'glideraFactory',
+  function($q, $filter, States, ExchangeFactory, glideraFactory) {
+    var factory = {};
 
-  account.getRegistrationStatus = function() {
-    return this.registered;
-  };
-  account.setRegistrationStatus = function(status) {
-    this.registered = status;
-  };
+    // account prepopulate dummy data
+    var account = {
+      'firstName': '',
+      'middleName': '',
+      'lastName': '',
+      'email': '',
+      'address1': '',
+      'address2': '',
+      'city': '',
+      'zipCode': '',
+      'state': '',
+      'birthDate': '',
+      'registered': true,
+      'status': ''
+    };
+
+    account.getRegistrationStatus = function() {
+      return this.registered;
+    };
+    account.setRegistrationStatus = function(status) {
+      this.registered = status;
+    };
+
+    factory.getUserAccount = function() {
+      return account;
+    };
+    factory.getFullUserAccount = function() {
+      return $q(function(resolve, reject) {
+        glideraFactory.getBasicInfo(function(e, s, b) {
+          if (s === 200) {
+            account.firstName = b.firstName;
+            account.middleName = b.middleName;
+            account.lastName = b.lastName;
+            account.address1 = b.address1;
+            account.address2 = b.address2;
+            account.city = b.city;
+            account.zipCode = b.zipCode;
+            account.state = States.findState(b.state);
+            account.status = b.status.status;
+
+            // XXX: This is kind of hacky
+            if (b.birthDate) {
+              var birthDate = b.birthDate.replace(/T.*/, '');
+              account.birthDate = $filter('date')(birthDate, 'MM/dd/yyyy');
+            }
+
+            account.email = 'someone@yourdomain.co';
+            account.registered = true;
+            resolve(account);
+          } else {
+            reject();
+          }
+        });
+      });
+    }
+    factory.updateUserAccount = function(account) {
+      console.log(account);
+      return $q(function(resolve, reject) {
+        glideraFactory.updateBasicInfo({
+          'firstName': account.firstName,
+          'lastName': account.lastName,
+          'birthDate': account.birthDate,
+          'address1': account.address1,
+          'address2': account.address2,
+          'city': account.city,
+          'state': account.state.id,
+          'zipCode': account.zipCode
+        }, function(e, s, b) {
+          if (s === 200) {
+            resolve();
+          } else {
+            reject();
+          }
+        });
+      });
+    };
+
+
+    // Fetch the user data if available
+    if (glideraFactory.hasRegistered()) {
+      factory.getFullUserAccount();
+    }
+
+    return factory;
+
+  }]).
+factory('DataFactory', [
+  '$q', '$filter', 'States', 'ExchangeFactory', 'glideraFactory',
+  function($q, $filter, States, ExchangeFactory, glideraFactory) {
+  var factory = {};
 
   factory.getUserWallets = function() {
     return $q(function(resolve, reject) {
@@ -36,59 +105,6 @@ angular.module('app.dataFactory', ['app.glidera', 'app.constants'])
     });
   };
 
-  factory.getUserAccount = function() {
-    return account;
-  };
-  factory.getFullUserAccount = function() {
-    return $q(function(resolve, reject) {
-      glideraFactory.getBasicInfo(function(e, s, b) {
-        if (s === 200) {
-          account.firstName = b.firstName;
-          account.middleName = b.middleName;
-          account.lastName = b.lastName;
-          account.address1 = b.address1;
-          account.address2 = b.address2;
-          account.city = b.city;
-          account.zipCode = b.zipCode;
-          account.state = StateFactory.findState(b.state);
-          account.status = b.status.status;
-
-          // XXX: This is kind of hacky
-          if (b.birthDate) {
-            var birthDate = b.birthDate.replace(/T.*/, '');
-            account.birthDate = $filter('date')(birthDate, 'MM/dd/yyyy');
-          }
-
-          account.email = 'someone@yourdomain.co';
-          account.registered = true;
-          resolve(account);
-        } else {
-          reject();
-        }
-      });
-    });
-  }
-  factory.updateUserAccount = function(account) {
-    console.log(account);
-    return $q(function(resolve, reject) {
-      glideraFactory.updateBasicInfo({
-        'firstName': account.firstName,
-        'lastName': account.lastName,
-        'birthDate': account.birthDate,
-        'address1': account.address1,
-        'address2': account.address2,
-        'city': account.city,
-        'state': account.state.id,
-        'zipCode': account.zipCode
-      }, function(e, s, b) {
-        if (s === 200) {
-          resolve();
-        } else {
-          reject();
-        }
-      });
-    });
-  };
   factory.getExchange = function() {
     return ExchangeFactory;
   }
@@ -176,16 +192,11 @@ angular.module('app.dataFactory', ['app.glidera', 'app.constants'])
     });
   };
 
-  // Fetch the user data if available
-  if (glideraFactory.hasRegistered()) {
-    factory.getFullUserAccount();
-  }
-
   return factory;
 }]);
 
-angular.module('app.constants', [])
-.factory('ExchangeFactory', [function() {
+angular.module('app.constants', []).
+factory('ExchangeFactory', [function() {
   // default exchange data
   return {
     'name': 'Glidera',
@@ -204,8 +215,8 @@ angular.module('app.constants', [])
     'supportsBankAccounts': true,
     'supportsCreditCards': false
   };
-}])
-.factory('StateFactory', [function() {
+}]).
+factory('States', [function() {
   var states = [
     {"id": "AL", "name": "Alabama"},
     {"id": "AK", "name": "Alaska"},
