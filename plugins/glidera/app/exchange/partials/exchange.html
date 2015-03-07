@@ -20,11 +20,20 @@
 <div class="exchange-payment-list row">
   <div class="col-xs-12">
     <ul class="exchange-payment-options list-group" ng-model="bankAccounts">
-      <li class="list-group-item header">Payment Methods</li>
+      <li class="list-group-item header">Payment Methods <button ng-click="exchange.addBankAccount()" class="btn btn-success btn-xs pull-right">ADD NEW</button></li>
 
       <li class="list-group-item" ng-repeat="account in bankAccounts">
-        <i class="fa fa-bank"></i>{{account.description}}
-          <span class="ending pull-right">{{account.accountNumber}}</span>
+        <div class="row">
+          <div class="col-xs-12">
+            <i class="fa fa-bank"></i>{{ account.description }}<br />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-12">
+            <small>{{account.accountNumber}}</small>
+            <label class="label label-info pull-right">{{ account.status || 'PENDING' }}</label>
+          </div>
+        </div>
       </li>
     </ul>
   </div>

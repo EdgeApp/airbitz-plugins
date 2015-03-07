@@ -103,6 +103,10 @@ body .exchange-payment-options {
   margin-top: 20px;
   margin-bottom: 20px;
 }
+body .exchange-payment-options .list-group-item small {
+  margin-left: 24px;
+  font-size: 65%;
+}
 body .exchange-payment-options .list-group-item i {
   width: 24px;
   margin-right: 10px;
