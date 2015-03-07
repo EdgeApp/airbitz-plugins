@@ -63,7 +63,7 @@
 
       <div class="next-cancel row text-right">
         <div class="col-xs-12">
-            <button ng-click="deleteBankAccount()" class="btn btn-lg btn-danger pull-left">Delete</button>
+            <button ng-if="bankAccount.status !== 'Pending'" ng-click="deleteBankAccount()" class="btn btn-lg btn-danger pull-left">Delete</button>
             <button ui-sref="exchange" class="btn btn-lg btn-link">Cancel</button>
             <button ng-click="saveBankAccount()" class="btn btn-lg btn-success">Save</button>
         </div>
