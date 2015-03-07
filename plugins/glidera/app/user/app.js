@@ -1,5 +1,5 @@
 
-angular.module('app.signup', ['app.dataFactory', 'app.constants'])
+angular.module('app.user', ['app.dataFactory', 'app.constants'])
 .controller('signupController', ['$scope', '$state', 'DataFactory',
   function ($scope, $state, DataFactory, StateFactory) {
     Airbitz.ui.title('Glidera Signup');

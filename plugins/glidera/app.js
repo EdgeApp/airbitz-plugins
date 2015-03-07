@@ -1,5 +1,5 @@
 
-var app = angular.module('app', ['app.core', 'app.history', 'app.exchange', 'app.signup']);
+var app = angular.module('app', ['app.core', 'app.history', 'app.exchange', 'app.user']);
 
 app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
 
@@ -15,19 +15,19 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
     // route for signup
     .state("signup", {
       url: "/signup/",
-      templateUrl: "app/signup/partials/signup.html",
+      templateUrl: "app/user/partials/signup.html",
       controller: "signupController",
     })
     // route for email verification
     .state("verifyEmail", {
       url: "/signup/verify/email/",
-      templateUrl: "app/signup/partials/verify.email.html",
+      templateUrl: "app/user/partials/verify.email.html",
       controller: "verifyEmailController",
     })
     // route for phone verification
     .state("verifyPhone", {
       url: "/signup/verify/phone/",
-      templateUrl: "app/signup/partials/verify.phone.html",
+      templateUrl: "app/user/partials/verify.phone.html",
       controller: "verifyPhoneController",
     })
     // route for two factor verifications
@@ -88,7 +88,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
     // route for account
     .state("account", {
       url: "/account/",
-      templateUrl: "app/signup/partials/userAccount.html",
+      templateUrl: "app/user/partials/userAccount.html",
       controller: "userAccountController",
     })
 }]);
