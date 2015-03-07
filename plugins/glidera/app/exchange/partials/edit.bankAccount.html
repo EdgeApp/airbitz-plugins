@@ -1,4 +1,30 @@
 
+<div ng-if="bankAccount.status === 'Pending'">
+
+  <h3>Verify Account</h3>
+
+  <div class="row">
+    <p class="col-xs-12" style="margin-top: 15px; margin-bottom: 15px;">Please check your account for two deposits from <label class="label label-info">{{ exchange.depositId }}</label> and input them below.</p>
+    <div class="col-xs-6">
+      <label for="inputDepositAmount1" class="">Deposit 1</label>
+      <input ng-model="deposit.amount1" type="text" id="inputDepositAmount1" class="form-control" placeholder="0.35" autofocus="" autocomplete="off">
+    </div>
+    <div class="col-xs-6">
+      <label for="inputDepositAmount2" class="">Deposit 2</label>
+      <input ng-model="deposit.amount2" type="text" id="inputDepositAmount2" class="form-control" placeholder="0.15" autofocus="" autocomplete="off">
+    </div>
+  </div>
+
+  <div class="row" style="margin-top: 15px;">
+    <div class="col-xs-12 text-right">
+      <button ng-click="verifyAccount()" class="btn btn-warning">Verify</button>
+    </div>
+  </div>
+
+  <hr />
+
+</div>
+
 <div class="exchange-add-bank-account row">
 
   <div class="col-xs-12">
@@ -39,8 +65,9 @@
 
       <div class="next-cancel row text-right">
         <div class="col-xs-12">
-          <button ui-sref="exchange" class="btn btn-lg btn-link">Cancel</button>
-          <button ng-click="saveBankAccount()" class="btn btn-lg btn-success">Save</button>
+            <button ng-click="deleteBankAccount()" class="btn btn-lg btn-danger pull-left">Delete</button>
+            <button ui-sref="exchange" class="btn btn-lg btn-link">Cancel</button>
+            <button ng-click="saveBankAccount()" class="btn btn-lg btn-success">Save</button>
         </div>
       </div>
     </form>

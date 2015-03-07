@@ -60,11 +60,31 @@ angular.module('app.exchange', ['app.dataFactory'])
       alert('Error!1!111!1');
     });
 
+    $scope.deposit = {};
+    $scope.verifyAccount = function() {
+      DataFactory.verifyBankAccount(
+          $scope.bankAccount.bankAccountUuid, $scope.deposit.amount1,
+          $scope.deposit.amount2, $scope.bankAccount.description).then(function() {
+        $state.go('exchange');
+      }, function() {
+        // TODO: error
+        alert('TODO: Error! Error!');
+      });
+    };
+
     $scope.saveBankAccount = function() {
       DataFactory.updateBankAccount($scope.bankAccount).then(function() {
         $state.go('exchange');
       }, function() {
         // TODO: error
+        alert('TODO: Error! Error!');
+      });
+    };
+
+    $scope.deleteBankAccount = function() {
+      DataFactory.deleteBankAccount('123456', $scope.bankAccount.bankAccountUuid).then(function() {
+        $state.go('exchange');
+      }, function() {
         alert('TODO: Error! Error!');
       });
     };
