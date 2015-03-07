@@ -3,13 +3,13 @@ angular.module('app.exchange', ['app.dataFactory'])
 .controller('homeController', ['$scope', '$state', 'DataFactory',
   function ($scope, $state, DataFactory) {
     $scope.exchange = DataFactory.getExchange();
-    $scope.account = DataFactory.getAccount();
+    $scope.account = DataFactory.getUserAccount();
   }])
 .controller('dashboardController', ['$scope', '$state', 'DataFactory',
   function ($scope, $state, DataFactory) {
     $scope.exchange = DataFactory.getExchange();
-    $scope.account = DataFactory.getAccount();
-    $scope.accountStatus = DataFactory.getAccountStatus();
+    $scope.account = DataFactory.getUserAccount();
+    $scope.userAccountStatus = DataFactory.getUserAccountStatus();
 
     DataFactory.getBankAccounts().then(function(bankAccounts) {
       $scope.bankAccounts = bankAccounts;
@@ -37,7 +37,7 @@ angular.module('app.exchange', ['app.dataFactory'])
 .controller('addAccountController', ['$scope', '$state', 'DataFactory',
   function ($scope, $state, DataFactory) {
     $scope.exchange = DataFactory.getExchange();
-    $scope.account = DataFactory.getAccount();
+    $scope.account = DataFactory.getUserAccount();
     $scope.bankAccount = {};
     $scope.bankAccount.bankAccountType = 'CHECKING';
 
@@ -50,37 +50,25 @@ angular.module('app.exchange', ['app.dataFactory'])
       });
     };
   }])
-.controller('updateAccountController', ['$scope', '$state', 'DataFactory',
-  function ($scope, $state, DataFactory) {
-    $scope.exchange = DataFactory.getExchange();
-    $scope.account = DataFactory.getAccount();
-    $scope.bankAccount = DataFactory.getBankAccount();
-
-    $scope.saveBankAccount = function() {
-      DataFactory.updateBankAccount().then(function() {
-        $state.go('exchange');
-      });
-    };
-  }])
 .controller('addCreditCardController', ['$scope', '$state', 'DataFactory',
   function ($scope, $state, DataFactory) {
     $scope.exchange = DataFactory.getExchange();
-    $scope.account = DataFactory.getAccount();
+    $scope.account = DataFactory.getUserAccount();
   }])
 .controller('orderController', ['$scope', '$state', 'DataFactory',
   function ($scope, $state, DataFactory) {
     $scope.exchange = DataFactory.getExchange();
-    $scope.account = DataFactory.getAccount();
+    $scope.account = DataFactory.getUserAccount();
   }])
 .controller('revirewOrderController', ['$scope', '$state', 'DataFactory',
   function ($scope, $state, DataFactory) {
     $scope.exchange = DataFactory.getExchange();
-    $scope.account = DataFactory.getAccount();
+    $scope.account = DataFactory.getUserAccount();
   }])
 .controller('executeOrderController', ['$scope', '$state', 'DataFactory',
   function ($scope, $state, DataFactory) {
     $scope.exchange = DataFactory.getExchange();
-    $scope.account = DataFactory.getAccount();
+    $scope.account = DataFactory.getUserAccount();
   }]);
     /*
     // ------ exchange stubs

@@ -26,14 +26,13 @@ angular.module('app.dataFactory', ['app.glidera'])
     this.registered = status;
   };
 
-  factory.getAccountStatus = function() {
+  factory.getUserAccountStatus = function() {
     switch(account.status) {
       case 'BASIC_INFO_NOT_VERIFIED':
-        return 'Info Not Verified';
       case 'BASIC_INFO_VERIFIED_BANK_ACCOUNT_NEEDED':
-        return 'Bank Account Needed';
+        return 'Not Verified';
       case 'BASIC_INFO_VERIFIED':
-        return 'Info Needed';
+        return 'Verified';
       default:
         return 'ACCOUNT UNKNOWN';
     }
@@ -59,10 +58,10 @@ angular.module('app.dataFactory', ['app.glidera'])
     'supportsCreditCards': false,
   };
 
-  factory.getAccount = function() {
+  factory.getUserAccount = function() {
     return account;
   }
-  factory.saveAccount = function() {
+  factory.updateUserAccount = function() {
     return $q(function(resolve, reject) {
       setTimeout(function() {
         resolve(true);

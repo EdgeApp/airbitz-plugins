@@ -54,7 +54,6 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
       templateUrl: "app/exchange/partials/add.creditCard.html",
       controller: "addCreditCardController",
     })
-
     // route for buying on exchange
     .state("exchangeOrder", {
       url: "/exchange/order/",
@@ -80,5 +79,11 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
       url: "/exchange/order/execute/",
       templateUrl: "app/exchange/partials/order.execute.html",
       controller: "executeOrderController",
+    })
+    // route for account
+    .state("account", {
+      url: "/account/",
+      templateUrl: "app/signup/partials/userAccount.html",
+      controller: "userAccountController",
     })
 }]);

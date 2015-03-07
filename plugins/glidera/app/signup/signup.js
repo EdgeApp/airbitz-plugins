@@ -5,7 +5,7 @@ angular.module('app.signup', ['app.dataFactory'])
     Airbitz.ui.title('Glidera Signup');
 
     $scope.exchange = DataFactory.getExchange();
-    $scope.account = DataFactory.getAccount();
+    $scope.account = DataFactory.getUserAccount();
 
     $scope.cancelSignup = function(){
       $state.go('home');
@@ -13,8 +13,22 @@ angular.module('app.signup', ['app.dataFactory'])
 
     $scope.submitSignUp = function(account) {
       Airbitz.ui.title('Saving...');
-      DataFactory.saveAccount().then(function() {
+      DataFactory.updateUserAccount().then(function() {
         $state.go('verifyEmail');
+      });
+    };
+  }])
+.controller('userAccountController', ['$scope', '$state', 'DataFactory',
+  function ($scope, $state, DataFactory) {
+    $scope.account = DataFactory.getUserAccount();
+
+    $scope.cancelSignup = function(){
+      $state.go('exchange');
+    };
+
+    $scope.saveUserAccount = function() {
+      DataFactory.updateUserAccount().then(function() {
+        $state.go('exchange');
       });
     };
   }])
@@ -23,14 +37,14 @@ angular.module('app.signup', ['app.dataFactory'])
       Airbitz.ui.title('Glidera: Verify Email');
 
       $scope.exchange = DataFactory.getExchange();
-      $scope.account = DataFactory.getAccount();
+      $scope.account = DataFactory.getUserAccount();
 
       $scope.resendEmail = function(email){
         alert('Resending to: ' + email);
       };
       $scope.verifyEmail = function(){
         Airbitz.ui.title('Saving...');
-        DataFactory.saveAccount().then(function() {
+        DataFactory.updateUserAccount().then(function() {
           $scope.account.setRegistrationStatus(true);
           $state.go('verifyPhone');
         });
@@ -41,7 +55,7 @@ angular.module('app.signup', ['app.dataFactory'])
       Airbitz.ui.title('Glidera: Verify Phone');
 
       $scope.exchange = DataFactory.getExchange();
-      $scope.account = DataFactory.getAccount();
+      $scope.account = DataFactory.getUserAccount();
 
       $scope.verifyPhone = function(){
         $state.go('verifyPhone');
