@@ -71,8 +71,10 @@ angular.module('app.dataFactory', ['app.glidera', 'app.stateFactory'])
           account.status = b.status.status;
 
           // XXX: This is kind of hacky
-          var birthDate = b.birthDate.replace(/T.*/, '');
-          account.birthDate = $filter('date')(birthDate, 'MM/dd/yyyy');
+          if (b.birthDate) {
+            var birthDate = b.birthDate.replace(/T.*/, '');
+            account.birthDate = $filter('date')(birthDate, 'MM/dd/yyyy');
+          }
 
           account.email = 'someone@yourdomain.co';
           account.registered = true;
