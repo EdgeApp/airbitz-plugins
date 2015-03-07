@@ -25,6 +25,14 @@ angular.module('app.dataFactory', ['app.glidera', 'app.stateFactory'])
     this.registered = status;
   };
 
+  factory.getUserWallets = function() {
+    return $q(function(resolve, reject) {
+      Airbitz.core.wallets({
+        success: resolve,
+        error: reject
+      });
+    });
+  };
   // default exchange data
   var exchange = {
     'name': 'Glidera',

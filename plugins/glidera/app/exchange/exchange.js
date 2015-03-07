@@ -109,6 +109,21 @@ angular.module('app.exchange', ['app.dataFactory'])
   function ($scope, $state, DataFactory) {
     $scope.exchange = DataFactory.getExchange();
     $scope.account = DataFactory.getUserAccount();
+
+    DataFactory.getBankAccounts().then(function(bankAccounts) {
+      $scope.bankAccounts = bankAccounts;
+      $scope.transferFromBankAccount = bankAccounts[0];
+    }, function() {
+      // TODO: error
+      alert('TODO: Error! Error!');
+    });
+
+    DataFactory.getUserWallets().then(function(userWallets) {
+      $scope.userWallets = userWallets;
+      $scope.transferToWallet = userWallets[0]
+    }, function(error) {
+      $scope.error = 'Error: Cannot get user wallets.';
+    });
   }])
 .controller('revirewOrderController', ['$scope', '$state', 'DataFactory',
   function ($scope, $state, DataFactory) {
