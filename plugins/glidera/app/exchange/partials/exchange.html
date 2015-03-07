@@ -1,3 +1,15 @@
+<div class="exchange-user-account row">
+  <div class="col-xs-12">
+    <ul class="list-group">
+      <li class="header list-group-item"><i class="fa fa-user"></i> User Account</li>
+      <li ui-sref="account" class="list-group-item">{{ account.firstName || 'First' }} {{ account.lastName || 'Last' }} <label class="label label-outline pull-right">{{ userAccountStatus }}</label></li>
+      <!-- <li ng-if="exchange.supportsBankAccounts" ng-click="exchange.addBankAccount()" class="list-group-item"><i class="fa fa-bank"></i> Add Bank Account</li>
+      <li ng-if="exchange.supportsCreditCards" ng-click="exchange.addCreditCard()" class="list-group-item"><i class="fa fa-credit-card"></i> Add Credit Card</li> -->
+    </ul>
+  </div>
+</div>
+
+
 <div class="buy-sell row">
   <div class="col-xs-6">
     <button ng-click="exchange.buy()" class="buy-button btn-success btn-lg btn-block btn"><i class="fa fa-bitcoin"></i> BUY</button>
@@ -7,31 +19,19 @@
   </div>
 </div>
 
-<div class="exchange-payment-options row">
-  <div class="col-xs-12">
-    <ul class="list-group">
-      <li ui-sref="account" class="list-group-item"><i class="fa fa-user"></i> User Account <label class="label label-info pull-right">{{ userAccountStatus }}</label></li>
-      <li ng-if="exchange.supportsBankAccounts" ng-click="exchange.addBankAccount()" class="list-group-item"><i class="fa fa-bank"></i> Add Bank Account</li>
-      <li ng-if="exchange.supportsCreditCards" ng-click="exchange.addCreditCard()" class="list-group-item"><i class="fa fa-credit-card"></i> Add Credit Card</li>
-    </ul>
-  </div>
-</div>
 
 <div class="exchange-payment-list row">
   <div class="col-xs-12">
     <ul class="exchange-payment-options list-group" ng-model="bankAccounts">
-      <li class="list-group-item header">Payment Methods <button ng-click="exchange.addBankAccount()" class="btn btn-success btn-xs pull-right">ADD NEW</button></li>
+      <li class="list-group-item header"><i class="fa fa-bank"></i>Payment Methods <button ng-click="exchange.addBankAccount()" class="btn btn-primary btn-xs pull-right">ADD NEW</button></li>
 
       <li class="list-group-item" ng-repeat="account in bankAccounts">
         <div class="row">
-          <div class="col-xs-12">
-            <i class="fa fa-bank"></i>{{ account.description }}<br />
-          </div>
+          <div class="col-xs-12">{{ account.description }}</div>
         </div>
         <div class="row">
           <div class="col-xs-12">
-            <small>{{account.accountNumber}}</small>
-            <label class="label label-info pull-right">{{ account.status || 'PENDING' }}</label>
+            <small>{{account.accountNumber}}</small> <label class="label label-outline pull-right">{{ account.status || 'UNKNOWN' }}</label>
           </div>
         </div>
       </li>

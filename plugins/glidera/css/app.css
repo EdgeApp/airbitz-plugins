@@ -55,7 +55,8 @@ body .list-group a.list-group-item {
 }
 body .list-group .list-group-item.header,
 body .list-group a.list-group-item.header {
-  background: #64a6cb;
+  background: #efefef;
+  color: #0f5791;
 }
 body .list-group .list-group-item:hover,
 body .list-group a.list-group-item:hover,
@@ -99,15 +100,15 @@ body .exchange-balances {
   margin-top: 20px;
   margin-bottom: 20px;
 }
-body .exchange-payment-options {
+body .exchange-user-account {
   margin-top: 20px;
   margin-bottom: 20px;
 }
-body .exchange-payment-options .list-group-item small {
-  margin-left: 24px;
+body .exchange-user-account .list-group-item small {
+  margin-left: 12px;
   font-size: 65%;
 }
-body .exchange-payment-options .list-group-item i {
+body .exchange-user-account .list-group-item i {
   width: 24px;
   margin-right: 10px;
 }
