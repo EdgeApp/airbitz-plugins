@@ -2,9 +2,9 @@
   <div class="col-xs-12">
     <ul class="list-group">
       <li class="header list-group-item"><i class="fa fa-user"></i> User Account</li>
-      <li ui-sref="account" class="list-group-item">{{ account.firstName || '' }} {{ account.lastName || '' }} <label class="label label-outline pull-right">{{ userAccountStatus }}</label></li>
-      <!-- <li ng-if="exchange.supportsBankAccounts" ng-click="exchange.addBankAccount()" class="list-group-item"><i class="fa fa-bank"></i> Add Bank Account</li>
-      <li ng-if="exchange.supportsCreditCards" ng-click="exchange.addCreditCard()" class="list-group-item"><i class="fa fa-credit-card"></i> Add Credit Card</li> -->
+      <li ui-sref="account" class="list-group-item">
+        {{ account.firstName || '' }} {{ account.lastName || '' }}
+        <label class="label label-outline pull-right">{{ userAccountStatus }}</label></li>
     </ul>
   </div>
 </div>

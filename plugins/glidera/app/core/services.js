@@ -72,6 +72,7 @@ angular.module('app.dataFactory', ['app.glidera', 'app.stateFactory'])
           account.city = b.city;
           account.zipCode = b.zipCode;
           account.state = StateFactory.findState(b.state);
+          account.status = b.status.status;
 
           // XXX: This is kind of hacky
           var birthDate = b.birthDate.replace(/T.*/, '');
