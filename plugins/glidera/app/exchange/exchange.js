@@ -67,7 +67,6 @@ angular.module('app.exchange', ['app.dataFactory'])
           $scope.deposit.amount2, $scope.bankAccount.description).then(function() {
         $state.go('exchange');
       }, function() {
-        // TODO: error
         alert('TODO: Error! Error!');
       });
     };

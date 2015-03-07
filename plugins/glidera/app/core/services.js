@@ -167,7 +167,7 @@ angular.module('app.dataFactory', ['app.glidera', 'app.stateFactory'])
   factory.verifyBankAccount = function(uuid, amount1, amount2, description) {
     console.log(uuid + ' ' + amount1 + ' ' + amount2 + ' ' + description);
     return $q(function(resolve, reject) {
-      glideraFactory.verifyBankAccount(uuid, amount1, amount2, description, function(e, r, b) {
+      glideraFactory.verifyBankAccount(uuid, amount1, amount2, description, function(e, s, b) {
         s == 200 ?  resolve() : reject();
       });
     });
