@@ -1,6 +1,8 @@
 
-angular.module('app.dataFactory', ['app.glidera', 'app.stateFactory'])
-.factory('DataFactory', ['$q', '$filter', 'StateFactory', 'glideraFactory', function($q, $filter, StateFactory, glideraFactory) {
+angular.module('app.dataFactory', ['app.glidera', 'app.constants'])
+.factory('DataFactory', [
+  '$q', '$filter', 'StateFactory', 'ExchangeFactory', 'glideraFactory',
+  function($q, $filter, StateFactory, ExchangeFactory, glideraFactory) {
   var factory = {};
   // account prepopulate dummy data
   var account = {
@@ -32,25 +34,6 @@ angular.module('app.dataFactory', ['app.glidera', 'app.stateFactory'])
         error: reject
       });
     });
-  };
-  // default exchange data
-  var exchange = {
-    'name': 'Glidera',
-    'icon': 'fa-bitcoin',
-    'countryCode': 'US', // ISO 3661-1
-    'emailVerificationAddress': 'verifications@glidera.com',
-    'phoneVerificationNumber': '+1 650-331-0021',
-    'depositBankName1': 'Bank of America',
-    'depositBankAccount1': '90001923932',
-    'depositBankName2': 'METRO BANK',
-    'depositBankAccount2'
-    : '23002223932',
-    'orderTimeout': '60',
-    'depositTimeout': '3600',
-    'verificationCode': 'someCode',
-    'depositId': 'GLIDER-USA-002',
-    'supportsBankAccounts': true,
-    'supportsCreditCards': false,
   };
 
   factory.getUserAccount = function() {
@@ -107,7 +90,7 @@ angular.module('app.dataFactory', ['app.glidera', 'app.stateFactory'])
     });
   };
   factory.getExchange = function() {
-    return exchange;
+    return ExchangeFactory;
   }
 
   // default bank account data
@@ -201,7 +184,27 @@ angular.module('app.dataFactory', ['app.glidera', 'app.stateFactory'])
   return factory;
 }]);
 
-angular.module('app.stateFactory', [])
+angular.module('app.constants', [])
+.factory('ExchangeFactory', [function() {
+  // default exchange data
+  return {
+    'name': 'Glidera',
+    'icon': 'fa-bitcoin',
+    'countryCode': 'US', // ISO 3661-1
+    'emailVerificationAddress': 'verifications@glidera.com',
+    'phoneVerificationNumber': '+1 650-331-0021',
+    'depositBankName1': 'Bank of America',
+    'depositBankAccount1': '90001923932',
+    'depositBankName2': 'METRO BANK',
+    'depositBankAccount2': '23002223932',
+    'orderTimeout': '60',
+    'depositTimeout': '3600',
+    'verificationCode': 'someCode',
+    'depositId': 'GLIDER-USA-002',
+    'supportsBankAccounts': true,
+    'supportsCreditCards': false
+  };
+}])
 .factory('StateFactory', [function() {
   var states = [
     {"id": "AL", "name": "Alabama"},
