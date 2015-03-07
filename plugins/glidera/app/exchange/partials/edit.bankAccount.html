@@ -25,7 +25,7 @@
 
 </div>
 
-<div class="exchange-add-bank-account row">
+<div class="exchange-edit-bank-account row">
 
   <div class="col-xs-12">
 
@@ -38,30 +38,28 @@
             class="form-control" autocomplete="off">
       </div>
 
-      <div class="form-group">
-        <label for="inputIsPrimary" class="">Primary Account:</label>
-        <input ng-model="bankAccount.primary"
-            type="checkbox" id="inputIsPrimary"
-            class="form-control">
-      </div>
-
-
-      <div class="form-group">
-        <label for="inputAccountType" class="">Account Type</label>
-        <div>
-            {{ bankAccount.bankAccountType }}
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="inputBankAccountNumber" class="">Account Number</label>
-        <div> {{ bankAccount.accountNumber }} </div>
-      </div>
-
-      <div class="form-group">
-        <label for="inputBankRoutingNumber" class="">Routing Number</label>
-        <div>{{bankAccount.routingNumber}}</div>
-      </div>
+      <table class="bank-account-info table table-bordered">
+        <tr>
+          <td>Primary Account</td>
+          <td>
+            <input ng-model="bankAccount.primary"
+            type="checkbox" id="inputIsPrimary">
+          </td>
+        </tr>
+        <tr>
+        <tr>
+          <td>Account Type</td>
+          <td>{{ bankAccount.bankAccountType }}</td>
+        </tr>
+        <tr>
+          <td>Account Number</td>
+          <td>{{ bankAccount.accountNumber }}</td>
+        </tr>
+        <tr>
+          <td>Routing Number</td>
+          <td>{{bankAccount.routingNumber}}</td>
+        </tr>
+      </table>
 
       <div class="next-cancel row text-right">
         <div class="col-xs-12">
