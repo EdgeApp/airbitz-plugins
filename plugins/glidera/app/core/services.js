@@ -1,6 +1,6 @@
 
-angular.module('app.dataFactory', ['app.glidera'])
-.factory('DataFactory', ['$q', 'glideraFactory', function($q, glideraFactory) {
+angular.module('app.dataFactory', ['app.glidera', 'app.stateFactory'])
+.factory('DataFactory', ['$q', '$filter', 'StateFactory', 'glideraFactory', function($q, $filter, StateFactory, glideraFactory) {
   var factory = {};
   // account prepopulate dummy data
   var account = {
@@ -8,14 +8,13 @@ angular.module('app.dataFactory', ['app.glidera'])
     'middleName': 'Walleye',
     'lastName': 'Bobby',
     'email': 'jimmy@hendrix',
-    'street': '1001 east high st',
-    'street2': 'apt 2',
+    'address1': '1001 east high st',
+    'address2': 'apt 2',
     'city': 'Pottstown',
-    'zip': '19464',
+    'zipCode': '19464',
     'state': 'PA',
-    'country': 'US',
-    'dob': '01-22-1980',
-    'registered': false,
+    'birthDate': '01-22-1980',
+    'registered': true,
     'status': 'BASIC_INFO_NOT_VERIFIED'
   };
 
@@ -60,12 +59,52 @@ angular.module('app.dataFactory', ['app.glidera'])
 
   factory.getUserAccount = function() {
     return account;
-  }
-  factory.updateUserAccount = function() {
+  };
+  factory.getFullUserAccount = function() {
     return $q(function(resolve, reject) {
-      setTimeout(function() {
-        resolve(true);
-      }, 500);
+      glideraFactory.getBasicInfo(function(e, s, b) {
+        if (s === 200) {
+          account.firstName = b.firstName;
+          account.middleName = b.middleName;
+          account.lastName = b.lastName;
+          account.address1 = b.address1;
+          account.address2 = b.address2;
+          account.city = b.city;
+          account.zipCode = b.zipCode;
+          account.state = StateFactory.findState(b.state);
+
+          // XXX: This is kind of hacky
+          var birthDate = b.birthDate.replace(/T.*/, '');
+          account.birthDate = $filter('date')(birthDate, 'MM/dd/yyyy');
+
+          account.email = 'someone@yourdomain.co';
+          account.registered = true;
+          resolve(account);
+        } else {
+          reject();
+        }
+      });
+    });
+  }
+  factory.updateUserAccount = function(account) {
+    console.log(account);
+    return $q(function(resolve, reject) {
+      glideraFactory.updateBasicInfo({
+        'firstName': account.firstName,
+        'lastName': account.lastName,
+        'birthDate': account.birthDate,
+        'address1': account.address1,
+        'address2': account.address2,
+        'city': account.city,
+        'state': account.state.id,
+        'zipCode': account.zipCode
+      }, function(e, s, b) {
+        if (s === 200) {
+          resolve();
+        } else {
+          reject();
+        }
+      });
     });
   };
   factory.getExchange = function() {
@@ -151,3 +190,71 @@ angular.module('app.dataFactory', ['app.glidera'])
   return factory;
 }]);
 
+angular.module('app.stateFactory', [])
+.factory('StateFactory', [function() {
+  var states = [
+    {"id": "AL", "name": "Alabama"},
+    {"id": "AK", "name": "Alaska"},
+    {"id": "AZ", "name": "Arizona"},
+    {"id": "AR", "name": "Arkansas"},
+    {"id": "CA", "name": "California"},
+    {"id": "CO", "name": "Colorado"},
+    {"id": "CT", "name": "Connecticut"},
+    {"id": "DE", "name": "Delaware"},
+    {"id": "DC", "name": "District"},
+    {"id": "FL", "name": "Florida"},
+    {"id": "GA", "name": "Georgia"},
+    {"id": "HI", "name": "Hawaii"},
+    {"id": "ID", "name": "Idaho"},
+    {"id": "IL", "name": "Illinois"},
+    {"id": "IN", "name": "Indiana"},
+    {"id": "IA", "name": "Iowa"},
+    {"id": "KS", "name": "Kansas"},
+    {"id": "KY", "name": "Kentucky"},
+    {"id": "LA", "name": "Louisiana"},
+    {"id": "ME", "name": "Maine"},
+    {"id": "MD", "name": "Maryland"},
+    {"id": "MA", "name": "Massachusetts"},
+    {"id": "MI", "name": "Michigan"},
+    {"id": "MN", "name": "Minnesota"},
+    {"id": "MS", "name": "Mississippi"},
+    {"id": "MO", "name": "Missouri"},
+    {"id": "MT", "name": "Montana"},
+    {"id": "NE", "name": "Nebraska"},
+    {"id": "NV", "name": "Nevada"},
+    {"id": "NH", "name": "New"},
+    {"id": "NJ", "name": "New"},
+    {"id": "NM", "name": "New"},
+    {"id": "NY", "name": "New"},
+    {"id": "NC", "name": "North"},
+    {"id": "ND", "name": "North"},
+    {"id": "OH", "name": "Ohio"},
+    {"id": "OK", "name": "Oklahoma"},
+    {"id": "OR", "name": "Oregon"},
+    {"id": "PA", "name": "Pennsylvania"},
+    {"id": "RI", "name": "Rhode"},
+    {"id": "SC", "name": "South"},
+    {"id": "SD", "name": "South"},
+    {"id": "TN", "name": "Tennessee"},
+    {"id": "TX", "name": "Texas"},
+    {"id": "UT", "name": "Utah"},
+    {"id": "VT", "name": "Vermont"},
+    {"id": "VA", "name": "Virginia"},
+    {"id": "WA", "name": "Washington"},
+    {"id": "WV", "name": "West"},
+    {"id": "WI", "name": "Wisconsin"},
+    {"id": "WY", "name": "Wyoming"}
+  ];
+  return {
+    getStates: function() {
+      return states;
+    },
+    findState: function(code) {
+      code = code.replace(/.*, /, ''); /* XXX: AHHHHHHHHH GLIDERA!!!!!!!! */
+      var l = states.filter(function(s) {
+        return s.id === code;
+      });
+      return l.length >= 1 ? l[0] : null;
+    }
+  }
+}]);

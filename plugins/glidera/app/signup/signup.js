@@ -1,7 +1,7 @@
 
-angular.module('app.signup', ['app.dataFactory'])
+angular.module('app.signup', ['app.dataFactory', 'app.stateFactory'])
 .controller('signupController', ['$scope', '$state', 'DataFactory',
-  function ($scope, $state, DataFactory) {
+  function ($scope, $state, DataFactory, StateFactory) {
     Airbitz.ui.title('Glidera Signup');
 
     $scope.exchange = DataFactory.getExchange();
@@ -18,16 +18,23 @@ angular.module('app.signup', ['app.dataFactory'])
       });
     };
   }])
-.controller('userAccountController', ['$scope', '$state', 'DataFactory',
-  function ($scope, $state, DataFactory) {
-    $scope.account = DataFactory.getUserAccount();
+.controller('userAccountController', ['$scope', '$state', 'DataFactory', 'StateFactory',
+  function ($scope, $state, DataFactory, StateFactory) {
+    $scope.states = StateFactory.getStates();
+    DataFactory.getFullUserAccount().then(function(account) {
+      $scope.account = account;
+    }, function() {
+      // TODO: Error!!!
+      alert('Error!!!!');
+    });
 
     $scope.cancelSignup = function(){
       $state.go('exchange');
     };
 
     $scope.saveUserAccount = function() {
-      DataFactory.updateUserAccount().then(function() {
+      DataFactory.updateUserAccount($scope.account).then(function() {
+        Airbitz.ui.title('Saving...');
         $state.go('exchange');
       });
     };
