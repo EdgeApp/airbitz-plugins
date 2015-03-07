@@ -4,18 +4,18 @@ angular.module('app.dataFactory', ['app.glidera', 'app.stateFactory'])
   var factory = {};
   // account prepopulate dummy data
   var account = {
-    'firstName': 'Ricky',
-    'middleName': 'Walleye',
-    'lastName': 'Bobby',
-    'email': 'jimmy@hendrix',
-    'address1': '1001 east high st',
-    'address2': 'apt 2',
-    'city': 'Pottstown',
-    'zipCode': '19464',
-    'state': 'PA',
-    'birthDate': '01-22-1980',
+    'firstName': '',
+    'middleName': '',
+    'lastName': '',
+    'email': '',
+    'address1': '',
+    'address2': '',
+    'city': '',
+    'zipCode': '',
+    'state': '',
+    'birthDate': '',
     'registered': true,
-    'status': 'BASIC_INFO_NOT_VERIFIED'
+    'status': ''
   };
 
   account.getRegistrationStatus = function() {
