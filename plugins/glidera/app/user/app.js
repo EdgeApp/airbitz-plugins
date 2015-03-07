@@ -21,6 +21,7 @@ angular.module('app.user', ['app.dataFactory', 'app.constants'])
 .controller('userAccountController', ['$scope', '$state', 'DataFactory', 'States', 'UserFactory',
   function ($scope, $state, DataFactory, States, UserFactory) {
     $scope.states = States.getStates();
+    $scope.account = UserFactory.getUserAccount();
     UserFactory.getFullUserAccount().then(function(account) {
       $scope.account = account;
     }, function() {
