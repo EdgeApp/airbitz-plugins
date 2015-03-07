@@ -275,7 +275,6 @@ factory('States', [function() {
       return states;
     },
     findState: function(code) {
-      code = code.replace(/.*, /, ''); /* XXX: AHHHHHHHHH GLIDERA!!!!!!!! */
       var l = states.filter(function(s) {
         return s.id === code;
       });
