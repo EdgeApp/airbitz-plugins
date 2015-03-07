@@ -4,7 +4,7 @@
       <li class="header list-group-item"><i class="fa fa-user"></i> User Account</li>
       <li ui-sref="account" class="list-group-item">
         {{ account.firstName || '' }} {{ account.lastName || '' }}
-        <label class="label label-outline pull-right">{{ userAccountStatus }}</label></li>
+        <label class="label label-outline pull-right">{{ account.status | statusFilter }}</label></li>
     </ul>
   </div>
 </div>

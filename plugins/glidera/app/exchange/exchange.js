@@ -1,5 +1,18 @@
 
 angular.module('app.exchange', ['app.dataFactory'])
+.filter('statusFilter', function() {
+  return function(status) {
+    switch(status) {
+      case 'BASIC_INFO_NOT_VERIFIED':
+      case 'BASIC_INFO_VERIFIED_BANK_ACCOUNT_NEEDED':
+        return 'Not Verified';
+      case 'BASIC_INFO_VERIFIED':
+        return 'Verified';
+      default:
+        return 'ACCOUNT UNKNOWN';
+    }
+  };
+})
 .controller('homeController', ['$scope', '$state', 'DataFactory',
   function ($scope, $state, DataFactory) {
     $scope.exchange = DataFactory.getExchange();
@@ -9,7 +22,6 @@ angular.module('app.exchange', ['app.dataFactory'])
   function ($scope, $state, DataFactory) {
     $scope.exchange = DataFactory.getExchange();
     $scope.account = DataFactory.getUserAccount();
-    $scope.userAccountStatus = DataFactory.getUserAccountStatus();
 
     DataFactory.getBankAccounts().then(function(bankAccounts) {
       $scope.bankAccounts = bankAccounts;

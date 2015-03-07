@@ -25,18 +25,6 @@ angular.module('app.dataFactory', ['app.glidera', 'app.stateFactory'])
     this.registered = status;
   };
 
-  factory.getUserAccountStatus = function() {
-    switch(account.status) {
-      case 'BASIC_INFO_NOT_VERIFIED':
-      case 'BASIC_INFO_VERIFIED_BANK_ACCOUNT_NEEDED':
-        return 'Not Verified';
-      case 'BASIC_INFO_VERIFIED':
-        return 'Verified';
-      default:
-        return 'ACCOUNT UNKNOWN';
-    }
-  };
-
   // default exchange data
   var exchange = {
     'name': 'Glidera',
@@ -194,6 +182,11 @@ angular.module('app.dataFactory', ['app.glidera', 'app.stateFactory'])
       });
     });
   };
+
+  // Fetch the user data if available
+  if (glideraFactory.hasRegistered()) {
+    factory.getFullUserAccount();
+  }
 
   return factory;
 }]);
