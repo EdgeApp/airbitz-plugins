@@ -1,0 +1,49 @@
+
+<div class="exchange-add-bank-account row">
+
+  <div class="col-xs-12">
+
+    <form action="" class="form">
+
+      <div class="form-group">
+        <label for="inputBankAccountDescription" class="">Description</label>
+        <input ng-model="bankAccount.description"
+            type="text" id="inputBankAccountDescription"
+            class="form-control" autocomplete="off">
+      </div>
+
+      <div class="form-group">
+        <label for="inputIsPrimary" class="">Primary Account:</label>
+        <input ng-model="bankAccount.primary"
+            type="checkbox" id="inputIsPrimary"
+            class="form-control">
+      </div>
+
+
+      <div class="form-group">
+        <label for="inputAccountType" class="">Account Type</label>
+        <div>
+            {{ bankAccount.bankAccountType }}
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="inputBankAccountNumber" class="">Account Number</label>
+        <div> {{ bankAccount.accountNumber }} </div>
+      </div>
+
+      <div class="form-group">
+        <label for="inputBankRoutingNumber" class="">Routing Number</label>
+        <div>{{bankAccount.routingNumber}}</div>
+      </div>
+
+      <div class="next-cancel row text-right">
+        <div class="col-xs-12">
+          <button ui-sref="exchange" class="btn btn-lg btn-link">Cancel</button>
+          <button ng-click="saveBankAccount()" class="btn btn-lg btn-success">Save</button>
+        </div>
+      </div>
+    </form>
+
+  </div>
+</div>

@@ -50,6 +50,25 @@ angular.module('app.exchange', ['app.dataFactory'])
       });
     };
   }])
+.controller('editBankAccountController', ['$scope', '$state', '$stateParams', 'DataFactory',
+  function ($scope, $state, $stateParams, DataFactory) {
+    $scope.account = DataFactory.getUserAccount();
+    DataFactory.getBankAccount($stateParams.uuid).then(function(bankAccount) {
+      $scope.bankAccount = bankAccount;
+    }, function() {
+      // TODO!!!
+      alert('Error!1!111!1');
+    });
+
+    $scope.saveBankAccount = function() {
+      DataFactory.updateBankAccount($scope.bankAccount).then(function() {
+        $state.go('exchange');
+      }, function() {
+        // TODO: error
+        alert('TODO: Error! Error!');
+      });
+    };
+  }])
 .controller('addCreditCardController', ['$scope', '$state', 'DataFactory',
   function ($scope, $state, DataFactory) {
     $scope.exchange = DataFactory.getExchange();

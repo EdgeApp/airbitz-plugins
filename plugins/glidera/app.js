@@ -48,6 +48,11 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
       templateUrl: "app/exchange/partials/add.bankAccount.html",
       controller: "addAccountController",
     })
+    .state("exchangeEditBankController", {
+      url: "/exchange/edit/bankAccount/:uuid/",
+      templateUrl: "app/exchange/partials/edit.bankAccount.html",
+      controller: "editBankAccountController",
+    })
     // route for adding exchange credit card
     .state("exchangeAddCreditCard", {
       url: "/exchange/add/creditCard/",

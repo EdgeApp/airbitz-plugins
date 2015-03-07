@@ -132,9 +132,17 @@ angular.module('app.dataFactory', ['app.glidera', 'app.stateFactory'])
         });
       });
   };
-  factory.getBankAccount = function() {
-    return bankAccount;
-  }
+  factory.getBankAccount = function(uuid) {
+    return $q(function(resolve, reject) {
+      glideraFactory.getBankAccount(uuid, function(e, s, b) {
+        if (e === null) {
+          resolve(b);
+        } else {
+          reject();
+        }
+      });
+    });
+  };
 
   // MAPS TO: https://sandbox.glidera.com/documentation.xhtml#apiReference-createBankAccount
   factory.createBankAccount = function(bankAccount) {
@@ -162,14 +170,12 @@ angular.module('app.dataFactory', ['app.glidera', 'app.stateFactory'])
 
   // MAPS TO: https://sandbox.glidera.com/documentation.xhtml#apiReference-updateBankAccount
   factory.updateBankAccount = function(bankAccount) {
-    console.log(bankAccount);
     return $q(function(resolve, reject) {
-      glideraFactory.updateBankAccount(accountId, desc, setPrimary, function(e, s, b) {
-        if (e === null || b.success === true) {
-          resolve();
-        } else {
-          reject();
-        }
+      glideraFactory.updateBankAccount(
+          bankAccount.bankAccountUuid, bankAccount.description,
+          bankAccount.primary,
+      function(e, s, b) {
+          e === null ? resolve(b) : reject();
       });
     });
   };
