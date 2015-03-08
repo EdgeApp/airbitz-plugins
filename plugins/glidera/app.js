@@ -60,16 +60,16 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
       controller: "addCreditCardController",
     })
     // route for buying on exchange
-    .state("exchangeOrder", {
-      url: "/exchange/order/",
-      templateUrl: "app/exchange/partials/order.html",
-      controller: "orderController",
+    .state("exchangeOrderBuy", {
+      url: "/exchange/order/buy/",
+      templateUrl: "app/exchange/partials/order.buy.html",
+      controller: "orderBuyController",
     })
     // route for selling on exchange
-    .state("exchangeSell", {
-      url: "/exchange/sell/",
-      templateUrl: "app/exchange/partials/order.html",
-      controller: "orderController",
+    .state("exchangeOrderSell", {
+      url: "/exchange/order/sell/",
+      templateUrl: "app/exchange/partials/order.sell.html",
+      controller: "orderSellController",
     })
 
     // route for selling on exchange

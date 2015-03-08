@@ -1,0 +1,56 @@
+<div class="row">
+  <div class="col-xs-6">
+    <div class="btn-group pull-left" data-toggle-name="btc-fiat-toggle" data-toggle="buttons-radio">
+      <button type="button" value="default" data-toggle="button" class="btn btn-warning">BUY</button>
+      <button type="button active" value="distance" data-toggle="button"
+      class="btn">SELL</button>
+    </div>
+  </div>
+</div>
+
+<hr />
+
+<div class="exchange-buy-sell-interface row">
+  <div class="col-xs-12">
+
+    <form action="" class="form">
+
+      <div class="row">
+        <div class="col-xs-6 form-group">
+          <label for="inputBtcWallet" class="">Transfer From</label>
+          <select
+            ng-model="transferToWallet"
+            ng-options="w.name for w in userWallets"
+            id="inputBtcWallet" class="form-control">
+          </select>
+        </div>
+
+        <div class="col-xs-6 form-group">
+          <label for="inputFromBankAccount" class="">Depoist To</label>
+          <select
+            ng-model="transferFromBankAccount"
+            ng-options="a.description for a in bankAccounts"
+            id="inputFromBankAccount" class="form-control">
+          </select>
+        </div>
+      </div>
+
+
+      <div class="form-group">
+        <label for="inputBuySellAmount" class="">Amount</label>
+        <input type="text" id="inputBuySellAmount" class="form-control" placeholder="2.5" autofocus="true" autocomplete="off">
+
+        <label class="fiat-value">$311.00</label>
+      </div>
+
+      <div class="row text-right" style="margin-top: 40px;">
+        <div class="col-xs-12">
+          <button ui-sref="exchange" class="buy-sell-next btn btn-lg btn-link">Cancel</button>
+          <button ng-click="exchange.reviewOrder()" class="buy-sell-next btn btn-lg btn-success">Next</button>
+        </div>
+      </div>
+
+    </form>
+
+  </div>
+</div>

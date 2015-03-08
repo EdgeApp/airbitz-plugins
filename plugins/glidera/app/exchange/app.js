@@ -31,11 +31,11 @@ angular.module('app.exchange', ['app.dataFactory'])
     });
 
     $scope.exchange.buy = function(){
-      $state.go('exchangeOrder');
+      $state.go('exchangeOrderBuy');
     };
 
     $scope.exchange.sell = function(){
-      $state.go('exchangeSell');
+      $state.go('exchangeOrderSell');
     };
 
     $scope.exchange.addBankAccount = function(){
@@ -106,6 +106,46 @@ angular.module('app.exchange', ['app.dataFactory'])
     $scope.account = UserFactory.getUserAccount();
   }])
 .controller('orderController', ['$scope', '$state', 'DataFactory', 'UserFactory',
+  function ($scope, $state, DataFactory, UserFactory) {
+    $scope.exchange = DataFactory.getExchange();
+    $scope.account = UserFactory.getUserAccount();
+
+    DataFactory.getBankAccounts().then(function(bankAccounts) {
+      $scope.bankAccounts = bankAccounts;
+      $scope.transferFromBankAccount = bankAccounts[0];
+    }, function() {
+      // TODO: error
+      alert('TODO: Error! Error!');
+    });
+
+    DataFactory.getUserWallets().then(function(userWallets) {
+      $scope.userWallets = userWallets;
+      $scope.transferToWallet = userWallets[0]
+    }, function(error) {
+      $scope.error = 'Error: Cannot get user wallets.';
+    });
+  }])
+.controller('orderBuyController', ['$scope', '$state', 'DataFactory', 'UserFactory',
+  function ($scope, $state, DataFactory, UserFactory) {
+    $scope.exchange = DataFactory.getExchange();
+    $scope.account = UserFactory.getUserAccount();
+
+    DataFactory.getBankAccounts().then(function(bankAccounts) {
+      $scope.bankAccounts = bankAccounts;
+      $scope.transferFromBankAccount = bankAccounts[0];
+    }, function() {
+      // TODO: error
+      alert('TODO: Error! Error!');
+    });
+
+    DataFactory.getUserWallets().then(function(userWallets) {
+      $scope.userWallets = userWallets;
+      $scope.transferToWallet = userWallets[0]
+    }, function(error) {
+      $scope.error = 'Error: Cannot get user wallets.';
+    });
+  }])
+.controller('orderSellController', ['$scope', '$state', 'DataFactory', 'UserFactory',
   function ($scope, $state, DataFactory, UserFactory) {
     $scope.exchange = DataFactory.getExchange();
     $scope.account = UserFactory.getUserAccount();
