@@ -96,6 +96,10 @@ body .buy-sell {
   margin-top: 20px;
   margin-bottom: 40px;
 }
+body .buy-sell.btn-group .btn.active {
+  background: none;
+  border-color: white;
+}
 body .exchange-balances {
   margin-top: 20px;
   margin-bottom: 20px;

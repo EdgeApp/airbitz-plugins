@@ -1,14 +1,12 @@
 <div class="row">
   <div class="col-xs-6">
-    <div class="btn-group pull-left" data-toggle-name="btc-fiat-toggle" data-toggle="buttons-radio">
-      <button type="button" value="default" data-toggle="button" class="btn btn-warning">BUY</button>
-      <button type="button active" value="distance" data-toggle="button"
-      class="btn">SELL</button>
+    <div class="buy-sell btn-group pull-left" data-toggle-name="btc-fiat-toggle" data-toggle="buttons-radio">
+      <button ui-sref="exchangeOrderBuy" type="button" value="default" data-toggle="button" class="btn btn-primary">BUY</button>
+      <button ui-sref="exchangeOrderSell" type="button" value="distance" data-toggle="button"
+      class="btn btn-success active">SELL</button>
     </div>
   </div>
 </div>
-
-<hr />
 
 <div class="exchange-buy-sell-interface row">
   <div class="col-xs-12">
