@@ -144,6 +144,12 @@ angular.module('app.exchange', ['app.dataFactory'])
     }, function(error) {
       $scope.error = 'Error: Cannot get user wallets.';
     });
+
+    $scope.exchange.reviewOrder = function(){
+      $scope.exchange.order = {};
+      $scope.exchange.order.type = 'Buy';
+      $state.go('reviewOrder');
+    };
   }])
 .controller('orderSellController', ['$scope', '$state', 'DataFactory', 'UserFactory',
   function ($scope, $state, DataFactory, UserFactory) {
@@ -169,40 +175,18 @@ angular.module('app.exchange', ['app.dataFactory'])
   function ($scope, $state, DataFactory, UserFactory) {
     $scope.exchange = DataFactory.getExchange();
     $scope.account = UserFactory.getUserAccount();
-  }])
-.controller('executeOrderController', ['$scope', '$state', 'DataFactory', 'UserFactory',
-  function ($scope, $state, DataFactory, UserFactory) {
-    $scope.exchange = DataFactory.getExchange();
-    $scope.account = UserFactory.getUserAccount();
-  }]);
-    /*
-    // ------ exchange stubs
-    $scope.exchange.buy = function(){
-      $state.go('exchangeOrder');
-    };
-
-    $scope.exchange.sell = function(){
-      $state.go('exchangeSell');
-    };
-
-
-    //------ exchange.order actions
-    $scope.exchange.reviewOrder = function(){
-      $scope.exchange.order = {};
-      $scope.exchange.order.type = 'Buy';
-      $state.go('reviewOrder');
-    };
-
-    $scope.exchange.editOrder = function(){
-      $state.go('exchangeOrder');
-    };
 
     $scope.exchange.executeOrder = function(){
       alert('SEND ORDER TO GLIDERA VIA API');
       $state.go('executeOrder');
     };
+  }])
+.controller('executeOrderController', ['$scope', '$state', 'DataFactory', 'UserFactory',
+  function ($scope, $state, DataFactory, UserFactory) {
+    $scope.exchange = DataFactory.getExchange();
+    $scope.account = UserFactory.getUserAccount();
 
     $scope.exchange.confirmDeposit = function(){
       $state.go('confirmDeposit');
     };
-    */
+  }]);
