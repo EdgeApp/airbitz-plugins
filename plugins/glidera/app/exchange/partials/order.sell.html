@@ -1,10 +1,14 @@
-<div class="row">
+<div class="buy-sell row">
   <div class="col-xs-6">
-    <div class="buy-sell btn-group pull-left" data-toggle-name="btc-fiat-toggle" data-toggle="buttons-radio">
+    <div class="btn-group pull-left" data-toggle-name="btc-fiat-toggle" data-toggle="buttons-radio">
       <button ui-sref="exchangeOrderBuy" type="button" value="default" data-toggle="button" class="btn btn-primary">BUY</button>
       <button ui-sref="exchangeOrderSell" type="button" value="distance" data-toggle="button"
       class="btn btn-success active">SELL</button>
     </div>
+  </div>
+
+  <div class="col-xs-6">
+      <span class="exchange-rate pull-right">1 BTC = ${{ exchange.exchangeRate }}</span>
   </div>
 </div>
 
@@ -35,10 +39,19 @@
 
 
       <div class="form-group">
-        <label for="inputBuySellAmount" class="">Amount</label>
-        <input type="text" id="inputBuySellAmount" class="form-control" placeholder="2.5" autofocus="true" autocomplete="off">
+        <div class="row">
+          <div class="col-xs-12">
+            <label for="inputBuySellAmount" class="pull-left">Amount to Buy</label>
+          </div>
+        </div>
 
-        <label class="fiat-value">$311.00</label>
+        <div class="input-group">
+          <input ng-model="orderValueInput" type="text" id="inputBuySellAmount" class="form-control" placeholder="{{ placeholderValue }}" autofocus="true" autocomplete="off">
+          <span class="input-group-addon">{{ prependSymbol }}</span>
+        </div>
+
+        <label class="converted-value">{{ convertedValue(orderValueInput) }}</label>
+        <button ng-click="toggleOutputState()" class="btn btn-warning btn-xs pull-right">switch</button>
       </div>
 
       <div class="row text-right" style="margin-top: 40px;">

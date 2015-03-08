@@ -105,26 +105,6 @@ angular.module('app.exchange', ['app.dataFactory'])
     $scope.exchange = DataFactory.getExchange();
     $scope.account = UserFactory.getUserAccount();
   }])
-.controller('orderController', ['$scope', '$state', 'DataFactory', 'UserFactory',
-  function ($scope, $state, DataFactory, UserFactory) {
-    $scope.exchange = DataFactory.getExchange();
-    $scope.account = UserFactory.getUserAccount();
-
-    DataFactory.getBankAccounts().then(function(bankAccounts) {
-      $scope.bankAccounts = bankAccounts;
-      $scope.transferFromBankAccount = bankAccounts[0];
-    }, function() {
-      // TODO: error
-      alert('TODO: Error! Error!');
-    });
-
-    DataFactory.getUserWallets().then(function(userWallets) {
-      $scope.userWallets = userWallets;
-      $scope.transferToWallet = userWallets[0]
-    }, function(error) {
-      $scope.error = 'Error: Cannot get user wallets.';
-    });
-  }])
 .controller('orderBuyController', ['$scope', '$state', 'DataFactory', 'UserFactory',
   function ($scope, $state, DataFactory, UserFactory) {
     $scope.exchange = DataFactory.getExchange();
@@ -144,6 +124,47 @@ angular.module('app.exchange', ['app.dataFactory'])
     }, function(error) {
       $scope.error = 'Error: Cannot get user wallets.';
     });
+
+
+
+
+    // ui toggle state setup
+    $scope.outputSatoshi = true;
+    $scope.prependSymbol = 'USD';
+    $scope.placeholderValue = '20.00';
+
+
+    // function for ui to switch input/output
+    $scope.toggleOutputState = function() {
+      $scope.outputSatoshi = !$scope.outputSatoshi;
+
+      if($scope.outputSatoshi) {
+        $scope.prependSymbol = 'USD';
+
+      } else {
+        $scope.prependSymbol = 'BTC';
+      }
+
+      $scope.orderValueInput = $scope.convertedOutput;
+    };
+
+
+    // convert user input to converted value for live display
+    $scope.convertedValue = function(input) {
+      if (typeof(input)==='undefined') input = 0;
+
+      if($scope.outputSatoshi) {
+        output = Airbitz.core.formatSatoshi(Airbitz.core.currencyToSatoshi(input, $scope.exchange.currencyNum), false);
+      } else {
+        output = Airbitz.core.formatCurrency(Airbitz.core.satoshiToCurrency(input, $scope.exchange.currencyNum), false);
+      }
+
+      return output;
+    };
+
+
+
+
 
     $scope.exchange.reviewOrder = function(){
       $scope.exchange.order = {};

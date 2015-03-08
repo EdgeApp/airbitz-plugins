@@ -100,6 +100,10 @@ body .buy-sell.btn-group .btn.active {
   background: none;
   border-color: white;
 }
+body .buy-sell .exchange-rate {
+  padding-top: 6px;
+  font-size: 20px;
+}
 body .exchange-balances {
   margin-top: 20px;
   margin-bottom: 20px;
@@ -135,7 +139,7 @@ body .exchange-buy-sell-interface input[type=text] {
   padding: 24px 12px;
   font-size: 150%;
 }
-body .exchange-buy-sell-interface .fiat-value {
+body .exchange-buy-sell-interface .converted-value {
   padding: 3px 12px;
   font-size: 150%;
   color: #64a6cb;
