@@ -106,7 +106,7 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa'])
     };
   }])
 
-.controller('orderController', 
+.controller('orderController',
   ['$scope', '$state', '$stateParams', 'DataFactory', 'UserFactory', 'TwoFactor',
   function ($scope, $state, $stateParams, DataFactory, UserFactory, TwoFactor) {
     $scope.exchange = DataFactory.getExchange();
@@ -200,8 +200,12 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa'])
   }])
 .controller('transactionsController', ['$scope', '$state', 'DataFactory',
   function ($scope, $state, DataFactory) {
-    $scope.transactions = DataFactory.getTransactions();
-    console.log('TRANSACTIONS: ' + $scope.transactions);
+    // $scope.transactions = DataFactory.getTransactions();
+    // console.log('TRANSACTIONS: ' + $scope.transactions);
+    DataFactory.getTransactions().then(function(transactions) {
+      $scope.transactions = transactions;
+    })
+
   }]);
 
 

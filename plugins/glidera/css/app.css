@@ -149,6 +149,10 @@ body .exchange-buy-sell-interface .converted-value {
   font-size: 150%;
   color: #64a6cb;
 }
+body .transactions .table thead {
+  background: #446275;
+  color: white;
+}
 body .transactions .table td {
   font-size: 10px;
 }

@@ -98,7 +98,7 @@ factory('DataFactory', [
 
   // transactions
   factory.getTransactions = function() {
-    return [
+    var dummyData = [
       {
         "transactionUuid": "8cdf8c41-2b90-4cc5-b365-07cea92f4200",
         "type": "SELL",
@@ -121,7 +121,20 @@ factory('DataFactory', [
         "estimatedDeliveryDate": "2015-01-13",
         "status": "COMPLETE"
       }
-    ]
+    ];
+
+    return $q(function(resolve, reject) {
+      glideraFactory.transactions(function(e, s, b) {
+        if (e === null) {
+          resolve(b.transactions);
+          console.log(b.transactions);
+
+          // return dummyData
+        } else {
+          reject();
+        }
+      });
+    });
   };
 
 
