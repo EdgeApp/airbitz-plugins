@@ -1,5 +1,5 @@
 
-var app = angular.module('app', ['app.core', 'app.history', 'app.exchange', 'app.user']);
+var app = angular.module('app', ['app.core', 'app.history', 'app.exchange', 'app.user', 'app.2fa']);
 
 app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
 
@@ -32,7 +32,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
     })
     // route for two factor verifications
     .state("verify2FA", {
-      url: "/signup/verify/twofa/",
+      url: "/verify/twofa/",
       templateUrl: "app/exchange/partials/verify.twofactor.html",
       controller: "verify2faController",
     })

@@ -78,21 +78,3 @@ angular.module('app.user', ['app.dataFactory', 'app.constants'])
         alert('Change phone: ' + phone);
       };
     }])
-.controller('verify2faController', ['$scope', '$state', 'DataFactory',
-    function($scope, $state, DataFactory) {
-      Airbitz.ui.title('Glidera: 2FA');
-
-      $scope.submit2FA = function(code, redirect){
-        alert('Send: ' + code + ' to Glider to check if valid.');
-        if(redirect){
-          $state.go(redirect);
-        }else{
-          $state.go('loadExchange');
-        }
-      };
-
-      $scope.resendSMS = function(phone){
-        alert('Resend verfication SMS to: ' + phone);
-        $state.go('');
-      };
-    }]);

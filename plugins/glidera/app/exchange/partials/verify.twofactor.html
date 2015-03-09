@@ -12,7 +12,7 @@
 
       <div class="form-group">
         <label for="inputVerificationCode" class="sr-only">Verification Code</label>
-        <input ng-model="account.verificationCode" type="text" id="inputVerificationCode" class="form-control" placeholder="Verification Code" autofocus="true" autocomplete="off">
+        <input ng-model="verificationCode" type="text" id="inputVerificationCode" class="form-control" placeholder="Verification Code" autofocus="true" autocomplete="off">
       </div>
 
   </form>
@@ -22,6 +22,6 @@
 <div class="row text-right" style="margin-top: 40px;">
   <div class="col-xs-12">
     <button ng-click="verifyPhone()" class="buy-sell-next btn btn-lg btn-link">Change Phone</button>
-    <button ng-click="submit2FA(account.verificationCode, 'exchange')" class="buy-sell-next btn btn-lg btn-success">Validate</button>
+    <button ng-click="submit2FA()" class="buy-sell-next btn btn-lg btn-success">Validate</button>
   </div>
 </div>

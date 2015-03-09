@@ -1,5 +1,5 @@
 
-angular.module('app.exchange', ['app.dataFactory'])
+angular.module('app.exchange', ['app.dataFactory', 'app.2fa'])
 .filter('statusFilter', function() {
   return function(status) {
     switch(status) {
@@ -46,24 +46,27 @@ angular.module('app.exchange', ['app.dataFactory'])
       $state.go('exchangeAddCreditCard');
     };
   }])
-.controller('addAccountController', ['$scope', '$state', 'DataFactory', 'UserFactory',
-  function ($scope, $state, DataFactory, UserFactory) {
+.controller('addAccountController',
+  ['$scope', '$state', 'DataFactory', 'UserFactory', 'TwoFactor',
+  function ($scope, $state, DataFactory, UserFactory, TwoFactor) {
     $scope.exchange = DataFactory.getExchange();
     $scope.account = UserFactory.getUserAccount();
     $scope.bankAccount = {};
     $scope.bankAccount.bankAccountType = 'CHECKING';
 
     $scope.saveBankAccount = function() {
-      DataFactory.createBankAccount($scope.bankAccount).then(function() {
-        $state.go('exchange');
-      }, function() {
-        // TODO: error
-        alert('TODO: Error! Error!');
+      TwoFactor.showTwoFactor(function() {
+        DataFactory.createBankAccount($scope.bankAccount).then(function() {
+          $state.go('exchange');
+        }, function() {
+          alert('TODO: Error! Error!');
+        });
       });
     };
   }])
-.controller('editBankAccountController', ['$scope', '$state', '$stateParams', 'DataFactory', 'UserFactory',
-  function ($scope, $state, $stateParams, DataFactory, UserFactory) {
+.controller('editBankAccountController',
+  ['$scope', '$state', '$stateParams', 'DataFactory', 'UserFactory', 'TwoFactor',
+  function ($scope, $state, $stateParams, DataFactory, UserFactory, TwoFactor) {
     $scope.account = UserFactory.getUserAccount();
     DataFactory.getBankAccount($stateParams.uuid).then(function(bankAccount) {
       $scope.bankAccount = bankAccount;
@@ -93,23 +96,19 @@ angular.module('app.exchange', ['app.dataFactory'])
     };
 
     $scope.deleteBankAccount = function() {
-      DataFactory.deleteBankAccount('123456', $scope.bankAccount.bankAccountUuid).then(function() {
-        $state.go('exchange');
-      }, function() {
-        alert('TODO: Error! Error!');
+      TwoFactor.showTwoFactor(function() {
+        DataFactory.deleteBankAccount($scope.bankAccount.bankAccountUuid).then(function() {
+          $state.go('exchange');
+        }, function() {
+          alert('TODO: Error! Error!');
+        });
       });
     };
   }])
-.controller('addCreditCardController', ['$scope', '$state', 'DataFactory', 'UserFactory',
-  function ($scope, $state, DataFactory, UserFactory) {
-    $scope.exchange = DataFactory.getExchange();
-    $scope.account = UserFactory.getUserAccount();
-  }])
 
-
-
-
-.controller('orderController', ['$scope', '$state', '$stateParams', 'DataFactory', 'UserFactory', function ($scope, $state, $stateParams, DataFactory, UserFactory) {
+.controller('orderController', 
+  ['$scope', '$state', '$stateParams', 'DataFactory', 'UserFactory', 'TwoFactor',
+  function ($scope, $state, $stateParams, DataFactory, UserFactory, TwoFactor) {
     $scope.exchange = DataFactory.getExchange();
     $scope.account = UserFactory.getUserAccount();
 
@@ -153,16 +152,17 @@ angular.module('app.exchange', ['app.dataFactory'])
       output = Airbitz.core.formatCurrency(
         Airbitz.core.satoshiToCurrency(input, $scope.exchange.currencyNum), false
       );
-
       $scope.order.orderFiatInput = output;
+    };
+    $scope.next = function() {
+      TwoFactor.showTwoFactor(function() {
+        $state.go("reviewOrder");
+      });
     };
   }])
 
-
-
-
-.controller('reviewOrderController', ['$scope', '$state', 'DataFactory', 'UserFactory',
-  function ($scope, $state, DataFactory, UserFactory) {
+.controller('reviewOrderController', ['$scope', '$state', 'DataFactory', 'UserFactory', 'TwoFactor',
+  function ($scope, $state, DataFactory, UserFactory, TwoFactor) {
     var order = DataFactory.getOrder(false);
     console.log(order);
     $scope.order = order;
@@ -171,7 +171,7 @@ angular.module('app.exchange', ['app.dataFactory'])
     if (!order.orderAction) {
       $state.go('exchange');
     }
-    $scope.exchange.executeOrder = function(){
+    $scope.exchange.executeOrder = function() {
       if (order.orderAction == 'buy') {
         DataFactory.buy(order.transferToWallet.id, order.orderBtcInput).then(function() {
           alert('bought bitcoin');

@@ -1,5 +1,5 @@
 
-angular.module('app.dataFactory', ['app.glidera', 'app.constants']).
+angular.module('app.dataFactory', ['app.glidera', 'app.2fa', 'app.constants']).
 factory('UserFactory', [
   '$q', '$filter', 'States', 'ExchangeFactory', 'glideraFactory', 'TwoFactor',
   function($q, $filter, States, ExchangeFactory, glideraFactory, TwoFactor) {
@@ -184,9 +184,9 @@ factory('DataFactory', [
   };
 
   // MAPS TO: https://sandbox.glidera.com/documentation.xhtml#apiReference-deleteBankAccount
-  factory.deleteBankAccount = function(otpCode, accountId) {
+  factory.deleteBankAccount = function(accountId) {
     return $q(function(resolve, reject) {
-      glideraFactory.deleteBankAccount(otpCode, accountId, function(e, s, b) {
+      glideraFactory.deleteBankAccount(TwoFactor.getCode(), accountId, function(e, s, b) {
         e === null && s == 200 ? resolve() : reject();
       });
     });
@@ -218,7 +218,7 @@ factory('DataFactory', [
 
   factory.buy = function(walletId, qty) {
     return $q(function (resolve, reject) {
-      Airbitz.core.createReceiveRequest(walletId, {success: resolve, error: reject})
+      Airbitz.core.createReceiveRequest(walletId, {name: 'Glidera', notes: '', success: resolve, error: reject})
     }).then(function(data) {
       var address = Airbitz._bridge.inDevMod() 
                   ? glideraFactory.sandboxAddress : data['address'];
@@ -257,22 +257,6 @@ factory('DataFactory', [
     });
   };
   return factory;
-}]).
-factory('TwoFactor', ['glideraFactory', function() {
-  var twoFactorCode = '123456';
-  return {
-    requestCode: function() {
-      return $q(function(resolve, reject) {
-        glideraFactory.getTwoFactorCode(function(e, r, b) {
-          r == 200 ? resolve() : reject();
-        });
-      });
-    },
-
-    getCode: function() {
-      return twoFactorCode;
-    }
-  }
 }]);
 
 angular.module('app.constants', []).
