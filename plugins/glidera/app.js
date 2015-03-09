@@ -63,20 +63,20 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
     .state("exchangeOrderBuy", {
       url: "/exchange/order/buy/",
       templateUrl: "app/exchange/partials/order.buy.html",
-      controller: "orderBuyController",
+      controller: "orderController",
     })
     // route for selling on exchange
     .state("exchangeOrderSell", {
       url: "/exchange/order/sell/",
       templateUrl: "app/exchange/partials/order.sell.html",
-      controller: "orderSellController",
+      controller: "orderController",
     })
 
     // route for selling on exchange
     .state("reviewOrder", {
       url: "/exchange/order/review/",
       templateUrl: "app/exchange/partials/order.review.html",
-      controller: "revirewOrderController",
+      controller: "reviewOrderController",
     })
 
     // route for selling on exchange

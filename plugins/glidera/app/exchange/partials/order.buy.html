@@ -38,19 +38,36 @@
       </div>
 
       <div class="form-group">
-        <div class="row">
-          <div class="col-xs-12">
-            <label for="inputBuySellAmount" class="pull-left">Amount to Buy</label>
-          </div>
-        </div>
-
+        <label for="inputFiatAmount" class="">Order Buy Amount</label>
         <div class="input-group">
-          <input ng-model="orderValueInput" type="text" id="inputBuySellAmount" class="form-control" placeholder="{{ placeholderValue }}" autofocus="true" autocomplete="off">
-          <span class="input-group-addon">{{ prependSymbol }}</span>
+          <span class="input-group-addon">$</span>
+          <input
+            ng-model="orderFiatInput"
+            ng-change="convertFiatValue(orderFiatInput)"
+            type="text"
+            id="inputFiatAmount"
+            class="form-control"
+            placeholder="{{ placeholderFiatValue }}"
+            autofocus="true"
+            autocomplete="off"
+          >
         </div>
+      </div>
 
-        <label class="converted-value">{{ convertedValue(orderValueInput) }}</label>
-        <button ng-click="toggleOutputState()" class="btn btn-warning btn-xs pull-right">switch</button>
+      <div class="form-group">
+        <div class="input-group">
+          <span class="input-group-addon">B</span>
+          <input
+            ng-model="orderBtcInput"
+            ng-change="convertBtcValue(orderBtcInput)"
+            type="text"
+            id="inputBtcAmount"
+            class="form-control"
+            placeholder="{{ placeholderBtcValue }}"
+            autofocus="true"
+            autocomplete="off"
+          >
+        </div>
       </div>
 
       <div class="row text-right" style="margin-top: 40px;">

@@ -105,7 +105,7 @@ angular.module('app.exchange', ['app.dataFactory'])
     $scope.exchange = DataFactory.getExchange();
     $scope.account = UserFactory.getUserAccount();
   }])
-.controller('orderBuyController', ['$scope', '$state', 'DataFactory', 'UserFactory',
+.controller('orderController', ['$scope', '$state', 'DataFactory', 'UserFactory',
   function ($scope, $state, DataFactory, UserFactory) {
     $scope.exchange = DataFactory.getExchange();
     $scope.account = UserFactory.getUserAccount();
@@ -126,73 +126,31 @@ angular.module('app.exchange', ['app.dataFactory'])
     });
 
 
-
-
-    // ui toggle state setup
-    $scope.outputSatoshi = true;
-    $scope.prependSymbol = 'USD';
-    $scope.placeholderValue = '20.00';
-
-
-    // function for ui to switch input/output
-    $scope.toggleOutputState = function() {
-      $scope.outputSatoshi = !$scope.outputSatoshi;
-
-      if($scope.outputSatoshi) {
-        $scope.prependSymbol = 'USD';
-
-      } else {
-        $scope.prependSymbol = 'BTC';
-      }
-
-      $scope.orderValueInput = $scope.convertedOutput;
-    };
-
-
-    // convert user input to converted value for live display
-    $scope.convertedValue = function(input) {
+    $scope.convertFiatValue = function(input) {
+      // console.log('convert: ' + input + ' fiat to btc');
       if (typeof(input)==='undefined') input = 0;
 
-      if($scope.outputSatoshi) {
-        output = Airbitz.core.formatSatoshi(Airbitz.core.currencyToSatoshi(input, $scope.exchange.currencyNum), false);
-      } else {
-        output = Airbitz.core.formatCurrency(Airbitz.core.satoshiToCurrency(input, $scope.exchange.currencyNum), false);
-      }
+      output = Airbitz.core.formatSatoshi(
+        Airbitz.core.currencyToSatoshi(input, $scope.exchange.currencyNum), false
+      );
 
-      return output;
+      $scope.orderBtcInput = output;
     };
 
+    $scope.convertBtcValue = function(input) {
+      // console.log(input + ' satoshi = ' + input / 100000000 + ' BTC');
+      if (typeof(input)==='undefined') input = 0;
+      // convert to btc before currency conversion to match ui
+      input = input * 100000000;
 
+      output = Airbitz.core.formatCurrency(
+        Airbitz.core.satoshiToCurrency(input, $scope.exchange.currencyNum), false
+      );
 
-
-
-    $scope.exchange.reviewOrder = function(){
-      $scope.exchange.order = {};
-      $scope.exchange.order.type = 'Buy';
-      $state.go('reviewOrder');
+      $scope.orderFiatInput = output;
     };
   }])
-.controller('orderSellController', ['$scope', '$state', 'DataFactory', 'UserFactory',
-  function ($scope, $state, DataFactory, UserFactory) {
-    $scope.exchange = DataFactory.getExchange();
-    $scope.account = UserFactory.getUserAccount();
-
-    DataFactory.getBankAccounts().then(function(bankAccounts) {
-      $scope.bankAccounts = bankAccounts;
-      $scope.transferFromBankAccount = bankAccounts[0];
-    }, function() {
-      // TODO: error
-      alert('TODO: Error! Error!');
-    });
-
-    DataFactory.getUserWallets().then(function(userWallets) {
-      $scope.userWallets = userWallets;
-      $scope.transferToWallet = userWallets[0]
-    }, function(error) {
-      $scope.error = 'Error: Cannot get user wallets.';
-    });
-  }])
-.controller('revirewOrderController', ['$scope', '$state', 'DataFactory', 'UserFactory',
+.controller('reviewOrderController', ['$scope', '$state', 'DataFactory', 'UserFactory',
   function ($scope, $state, DataFactory, UserFactory) {
     $scope.exchange = DataFactory.getExchange();
     $scope.account = UserFactory.getUserAccount();
