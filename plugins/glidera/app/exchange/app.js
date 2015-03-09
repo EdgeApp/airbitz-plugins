@@ -120,7 +120,7 @@ angular.module('app.exchange', ['app.dataFactory'])
 
     DataFactory.getBankAccounts().then(function(bankAccounts) {
       $scope.bankAccounts = bankAccounts;
-      $scope.transferFromBankAccount = bankAccounts[0];
+      $scope.order.transferFromBankAccount = bankAccounts[0];
     }, function() {
       // TODO: error
       alert('TODO: Error! Error!');
@@ -128,7 +128,7 @@ angular.module('app.exchange', ['app.dataFactory'])
 
     DataFactory.getUserWallets().then(function(userWallets) {
       $scope.userWallets = userWallets;
-      $scope.transferToWallet = userWallets[0]
+      $scope.order.transferToWallet = userWallets[0]
     }, function(error) {
       $scope.error = 'Error: Cannot get user wallets.';
     });
@@ -142,7 +142,7 @@ angular.module('app.exchange', ['app.dataFactory'])
         Airbitz.core.currencyToSatoshi(input, $scope.exchange.currencyNum), false
       );
 
-      $scope.orderBtcInput = output;
+      $scope.order.orderBtcInput = output;
     };
 
     $scope.convertBtcValue = function(input) {
@@ -155,7 +155,7 @@ angular.module('app.exchange', ['app.dataFactory'])
         Airbitz.core.satoshiToCurrency(input, $scope.exchange.currencyNum), false
       );
 
-      $scope.orderFiatInput = output;
+      $scope.order.orderFiatInput = output;
     };
   }])
 
@@ -166,10 +166,22 @@ angular.module('app.exchange', ['app.dataFactory'])
   function ($scope, $state, DataFactory, UserFactory) {
     $scope.exchange = DataFactory.getExchange();
     $scope.account = UserFactory.getUserAccount();
+    $scope.order = DataFactory.getOrder(false);
+    console.log($scope.order);
 
     $scope.exchange.executeOrder = function(){
-      alert('SEND ORDER TO GLIDERA VIA API');
-      $state.go('executeOrder');
+      // buy
+      if (order.orderAction == 'buy') {
+        DataFactory.buy(order.wallet.id, order.satoshis).then(function() {
+          alert('bought bitcoin');
+          $state.go('executeOrder');
+        });
+      } else {
+        DataFactory.requestSpend($scope.wallet.id, $scope.satoshis).then(function() {
+          alert('bought bitcoin');
+          $state.go('executeOrder');
+        });
+      }
     };
   }])
 .controller('executeOrderController', ['$scope', '$state', 'DataFactory', 'UserFactory',

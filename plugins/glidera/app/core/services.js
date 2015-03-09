@@ -1,4 +1,7 @@
 
+// TODO: replace this with UI
+var OTP_CODE = "123456";
+
 angular.module('app.dataFactory', ['app.glidera', 'app.constants']).
 factory('UserFactory', [
   '$q', '$filter', 'States', 'ExchangeFactory', 'glideraFactory',
@@ -147,7 +150,7 @@ factory('DataFactory', [
     console.log(bankAccount);
     return $q(function(resolve, reject) {
       glideraFactory.createBankAccount(
-        '123456',
+        OTP_CODE,
         bankAccount.routingNumber,
         bankAccount.accountNumber,
         bankAccount.description,
@@ -215,8 +218,41 @@ factory('DataFactory', [
     exchangeOrder = {};
   };
 
+  factory.buy = function(walletId, qty) {
+    return q$(function (resolve, reject) {
+      Airbitz.core.createReceiveRequest(wallet, {success: resolve, error: reject})
+    }).then(function(data) {
+      var address = glideraApi.sandboxAddress; // TODO: data['address'];
+      return $q(function(resolve, reject) {
+        glideraFactory.buy(OTP_CODE, address, qty, opts, function(e, r, b) {
+          e === null ? resolve() : reject();
+        });
+      });
+    });
+  };
 
-
+  factory.sell = function(walletId, amountSatoshi) {
+    return $q(function(resolve, reject) {
+      glideraFactory.sellAddress(amountSatoshi, {
+        success:resolve,
+        error:reject
+      });
+    }).then(function(data) {
+      var sellAddress = data["sellAddress"];
+      return $q(function(resolve, reject) {
+        Airbitz.core.requestSpend(walletId, sellAddress, amountSatoshi, {
+          success: resolve,
+          error: reject
+        });
+      });
+    }).then(function(data) {
+      var refundAddress = data["address"];
+      var signedTx = data["tx"];
+      glideraFactory.sell(OTP_CODE, refundAddress, signedTx, {useCurrentPrice:true}, function(e, r, b) {
+        e === null ? resolve() : reject();
+      });
+    });
+  };
   return factory;
 }]);
 

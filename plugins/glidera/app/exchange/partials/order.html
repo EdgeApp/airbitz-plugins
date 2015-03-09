@@ -26,7 +26,7 @@
         <div class="col-xs-6 form-group">
           <label for="inputFromBankAccount" class="">Spend From</label>
           <select
-            ng-model="transferFromBankAccount"
+            ng-model="order.transferFromBankAccount"
             ng-options="a.description for a in bankAccounts"
             id="inputFromBankAccount" class="form-control">
           </select>
@@ -35,7 +35,7 @@
         <div class="col-xs-6 form-group">
           <label for="inputBtcWallet" class="">Transfer BTC To</label>
           <select
-            ng-model="transferToWallet"
+            ng-model="order.transferToWallet"
             ng-options="w.name for w in userWallets"
             id="inputBtcWallet" class="form-control">
           </select>
@@ -46,7 +46,7 @@
         <div class="col-xs-6 form-group">
           <label for="inputBtcWallet" class="">Sell BTC From</label>
           <select
-            ng-model="transferToWallet"
+            ng-model="order.transferToWallet"
             ng-options="w.name for w in userWallets"
             id="inputBtcWallet" class="form-control">
           </select>
@@ -55,7 +55,7 @@
         <div class="col-xs-6 form-group">
           <label for="inputFromBankAccount" class="">Depoist To</label>
           <select
-            ng-model="transferFromBankAccount"
+            ng-model="order.transferFromBankAccount"
             ng-options="a.description for a in bankAccounts"
             id="inputFromBankAccount" class="form-control">
           </select>
@@ -67,8 +67,8 @@
         <div class="input-group">
           <span class="input-group-addon">$</span>
           <input
-            ng-model="orderFiatInput"
-            ng-change="convertFiatValue(orderFiatInput)"
+            ng-model="order.orderFiatInput"
+            ng-change="convertFiatValue(order.orderFiatInput)"
             type="text"
             id="inputFiatAmount"
             class="form-control"
@@ -82,8 +82,8 @@
         <div class="input-group">
           <span class="input-group-addon">B</span>
           <input
-            ng-model="orderBtcInput"
-            ng-change="convertBtcValue(orderBtcInput)"
+            ng-model="order.orderBtcInput"
+            ng-change="convertBtcValue(order.orderBtcInput)"
             type="text"
             id="inputBtcAmount"
             class="form-control"
