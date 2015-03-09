@@ -71,7 +71,12 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
       templateUrl: "app/exchange/partials/order.html",
       controller: "orderController",
     })
-
+    // route for transactions
+    .state("exchangeTransactions", {
+      url: "/exchange/transactions/",
+      templateUrl: "app/exchange/partials/transactions.html",
+      controller: "transactionsController",
+    })
     // route for executing order
     .state("executeOrder", {
       url: "/exchange/order/execute/",

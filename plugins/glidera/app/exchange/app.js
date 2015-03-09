@@ -197,4 +197,22 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa'])
     $scope.exchange.confirmDeposit = function(){
       $state.go('confirmDeposit');
     };
+  }])
+.controller('transactionsController', ['$scope', '$state', 'DataFactory',
+  function ($scope, $state, DataFactory) {
+    $scope.transactions = DataFactory.getTransactions();
+    console.log('TRANSACTIONS: ' + $scope.transactions);
   }]);
+
+
+
+
+
+
+
+
+
+
+
+
+

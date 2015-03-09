@@ -1,0 +1,15 @@
+
+<div class="transactions row">
+
+  <div class="col-xs-12">
+    <table ng-model="transactions" class="table table-bordered">
+      <tr ng-repeat="t in transactions">
+        <td>{{ t.estimatedDeliveryDate || 'date' }}</td>
+        <td>{{ t.type || 'type' }}</td>
+        <td>{{ t.price || 'price' }}</td>
+        <td>{{ t.subtotal / t.price || 'price each' }}</td>
+      </tr>
+    </table>
+  </div>
+
+</div>

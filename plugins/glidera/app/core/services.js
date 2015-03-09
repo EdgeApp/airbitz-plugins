@@ -96,6 +96,35 @@ factory('DataFactory', [
   function($q, $filter, States, ExchangeFactory, glideraFactory, TwoFactor) {
   var factory = {};
 
+  // transactions
+  factory.getTransactions = function() {
+    return [
+      {
+        "transactionUuid": "8cdf8c41-2b90-4cc5-b365-07cea92f4200",
+        "type": "SELL",
+        "price": 296.15,
+        "subtotal": 29.62,
+        "fees": 0.30,
+        "total": 29.92,
+        "transactionHash": "000000000df4ba5538dbad71f9f436ee639e4828d7c73fda62e5ddd85578e8c8",
+        "estimatedDeliveryDate": "2015-02-13",
+        "status": "COMPLETE"
+      },
+      {
+        "transactionUuid": "8cdf8c41-2b90-4cc5-b365-05cea92f4200",
+        "type": "BUY",
+        "price": 196.15,
+        "subtotal": 29.62,
+        "fees": 0.30,
+        "total": 29.92,
+        "transactionHash": "000000000df4ba5538dbad71f9f436ee639e4828d7c73fda62e5ddd85578e8c8",
+        "estimatedDeliveryDate": "2015-01-13",
+        "status": "COMPLETE"
+      }
+    ]
+  };
+
+
   factory.getUserWallets = function() {
     return $q(function(resolve, reject) {
       Airbitz.core.wallets({
@@ -220,7 +249,7 @@ factory('DataFactory', [
     return $q(function (resolve, reject) {
       Airbitz.core.createReceiveRequest(walletId, {name: 'Glidera', notes: '', success: resolve, error: reject})
     }).then(function(data) {
-      var address = Airbitz._bridge.inDevMod() 
+      var address = Airbitz._bridge.inDevMod()
                   ? glideraFactory.sandboxAddress : data['address'];
       return $q(function(resolve, reject) {
         if (address) {
