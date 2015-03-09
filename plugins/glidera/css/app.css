@@ -138,9 +138,11 @@ body .exchange-payment-list .ending {
 body .row.next-cancel {
   margin-top: 40px;
 }
-body .exchange-buy-sell-interface input[type=text] {
+body .exchange-buy-sell-interface input[type=text],
+body .exchange-buy-sell-interface input[type=number] {
   padding: 24px 12px;
   font-size: 150%;
+  color: #0f5791;
 }
 body .exchange-buy-sell-interface .converted-value {
   padding: 3px 12px;

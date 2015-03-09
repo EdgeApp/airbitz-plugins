@@ -113,7 +113,10 @@ angular.module('app.exchange', ['app.dataFactory'])
   function ($scope, $state, $stateParams, DataFactory, UserFactory) {
     $scope.exchange = DataFactory.getExchange();
     $scope.account = UserFactory.getUserAccount();
-    $scope.orderAction = $stateParams.orderAction;
+
+    $scope.order = DataFactory.getOrder(true); // initialize new order and clear existing order
+    $scope.order.orderAction = $stateParams.orderAction; // set order action
+
 
     DataFactory.getBankAccounts().then(function(bankAccounts) {
       $scope.bankAccounts = bankAccounts;

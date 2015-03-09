@@ -192,6 +192,31 @@ factory('DataFactory', [
     });
   };
 
+  // initialize exchangeOrder
+  var exchangeOrder = {};
+
+  factory.createBuyOrder = function(order) {
+    // exchangeOrder = angular.copy(order);
+    exchangeOrder.destinationWallet = order.destinationWallet;
+    exchangeOrder.qty = order.qty;
+    exchangeOrder.useCurrentPrice = order.useCurrentPrice;
+    exchangeOrder.orderAction = order.orderAction
+  };
+
+  factory.getOrder = function(clear) {
+    console.log('Get order:');
+    if(clear) {
+      this.clearOrder();
+    }
+    return exchangeOrder;
+  };
+
+  factory.clearOrder = function() {
+    exchangeOrder = {};
+  };
+
+
+
   return factory;
 }]);
 
