@@ -1,11 +1,8 @@
 
-// TODO: replace this with UI
-var OTP_CODE = "123456";
-
 angular.module('app.dataFactory', ['app.glidera', 'app.constants']).
 factory('UserFactory', [
-  '$q', '$filter', 'States', 'ExchangeFactory', 'glideraFactory',
-  function($q, $filter, States, ExchangeFactory, glideraFactory) {
+  '$q', '$filter', 'States', 'ExchangeFactory', 'glideraFactory', 'TwoFactor',
+  function($q, $filter, States, ExchangeFactory, glideraFactory, TwoFactor) {
     var factory = {};
 
     // account prepopulate dummy data
@@ -95,8 +92,8 @@ factory('UserFactory', [
 
   }]).
 factory('DataFactory', [
-  '$q', '$filter', 'States', 'ExchangeFactory', 'glideraFactory',
-  function($q, $filter, States, ExchangeFactory, glideraFactory) {
+  '$q', '$filter', 'States', 'ExchangeFactory', 'glideraFactory', 'TwoFactor',
+  function($q, $filter, States, ExchangeFactory, glideraFactory, TwoFactor) {
   var factory = {};
 
   factory.getUserWallets = function() {
@@ -150,7 +147,7 @@ factory('DataFactory', [
     console.log(bankAccount);
     return $q(function(resolve, reject) {
       glideraFactory.createBankAccount(
-        OTP_CODE,
+        TwoFactor.getCode(),
         bankAccount.routingNumber,
         bankAccount.accountNumber,
         bankAccount.description,
@@ -217,16 +214,22 @@ factory('DataFactory', [
   factory.clearOrder = function() {
     exchangeOrder = {};
   };
+  console.log(TwoFactor);
 
   factory.buy = function(walletId, qty) {
     return $q(function (resolve, reject) {
-      Airbitz.core.createReceiveRequest(wallet, {success: resolve, error: reject})
+      Airbitz.core.createReceiveRequest(walletId, {success: resolve, error: reject})
     }).then(function(data) {
-      var address = glideraApi.sandboxAddress; // TODO: data['address'];
+      var address = Airbitz._bridge.inDevMod() 
+                  ? glideraFactory.sandboxAddress : data['address'];
       return $q(function(resolve, reject) {
-        glideraFactory.buy(OTP_CODE, address, qty, opts, function(e, r, b) {
-          e === null ? resolve() : reject();
-        });
+        if (address) {
+          glideraFactory.buy(TwoFactor.getCode(), address, qty, {}, function(e, r, b) {
+            r === 200 ? resolve() : reject(b.message);
+          });
+        } else {
+          reject('Unable to obtain a destination address. Please try again later.');
+        }
       });
     });
   };
@@ -248,12 +251,28 @@ factory('DataFactory', [
     }).then(function(data) {
       var refundAddress = data["address"];
       var signedTx = data["tx"];
-      glideraFactory.sell(OTP_CODE, refundAddress, signedTx, {useCurrentPrice:true}, function(e, r, b) {
+      glideraFactory.sell(TwoFactor.getCode(), refundAddress, signedTx, {useCurrentPrice:true}, function(e, r, b) {
         e === null ? resolve() : reject();
       });
     });
   };
   return factory;
+}]).
+factory('TwoFactor', ['glideraFactory', function() {
+  var twoFactorCode = '123456';
+  return {
+    requestCode: function() {
+      return $q(function(resolve, reject) {
+        glideraFactory.getTwoFactorCode(function(e, r, b) {
+          r == 200 ? resolve() : reject();
+        });
+      });
+    },
+
+    getCode: function() {
+      return twoFactorCode;
+    }
+  }
 }]);
 
 angular.module('app.constants', []).

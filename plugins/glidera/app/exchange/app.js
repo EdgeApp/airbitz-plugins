@@ -176,11 +176,15 @@ angular.module('app.exchange', ['app.dataFactory'])
         DataFactory.buy(order.transferToWallet.id, order.orderBtcInput).then(function() {
           alert('bought bitcoin');
           $state.go('executeOrder');
+        }, function(error) {
+          alert(error);
         });
       } else {
-        DataFactory.requestSpend($scope.wallet.id, $scope.satoshis).then(function() {
-          alert('bought bitcoin');
+        DataFactory.requestSpend(order.transferFromWallet.id, order.orderBtcInput).then(function() {
+          alert('sold bitcoin');
           $state.go('executeOrder');
+        }, function(error) {
+          alert(error);
         });
       }
     };
