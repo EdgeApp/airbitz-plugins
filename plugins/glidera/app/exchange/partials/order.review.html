@@ -1,10 +1,10 @@
 <div class="row text-center">
   <h3 class="col-xs-12">You are about to</h3>
-  <h3 class="col-xs-12"><label class="label label-info">{{exchange.order.type||"BUY"}}</label></h3>
-  <h3 class="col-xs-12"><label class="label label-default">{{exchange.order.amount||"3.14"}} {{exchange.order.currency||"BTC"}}</label> for <label class="label label-default">{{exchange.order.currencySymbol||"$"}}{{exchange.order.getExchangeRate()||"5555.91"}} {{exchange.order.currency||"USD"}}</label></h3>
-  <h3 class="col-xs-12">At a rate of <label class="label label-outline">$1769.40</label> per <label class="label label-outline">BTC</label></h3>
-  <h3 class="col-xs-12">Using <label class="label label-warning">{{exchange.order.paymentMethod||"Visa 4494"}}</label> payment</h3>
-  <h3 class="col-xs-12">Into wallet <label class="label label-primary">{{exchange.order.depositDestination||"Travel Spending"}}</label></h3>
+  <h3 class="col-xs-12"><label class="label label-info">{{ order.orderAction || "orderAction" | uppercase }}</label></h3>
+  <h3 class="col-xs-12"><label class="label label-default">{{ order.orderBtcInput || "3.14" }} {{ exchange.order.currency || "BTC" }}</label> for <label class="label label-default">{{ exchange.order.currencySymbol || "$" }}{{ order.orderBtcInput * exchange.exchangeRate || "orderTotal" }} {{ exchange.order.currency || "USD" }}</label></h3>
+  <h3 class="col-xs-12">At a rate of <label class="label label-outline">${{ exchange.exchangeRate }}</label> per <label class="label label-outline">BTC</label></h3>
+  <h3 class="col-xs-12">Using <label class="label label-warning">{{order.transferFromBankAccount.description || "FakeVisa 4494" }}</label> payment</h3>
+  <h3 class="col-xs-12">Into wallet <label class="label label-primary">{{ order.transferToWallet.name || "Travel Spending" }}</label></h3>
 </div>
 
 <div class="row text-center" style="margin: 30px 0;">
