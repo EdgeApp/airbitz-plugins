@@ -1,14 +1,19 @@
+<!-- <div class="row">
+  <h1 class="col-xs-12">{{ orderAction == 'buy' }}</h1>
+</div>
+ -->
+
 <div class="buy-sell row">
   <div class="col-xs-6">
     <div class="btn-group pull-left" data-toggle-name="btc-fiat-toggle" data-toggle="buttons-radio">
-      <button ui-sref="exchangeOrderBuy" type="button" value="default" data-toggle="button" class="btn btn-primary">BUY</button>
-      <button ui-sref="exchangeOrderSell" type="button" value="distance" data-toggle="button"
-      class="btn btn-success active">SELL</button>
+      <button  ui-sref="exchangeOrder({orderAction: 'buy'})" ng-class="{ 'active' : orderAction == 'buy' }" type="button" value="default" data-toggle="button" class="btn btn-success">BUY</button>
+      <button  ui-sref="exchangeOrder({orderAction: 'sell'})" ng-class="{ 'active' : orderAction == 'sell' }" type="button" value="distance" data-toggle="button"
+      class="btn btn-primary">SELL</button>
     </div>
   </div>
 
   <div class="col-xs-6">
-      <span class="exchange-rate pull-right">1 BTC = ${{ exchange.exchangeRate }}</span>
+      <span class="exchange-rate pull-right">BTC Price = ${{ exchange.exchangeRate }}</span>
   </div>
 </div>
 
@@ -17,9 +22,29 @@
 
     <form action="" class="form">
 
-      <div class="row">
+      <div ng-if="orderAction == 'buy'"  class="row">
         <div class="col-xs-6 form-group">
-          <label for="inputBtcWallet" class="">Transfer From</label>
+          <label for="inputFromBankAccount" class="">Spend From</label>
+          <select
+            ng-model="transferFromBankAccount"
+            ng-options="a.description for a in bankAccounts"
+            id="inputFromBankAccount" class="form-control">
+          </select>
+        </div>
+
+        <div class="col-xs-6 form-group">
+          <label for="inputBtcWallet" class="">Transfer BTC To</label>
+          <select
+            ng-model="transferToWallet"
+            ng-options="w.name for w in userWallets"
+            id="inputBtcWallet" class="form-control">
+          </select>
+        </div>
+      </div>
+
+      <div ng-if="orderAction == 'sell'" class="row">
+        <div class="col-xs-6 form-group">
+          <label for="inputBtcWallet" class="">Sell BTC From</label>
           <select
             ng-model="transferToWallet"
             ng-options="w.name for w in userWallets"
@@ -37,9 +62,8 @@
         </div>
       </div>
 
-
       <div class="form-group">
-        <label for="inputFiatAmount" class="">Order Sell Amount</label>
+        <label for="inputFiatAmount" class="">Amount to <span class="label label-outline">{{ orderAction | uppercase }}</span></label>
         <div class="input-group">
           <span class="input-group-addon">$</span>
           <input
@@ -48,7 +72,7 @@
             type="text"
             id="inputFiatAmount"
             class="form-control"
-            placeholder="{{ placeholderFiatValue }}"
+            placeholder="100.00"
             autofocus="true"
             autocomplete="off"
           >
@@ -64,7 +88,7 @@
             type="text"
             id="inputBtcAmount"
             class="form-control"
-            placeholder="{{ placeholderBtcValue }}"
+            placeholder="0.5"
             autofocus="true"
             autocomplete="off"
           >

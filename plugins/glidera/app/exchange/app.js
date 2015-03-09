@@ -30,13 +30,13 @@ angular.module('app.exchange', ['app.dataFactory'])
       alert('TODO: Error! Error!');
     });
 
-    $scope.exchange.buy = function(){
-      $state.go('exchangeOrderBuy');
-    };
+    // $scope.exchange.buy = function(){
+    //   $state.go('exchangeOrderBuy');
+    // };
 
-    $scope.exchange.sell = function(){
-      $state.go('exchangeOrderSell');
-    };
+    // $scope.exchange.sell = function(){
+    //   $state.go('exchangeOrderSell');
+    // };
 
     $scope.exchange.addBankAccount = function(){
       $state.go('exchangeAddBankAccount');
@@ -105,10 +105,15 @@ angular.module('app.exchange', ['app.dataFactory'])
     $scope.exchange = DataFactory.getExchange();
     $scope.account = UserFactory.getUserAccount();
   }])
-.controller('orderController', ['$scope', '$state', 'DataFactory', 'UserFactory',
-  function ($scope, $state, DataFactory, UserFactory) {
+
+
+
+
+.controller('orderController', ['$scope', '$state', '$stateParams', 'DataFactory', 'UserFactory',
+  function ($scope, $state, $stateParams, DataFactory, UserFactory) {
     $scope.exchange = DataFactory.getExchange();
     $scope.account = UserFactory.getUserAccount();
+    $scope.orderAction = $stateParams.orderAction;
 
     DataFactory.getBankAccounts().then(function(bankAccounts) {
       $scope.bankAccounts = bankAccounts;
@@ -150,6 +155,10 @@ angular.module('app.exchange', ['app.dataFactory'])
       $scope.orderFiatInput = output;
     };
   }])
+
+
+
+
 .controller('reviewOrderController', ['$scope', '$state', 'DataFactory', 'UserFactory',
   function ($scope, $state, DataFactory, UserFactory) {
     $scope.exchange = DataFactory.getExchange();

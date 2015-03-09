@@ -59,27 +59,20 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
       templateUrl: "app/exchange/partials/add.creditCard.html",
       controller: "addCreditCardController",
     })
-    // route for buying on exchange
-    .state("exchangeOrderBuy", {
-      url: "/exchange/order/buy/",
-      templateUrl: "app/exchange/partials/order.buy.html",
+    // route for creating an order
+    .state("exchangeOrder", {
+      url: "/exchange/order/:orderAction/",
+      templateUrl: "app/exchange/partials/order.html",
       controller: "orderController",
     })
-    // route for selling on exchange
-    .state("exchangeOrderSell", {
-      url: "/exchange/order/sell/",
-      templateUrl: "app/exchange/partials/order.sell.html",
-      controller: "orderController",
-    })
-
-    // route for selling on exchange
+    // route for reviewing order
     .state("reviewOrder", {
       url: "/exchange/order/review/",
       templateUrl: "app/exchange/partials/order.review.html",
       controller: "reviewOrderController",
     })
 
-    // route for selling on exchange
+    // route for executing order
     .state("executeOrder", {
       url: "/exchange/order/execute/",
       templateUrl: "app/exchange/partials/order.execute.html",
