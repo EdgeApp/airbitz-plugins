@@ -109,8 +109,7 @@ angular.module('app.exchange', ['app.dataFactory'])
 
 
 
-.controller('orderController', ['$scope', '$state', '$stateParams', 'DataFactory', 'UserFactory',
-  function ($scope, $state, $stateParams, DataFactory, UserFactory) {
+.controller('orderController', ['$scope', '$state', '$stateParams', 'DataFactory', 'UserFactory', function ($scope, $state, $stateParams, DataFactory, UserFactory) {
     $scope.exchange = DataFactory.getExchange();
     $scope.account = UserFactory.getUserAccount();
 
@@ -164,15 +163,17 @@ angular.module('app.exchange', ['app.dataFactory'])
 
 .controller('reviewOrderController', ['$scope', '$state', 'DataFactory', 'UserFactory',
   function ($scope, $state, DataFactory, UserFactory) {
+    var order = DataFactory.getOrder(false);
+    console.log(order);
+    $scope.order = order;
     $scope.exchange = DataFactory.getExchange();
     $scope.account = UserFactory.getUserAccount();
-    $scope.order = DataFactory.getOrder(false);
-    console.log($scope.order);
-
+    if (!order.orderAction) {
+      $state.go('exchange');
+    }
     $scope.exchange.executeOrder = function(){
-      // buy
       if (order.orderAction == 'buy') {
-        DataFactory.buy(order.wallet.id, order.satoshis).then(function() {
+        DataFactory.buy(order.transferToWallet.id, order.orderBtcInput).then(function() {
           alert('bought bitcoin');
           $state.go('executeOrder');
         });

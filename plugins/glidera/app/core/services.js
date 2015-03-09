@@ -219,7 +219,7 @@ factory('DataFactory', [
   };
 
   factory.buy = function(walletId, qty) {
-    return q$(function (resolve, reject) {
+    return $q(function (resolve, reject) {
       Airbitz.core.createReceiveRequest(wallet, {success: resolve, error: reject})
     }).then(function(data) {
       var address = glideraApi.sandboxAddress; // TODO: data['address'];
