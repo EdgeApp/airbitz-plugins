@@ -291,6 +291,13 @@ var Glidera = (function () {
     },
 
     sellAddress: function(qty, callback) {
+      return this._request(true, '/user/create_sell_address', {
+        'method': 'GET',
+        'callback': callback
+      });
+    },
+
+    sellPrices: function(qty, callback) {
       return this._request(true, '/prices/sell', {
         'method': 'POST',
         'data': {

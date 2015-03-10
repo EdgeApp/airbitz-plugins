@@ -1,4 +1,16 @@
 
+function errorMap(res) {
+  if (!res.code) {
+    return "An unknown error occurred.";
+  }
+  switch(res.code) {
+    case "MissingRequiredParameter":
+      return "This request is missing required data."
+    default:
+      return "An unknown error occurred."
+  }
+}
+
 angular.module('app.dataFactory', ['app.glidera', 'app.2fa', 'app.constants']).
 factory('UserFactory', [
   '$q', '$filter', 'States', 'ExchangeFactory', 'glideraFactory', 'TwoFactor',
@@ -256,14 +268,18 @@ factory('DataFactory', [
     exchangeOrder = {};
   };
 
-  factory.buy = function(wallet, qty) {
-    return $q(function (resolve, reject) {
+  var createAddress = function(wallet, name, notes, resolve, reject) {
       Airbitz.core.createReceiveRequest(wallet, {
-        name: 'Glidera',
-        notes: '',
+        name: name,
+        notes: notes,
         success: resolve,
         error: reject
       })
+  };
+
+  factory.buy = function(wallet, qty) {
+    return $q(function (resolve, reject) {
+      createAddress(wallet, 'Glidera', '', resolve, reject);
     }).then(function(data) {
       var address = Airbitz._bridge.inDevMod()
                   ? glideraFactory.sandboxAddress : data['address'];
@@ -283,25 +299,42 @@ factory('DataFactory', [
     });
   };
 
-  factory.sell = function(walletId, amountSatoshi) {
+  factory.sell = function(wallet, qty) {
     return $q(function(resolve, reject) {
-      glideraFactory.sellAddress(amountSatoshi, {
-        success:resolve,
-        error:reject
+      glideraFactory.sellAddress(qty, function(e, r, b) {
+        (r == 200) ? resolve(b) : reject(b);
       });
     }).then(function(data) {
+      console.log('________ ' + data);
       var sellAddress = data["sellAddress"];
       return $q(function(resolve, reject) {
-        Airbitz.core.requestSpend(walletId, sellAddress, amountSatoshi, {
-          success: resolve,
+        createAddress(wallet, 'Glidera Refund', '', function(req) {
+          console.log('----- ' + JSON.stringify(req));
+          resolve({'sellAddress': sellAddress, 'refundAddress': req['address']});
+        }, reject);
+      });
+    }).then(function(data) {
+      console.log('sellAddress: ' + data.sellAddress);
+      console.log('refundAddress: ' + data.refundAddress);
+      return $q(function(resolve, reject) {
+        Airbitz.core.requestSpend(wallet, data.sellAddress, qty, {
+          success: function() {
+            resolve({'sellAddress': data.sellAddress,
+                     'refundAddress': data.refundAddress});
+          },
           error: reject
         });
       });
     }).then(function(data) {
-      var refundAddress = data["address"];
-      var signedTx = data["tx"];
-      glideraFactory.sell(TwoFactor.getCode(), refundAddress, signedTx, {useCurrentPrice:true}, function(e, r, b) {
-        e === null ? resolve() : reject();
+      var signedTx = '';
+      return $q(function(resolve, reject) {
+        glideraFactory.sell(TwoFactor.getCode(), data.refundAddress, signedTx, {useCurrentPrice:true}, function(e, r, b) {
+          r === 200 ? resolve(b) : reject(errorMap(b));
+        });
+      });
+    }).catch(function(data) {
+      return $q(function(resolve, reject) {
+        reject(data);
       });
     });
   };
