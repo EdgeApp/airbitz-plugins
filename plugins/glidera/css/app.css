@@ -171,6 +171,10 @@ body .exchange-buy-sell-interface input[type=number] {
 body .exchange-buy-sell-interface .input-group-addon {
   font-size: 180%;
 }
+body .order-review table td:first-child {
+  font-weight: bold;
+  color: #ddd;
+}
 body .transactions .table thead {
   background: #446275;
   color: white;
