@@ -12,10 +12,18 @@
 @ab-gray-dark: #333;
 @ab-gray-light: #ccc;
 
-
+/*
+    FIXES FOR WEIRD STUFF
+*/
 // remove orange border on all tapped elements
 * { -webkit-tap-highlight-color: rgba(0, 0, 0, 0); }
 
+// remove step increment arrows
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
 
 body {
   margin: 20px 0 40px;
@@ -202,20 +210,34 @@ body {
   // exchange buy sell interface
   .exchange-buy-sell-interface {
 
+    // substitute for form-control to prevent number fields from breaking due to height
+    input[type="number"] {
+      display: block;
+      width: 100%;
+      // height: 34px; // do not put height on number field with font size increased
+      padding: 6px 12px;
+      background-color: #fff;
+      background-image: none;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+      box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+      -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+      -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+      transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    }
+
     input[type=text],
     input[type=number] {
-      padding: 24px 12px;
-      font-size: 150%;
+      padding: 12px 12px;
+      font-size: 180%;
       color: @ab-blue-dark;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
     }
 
-    .converted-value {
-      padding: 3px 12px;
-      font-size: 150%;
-      color: @ab-blue-light;
-    }
-
-    .buy-sell-next {
+    .input-group-addon {
+      font-size: 180%;
     }
   }
 
