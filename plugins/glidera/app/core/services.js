@@ -162,15 +162,15 @@ factory('DataFactory', [
   };
 
   factory.getBankAccounts = function() {
-      return $q(function(resolve, reject) {
-        glideraFactory.getBankAccounts(function(e, s, b) {
-          if (e === null) {
-            resolve(b.bankAccounts);
-          } else {
-            reject();
-          }
-        });
+    return $q(function(resolve, reject) {
+      glideraFactory.getBankAccounts(function(e, s, b) {
+        if (e === null) {
+          resolve(b.bankAccounts);
+        } else {
+          reject();
+        }
       });
+    });
   };
   factory.getBankAccount = function(uuid) {
     return $q(function(resolve, reject) {

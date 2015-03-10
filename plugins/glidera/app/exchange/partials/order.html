@@ -22,48 +22,24 @@
 
     <form action="" class="form">
 
-      <div ng-if="order.orderAction == 'buy'"  class="row">
+      <div class="row">
         <div class="col-xs-6 form-group">
-          <label for="inputFromBankAccount" class="">Spend From</label>
-          <select
-            ng-model="order.transferFromBankAccount"
-            ng-options="a.description for a in bankAccounts"
-            id="inputFromBankAccount" class="form-control">
-          </select>
-        </div>
-
-        <div class="col-xs-6 form-group">
-          <label for="inputBtcWallet" class="">Transfer BTC To</label>
+          <label for="inputBtcWallet" class="">BTC Wallet</label>
           <select
             ng-model="order.transferToWallet"
             ng-options="w.name for w in userWallets"
             id="inputBtcWallet" class="form-control">
-          </select>
-        </div>
-      </div>
-
-      <div ng-if="order.orderAction == 'sell'" class="row">
-        <div class="col-xs-6 form-group">
-          <label for="inputBtcWallet" class="">Sell BTC From</label>
-          <select
-            ng-model="order.transferToWallet"
-            ng-options="w.name for w in userWallets"
-            id="inputBtcWallet" class="form-control">
-          </select>
-        </div>
-
-        <div class="col-xs-6 form-group">
-          <label for="inputFromBankAccount" class="">Depoist To</label>
-          <select
-            ng-model="order.transferFromBankAccount"
-            ng-options="a.description for a in bankAccounts"
-            id="inputFromBankAccount" class="form-control">
           </select>
         </div>
       </div>
 
       <div class="form-group">
-        <label for="inputFiatAmount" class="">Amount to <span class="label label-outline">{{ order.orderAction | uppercase }}</span></label>
+        <label for="inputFiatAmount" class="">Amount to <span
+        ng-class="{
+          'label-success' : order.orderAction == 'buy',
+          'label-primary' : order.orderAction == 'sell',
+        }"
+        class="label label-outline">{{ order.orderAction | uppercase }}</span></label>
         <div class="input-group">
           <span class="input-group-addon">$</span>
           <input
