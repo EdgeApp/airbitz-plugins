@@ -26,24 +26,21 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa'])
     DataFactory.getBankAccounts().then(function(bankAccounts) {
       $scope.bankAccounts = bankAccounts;
     }, function() {
-      // TODO: error
       Airbitz.ui.showAlert('Error', 'TODO: Error! Error!');
     });
 
-    // $scope.exchange.buy = function(){
-    //   $state.go('exchangeOrderBuy');
-    // };
-
-    // $scope.exchange.sell = function(){
-    //   $state.go('exchangeOrderSell');
-    // };
-
-    $scope.exchange.addBankAccount = function(){
-      $state.go('exchangeAddBankAccount');
+    $scope.buy = function(){
+      DataFactory.getOrder(true);
+      $state.go('exchangeOrder', {'orderAction': 'buy'});
     };
 
-    $scope.exchange.addCreditCard = function(){
-      $state.go('exchangeAddCreditCard');
+    $scope.sell = function(){
+      DataFactory.getOrder(true);
+      $state.go('exchangeOrder', {'orderAction': 'sell'});
+    };
+
+    $scope.addBankAccount = function(){
+      $state.go('exchangeAddBankAccount');
     };
   }])
 .controller('addAccountController',
@@ -110,7 +107,7 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa'])
     $scope.exchange = DataFactory.getExchange();
     $scope.account = UserFactory.getUserAccount();
 
-    $scope.order = DataFactory.getOrder(true); // initialize new order and clear existing order
+    $scope.order = DataFactory.getOrder(false); // initialize new order and clear existing order
     $scope.order.orderAction = $stateParams.orderAction; // set order action
 
 
@@ -168,7 +165,10 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa'])
     if (!order.orderAction) {
       $state.go('exchange');
     }
-    $scope.exchange.executeOrder = function() {
+    $scope.editOrder = function() {
+      $state.go('exchangeOrder');
+    };
+    $scope.executeOrder = function() {
       console.log(JSON.stringify(order));
       if (order.orderAction == 'buy') {
         DataFactory.buy(order.transferToWallet, order.orderBtcInput).then(function() {
