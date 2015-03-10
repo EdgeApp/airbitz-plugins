@@ -134,7 +134,7 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa'])
         Airbitz.core.currencyToSatoshi(input, $scope.exchange.currencyNum), false
       );
 
-      $scope.order.orderBtcInput = output;
+      $scope.order.orderBtcInput = parseFloat(output);
     };
 
     $scope.convertBtcValue = function(input) {
@@ -146,7 +146,7 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa'])
       output = Airbitz.core.formatCurrency(
         Airbitz.core.satoshiToCurrency(input, $scope.exchange.currencyNum), false
       );
-      $scope.order.orderFiatInput = output;
+      $scope.order.orderFiatInput = parseFloat(output);
     };
     $scope.next = function() {
       TwoFactor.showTwoFactor(function() {
