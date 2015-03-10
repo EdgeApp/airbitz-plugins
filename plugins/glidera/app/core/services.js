@@ -16,30 +16,14 @@ factory('UserFactory', [
   '$q', '$filter', 'States', 'ExchangeFactory', 'glideraFactory', 'TwoFactor',
   function($q, $filter, States, ExchangeFactory, glideraFactory, TwoFactor) {
     var factory = {};
+    var account = Airbitz.core.readData('account') || {};
 
-    // account prepopulate dummy data
-    var account = {
-      'firstName': '',
-      'middleName': '',
-      'lastName': '',
-      'email': '',
-      'address1': '',
-      'address2': '',
-      'city': '',
-      'zipCode': '',
-      'state': '',
-      'birthDate': '',
-      'registered': true,
-      'status': ''
-    };
-
-    account.getRegistrationStatus = function() {
+    factory.getRegistrationStatus = function() {
       return this.registered;
     };
-    account.setRegistrationStatus = function(status) {
+    factory.setRegistrationStatus = function(status) {
       this.registered = status;
     };
-
     factory.getUserAccount = function() {
       return account;
     };
@@ -65,6 +49,10 @@ factory('UserFactory', [
 
             account.email = 'someone@yourdomain.co';
             account.registered = true;
+
+            // persiste locally
+            console.log(account);
+            Airbitz.core.writeData('account', account);
             resolve(account);
           } else {
             reject();
@@ -73,7 +61,6 @@ factory('UserFactory', [
       });
     }
     factory.updateUserAccount = function(account) {
-      console.log(account);
       return $q(function(resolve, reject) {
         glideraFactory.updateBasicInfo({
           'firstName': account.firstName,
@@ -86,6 +73,7 @@ factory('UserFactory', [
           'zipCode': account.zipCode
         }, function(e, s, b) {
           if (s === 200) {
+            Airbitz.core.writeData('account', account);
             resolve();
           } else {
             reject();
@@ -96,10 +84,7 @@ factory('UserFactory', [
 
 
     // Fetch the user data if available
-    if (glideraFactory.hasRegistered()) {
-      factory.getFullUserAccount();
-    }
-
+    factory.getFullUserAccount();
     return factory;
 
   }]).
@@ -137,7 +122,7 @@ factory('DataFactory', [
     return ExchangeFactory;
   }
 
-  var bankAccounts = [];
+  var bankAccounts = Airbitz.core.readData('bankAccounts') || [];
   factory.getBankAccounts = function() {
     return bankAccounts;
   };
@@ -146,6 +131,7 @@ factory('DataFactory', [
       glideraFactory.getBankAccounts(function(e, s, b) {
         if (e === null) {
           bankAccounts = b.bankAccounts; //cache bank accounts
+          Airbitz.core.writeData('bankAccounts', bankAccounts);
           resolve(b.bankAccounts);
         } else {
           reject();

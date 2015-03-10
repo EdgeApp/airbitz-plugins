@@ -5,6 +5,7 @@ angular.module('app.user', ['app.dataFactory', 'app.constants'])
     Airbitz.ui.title('Glidera Signup');
     $scope.exchange = DataFactory.getExchange();
     $scope.account = UserFactory.getUserAccount();
+    $scope.hasRegistered = UserFactory.getRegistrationStatus();
     $scope.states = States.getStates();
 
     $scope.cancelSignup = function(){
@@ -22,6 +23,7 @@ angular.module('app.user', ['app.dataFactory', 'app.constants'])
   function ($scope, $state, DataFactory, States, UserFactory) {
     $scope.states = States.getStates();
     $scope.account = UserFactory.getUserAccount();
+    $scope.hasRegistered = UserFactory.getRegistrationStatus();
     UserFactory.getFullUserAccount().then(function(account) {
       $scope.account = account;
     }, function() {

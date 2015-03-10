@@ -22,27 +22,27 @@
       <input ng-model="account.email" type="text" id="inputEmail" class="form-control" placeholder="jimmy@hendrix.com" autofocus="" autocomplete="off">
     </div>
 
-    <div ng-show="account.getRegistrationStatus()" class="form-group">
+    <div ng-show="hasRegistered" class="form-group">
       <label for="inputAddress" class="">Address</label>
       <input ng-model="account.street" type="text" id="inputAddressStreet" class="form-control" placeholder="Street Address" autofocus="" autocomplete="off">
     </div>
 
-    <div ng-show="account.getRegistrationStatus()" class="form-group">
+    <div ng-show="hasRegistered" class="form-group">
       <label for="inputAddress" class="sr-only">Address 2</label>
       <input ng-model="account.street2" type="text" id="inputAddressStreet" class="form-control" placeholder="Street Address 2" autofocus="" autocomplete="off">
     </div>
 
-    <div ng-show="account.getRegistrationStatus()" class="form-group">
+    <div ng-show="hasRegistered" class="form-group">
       <label for="inputAddressCity" class="sr-only">City</label>
       <input ng-model="account.city" type="text" id="inputAddressCity" class="form-control" placeholder="City" autofocus="" autocomplete="off">
     </div>
 
-    <div ng-show="account.getRegistrationStatus()" class="form-group">
+    <div ng-show="hasRegistered" class="form-group">
       <label for="inputAddressZip" class="sr-only">Zip</label>
       <input ng-model="account.zip" type="text" id="inputAddressZip" class="form-control" placeholder="19512" autofocus="" autocomplete="off">
     </div>
 
-    <div ng-show="account.getRegistrationStatus()" class="row">
+    <div ng-show="hasRegistered" class="row">
       <div class="form-group col-xs-6">
         <select ng-options="o.name for o in states" ng-model="account.state" class="form-control">
           <option value="">-- Select a State --</option>
@@ -50,7 +50,7 @@
       </div>
     </div>
 
-    <div ng-show="account.getRegistrationStatus()" class="form-group">
+    <div ng-show="hasRegistered" class="form-group">
       <label for="inputDob" class="">Date of Birth</label>
       <input ng-model="account.dob" type="text" id="inputDob" class="form-control" placeholder="07-04-1776" autofocus="" autocomplete="off" value="">
     </div>
