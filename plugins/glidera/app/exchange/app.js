@@ -183,7 +183,7 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa'])
           Airbitz.ui.showAlert('Error', error);
         });
       } else {
-        DataFactory.sell(order.transferFromWallet, order.orderBtcInput).then(function() {
+        DataFactory.sell(order.transferToWallet, order.orderBtcInput).then(function() {
           Airbitz.ui.showAlert('Sold Bitcoin', 'You sold bitcoin!');
           $state.go('exchange');
         }, function(error) {
