@@ -164,7 +164,7 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa'])
 .controller('reviewOrderController', ['$scope', '$state', 'DataFactory', 'UserFactory', 'TwoFactor',
   function ($scope, $state, DataFactory, UserFactory, TwoFactor) {
     var order = DataFactory.getOrder(false);
-    console.log(order);
+    console.log(JSON.stringify(order));
     $scope.order = order;
     $scope.exchange = DataFactory.getExchange();
     $scope.account = UserFactory.getUserAccount();
@@ -172,15 +172,16 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa'])
       $state.go('exchange');
     }
     $scope.exchange.executeOrder = function() {
+      console.log(JSON.stringify(order));
       if (order.orderAction == 'buy') {
-        DataFactory.buy(order.transferToWallet.id, order.orderBtcInput).then(function() {
+        DataFactory.buy(order.transferToWallet, order.orderBtcInput).then(function() {
           alert('bought bitcoin');
           $state.go('executeOrder');
         }, function(error) {
           alert(error);
         });
       } else {
-        DataFactory.requestSpend(order.transferFromWallet.id, order.orderBtcInput).then(function() {
+        DataFactory.requestSpend(order.transferFromWallet, order.orderBtcInput).then(function() {
           alert('sold bitcoin');
           $state.go('executeOrder');
         }, function(error) {

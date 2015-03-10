@@ -22,15 +22,16 @@ controller('verify2faController', ['$scope', '$state', 'DataFactory', 'UserFacto
   }]).
 factory('TwoFactor', ['$state', '$q', 'glideraFactory',
   function($state, $q, glideraFactory) {
+    'use strict';
+
     var code = '';
-    var nextAction = null;
-    return {
+    var nextAction = function() { };
+    var factory = {
       showTwoFactor: function(finishedCallback) {
-        this.nextAction = finishedCallback;
+        if (finishedCallback) {
+          this.nextAction = finishedCallback;
+        }
         $state.go('verify2FA');
-      },
-      getNext: function() {
-        return this.nextAction;
       },
       requestCode: function() {
         return $q(function(resolve, reject) {
@@ -39,7 +40,6 @@ factory('TwoFactor', ['$state', '$q', 'glideraFactory',
           });
         });
       },
-
       finish: function(c) {
         this.code = c;
         if (this.nextAction) {
@@ -49,5 +49,6 @@ factory('TwoFactor', ['$state', '$q', 'glideraFactory',
       getCode: function() {
         return this.code;
       }
-    }
+    };
+    return factory;
   }]);

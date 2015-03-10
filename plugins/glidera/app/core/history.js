@@ -3,6 +3,7 @@ angular.module('app.history', []).
 run(function($rootScope, $window) {
   var history = [];
   $rootScope.$on('$locationChangeStart', function(event, next, current) {
+    console.log('history: ' + next + ' ' + current);
     if (history.length == 0) {
       history.push(current);
     }

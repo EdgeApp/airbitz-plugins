@@ -20,8 +20,7 @@
 <div class="exchange-buy-sell-interface row">
   <div class="col-xs-12">
 
-    <form action="" class="form">
-
+    <form ng-submit="next()" class="form">
       <div class="row">
         <div class="col-xs-6 form-group">
           <label for="inputBtcWallet" class="">BTC Wallet</label>
@@ -71,8 +70,8 @@
 
       <div class="row text-right" style="margin-top: 40px;">
         <div class="col-xs-12">
-          <button ui-sref="exchange" class="buy-sell-next btn btn-lg btn-link">Cancel</button>
-          <button ng-click="next()" class="buy-sell-next btn btn-lg btn-success">Next</button>
+          <button type="button" ui-sref="exchange" class="buy-sell-next btn btn-lg btn-link">Cancel</button>
+          <button type="submit" class="buy-sell-next btn btn-lg btn-success">Next</button>
         </div>
       </div>
 

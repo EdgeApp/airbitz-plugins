@@ -246,7 +246,6 @@ factory('DataFactory', [
   };
 
   factory.getOrder = function(clear) {
-    console.log('Get order:');
     if(clear) {
       this.clearOrder();
     }
@@ -256,11 +255,15 @@ factory('DataFactory', [
   factory.clearOrder = function() {
     exchangeOrder = {};
   };
-  console.log(TwoFactor);
 
-  factory.buy = function(walletId, qty) {
+  factory.buy = function(wallet, qty) {
     return $q(function (resolve, reject) {
-      Airbitz.core.createReceiveRequest(walletId, {name: 'Glidera', notes: '', success: resolve, error: reject})
+      Airbitz.core.createReceiveRequest(wallet, {
+        name: 'Glidera',
+        notes: '',
+        success: resolve,
+        error: reject
+      })
     }).then(function(data) {
       var address = Airbitz._bridge.inDevMod()
                   ? glideraFactory.sandboxAddress : data['address'];
@@ -272,6 +275,10 @@ factory('DataFactory', [
         } else {
           reject('Unable to obtain a destination address. Please try again later.');
         }
+      });
+    }, function(error) {
+      return $q(function(resolve, reject) {
+        reject(error);
       });
     });
   };
