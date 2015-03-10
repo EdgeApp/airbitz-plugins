@@ -4,7 +4,8 @@
   "description": "",
   "main": "gulpfile.js",
   "dependencies": {
-    "gulp": "^3.8.11"
+    "gulp": "^3.8.11",
+    "moment": "^2.9.0"
   },
   "devDependencies": {
     "gulp-concat": "^2.5.2",
