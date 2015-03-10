@@ -27,7 +27,7 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa'])
       $scope.bankAccounts = bankAccounts;
     }, function() {
       // TODO: error
-      alert('TODO: Error! Error!');
+      Airbitz.ui.showAlert('Error', 'TODO: Error! Error!');
     });
 
     // $scope.exchange.buy = function(){
@@ -59,7 +59,7 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa'])
         DataFactory.createBankAccount($scope.bankAccount).then(function() {
           $state.go('exchange');
         }, function() {
-          alert('TODO: Error! Error!');
+          Airbitz.ui.showAlert('Error', 'TODO: Error! Error!');
         });
       });
     };
@@ -71,8 +71,7 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa'])
     DataFactory.getBankAccount($stateParams.uuid).then(function(bankAccount) {
       $scope.bankAccount = bankAccount;
     }, function() {
-      // TODO!!!
-      alert('Error!1!111!1');
+      Airbitz.ui.showAlert('Error', 'TODO: Error! Error!');
     });
 
     $scope.deposit = {};
@@ -82,7 +81,7 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa'])
           $scope.deposit.amount2, $scope.bankAccount.description).then(function() {
         $state.go('exchange');
       }, function() {
-        alert('TODO: Error! Error!');
+        Airbitz.ui.showAlert('Error', 'TODO: Error! Error!');
       });
     };
 
@@ -90,8 +89,7 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa'])
       DataFactory.updateBankAccount($scope.bankAccount).then(function() {
         $state.go('exchange');
       }, function() {
-        // TODO: error
-        alert('TODO: Error! Error!');
+        Airbitz.ui.showAlert('Error', 'TODO: Error! Error!');
       });
     };
 
@@ -100,7 +98,7 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa'])
         DataFactory.deleteBankAccount($scope.bankAccount.bankAccountUuid).then(function() {
           $state.go('exchange');
         }, function() {
-          alert('TODO: Error! Error!');
+          Airbitz.ui.showAlert('Error', 'TODO: Error! Error!');
         });
       });
     };
@@ -120,8 +118,7 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa'])
       $scope.bankAccounts = bankAccounts;
       $scope.order.transferFromBankAccount = bankAccounts[0];
     }, function() {
-      // TODO: error
-      alert('TODO: Error! Error!');
+      Airbitz.ui.showAlert('Error', 'TODO: Error! Error!');
     });
 
     DataFactory.getUserWallets().then(function(userWallets) {
@@ -175,17 +172,17 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa'])
       console.log(JSON.stringify(order));
       if (order.orderAction == 'buy') {
         DataFactory.buy(order.transferToWallet, order.orderBtcInput).then(function() {
-          alert('bought bitcoin');
-          $state.go('executeOrder');
+          Airbitz.ui.showAlert('Bought Bitcoin', 'You bought bitcoin!');
+          $state.go('exchange');
         }, function(error) {
-          alert(error);
+          Airbitz.ui.showAlert('Error', error);
         });
       } else {
         DataFactory.requestSpend(order.transferFromWallet, order.orderBtcInput).then(function() {
-          alert('sold bitcoin');
-          $state.go('executeOrder');
+          Airbitz.ui.showAlert('Bought Bitcoin', 'You sold bitcoin!');
+          $state.go('exchange');
         }, function(error) {
-          alert(error);
+          Airbitz.ui.showAlert('Error', error);
         });
       }
     };

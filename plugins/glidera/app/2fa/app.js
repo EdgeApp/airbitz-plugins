@@ -2,6 +2,7 @@
 angular.module('app.2fa', ['app.dataFactory', 'app.glidera']).
 controller('verify2faController', ['$scope', '$state', 'DataFactory', 'UserFactory', 'TwoFactor',
   function ($scope, $state, DataFactory, UserFactory, TwoFactor) {
+    Airbitz.ui.title('2 Factor Verification');
     $scope.exchange = DataFactory.getExchange();
     $scope.account = UserFactory.getUserAccount();
 
@@ -9,7 +10,7 @@ controller('verify2faController', ['$scope', '$state', 'DataFactory', 'UserFacto
       TwoFactor.requestCode(function() {
         // Success, do nothing
       }, function(error) {
-        alert(error);
+        Airbitz.ui.showAlert('Error', error);
       });
     };
     $scope.submit2FA = function() {

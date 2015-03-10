@@ -25,8 +25,7 @@ angular.module('app.user', ['app.dataFactory', 'app.constants'])
     UserFactory.getFullUserAccount().then(function(account) {
       $scope.account = account;
     }, function() {
-      // TODO: Error!!!
-      alert('Error!!!!');
+      Airbitz.ui.showAlert('Error', 'TODO: Error. Error');
     });
 
     $scope.cancelSignup = function(){
@@ -48,7 +47,7 @@ angular.module('app.user', ['app.dataFactory', 'app.constants'])
       $scope.account = UserFactory.getUserAccount();
 
       $scope.resendEmail = function(email){
-        alert('Resending to: ' + email);
+        Airbitz.ui.showAlert('Resending', 'Resending to ' + email);
       };
       $scope.verifyEmail = function(){
         Airbitz.ui.title('Saving...');
@@ -70,11 +69,11 @@ angular.module('app.user', ['app.dataFactory', 'app.constants'])
       };
 
       $scope.submitPhone = function(phone){
-        alert('Send: ' + phone + ' to Glider for verification code.');
+        Airbitz.ui.showAlert('Send', 'Send ' + phone + ' to Glidera for verification code');
         $state.go('verify2FA');
       };
 
       $scope.changePhone = function(phone){
-        alert('Change phone: ' + phone);
+        Airbitz.ui.showAlert('Change Phone', 'Change phone: ' + phone);
       };
     }])

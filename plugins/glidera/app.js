@@ -33,7 +33,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
     // route for two factor verifications
     .state("verify2FA", {
       url: "/verify/twofa/",
-      templateUrl: "app/exchange/partials/verify.twofactor.html",
+      templateUrl: "app/2fa/partials/verify.twofactor.html",
       controller: "verify2faController",
     })
     // route for exchange
