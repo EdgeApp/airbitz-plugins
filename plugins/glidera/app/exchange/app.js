@@ -24,7 +24,8 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa'])
     $scope.exchange = DataFactory.getExchange();
     $scope.account = UserFactory.getUserAccount();
 
-    DataFactory.getBankAccounts().then(function(bankAccounts) {
+    $scope.bankAccounts = DataFactory.getBankAccounts();
+    DataFactory.fetchBankAccounts().then(function(bankAccounts) {
       $scope.bankAccounts = bankAccounts;
     }, function() {
       Airbitz.ui.showAlert('Error', 'TODO: Error! Error!');
@@ -68,11 +69,12 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa'])
   function ($scope, $state, $stateParams, DataFactory, UserFactory, TwoFactor) {
     Airbitz.ui.title('Edit Bank Account');
     $scope.account = UserFactory.getUserAccount();
-    DataFactory.getBankAccount($stateParams.uuid).then(function(bankAccount) {
-      $scope.bankAccount = bankAccount;
-    }, function() {
-      Airbitz.ui.showAlert('Error', 'TODO: Error! Error!');
-    });
+    $scope.bankAccount = DataFactory.getBankAccount($stateParams.uuid);
+    // DataFactory.fetchBankAccount($stateParams.uuid).then(function(bankAccount) {
+    //   $scope.bankAccount = bankAccount;
+    // }, function() {
+    //   Airbitz.ui.showAlert('Error', 'TODO: Error! Error!');
+    // });
 
     $scope.deposit = {};
     $scope.verifyAccount = function() {
@@ -115,8 +117,8 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa'])
     $scope.order = DataFactory.getOrder(false); // initialize new order and clear existing order
     $scope.order.orderAction = $stateParams.orderAction; // set order action
 
-
-    DataFactory.getBankAccounts().then(function(bankAccounts) {
+    $scope.bankAccounts = DataFactory.getBankAccounts();
+    DataFactory.fetchBankAccounts().then(function(bankAccounts) {
       $scope.bankAccounts = bankAccounts;
       $scope.order.transferFromBankAccount = bankAccounts[0];
     }, function() {

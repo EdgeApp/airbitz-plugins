@@ -110,31 +110,6 @@ factory('DataFactory', [
 
   // transactions
   factory.getTransactions = function() {
-    var dummyData = [
-      {
-        "transactionUuid": "8cdf8c41-2b90-4cc5-b365-07cea92f4200",
-        "type": "SELL",
-        "price": 296.15,
-        "subtotal": 29.62,
-        "fees": 0.30,
-        "total": 29.92,
-        "transactionHash": "000000000df4ba5538dbad71f9f436ee639e4828d7c73fda62e5ddd85578e8c8",
-        "estimatedDeliveryDate": "2015-02-13",
-        "status": "COMPLETE"
-      },
-      {
-        "transactionUuid": "8cdf8c41-2b90-4cc5-b365-05cea92f4200",
-        "type": "BUY",
-        "price": 196.15,
-        "subtotal": 29.62,
-        "fees": 0.30,
-        "total": 29.92,
-        "transactionHash": "000000000df4ba5538dbad71f9f436ee639e4828d7c73fda62e5ddd85578e8c8",
-        "estimatedDeliveryDate": "2015-01-13",
-        "status": "COMPLETE"
-      }
-    ];
-
     return $q(function(resolve, reject) {
       glideraFactory.transactions(function(e, s, b) {
         if (e === null) {
@@ -149,7 +124,6 @@ factory('DataFactory', [
     });
   };
 
-
   factory.getUserWallets = function() {
     return $q(function(resolve, reject) {
       Airbitz.core.wallets({
@@ -163,20 +137,15 @@ factory('DataFactory', [
     return ExchangeFactory;
   }
 
-  // default bank account data
-  var bankAccount = {
-    'description': 'Glidera',
-    'bankAccountType': 'CHECKING',
-    'accountNumber': '77223399339',
-    'routingNumber': '10022291191',
-    'isPrimary': 'true',
-    'status': 'PENDING',
-  };
-
+  var bankAccounts = [];
   factory.getBankAccounts = function() {
+    return bankAccounts;
+  };
+  factory.fetchBankAccounts = function() {
     return $q(function(resolve, reject) {
       glideraFactory.getBankAccounts(function(e, s, b) {
         if (e === null) {
+          bankAccounts = b.bankAccounts; //cache bank accounts
           resolve(b.bankAccounts);
         } else {
           reject();
@@ -185,6 +154,12 @@ factory('DataFactory', [
     });
   };
   factory.getBankAccount = function(uuid) {
+    var l = bankAccounts.filter(function(b) {
+      return b.bankAccountUuid == uuid;
+    });
+    return l.length > 0 ? l[0] : null;
+  };
+  factory.fetchBankAccount = function(uuid) {
     return $q(function(resolve, reject) {
       glideraFactory.getBankAccount(uuid, function(e, s, b) {
         if (e === null) {
