@@ -13,7 +13,7 @@ function errorMap(res) {
   }
 }
 
-angular.module('app.dataFactory', ['app.glidera', 'app.2fa', 'app.constants']).
+angular.module('app.dataFactory', ['app.glidera', 'app.2fa', 'app.constants', 'app.limits']).
 factory('UserFactory', [
   '$q', '$filter', 'States', 'ExchangeFactory', 'glideraFactory', 'TwoFactor',
   function($q, $filter, States, ExchangeFactory, glideraFactory, TwoFactor) {
@@ -241,6 +241,7 @@ factory('DataFactory', [
   };
 
   factory.buy = function(wallet, qty) {
+    // TODO: check buy limits
     return $q(function (resolve, reject) {
       createAddress(wallet, 'Glidera', '', resolve, reject);
     }).then(function(data) {
@@ -269,6 +270,7 @@ factory('DataFactory', [
   };
 
   factory.sell = function(wallet, qty) {
+    // TODO: check sell limits
     return $q(function(resolve, reject) {
       glideraFactory.sellAddress(qty, function(e, r, b) {
         (r == 200) ? resolve(b) : reject(b);

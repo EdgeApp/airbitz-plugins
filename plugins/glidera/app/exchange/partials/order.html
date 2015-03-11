@@ -74,6 +74,10 @@
 
       <div class="row text-right" style="margin-top: 40px;">
         <div class="col-xs-12">
+          <div class="pull-left">
+            <span ng-show="{{order.orderAction=='buy'}}" buy-limits></span>
+            <span ng-show="{{order.orderAction=='sell'}}" sell-limits></span>
+          </div>
           <button type="button" ui-sref="exchange" class="buy-sell-next btn btn-lg btn-link">Cancel</button>
           <button type="submit" class="buy-sell-next btn btn-lg btn-success">Next</button>
         </div>

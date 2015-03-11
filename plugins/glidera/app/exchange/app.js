@@ -1,5 +1,5 @@
 
-angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices'])
+angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices', 'app.limits'])
 .filter('statusFilter', function() {
   return function(status) {
     switch(status) {
@@ -18,11 +18,16 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices'])
     $scope.exchange = DataFactory.getExchange();
     $scope.account = UserFactory.getUserAccount();
   }])
-.controller('dashboardController', ['$scope', '$state', 'DataFactory', 'UserFactory',
-  function ($scope, $state, DataFactory, UserFactory) {
+.controller('dashboardController', ['$scope', '$state', 'DataFactory', 'UserFactory', 'Limits',
+  function ($scope, $state, DataFactory, UserFactory, Limits) {
     Airbitz.ui.title('Glidera');
     $scope.exchange = DataFactory.getExchange();
     $scope.account = UserFactory.getUserAccount();
+
+    $scope.limits = Limits.getLimits();
+    Limits.fetchLimits().then(function(limits) {
+      $scope.limits = limits;
+    });
 
     $scope.bankAccounts = DataFactory.getBankAccounts();
     DataFactory.fetchBankAccounts().then(function(bankAccounts) {
@@ -108,11 +113,16 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices'])
   }])
 
 .controller('orderController',
-  ['$scope', '$state', '$stateParams', 'DataFactory', 'UserFactory', 'TwoFactor',
-  function ($scope, $state, $stateParams, DataFactory, UserFactory, TwoFactor) {
+  ['$scope', '$state', '$stateParams', 'DataFactory', 'UserFactory', 'TwoFactor', 'Limits',
+  function ($scope, $state, $stateParams, DataFactory, UserFactory, TwoFactor, Limits) {
     Airbitz.ui.title('Place Order');
     $scope.exchange = DataFactory.getExchange();
     $scope.account = UserFactory.getUserAccount();
+
+    $scope.limits = Limits.getLimits();
+    Limits.fetchLimits().then(function(limits) {
+      $scope.limits = limits;
+    });
 
     $scope.order = DataFactory.getOrder(false); // initialize new order and clear existing order
     $scope.order.orderAction = $stateParams.orderAction; // set order action
@@ -156,6 +166,13 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices'])
       $scope.order.orderFiatInput = parseFloat(output);
     };
     $scope.next = function() {
+      if ($scope.order.orderAction == 'buy' && !Limits.isBuyAllowed($scope.order.orderBtcInput)) {
+        Airbitz.ui.showAlert('Error', 'The buy limit will be exceeded. Please reduce your buy amount.');
+        return;
+      } else if ($scope.order.orderAction == 'sell' && !Limits.isSellAllowed($scope.order.orderBtcInput)) {
+        Airbitz.ui.showAlert('Error', 'The sell limit will be exceeded. Please reduce your sell amount.');
+        return;
+      }
       TwoFactor.showTwoFactor(function() {
         $state.go("reviewOrder");
       });
