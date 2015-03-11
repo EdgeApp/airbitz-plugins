@@ -56,6 +56,10 @@ body .well {
   background: none;
   border-color: #64a6cb;
 }
+body .table thead th {
+  background: #efefef;
+  color: #0f5791;
+}
 body .table.table-no-border th,
 body .table.table-no-border td {
   border-top: none;
@@ -72,6 +76,14 @@ body .list-group .list-group-item.header,
 body .list-group a.list-group-item.header {
   background: #efefef;
   color: #0f5791;
+}
+body .list-group .list-group-item.header:hover,
+body .list-group a.list-group-item.header:hover,
+body .list-group .list-group-item.header:active,
+body .list-group a.list-group-item.header:active,
+body .list-group .list-group-item.header:focus,
+body .list-group a.list-group-item.header:focus {
+  background: #efefef;
 }
 body .list-group .list-group-item:hover,
 body .list-group a.list-group-item:hover,

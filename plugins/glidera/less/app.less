@@ -10,7 +10,7 @@
 
 @ab-gray: #999;
 @ab-gray-dark: #333;
-@ab-gray-light: #ccc;
+@ab-gray-light: #efefef;
 
 /*
     FIXES FOR WEIRD STUFF
@@ -81,6 +81,13 @@ body {
 
   .table {
 
+    thead {
+      th {
+        background: @ab-gray-light;
+        color: @ab-blue-dark;
+      }
+    }
+
     &.table-no-border {
 
       th,
@@ -102,6 +109,10 @@ body {
       &.header {
         background: #efefef;
         color: @ab-blue-dark;
+
+        &:hover, &:active, &:focus {
+          background: #efefef;
+        }
       }
 
       &:hover, &:active, &:focus {
