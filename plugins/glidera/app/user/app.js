@@ -53,17 +53,18 @@ angular.module('app.user', ['app.dataFactory', 'app.constants'])
 
       $scope.resendEmail = function(email){
         Airbitz.ui.showAlert('Resending', 'Resending to ' + email);
+        // TODO resend email...
       };
       $scope.verifyEmail = function(){
         Airbitz.ui.title('Saving...');
         UserFactory.updateUserAccount($scope.account).then(function() {
-          $scope.account.setRegistrationStatus(true);
+          UserFactory.setRegistrationStatus(true);
           $state.go('verifyPhone');
         });
       };
     }])
-.controller('verifyPhoneController', ['$scope', '$state', 'DataFactory', 'UserFactory',
-    function($scope, $state, DataFactory, UserFactory) {
+.controller('verifyPhoneController', ['$scope', '$state', 'DataFactory', 'UserFactory', 'TwoFactor',
+    function($scope, $state, DataFactory, UserFactory, TwoFactor) {
       Airbitz.ui.title('Glidera: Verify Phone');
 
       $scope.exchange = DataFactory.getExchange();
@@ -74,11 +75,8 @@ angular.module('app.user', ['app.dataFactory', 'app.constants'])
       };
 
       $scope.submitPhone = function(phone){
-        Airbitz.ui.showAlert('Send', 'Send ' + phone + ' to Glidera for verification code');
-        $state.go('verify2FA');
+        TwoFactor.showTwoFactor(function() {
+          $state.go('exchange');
+        });
       };
-
-      $scope.changePhone = function(phone){
-        Airbitz.ui.showAlert('Change Phone', 'Change phone: ' + phone);
-      };
-    }])
+    }]);

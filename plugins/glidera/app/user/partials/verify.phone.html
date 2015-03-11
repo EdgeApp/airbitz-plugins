@@ -7,22 +7,22 @@
 
   <form ng-submit="submitPhone(account.phone)" class="form col-xs-offset-2 col-xs-8">
 
-      <div class="form-group">
-        <label for="inputPhone" class="sr-only">Verification Code</label>
-        <input ng-model="account.phone" type="text" id="inputPhone" class="form-control" placeholder="Valid Phone #" autofocus="true" autocomplete="off">
+    <div class="form-group">
+      <label for="inputPhone" class="sr-only">Verification Code</label>
+      <input ng-model="account.phone" type="text" id="inputPhone" class="form-control" placeholder="Valid Phone #" autofocus="true" autocomplete="off">
+    </div>
+
+    <div class="row" style="margin: 20px 0">
+      <p><label class="label label-warning">Note</label> Phone must be able to receive SMS text messages.</p>
+    </div>
+
+    <div class="row text-right" style="margin-top: 40px;">
+      <div class="col-xs-12">
+        <button type="button" ng-click="loadExchange()" class="buy-sell-next btn btn-lg btn-link">Later</button>
+        <button type="submit" class="buy-sell-next btn btn-lg btn-success">Confirm</button>
       </div>
+    </div>
 
   </form>
 
-</div>
-
-<div class="row" style="margin: 20px 0">
-  <p><label class="label label-warning">Note</label> Phone must be able to receive SMS text messages.</p>
-</div>
-
-<div class="row text-right" style="margin-top: 40px;">
-  <div class="col-xs-12">
-    <button type="button" ng-click="loadExchange()" class="buy-sell-next btn btn-lg btn-link">Later</button>
-    <button type="submit" class="buy-sell-next btn btn-lg btn-success">Confirm</button>
-  </div>
 </div>
