@@ -1,3 +1,4 @@
+
 function priceLink($interval, Prices, scope, element, attrs, callback) {
   var netTimeout;
 
@@ -20,63 +21,51 @@ function priceLink($interval, Prices, scope, element, attrs, callback) {
   updateView();
 }
 
-
 angular.module('app.prices', ['app.glidera']).
 factory('Prices', ['$q', 'glideraFactory',
   function($q, glideraFactory) {
-    var currentBuy = { };
-    var currentSell = { };
+    var factory = {};
     var timeDiff = function(date) {
       return (new Date(date).getTime() - new Date().getTime()) / 1000.0;
     };
-    var work = function(data, callback) {
-      if (data && timeDiff(data.expires) > 30) {
-        return $q(function(resolve, reject) {
-          resolve(data);
-        });
+    var cached = function(data) {
+      return (data && timeDiff(data.expires) > 30) ? data : null;
+    };
+    factory.currentBuy = {};
+    factory.currentSell = {};
+    factory.buyUuid = function() {
+      return this.currentBuy.priceUuid;
+    };
+    factory.updateBuy = function() {
+      console.log('updateBuy');
+      var deferred = $q.defer();
+      if (cached(this.currentBuy)) {
+        deferred.resolve(cached(this.currentBuy));
       } else {
-        return callback();
-      }
-    };
-    /* TODO: clean this up....its fugly */
-    return {
-      buyUuid: function() {
-        return currentBuy.priceUuid;
-      },
-      updateBuy: function() {
-        console.log('updateBuy');
-        return work(currentBuy, function() {
-          return $q(function(resolve, reject) {
-            glideraFactory.buyPrices(1, function(e, r, b) {
-              if (r == 200) {
-                currentBuy = b;
-                resolve(b);
-              } else {
-                reject();
-              }
-            });
-          });
-        });
-      },
-      sellUuid: function() {
-        return currentSell.priceUuid;
-      },
-      updateSell: function() {
-        console.log('updateSell');
-        return work(currentSell, function() {
-          return $q(function(resolve, reject) {
-            glideraFactory.sellPrices(1, function(e, r, b) {
-              if (r == 200) {
-                currentSell = b;
-                resolve(b);
-              } else {
-                reject();
-              }
-            });
-          });
+        glideraFactory.buyPrices(1, function(e, r, b) {
+          this.currentBuy = b;
+          (r == 200) ?  deferred.resolve(b) : deferred.reject();
         });
       }
+      return deferred.promise;
     };
+    factory.sellUuid = function() {
+      return this.currentSell.priceUuid;
+    };
+    factory.updateSell = function() {
+      console.log('updateSell');
+      var deferred = $q.defer();
+      if (cached(this.currentSell)) {
+        deferred.resolve(cached(this.currentSell));
+      } else {
+        glideraFactory.sellPrices(1, function(e, r, b) {
+          this.currentSell = b;
+          (r == 200) ?  deferred.resolve(b) : deferred.reject();
+        });
+      }
+      return deferred.promise;
+    };
+    return factory;
   }]).
 directive('priceUpdate', ['$interval', '$filter', 'Prices',
   function($interval, $filter, Prices) {
