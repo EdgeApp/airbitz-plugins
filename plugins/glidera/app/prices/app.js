@@ -1,5 +1,27 @@
+function priceLink($interval, Prices, scope, element, attrs, callback) {
+  var netTimeout;
 
-angular.module('app.directives', ['app.glidera']).
+  function updateView() {
+    var f = attrs.priceType === 'sell' ? Prices.updateSell : Prices.updateBuy;
+    f().then(function(b) {;
+      console.log("B = " + b);
+      callback(scope, b);
+    });
+  }
+
+  element.on('$destroy', function() {
+    $interval.cancel(netTimeout);
+  });
+
+  netTimeout = $interval(function() {
+      updateView(); // update DOM
+  }, 5000);
+
+  updateView();
+}
+
+
+angular.module('app.prices', ['app.glidera']).
 factory('Prices', ['$q', 'glideraFactory',
   function($q, glideraFactory) {
     var currentBuy = { };
@@ -10,7 +32,7 @@ factory('Prices', ['$q', 'glideraFactory',
     var work = function(data, callback) {
       if (data && timeDiff(data.expires) > 30) {
         return $q(function(resolve, reject) {
-          return data;
+          resolve(data);
         });
       } else {
         return callback();
@@ -52,31 +74,23 @@ factory('Prices', ['$q', 'glideraFactory',
   }]).
 directive('priceUpdate', ['$interval', '$filter', 'Prices',
   function($interval, $filter, Prices) {
-    function link(scope, element, attrs) {
-      var netTimeout;
-
-      function updateView() {
-        var f = attrs.priceType === 'sell' ? Prices.updateSell : Prices.updateBuy;
-        f().then(function(b) {;
+    return {
+      templateUrl: 'app/prices/partials/rate.html',
+      link: function(scope, elements, attrs){
+        return priceLink($interval, Prices, scope, elements, attrs, function(scope, b) {
           scope.price = $filter('currency')(b.price, '$', 2);
+        });
+      }
+    };
+  }]).
+directive('priceExpires', ['$interval', '$filter', 'Prices',
+  function($interval, $filter, Prices) {
+    return {
+      templateUrl: 'app/prices/partials/expires.html',
+      link: function(scope, elements, attrs){
+        return priceLink($interval, Prices, scope, elements, attrs, function(scope, b) {
           scope.expires = moment(b.expires).fromNow();
         });
       }
-
-      scope.$watch(attrs.sellPrice, function(value) {
-        updateView();
-      });
-
-      element.on('$destroy', function() {
-        $interval.cancel(netTimeout);
-      });
-
-      netTimeout = $interval(function() {
-        updateView(); // update DOM
-      }, 5000);
-    }
-    return {
-      templateUrl: 'app/prices/partials/rate.html',
-      link: link
     };
   }]);

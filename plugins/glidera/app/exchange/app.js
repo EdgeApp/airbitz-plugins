@@ -1,5 +1,5 @@
 
-angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.directives'])
+angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices'])
 .filter('statusFilter', function() {
   return function(status) {
     switch(status) {
