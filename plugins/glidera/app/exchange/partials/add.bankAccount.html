@@ -29,7 +29,7 @@
 
   <div class="col-xs-12">
 
-    <form action="" class="form">
+    <form ng-submit="saveBankAccount()" class="form">
 
       <div class="form-group">
         <label for="inputBankAccountDescription" class="">Description</label>
@@ -59,8 +59,8 @@
 
       <div class="next-cancel row text-right">
         <div class="col-xs-12">
-          <button ui-sref="exchange" class="btn btn-lg btn-link">Cancel</button>
-          <button ng-click="saveBankAccount()" class="btn btn-lg btn-success">Save</button>
+          <button type="button" ui-sref="exchange" class="btn btn-lg btn-link">Cancel</button>
+          <button type="submit" class="btn btn-lg btn-success">Save</button>
         </div>
       </div>
 
