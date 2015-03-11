@@ -1,22 +1,25 @@
-<div class="row text-center">
-  <h3 class="col-xs-12">Verification code sent to:</h3>
-  <h3 class="col-xs-12"><label class="label label-outline">Phone: {{account.phone||"321-555-1212"}}</label></h3>
-</div>
-
-<div class="row text-center" style="margin-top: 40px">
+<div class="twofa row text-center">
   <form ng-submit="submit2FA()" class="form col-xs-offset-3 col-xs-6">
     <div class="form-group">
       <label for="inputVerificationCode" class="sr-only">Verification Code</label>
-      <input ng-model="verificationCode" type="number"
-      id="inputVerificationCode" class="text-center input-lg form-control"
-      placeholder="Verification Code" autofocus autocomplete="off">
-    </div>
-
-    <div class="text-center row" style="margin-top: 30px;">
-      <div class="col-xs-12">
-        <button type="button" ng-click="verifyPhone()" class="buy-sell-next btn btn-lg btn-link">Change Phone</button>
-        <button type="submit" class="buy-sell-next btn btn-lg btn-success">Validate</button>
-      </div>
+      <input
+        ng-model="verificationCode"
+        type="number"
+        id="inputVerificationCode"
+        class="large text-center large"
+        placeholder="2FA Code"
+        autofocus="true"
+        autocomplete="off"
+        style="border-bottom-left-radius: 0; border-bottom-right-radius: 0;"
+      >
+      <button type="submit" class="buy-sell-next btn btn-lg btn-block btn-success"
+      style="border-top-left-radius: 0; border-top-right-radius: 0;">Verify Code</button>
     </div>
   </form>
+</div>
+
+<div class="row text-center">
+  <h3 class="col-xs-12">Verification code sent to:</h3>
+  <h3 class="col-xs-12"><label class="label label-outline"><span style="color: #ddd;">Phone:</span> {{account.phone||"321-555-1212"}}</label></h3>
+  <button type="button" ng-click="verifyPhone()" class="buy-sell-next btn btn-lg btn-link">Change Phone</button>
 </div>

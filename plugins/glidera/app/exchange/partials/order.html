@@ -28,7 +28,8 @@
           <select
             ng-model="order.transferToWallet"
             ng-options="w.name for w in userWallets"
-            id="inputBtcWallet" class="form-control">
+            id="inputBtcWallet"
+            class="form-control input-lg">
           </select>
         </div>
       </div>
@@ -46,6 +47,7 @@
             ng-model="order.orderFiatInput"
             ng-change="convertFiatValue(order.orderFiatInput)"
             type="number"
+            class="large"
             id="inputFiatAmount"
             placeholder="100.00"
             autofocus="true"
@@ -61,6 +63,7 @@
             ng-model="order.orderBtcInput"
             ng-change="convertBtcValue(order.orderBtcInput)"
             type="number"
+            class="large"
             id="inputBtcAmount"
             placeholder="0.5"
             autofocus="true"
