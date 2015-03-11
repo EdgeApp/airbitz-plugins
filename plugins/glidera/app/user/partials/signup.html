@@ -1,67 +1,55 @@
-<div class="row">
-  <h2 class="col-xs-12"><i class="fa {{exchange.icon}}"></i> {{exchange.name}} Account</h2>
-</div>
 
-<hr />
-
-<div class="row" style="margin-top: 20px;">
-  <form ng-submit="submitSignUp(account)" class="exchange-sign-up col-xs-12">
+<div class="row" style="margin-top: 20px;" >
+  <form name="form" class="exchange-sign-up col-xs-12" novalidate>
 
     <div class="form-group">
       <label for="inputFirstName" class="">Name</label>
-      <input ng-model="account.firstName" type="text" id="inputFirstName" class="form-control" placeholder="First: Ricky" autofocus="true" autocomplete="off">
+      <input ng-model="account.firstName" name="firstName" type="text" id="inputFirstName" class="form-control" 
+             placeholder="First Name"
+             autofocus="true"
+             autocomplete="off"
+             required="" />
+      <div ng-show="form.$submitted || form.firstName.$touched">
+        <div ng-show="form.firstName.$error.required">Required.</div>
+      </div>
     </div>
 
     <div class="form-group">
       <label for="inputLastName" class="sr-only">Last</label>
-      <input ng-model="account.lastName" type="text" id="inputLastName" class="form-control" placeholder="Last: Williams" autofocus="" autocomplete="off">
+      <input ng-model="account.lastName" name="lastName" type="text" id="inputLastName" class="form-control" 
+             placeholder="Last Name" 
+             autofocus=""
+             autocomplete="off"
+             required="" />
+      <div ng-show="form.$submitted || form.lastName.$touched">
+        <div ng-show="form.lastName.$error.required">Required.</div>
+      </div>
     </div>
 
     <div class="form-group">
       <label for="inputEmail" class="">Email</label>
-      <input ng-model="account.email" type="text" id="inputEmail" class="form-control" placeholder="jimmy@hendrix.com" autofocus="" autocomplete="off">
-    </div>
-
-    <div ng-show="hasRegistered" class="form-group">
-      <label for="inputAddress" class="">Address</label>
-      <input ng-model="account.street" type="text" id="inputAddressStreet" class="form-control" placeholder="Street Address" autofocus="" autocomplete="off">
-    </div>
-
-    <div ng-show="hasRegistered" class="form-group">
-      <label for="inputAddress" class="sr-only">Address 2</label>
-      <input ng-model="account.street2" type="text" id="inputAddressStreet" class="form-control" placeholder="Street Address 2" autofocus="" autocomplete="off">
-    </div>
-
-    <div ng-show="hasRegistered" class="form-group">
-      <label for="inputAddressCity" class="sr-only">City</label>
-      <input ng-model="account.city" type="text" id="inputAddressCity" class="form-control" placeholder="City" autofocus="" autocomplete="off">
-    </div>
-
-    <div ng-show="hasRegistered" class="form-group">
-      <label for="inputAddressZip" class="sr-only">Zip</label>
-      <input ng-model="account.zip" type="text" id="inputAddressZip" class="form-control" placeholder="19512" autofocus="" autocomplete="off">
-    </div>
-
-    <div ng-show="hasRegistered" class="row">
-      <div class="form-group col-xs-6">
-        <select ng-options="o.name for o in states" ng-model="account.state" class="form-control">
-          <option value="">-- Select a State --</option>
-        </select>
+      <input ng-model="account.email" name="email" type="email" id="inputEmail" class="form-control" 
+             placeholder="user@email.com"
+             autofocus=""
+             autocomplete="off"
+             required="" />
+      <div ng-show="form.$submitted || form.email.$touched">
+        <span ng-show="form.email.$error.required">Tell us your email.</span>
+        <span ng-show="form.email.$error.email">This is not a valid email.</span>
       </div>
-    </div>
-
-    <div ng-show="hasRegistered" class="form-group">
-      <label for="inputDob" class="">Date of Birth</label>
-      <input ng-model="account.dob" type="text" id="inputDob" class="form-control" placeholder="07-04-1776" autofocus="" autocomplete="off" value="">
     </div>
 
     <div class="row text-right" style="margin-top: 40px;">
       <div class="col-xs-12">
-        <button type="button" ng-click="cancelSignup()" class="btn btn-lg btn-link">Cancel</button>
-        <button type="submit" class="btn btn-lg btn-success">Next</button>
+        <button type="button" 
+                ng-click="cancelSignup()" 
+                class="btn btn-lg btn-link">Cancel</button>
+        <button type="submit"
+                ng-disabled="form.$invalid" 
+                ng-click="submitSignUp()" 
+                class="btn btn-lg btn-success">Next</button>
       </div>
     </div>
-
 
   </form>
 </div>

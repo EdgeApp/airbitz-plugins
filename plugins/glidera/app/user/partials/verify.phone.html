@@ -4,12 +4,19 @@
 </div>
 
 <div class="row text-center" style="margin-top: 40px">
-
-  <form ng-submit="submitPhone(account.phone)" class="form col-xs-offset-2 col-xs-8">
-
+  <form name="form" class="form col-xs-offset-2 col-xs-8" novalidate>
     <div class="form-group">
       <label for="inputPhone" class="sr-only">Verification Code</label>
-      <input ng-model="account.phone" type="text" id="inputPhone" class="form-control" placeholder="Valid Phone #" autofocus="true" autocomplete="off">
+      <input ng-model="account.phone" name="phone" type="tel" id="inputPhone" class="form-control" 
+             placeholder="111-111-1111"
+             autofocus="true"
+             autocomplete="off"
+             phone-number-validator />
+
+      <div ng-show="form.$submitted || form.phone.$touched">
+        <div ng-show="form.phone.$error.required">Required.</div>
+        <div ng-show="form.phone.$error.tel">This is not a valid phone number.</div>
+      </div>
     </div>
 
     <div class="row" style="margin: 20px 0">
@@ -19,7 +26,10 @@
     <div class="row text-right" style="margin-top: 40px;">
       <div class="col-xs-12">
         <button type="button" ng-click="loadExchange()" class="buy-sell-next btn btn-lg btn-link">Later</button>
-        <button type="submit" class="buy-sell-next btn btn-lg btn-success">Confirm</button>
+        <button type="submit" 
+                ng-click="submitPhone(account.phone)" 
+                ng-disabled="form.$invalid" 
+                class="buy-sell-next btn btn-lg btn-success">Validate</button>
       </div>
     </div>
 

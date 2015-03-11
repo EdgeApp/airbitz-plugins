@@ -21,14 +21,23 @@ factory('UserFactory', [
     var factory = {};
     var account = Airbitz.core.readData('account') || {};
 
-    factory.getRegistrationStatus = function() {
-      return this.registered;
-    };
-    factory.setRegistrationStatus = function(status) {
-      this.registered = status;
+    factory.isRegistered = function() {
+      return glideraFactory.hasRegistered();
     };
     factory.getUserAccount = function() {
       return account;
+    };
+    factory.registerUser = function(firstName, lastName, email) {
+      var d = $q.defer();
+      glideraFactory.register(firstName, lastName, email, '', function(success, b) {
+        if (success) {
+          // Airbitz.core.writeData('account' account);
+          d.resolve(b);
+        } else {
+          d.reject(b);
+        }
+      });
+      return d.promise;
     };
     factory.getFullUserAccount = function() {
       return $q(function(resolve, reject) {
