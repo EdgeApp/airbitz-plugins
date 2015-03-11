@@ -47,7 +47,7 @@ factory('UserFactory', [
             // XXX: This is kind of hacky
             if (b.birthDate) {
               var birthDate = b.birthDate.replace(/T.*/, '');
-              account.birthDate = $filter('date')(birthDate, 'MM/dd/yyyy');
+              account.birthDate = $filter('date')(birthDate, 'yyyy-MM-dd');
             }
 
             account.email = 'someone@yourdomain.co';
