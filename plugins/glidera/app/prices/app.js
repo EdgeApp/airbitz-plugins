@@ -4,7 +4,7 @@ function priceLink($interval, Prices, scope, element, attrs, callback) {
   function updateView() {
     var f = attrs.priceType === 'sell' ? Prices.updateSell : Prices.updateBuy;
     f().then(function(b) {;
-      console.log("B = " + b);
+      console.log("B = " + JSON.stringify(b));
       callback(scope, b);
     });
   }
@@ -40,6 +40,9 @@ factory('Prices', ['$q', 'glideraFactory',
     };
     /* TODO: clean this up....its fugly */
     return {
+      buyUuid: function() {
+        return currentBuy.priceUuid;
+      },
       updateBuy: function() {
         console.log('updateBuy');
         return work(currentBuy, function() {
@@ -54,6 +57,9 @@ factory('Prices', ['$q', 'glideraFactory',
             });
           });
         });
+      },
+      sellUuid: function() {
+        return currentSell.priceUuid;
       },
       updateSell: function() {
         console.log('updateSell');

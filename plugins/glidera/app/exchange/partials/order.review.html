@@ -68,6 +68,7 @@
 
   <div class="text-right col-xs-12">
     <button ng-click="editOrder()" class="btn btn-lg btn-link">Edit</button>
-    <button ng-click="executeOrder()" class="btn btn-lg btn-success"><i class="fa fa-checkmark"></i> Confirm</button>
+    <button ng-show="{{ order.orderAction == 'buy' }}" ng-click="executeOrder()" class="btn btn-lg btn-success"><i class="fa fa-checkmark"></i> Confirm</button>
+    <button ng-show="{{ order.orderAction == 'sell' }}" ng-click="executeOrder()" class="btn btn-lg btn-success"><i class="fa fa-checkmark"></i> Authorize Sell</button>
   </div>
 </div>

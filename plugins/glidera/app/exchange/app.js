@@ -70,11 +70,11 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices'])
     Airbitz.ui.title('Edit Bank Account');
     $scope.account = UserFactory.getUserAccount();
     $scope.bankAccount = DataFactory.getBankAccount($stateParams.uuid);
-    // DataFactory.fetchBankAccount($stateParams.uuid).then(function(bankAccount) {
-    //   $scope.bankAccount = bankAccount;
-    // }, function() {
-    //   Airbitz.ui.showAlert('Error', 'TODO: Error! Error!');
-    // });
+    DataFactory.fetchBankAccount($stateParams.uuid).then(function(bankAccount) {
+      $scope.bankAccount = bankAccount;
+    }, function() {
+      Airbitz.ui.showAlert('Error', 'TODO: Error! Error!');
+    });
 
     $scope.deposit = {};
     $scope.verifyAccount = function() {
