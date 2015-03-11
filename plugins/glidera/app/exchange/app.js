@@ -94,6 +94,7 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices', 'app
 
     $scope.saveBankAccount = function() {
       DataFactory.updateBankAccount($scope.bankAccount).then(function() {
+        Airbitz.ui.showAlert('Saved', 'Bank account information has been updated.');
         $state.go('exchange');
       }, function() {
         Airbitz.ui.showAlert('Error', 'TODO: Error! Error!');

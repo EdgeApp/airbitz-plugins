@@ -35,9 +35,12 @@ angular.module('app.user', ['app.dataFactory', 'app.constants'])
     };
 
     $scope.saveUserAccount = function() {
+      Airbitz.ui.title('Saving...');
       UserFactory.updateUserAccount($scope.account).then(function() {
-        Airbitz.ui.title('Saving...');
+        Airbitz.ui.showAlert('Saved', 'User information has been updated.');
         $state.go('exchange');
+      }, function(error) {
+        Airbitz.ui.showAlert('Error', error);
       });
     };
   }])
