@@ -5,7 +5,7 @@
 <hr />
 
 <div class="row" style="margin-top: 20px;">
-  <form class="exchange-sign-up col-xs-12">
+  <form ng-submit="submitSignUp(account)" class="exchange-sign-up col-xs-12">
 
     <div class="form-group">
       <label for="inputFirstName" class="">Name</label>
@@ -57,8 +57,8 @@
 
     <div class="row text-right" style="margin-top: 40px;">
       <div class="col-xs-12">
-        <button ng-click="cancelSignup()" class="btn btn-lg btn-link">Cancel</button>
-        <button ng-click="submitSignUp(account)" class="btn btn-lg btn-success">Next</button>
+        <button type="button" ng-click="cancelSignup()" class="btn btn-lg btn-link">Cancel</button>
+        <button type="submit" class="btn btn-lg btn-success">Next</button>
       </div>
     </div>
 

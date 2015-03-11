@@ -1,5 +1,5 @@
 <div class="row">
-  <form class="exchange-sign-up col-xs-12">
+  <form ng-submit="saveUserAccount()" class="exchange-sign-up col-xs-12">
 
     <div class="form-group">
       <label for="inputFirstName" class="">Name</label>
@@ -48,11 +48,10 @@
 
     <div class="row text-right" style="margin-top: 40px;">
       <div class="col-xs-12">
-        <button ng-click="cancelSignup()" class="btn btn-lg btn-link">Cancel</button>
-        <button ng-click="saveUserAccount()" class="btn btn-lg btn-success">Save</button>
+        <button type="button" ng-click="cancelSignup()" class="btn btn-lg btn-link">Cancel</button>
+        <button type="submit" class="btn btn-lg btn-success">Save</button>
       </div>
     </div>
-
 
   </form>
 </div>

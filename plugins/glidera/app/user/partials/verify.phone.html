@@ -11,7 +11,7 @@
 
 <div class="row text-center" style="margin-top: 40px">
 
-  <form action="" class="form col-xs-offset-2 col-xs-8">
+  <form ng-submit="submitPhone(account.phone)" class="form col-xs-offset-2 col-xs-8">
 
       <div class="form-group">
         <label for="inputPhone" class="sr-only">Verification Code</label>
@@ -28,7 +28,7 @@
 
 <div class="row text-right" style="margin-top: 40px;">
   <div class="col-xs-12">
-    <button ng-click="loadExchange()" class="buy-sell-next btn btn-lg btn-link">Later</button>
-    <button ng-click="submitPhone(account.phone)" class="buy-sell-next btn btn-lg btn-success">Confirm</button>
+    <button type="button" ng-click="loadExchange()" class="buy-sell-next btn btn-lg btn-link">Later</button>
+    <button type="submit" class="buy-sell-next btn btn-lg btn-success">Confirm</button>
   </div>
 </div>
