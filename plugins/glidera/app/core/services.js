@@ -6,6 +6,7 @@ function errorMap(res) {
   switch(res.code) {
     case "MissingRequiredParameter":
       return "This request is missing required data."
+    case "InvalidParameterValue":
     case "UnauthorizedException":
       return res.message;
     default:
@@ -231,33 +232,44 @@ factory('DataFactory', [
     exchangeOrder = {};
   };
 
-  var createAddress = function(wallet, name, notes, resolve, reject) {
+  var createAddress = function(wallet, name, category, notes, resolve, reject) {
       Airbitz.core.createReceiveRequest(wallet, {
         name: name,
+        category: category,
         notes: notes,
         success: resolve,
         error: reject
       })
   };
 
+  var executeBuy = function(wallet, qty, request) {
+    var deferred = $q.defer(),
+        requestId = request['requestId'],
+        address = Airbitz._bridge.inDevMod()
+                ? glideraFactory.sandboxAddress : request['address'];
+    if (address) {
+      var opts = {'priceUuid': Prices.buyUuid()};
+      glideraFactory.buy(TwoFactor.getCode(), address, qty, opts, function(e, r, b) {
+        console.log(JSON.stringify(b));
+        if (r == 200) {
+          Airbitz.core.finalizeRequest(wallet, requestId);
+          deferred.resolve();
+        } else {
+          deferred.reject(errorMap(b));
+        }
+      });
+    } else {
+      deferred.reject('Unable to obtain a destination address. Please try again later.');
+    }
+    return deferred.promise;
+  };
+
   factory.buy = function(wallet, qty) {
     // TODO: check buy limits
     return $q(function (resolve, reject) {
-      createAddress(wallet, 'Glidera', '', resolve, reject);
-    }).then(function(data) {
-      var address = Airbitz._bridge.inDevMod()
-                  ? glideraFactory.sandboxAddress : data['address'];
-      return $q(function(resolve, reject) {
-        if (address) {
-          var opts = {'priceUuid': Prices.buyUuid() };
-          glideraFactory.buy(TwoFactor.getCode(), address, qty, opts, function(e, r, b) {
-            console.log(JSON.stringify(b));
-            r === 200 ? resolve() : reject(errorMap(b));
-          });
-        } else {
-          reject('Unable to obtain a destination address. Please try again later.');
-        }
-      });
+      createAddress(wallet, 'Glidera', 'Transfer:Glidera', '', resolve, reject);
+    }).then(function(request) {
+      return executeBuy(wallet, qty, request);
     }, function(error) {
       return $q(function(resolve, reject) {
         reject(error);
@@ -278,7 +290,7 @@ factory('DataFactory', [
     }).then(function(data) {
       var sellAddress = data["sellAddress"];
       return $q(function(resolve, reject) {
-        createAddress(wallet, 'Glidera Refund', '', function(req) {
+        createAddress(wallet, 'Glidera Refund', 'Transfer:Refund', '', function(req) {
           resolve({'sellAddress': sellAddress,
                    'refundAddress': req['address']});
         }, reject);
@@ -288,6 +300,9 @@ factory('DataFactory', [
       console.log('refundAddress: ' + data.refundAddress);
       return $q(function(resolve, reject) {
         Airbitz.core.requestSpend(wallet, data.sellAddress, btcToSatoshi(qty), {
+          label: 'Glidera', 
+          category: 'Transfer:Glidera',
+          notes: '', 
           success: function(signedTx) {
             resolve({'sellAddress': data.sellAddress,
                      'refundAddress': data.refundAddress,
