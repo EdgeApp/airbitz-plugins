@@ -1,5 +1,5 @@
 <div class="row" style="margin-top: 20px;">
-  <h3 class="col-xs-6" style="margin-top: 0;"><span class="label label-outline">{{ order.orderAction || "Buy" | uppercase }} Order</span></h3>
+  <h2 class="col-xs-6" style="margin-top: 0;"><span class="label label-outline">{{ order.orderAction || "Buy" | uppercase }} Order</span></h2>
   <div class="text-right col-xs-6">
     <div price-update price-type="{{ order.orderAction }}"></div>
     <div price-expires price-type="{{ order.orderAction }}"></div>
