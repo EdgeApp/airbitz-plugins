@@ -1,10 +1,14 @@
-<div class="row" style="margin-bottom: 10px;">
-  <h3 class="col-xs-12">{{ order.orderAction || "Buy" | uppercase }} Order</h3>
+<div class="row" style="margin-top: 20px;">
+  <h3 class="col-xs-6" style="margin-top: 0;"><span class="label label-outline">{{ order.orderAction || "Buy" | uppercase }} Order</span></h3>
+  <div class="text-right col-xs-6">
+    <div price-update price-type="{{ order.orderAction }}"></div>
+    <div price-expires price-type="{{ order.orderAction }}"></div>
+  </div>
 </div>
 
 <div class="order-review row">
   <div class="col-xs-12">
-    <table class="table ">
+    <table class="table table-bordered">
       <colgroup>
         <col class="header">
         <col>
@@ -34,10 +38,10 @@
           <td>Total</td>
           <td>{{ exchange.order.currencySymbol || "$" }}{{ order.orderBtcInput * exchange.exchangeRate || "orderTotal" }} {{ exchange.order.currency || "USD" }}</td>
         </tr>
-        <tr>
+<!--         <tr>
           <td>Exchange Rate</td>
           <td>{{ exchange.order.currencySymbol || "$" }}{{ exchange.exchangeRate || "3000" }}</td>
-        </tr>
+        </tr> -->
       </tbody>
     </table>
   </div>
@@ -58,12 +62,12 @@
 </div> -->
 
 <div class="row">
-  <div class="text-left col-xs-6" style="margin-top: 10px;">
+<!--   <div class="text-left col-xs-6" style="margin-top: 10px;">
     <label class="label label-outline" style="border-radius: 100px; font-size: 14px;">{{exchange.orderTimeout||"60"}} seconds to complete</label>
-  </div>
+  </div> -->
 
-  <div class="text-right col-xs-6">
-    <button ng-click="editOrder()" class="btn btn-lg btn-link"><i class="fa fa-times"></i> Edit</button>
+  <div class="text-right col-xs-12">
+    <button ng-click="editOrder()" class="btn btn-lg btn-link">Edit</button>
     <button ng-click="executeOrder()" class="btn btn-lg btn-success"><i class="fa fa-checkmark"></i> Confirm</button>
   </div>
 </div>

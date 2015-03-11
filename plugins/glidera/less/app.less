@@ -79,6 +79,17 @@ body {
     border-color: @ab-blue-light
   }
 
+  .table {
+
+    &.table-no-border {
+
+      th,
+      td {
+        border-top: none;
+      }
+    }
+  }
+
   .list-group {
 
     .list-group-item,
@@ -242,13 +253,18 @@ body {
   }
 
   .order-review {
+    margin-top: 30px;
+    margin-bottom: 30px;
 
     table {
 
       td {
         &:first-child {
+          width: 150px;
+          text-align: right;
           font-weight: bold;
-          color: #ddd;
+          color: @ab-blue-dark;
+          background: #eee;
         }
       }
     }

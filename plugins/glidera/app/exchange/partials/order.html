@@ -12,8 +12,9 @@
     </div>
   </div>
 
-  <div class="col-xs-6">
-      <span class="exchange-rate pull-right"><div price-update price-type="{{ order.orderAction }}"></div></span>
+  <div class="text-right col-xs-6">
+      <div price-update price-type="{{ order.orderAction }}"></div>
+      <div price-expires price-type="{{ order.orderAction }}"></div>
   </div>
 </div>
 

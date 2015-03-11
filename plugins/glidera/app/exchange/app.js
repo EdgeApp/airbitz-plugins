@@ -173,7 +173,7 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices'])
       $state.go('exchange');
     }
     $scope.editOrder = function() {
-      $state.go('exchangeOrder');
+      $state.go('exchangeOrder', {'orderAction': order.orderAction});
     };
     $scope.executeOrder = function() {
       console.log(JSON.stringify(order));
