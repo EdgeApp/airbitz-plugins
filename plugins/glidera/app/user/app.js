@@ -84,7 +84,7 @@ angular.module('app.user', ['app.dataFactory', 'app.constants'])
       };
       $scope.submitPhone = function(){
         DataFactory.addPhoneNumber($scope.account.phone).then(function() {
-          TwoFactor.showTwoFactor(verifyCode);
+          TwoFactor.confirmTwoFactor(verifyCode);
         }, function(error) {
           Airbitz.ui.showAlert('Error', 'Unable to add phone number at this time.');
         });

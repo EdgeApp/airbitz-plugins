@@ -1,7 +1,7 @@
 
 angular.module('app.2fa', ['app.dataFactory', 'app.glidera']).
-controller('verify2faController', ['$scope', '$state', 'DataFactory', 'UserFactory', 'TwoFactor',
-  function ($scope, $state, DataFactory, UserFactory, TwoFactor) {
+controller('verify2faController', ['$scope', '$state', '$stateParams', 'DataFactory', 'UserFactory', 'TwoFactor',
+  function ($scope, $state, $stateParams, DataFactory, UserFactory, TwoFactor) {
     Airbitz.ui.title('2 Factor Verification');
     $scope.exchange = DataFactory.getExchange();
     $scope.account = UserFactory.getUserAccount();
@@ -9,7 +9,9 @@ controller('verify2faController', ['$scope', '$state', 'DataFactory', 'UserFacto
 
     var requestCode = function() {
       TwoFactor.requestCode().then(function(hasNumber) {
-        $scope.hasNumber = hasNumber;
+        if ($stateParams.confirmNumber == 'confirm') {
+          $scope.hasNumber = hasNumber;
+        }
       }, function(error) {
         Airbitz.ui.showAlert('Error', error);
       });
@@ -30,11 +32,17 @@ factory('TwoFactor', ['$state', '$q', 'glideraFactory',
     var oldCode = '';
     var nextAction = function() { };
     var factory = {};
+    factory.confirmTwoFactor = function(finishedCallback) {
+      if (finishedCallback) {
+        this.nextAction = finishedCallback;
+      }
+      $state.go('verify2FA', {'confirmNumber': 'confirm'});
+    };
     factory.showTwoFactor = function(finishedCallback) {
       if (finishedCallback) {
         this.nextAction = finishedCallback;
       }
-      $state.go('verify2FA');
+      $state.go('verify2FA', {'confirmNumber': ''});
     };
     factory.checkPhone = function() {
       var deferred = $q.defer();
