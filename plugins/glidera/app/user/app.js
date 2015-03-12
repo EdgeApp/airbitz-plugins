@@ -52,20 +52,18 @@ angular.module('app.user', ['app.dataFactory', 'app.constants'])
       }
     };
   }])
-.controller('verifyEmailController', ['$scope', '$state', 'DataFactory', 'UserFactory',
-    function($scope, $state, DataFactory, UserFactory) {
+.controller('verifyEmailController', ['$scope', '$state', 'Error', 'DataFactory', 'UserFactory',
+    function($scope, $state, Error, DataFactory, UserFactory) {
       Airbitz.ui.title('Glidera: Verify Email');
-
       $scope.exchange = DataFactory.getExchange();
       $scope.account = UserFactory.getUserAccount();
 
-      $scope.resendEmail = function(email){
-        Airbitz.ui.showAlert('Resending', 'Resending to ' + email);
-        // TODO resend email...
-      };
-      $scope.verifyEmail = function(){
+      $scope.next = function() {
         Airbitz.ui.title('Saving...');
-        $state.go('verifyPhone');
+        UserFactory.getFullUserAccount().then(function() {
+          // If the email is successfully verified, continue
+          $state.go('verifyPhone');
+        }, Error.reject);
       };
     }])
 .controller('verifyPhoneController', ['$scope', '$state', 'DataFactory', 'UserFactory', 'TwoFactor',

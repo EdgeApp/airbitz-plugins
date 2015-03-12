@@ -5,23 +5,14 @@
   <h3 class="col-xs-12"><label class="label label-outline">{{exchange.emailVerificationAddress}}</label></h3>
 </div>
 
-<div class="row text-center" style="margin: 40px 0">
-  <div class="col-xs-12">
-    <button ui-sref="signup" class="btn-link btn-lg btn"><i class="fa fa-edit"></i> Change Email</button>
-    <button ng-click="resendEmail(account.email)" class="btn-link btn-lg btn"><i class="fa fa-refresh"></i> Resend Email</button>
-  </div>
-</div>
-
 <div class="row" style="margin: 20px 0">
   <p><label class="label label-warning">Note</label> Email will contain a link which must be clicked on phone to proceed past this screen.</p>
 </div>
 
 <div class="row text-right" style="margin-top: 40px;">
   <div class="col-xs-12">
-    <button ui-sref="exchange" 
-            class="btn btn-lg btn-link">Skip to Exchange</button>
-    <button ng-click="verifyEmail()" 
+    <button ng-click="next()" 
             ng-disabled="form.$invalid" 
-            class="btn btn-lg btn-success">Simulinkor</button>
+            class="btn btn-lg btn-success">Continue</button>
   </div>
 </div>

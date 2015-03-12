@@ -78,7 +78,7 @@ factory('UserFactory', [
             Airbitz.core.writeData('account', account);
             resolve(account);
           } else {
-            reject();
+            reject(b);
           }
         });
       });
@@ -129,6 +129,13 @@ factory('Error', ['$state',
         Airbitz.ui.showAlert('Invalid', res.message);
       } else if (res.code == 'UnauthorizedException') {
         Airbitz.ui.showAlert('Unauthorized', res.message);
+      } else if (res.code == 'ConflictException') {
+        if (res.message && res.message.match(/email not verified/i)) {
+          $state.go('verifyEmail');
+          Airbitz.ui.showAlert('Error', 'Please verify your email address before continuing.');
+        } else {
+          Airbitz.ui.showAlert('Error', res.message);
+        }
       } else {
         Airbitz.ui.showAlert('Default Error', "An unknown error occurred.");
       }
@@ -405,7 +412,7 @@ factory('ExchangeFactory', [function() {
     'name': 'Glidera',
     'icon': 'fa-bitcoin',
     'countryCode': 'US', // ISO 3661-1
-    'emailVerificationAddress': 'verifications@glidera.com',
+    'emailVerificationAddress': 'admin@glidera.com',
     'phoneVerificationNumber': '+1 650-331-0021',
     'depositBankName1': 'Bank of America',
     'depositBankAccount1': '90001923932',
