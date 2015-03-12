@@ -25,9 +25,9 @@
 
     <div class="row text-right" style="margin-top: 40px;">
       <div class="col-xs-12">
-        <button type="button" ng-click="loadExchange()" class="buy-sell-next btn btn-lg btn-link">Later</button>
+        <button type="button" ui-sref="exchange" class="buy-sell-next btn btn-lg btn-link">Later</button>
         <button type="submit" 
-                ng-click="submitPhone(account.phone)" 
+                ng-click="submitPhone()" 
                 ng-disabled="form.$invalid" 
                 class="buy-sell-next btn btn-lg btn-success">Validate</button>
       </div>

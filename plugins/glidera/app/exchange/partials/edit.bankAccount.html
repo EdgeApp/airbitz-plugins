@@ -1,41 +1,62 @@
 
 <div ng-if="bankAccount.status === 'Pending'">
+    <form class="form" name="verifyForm" novalidate>
+        <h3>Verify Account</h3>
+        <div class="row">
+            <p class="col-xs-12" style="margin-top: 15px; margin-bottom: 15px;">Please check your account for two deposits from <label class="label label-info">{{ exchange.depositId }}</label> and input them below.</p>
+            <div class="col-xs-6">
+                <label for="inputDepositAmount1" class="">Deposit 1</label>
+                <input ng-model="deposit.amount1" name="amount1" type="number" id="inputDepositAmount1" class="form-control"
+                       placeholder="0.35"
+                       autofocus=""
+                       autocomplete="off"
+                       required="" />
+                <div ng-show="verifyForm.$submitted || verifyForm.amount1.$touched">
+                    <div ng-show="verifyForm.amount1.$error.required">Required.</div>
+                    <div ng-show="verifyForm.amount1.$error.number">This is not a valid number.</div>
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <label for="inputDepositAmount2" class="">Deposit 2</label>
+                <input ng-model="deposit.amount2" name="amount2" type="number" id="inputDepositAmount2" class="form-control"
+                       placeholder="0.15"
+                       autofocus=""
+                       autocomplete="off"
+                       required="" />
 
-  <h3>Verify Account</h3>
-
-  <div class="row">
-    <p class="col-xs-12" style="margin-top: 15px; margin-bottom: 15px;">Please check your account for two deposits from <label class="label label-info">{{ exchange.depositId }}</label> and input them below.</p>
-    <div class="col-xs-6">
-      <label for="inputDepositAmount1" class="">Deposit 1</label>
-      <input ng-model="deposit.amount1" type="text" id="inputDepositAmount1" class="form-control" placeholder="0.35" autofocus="" autocomplete="off">
-    </div>
-    <div class="col-xs-6">
-      <label for="inputDepositAmount2" class="">Deposit 2</label>
-      <input ng-model="deposit.amount2" type="text" id="inputDepositAmount2" class="form-control" placeholder="0.15" autofocus="" autocomplete="off">
-    </div>
-  </div>
-
-  <div class="row" style="margin-top: 15px;">
-    <div class="col-xs-12 text-right">
-      <button ng-click="verifyAccount()" class="btn btn-warning">Verify</button>
-    </div>
-  </div>
-
-  <hr />
-
+                <div ng-show="verifyForm.$submitted || verifyForm.amount2.$touched">
+                    <div ng-show="verifyForm.amount2.$error.required">Required.</div>
+                    <div ng-show="verifyForm.amount2.$error.number">This is not a valid number.</div>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 15px;">
+            <div class="col-xs-12 text-right">
+                <button type="submit"
+                        ng-disabled="verifyForm.$invalid"
+                        ng-click="verifyAccount()"
+                        class="btn btn-warning">Verify</button>
+            </div>
+        </div>
+    </form>
+    <hr />
 </div>
 
 <div class="exchange-edit-bank-account row">
 
   <div class="col-xs-12">
 
-    <form ng-submit="saveBankAccount()" class="form">
+    <form ng-submit="saveBankAccount()" class="form" name="form" novalidate>
 
       <div class="form-group">
         <label for="inputBankAccountDescription" class="">Description</label>
-        <input ng-model="bankAccount.description"
+        <input ng-model="bankAccount.description" name="description"
             type="text" id="inputBankAccountDescription"
-            class="form-control" autocomplete="off">
+            class="form-control" autocomplete="off" required="" />
+
+        <div ng-show="form.$submitted || form.description.$touched">
+            <div ng-show="form.description.$error.required">Required.</div>
+        </div>
       </div>
 
       <table class="bank-account-info table table-bordered">
@@ -43,7 +64,7 @@
           <td>Primary Account</td>
           <td>
             <input ng-model="bankAccount.primary"
-            type="checkbox" id="inputIsPrimary">
+            type="checkbox" id="inputIsPrimary" />
           </td>
         </tr>
         <tr>
@@ -63,9 +84,9 @@
 
       <div class="next-cancel row text-right">
         <div class="col-xs-12">
-            <button type="button" ng-if="bankAccount.status !== 'Pending'" ng-click="deleteBankAccount()" class="btn btn-lg btn-danger pull-left">Delete</button>
+            <button type="button" ng-disabled="form.$invalid" ng-if="bankAccount.status !== 'Pending'" ng-click="deleteBankAccount()" class="btn btn-lg btn-danger pull-left">Delete</button>
             <button type="button" ui-sref="exchange" class="btn btn-lg btn-link">Cancel</button>
-            <button type="submit" class="btn btn-lg btn-success">Save</button>
+            <button type="submit" ng-disabled="form.$invalid" class="btn btn-lg btn-success">Save</button>
         </div>
       </div>
     </form>

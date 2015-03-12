@@ -65,9 +65,7 @@ angular.module('app.user', ['app.dataFactory', 'app.constants'])
       };
       $scope.verifyEmail = function(){
         Airbitz.ui.title('Saving...');
-        UserFactory.updateUserAccount($scope.account).then(function() {
-          $state.go('verifyPhone');
-        });
+        $state.go('verifyPhone');
       };
     }])
 .controller('verifyPhoneController', ['$scope', '$state', 'DataFactory', 'UserFactory', 'TwoFactor',
@@ -77,13 +75,18 @@ angular.module('app.user', ['app.dataFactory', 'app.constants'])
       $scope.exchange = DataFactory.getExchange();
       $scope.account = UserFactory.getUserAccount();
 
-      $scope.verifyPhone = function(){
-        $state.go('verifyPhone');
-      };
-
-      $scope.submitPhone = function(phone){
-        TwoFactor.showTwoFactor(function() {
+      var verifyCode = function() {
+        DataFactory.confirmPhoneNumber(TwoFactor.getCode(), TwoFactor.getOldCode()).then(function() {
           $state.go('exchange');
+        }, function() {
+          Airbitz.ui.showAlert('Error', 'Invalid code. Please try again.');
+        });
+      };
+      $scope.submitPhone = function(){
+        DataFactory.addPhoneNumber($scope.account.phone).then(function() {
+          TwoFactor.confirmTwoFactor(verifyCode);
+        }, function(error) {
+          Airbitz.ui.showAlert('Error', 'Unable to add phone number at this time.');
         });
       };
     }]).
@@ -94,7 +97,7 @@ directive('phoneNumberValidator', [function() {
     require: 'ngModel',
     link: function(scope, elm, attrs, ctrl) {
       ctrl.$validators.tel = function(modelValue) {
-        return PHONE_REGEXP.test(modelValue.replace(/-/g, ''));
+        return !ctrl.$isEmpty(modelValue) && PHONE_REGEXP.test(modelValue.replace(/-/g, ''));
       }
     }
   };
