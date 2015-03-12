@@ -127,10 +127,6 @@ body .buy-sell .btn-group .btn.active {
   background: none;
   border-color: white;
 }
-body .buy-sell .exchange-rate {
-  padding-top: 6px;
-  font-size: 20px;
-}
 body .exchange-balances {
   margin-top: 20px;
   margin-bottom: 20px;
@@ -187,6 +183,12 @@ body .exchange-buy-sell-interface input[type=number].large {
 body .exchange-buy-sell-interface .input-group-addon {
   font-size: 180%;
 }
+body .order-limits {
+  text-align: right;
+}
+body .order-limits .limit-data {
+  color: #80c342;
+}
 body .order-review {
   margin-top: 30px;
   margin-bottom: 30px;
@@ -229,7 +231,7 @@ body .transactions .table td {
   font-size: 10px;
 }
 body .live-price-rate {
-  font-size: 20px;
+  font-size: 17px;
 }
 body .live-price-rate .price-rate-data {
   font-weight: bold;

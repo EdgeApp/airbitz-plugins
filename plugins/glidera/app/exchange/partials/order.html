@@ -6,9 +6,9 @@
 <div class="buy-sell row">
   <div class="col-xs-6">
     <div class="btn-group pull-left" data-toggle-name="btc-fiat-toggle" data-toggle="buttons-radio">
-      <button  ui-sref="exchangeOrder({orderAction: 'buy'})" ng-class="{ 'active' : order.orderAction == 'buy' }" type="button" value="default" data-toggle="button" class="btn btn-lg btn-success">BUY</button>
+      <button  ui-sref="exchangeOrder({orderAction: 'buy'})" ng-class="{ 'active' : order.orderAction == 'buy' }" type="button" value="default" data-toggle="button" class="btn btn-success">BUY</button>
       <button  ui-sref="exchangeOrder({orderAction: 'sell'})" ng-class="{ 'active' : order.orderAction == 'sell' }" type="button" value="distance" data-toggle="button"
-      class="btn btn-lg btn-primary">SELL</button>
+      class="btn btn-primary">SELL</button>
     </div>
   </div>
 
@@ -31,6 +31,12 @@
             id="inputBtcWallet"
             class="form-control input-lg">
           </select>
+        </div>
+
+        <div class="order-limits col-xs-6">
+          <label>Your {{order.orderAction | titlecase}} Limits</label>
+          <div ng-show="{{order.orderAction=='buy'}}" buy-limits></div>
+          <div ng-show="{{order.orderAction=='sell'}}" sell-limits></div>
         </div>
       </div>
 
@@ -74,16 +80,15 @@
 
       <div class="row text-right" style="margin-top: 40px;">
         <div class="col-xs-12">
-          <div class="pull-left">
-            <span ng-show="{{order.orderAction=='buy'}}" buy-limits></span>
-            <span ng-show="{{order.orderAction=='sell'}}" sell-limits></span>
-          </div>
           <button type="button" ui-sref="exchange" class="buy-sell-next btn btn-lg btn-link">Cancel</button>
           <button type="submit" class="buy-sell-next btn btn-lg btn-success">Next</button>
         </div>
       </div>
-
     </form>
 
   </div>
 </div>
+
+
+
+
