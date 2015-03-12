@@ -30,7 +30,7 @@ factory('UserFactory', [
     factory.registerUser = function(firstName, lastName, email) {
       var d = $q.defer();
       glideraFactory.register(firstName, lastName, email, '', function(success, b) {
-        var account = UserFactory.getUserAccount();
+        var account = factory.getUserAccount();
         account.firstName = firstName;
         account.lastName = lastName;
         account.email = email;
