@@ -39,6 +39,13 @@ factory('UserFactory', [
       });
       return d.promise;
     };
+    factory.fetchUserAccountStatus = function() {
+      return $q(function(resolve, reject){
+        glideraFactory.userStatus(function(e,s,b) {
+          (s === 200) ? resolve(b) : reject(b);
+        });
+      });
+    };
     factory.getFullUserAccount = function() {
       return $q(function(resolve, reject) {
         glideraFactory.getBasicInfo(function(e, s, b) {
@@ -309,9 +316,9 @@ factory('DataFactory', [
       console.log('refundAddress: ' + data.refundAddress);
       return $q(function(resolve, reject) {
         Airbitz.core.requestSpend(wallet, data.sellAddress, btcToSatoshi(qty), {
-          label: 'Glidera', 
+          label: 'Glidera',
           category: 'Transfer:Glidera',
-          notes: '', 
+          notes: '',
           success: function(signedTx) {
             resolve({'sellAddress': data.sellAddress,
                      'refundAddress': data.refundAddress,

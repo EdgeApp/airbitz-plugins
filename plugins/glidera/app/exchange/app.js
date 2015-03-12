@@ -10,6 +10,9 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices', 'app
     Airbitz.ui.title('Glidera');
     $scope.exchange = DataFactory.getExchange();
     $scope.account = UserFactory.getUserAccount();
+    UserFactory.fetchUserAccountStatus().then(function(b) {
+      $scope.userStatus = b;
+    });
 
     $scope.limits = Limits.getLimits();
     Limits.fetchLimits().then(function(limits) {
@@ -216,6 +219,11 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices', 'app
       $scope.transactions = transactions;
     })
 
+  }]).
+  directive('accountSummary', [function() {
+    return {
+      templateUrl: 'app/user/partials/account.html'
+    };
   }]);
 
 

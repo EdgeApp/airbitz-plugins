@@ -1,16 +1,24 @@
 <div class="exchange-user-account row">
   <div class="col-xs-12">
     <ul class="list-group">
-      <li class="header list-group-item"><i class="fa fa-user"></i> User Account <button ui-sref="home" class="btn btn-xs btn-danger pull-right">Log Out</button>
+      <li class="header list-group-item"><i class="fa fa-user"></i> {{ account.firstName || '' }} {{ account.lastName || '' }}
+        <label
+          class="label label-primary pull-right">
+          {{ account.status | statusFilter }}
+        </label>
       </li>
-      <li ui-sref="account" class="list-group-item">
-        {{ account.firstName || '' }} {{ account.lastName || '' }}
-        <label class="label label-outline pull-right">{{ account.status | statusFilter }}</label>
+      <li ui-sref="verifyEmail" class="list-group-item">Email
+        <label class="label label-outline pull-right">{{ userStatus.userCanTransact }}</label>
       </li>
-      <li class="list-group-item">Email</li>
-      <li class="list-group-item">Mobile Phone</li>
-      <li class="list-group-item">Account Info</li>
-      <li class="list-group-item">Bank Account</li>
+      <li ui-sref="verifyPhone" class="list-group-item">Mobile Phone
+        <label class="label label-outline pull-right">{{ userStatus.userPhoneSetup }}</label>
+      </li>
+      <li ui-ref="account" class="list-group-item">Account Info
+        <label class="label label-outline pull-right">{{ userStatus.userBasicInfoSetup }}</label>
+      </li>
+      <li ui-sref="" class="list-group-item">Bank Account
+        <label class="label label-outline pull-right">{{ userStatus.userBankAccountIsSetup }}</label>
+      </li>
     </ul>
   </div>
 </div>

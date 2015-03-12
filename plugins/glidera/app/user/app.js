@@ -87,7 +87,7 @@ angular.module('app.user', ['app.dataFactory', 'app.constants'])
         });
       };
     }]).
-directive('phoneNumberValidator', function() {
+directive('phoneNumberValidator', [function() {
   var PHONE_REGEXP = /^[0-9]{3}-?[0-9]{3}-?[0-9]{4}$/i;
 
   return {
@@ -97,9 +97,5 @@ directive('phoneNumberValidator', function() {
         return PHONE_REGEXP.test(modelValue.replace(/-/g, ''));
       }
     }
-  };
-}).directive('accountSummary', [function() {
-  return {
-    templateUrl: 'app/user/partials/account.html'
   };
 }]);
