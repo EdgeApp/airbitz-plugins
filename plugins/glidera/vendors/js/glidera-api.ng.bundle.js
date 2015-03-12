@@ -221,13 +221,12 @@ var Glidera = (function () {
       });
     },
 
-    verifyBankAccount: function(accountId, amount1, amount2, description, callback) {
+    verifyBankAccount: function(accountId, amount1, amount2, callback) {
       return this._request(true, '/user/bankaccount/' + accountId + '/verify', {
           'method': 'POST',
           'data': {
             'depositAmount1': amount1,
-            'depositAmount2': amount2,
-            'description': description
+            'depositAmount2': amount2
           },
           'callback': callback
       });
