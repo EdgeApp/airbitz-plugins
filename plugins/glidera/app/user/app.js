@@ -98,4 +98,8 @@ directive('phoneNumberValidator', function() {
       }
     }
   };
-});
+}).directive('accountSummary', [function() {
+  return {
+    templateUrl: 'app/user/partials/account.html'
+  };
+}]);
