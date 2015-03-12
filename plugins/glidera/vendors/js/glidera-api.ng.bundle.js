@@ -130,6 +130,7 @@ var Glidera = (function () {
     },
 
     register: function(firstName, lastName, email, code, cb) {
+      var that = this;
       this._request(false, '/user/register', {
         'method': 'POST',
         'data': {
@@ -139,9 +140,8 @@ var Glidera = (function () {
         },
         'callback': function(error, statusCode, body) {
           if (statusCode == 200) {
-            var j = Glidera.jsonParse(body);
-            this.key = j['key'];
-            this.secret = j['secret'];
+            that.key = body.key;
+            that.secret = body.secret;
           }
           cb(statusCode == 200, body);
         }
@@ -149,7 +149,7 @@ var Glidera = (function () {
     },
 
     hasRegistered: function() {
-      return (this.key !== '' && this.secret !== '');
+      return (this.key && this.secret);
     },
 
     getBasicInfo: function(callback) {
