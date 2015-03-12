@@ -4,33 +4,28 @@
     <div class="form-group">
       <label for="inputFirstName" class="">Name</label>
       <input ng-model="account.firstName" ng-required="true"
-             type="text" id="inputFirstName" class="form-control" placeholder="First: Ricky" autofocus="true" autocomplete="off">
+             type="text" id="inputFirstName" class="form-control" placeholder="First name" autofocus="true" autocomplete="off">
     </div>
 
     <div class="form-group">
       <label for="inputLastName" class="sr-only">Last</label>
       <input ng-model="account.lastName" ng-required="true"
-             type="text" id="inputLastName" class="form-control" placeholder="Last: Williams" autofocus="" autocomplete="off">
+             type="text" id="inputLastName" class="form-control" placeholder="Last name" autofocus="" autocomplete="off">
     </div>
 
     <div class="form-group">
       <label for="inputAddress" class="">Address</label>
-      <input ng-model="account.address1" type="text" id="inputAddressStreet" class="form-control" placeholder="Street Address" autofocus="" autocomplete="off">
+      <input ng-model="account.address1" type="text" id="inputAddressStreet" class="form-control" placeholder="Address" autofocus="" autocomplete="off">
     </div>
 
     <div class="form-group">
       <label for="inputAddress" class="sr-only">Address 2</label>
-      <input ng-model="account.address2" type="text" id="inputAddressStreet" class="form-control" placeholder="Street Address 2" autofocus="" autocomplete="off">
+      <input ng-model="account.address2" type="text" id="inputAddressStreet" class="form-control" placeholder="Address 2" autofocus="" autocomplete="off">
     </div>
 
     <div class="form-group">
       <label for="inputAddressCity" class="sr-only">City</label>
       <input ng-model="account.city" type="text" id="inputAddressCity" class="form-control" placeholder="City" autofocus="" autocomplete="off">
-    </div>
-
-    <div class="form-group">
-      <label for="inputAddressZip" class="sr-only">Zip</label>
-      <input ng-model="account.zipCode" type="text" id="inputAddressZip" class="form-control" placeholder="19512" autofocus="" autocomplete="off">
     </div>
 
     <div class="row">
@@ -42,8 +37,14 @@
     </div>
 
     <div class="form-group">
+      <label for="inputAddressZip" class="sr-only">Zip</label>
+      <input ng-model="account.zipCode" type="text" id="inputAddressZip" class="form-control" placeholder="Postal Code" autofocus="" autocomplete="off">
+    </div>
+
+
+    <div class="form-group">
       <label for="inputDob" class="">Date of Birth</label>
-      <input ng-model="account.birthDate" type="text" id="inputDob" class="form-control" placeholder="07-04-1776" autofocus="" autocomplete="off">
+      <input ng-model="account.birthDate" type="text" id="inputDob" class="form-control" placeholder="YYYY-MM-DD" autofocus="" autocomplete="off">
     </div>
 
     <div class="row text-right" style="margin-top: 40px;">

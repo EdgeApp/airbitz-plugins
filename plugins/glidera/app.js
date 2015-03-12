@@ -24,6 +24,12 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
       templateUrl: "app/user/partials/verify.email.html",
       controller: "verifyEmailController",
     })
+    // route for signup info verification
+    .state("verifyInfo", {
+      url: "/signup/verify/info/",
+      templateUrl: "app/user/partials/userAccount.html",
+      controller: "verifyInfoController",
+    })
     // route for phone verification
     .state("verifyPhone", {
       url: "/signup/verify/phone/",

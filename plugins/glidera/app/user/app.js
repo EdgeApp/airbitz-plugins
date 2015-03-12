@@ -62,10 +62,31 @@ angular.module('app.user', ['app.dataFactory', 'app.constants'])
         Airbitz.ui.title('Saving...');
         UserFactory.getFullUserAccount().then(function() {
           // If the email is successfully verified, continue
-          $state.go('verifyPhone');
-        }, Error.reject);
+          $state.go('verifyInfo');
+        }, function(b) {
+          if (b.code == "ConflictException") {
+            Error.reject(b);
+          } else {
+            $state.go('verifyInfo');
+          }
+        });
       };
     }])
+.controller('verifyInfoController', ['$scope', '$state', 'Error', 'States', 'DataFactory', 'UserFactory',
+  function($scope, $state, Error, States, DataFactory, UserFactory) {
+    $scope.states = States.getStates();
+    $scope.account = UserFactory.getUserAccount();
+
+    $scope.saveUserAccount = function() {
+      Airbitz.ui.title('Saving...');
+      UserFactory.updateUserAccount($scope.account).then(function() {
+        Airbitz.ui.showAlert('Saved', 'User information has been updated.');
+        $state.go('verifyPhone');
+      }, function(error) {
+        Airbitz.ui.showAlert('Error', error);
+      });
+    };
+  }])
 .controller('verifyPhoneController', ['$scope', '$state', 'DataFactory', 'UserFactory', 'TwoFactor',
     function($scope, $state, DataFactory, UserFactory, TwoFactor) {
       Airbitz.ui.title('Glidera: Verify Phone');
