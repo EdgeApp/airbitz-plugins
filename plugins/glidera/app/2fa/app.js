@@ -30,19 +30,32 @@ factory('TwoFactor', ['$state', '$q', 'glideraFactory',
 
     var code = '';
     var oldCode = '';
+    var lastFetch = null;
     var nextAction = function() { };
     var factory = {};
+    var that = this;
+    factory.cached = function() {
+      if (!that.lastFetch || !that.code) {
+        return false;
+      }
+      // if the code is less than 2 minutes old, don't ask for 2fa
+      return ((new Date().getTime() - that.lastFetch.getTime()) / 1000.0) <= 2 * 60;
+    };
     factory.confirmTwoFactor = function(finishedCallback) {
       if (finishedCallback) {
-        this.nextAction = finishedCallback;
+        that.nextAction = finishedCallback;
       }
       $state.go('verify2FA', {'confirmNumber': 'confirm'});
     };
     factory.showTwoFactor = function(finishedCallback) {
-      if (finishedCallback) {
-        this.nextAction = finishedCallback;
+      if (factory.cached())  {
+        finishedCallback(that.code);
+      } else {
+        if (finishedCallback) {
+          that.nextAction = finishedCallback;
+        }
+        $state.go('verify2FA', {'confirmNumber': ''});
       }
-      $state.go('verify2FA', {'confirmNumber': ''});
     };
     factory.checkPhone = function() {
       var deferred = $q.defer();
@@ -56,23 +69,24 @@ factory('TwoFactor', ['$state', '$q', 'glideraFactory',
         var hasNumber = data.phoneNumber !== null ? true : false;
         var d = $q.defer();
         glideraFactory.getTwoFactorCode(function(e, r, b) {
+          that.lastFetch = new Date();
           r >= 200 && r < 300 ? d.resolve(hasNumber) : d.reject(b);
         });
         return d.promise;
       });
     };
     factory.finish = function(c, o) {
-      this.code = c;
-      this.oldCode = o;
-      if (this.nextAction) {
-        this.nextAction();
+      that.code = c;
+      that.oldCode = o;
+      if (that.nextAction) {
+        that.nextAction();
       }
     };
     factory.getCode = function() {
-      return this.code;
+      return that.code;
     };
     factory.getOldCode = function() {
-      return this.oldCode;
+      return that.oldCode;
     }
     return factory;
   }]);
