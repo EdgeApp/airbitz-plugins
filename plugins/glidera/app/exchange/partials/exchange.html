@@ -1,4 +1,4 @@
-<div class="buy-sell row">
+<div ng-if="userStatus.userCanTransact" class="buy-sell row">
   <div class="col-xs-6">
     <button ng-click="buy()" class="buy-button btn-success btn-lg btn-block btn"><i class="fa fa-bitcoin"></i> BUY</button>
   </div>
@@ -7,7 +7,7 @@
   </div>
 </div>
 
-<div exchange-limits></div>
+<div ng-if="userStatus.userCanTransact" exchange-limits></div>
 
 <div account-summary></div>
 
