@@ -60,8 +60,8 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices', 'app
     };
   }])
 .controller('editBankAccountController',
-  ['$scope', '$state', '$stateParams', 'DataFactory', 'UserFactory', 'TwoFactor',
-  function ($scope, $state, $stateParams, DataFactory, UserFactory, TwoFactor) {
+  ['$scope', '$state', '$stateParams', 'Error', 'DataFactory', 'UserFactory', 'TwoFactor',
+  function ($scope, $state, $stateParams, Error, DataFactory, UserFactory, TwoFactor) {
     Airbitz.ui.title('Edit Bank Account');
     $scope.account = UserFactory.getUserAccount();
     $scope.bankAccount = DataFactory.getBankAccount($stateParams.uuid);
@@ -77,18 +77,14 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices', 'app
           $scope.bankAccount.bankAccountUuid, $scope.deposit.amount1,
           $scope.deposit.amount2, $scope.bankAccount.description).then(function() {
         $state.go('exchange');
-      }, function() {
-        Airbitz.ui.showAlert('Error', 'TODO: Error! Error!');
-      });
+      }, Error.reject);
     };
 
     $scope.saveBankAccount = function() {
       DataFactory.updateBankAccount($scope.bankAccount).then(function() {
         Airbitz.ui.showAlert('Saved', 'Bank account information has been updated.');
         $state.go('exchange');
-      }, function() {
-        Airbitz.ui.showAlert('Error', 'TODO: Error! Error!');
-      });
+      }, Error.reject);
     };
 
     $scope.deleteBankAccount = function() {

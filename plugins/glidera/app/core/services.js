@@ -238,12 +238,9 @@ factory('DataFactory', [
         bankAccount.routingNumber,
         bankAccount.accountNumber,
         bankAccount.description,
-        bankAccount.bankAccountType, function(e, s, b) {
-        if (s === 200) {
-          resolve(b.bankAccountUuid);
-        } else {
-          reject();
-        }
+        bankAccount.bankAccountType,
+        function(e, s, b) {
+          (s === 200) ? resolve(b.bankAccountUuid) : reject(b);
       });
     });
   };
@@ -252,8 +249,9 @@ factory('DataFactory', [
   factory.verifyBankAccount = function(uuid, amount1, amount2, description) {
     console.log(uuid + ' ' + amount1 + ' ' + amount2 + ' ' + description);
     return $q(function(resolve, reject) {
-      glideraFactory.verifyBankAccount(uuid, amount1, amount2, description, function(e, s, b) {
-        s == 200 ?  resolve() : reject();
+      glideraFactory.verifyBankAccount(uuid, amount1, amount2, description,
+      function(e, s, b) {
+        (s == 200) ?  resolve(b) : reject(b);
       });
     });
   };
@@ -265,7 +263,7 @@ factory('DataFactory', [
           bankAccount.bankAccountUuid, bankAccount.description,
           bankAccount.primary,
       function(e, s, b) {
-          e === null ? resolve(b) : reject();
+        (s === 200) ? resolve(b) : reject(b);
       });
     });
   };
@@ -273,8 +271,9 @@ factory('DataFactory', [
   // MAPS TO: https://sandbox.glidera.com/documentation.xhtml#apiReference-deleteBankAccount
   factory.deleteBankAccount = function(accountId) {
     return $q(function(resolve, reject) {
-      glideraFactory.deleteBankAccount(TwoFactor.getCode(), accountId, function(e, s, b) {
-        e === null && s == 200 ? resolve() : reject();
+      glideraFactory.deleteBankAccount(TwoFactor.getCode(), accountId,
+      function(e, s, b) {
+        (s == 200) ? resolve(b) : reject(b);
       });
     });
   };
