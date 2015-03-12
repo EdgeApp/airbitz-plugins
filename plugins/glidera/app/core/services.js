@@ -30,8 +30,14 @@ factory('UserFactory', [
     factory.registerUser = function(firstName, lastName, email) {
       var d = $q.defer();
       glideraFactory.register(firstName, lastName, email, '', function(success, b) {
+        var account = UserFactory.getUserAccount();
+        account.firstName = firstName;
+        account.lastName = lastName;
+        account.email = email;
+        account.key = b["key"];
+        account.secret = b["secret"];
         if (success) {
-          // Airbitz.core.writeData('account' account);
+          Airbitz.core.writeData('account', account);
           d.resolve(b);
         } else {
           d.reject(b);
@@ -58,8 +64,6 @@ factory('UserFactory', [
               var birthDate = b.birthDate.replace(/T.*/, '');
               account.birthDate = $filter('date')(birthDate, 'yyyy-MM-dd');
             }
-
-            account.email = 'someone@yourdomain.co';
             account.registered = true;
 
             // persiste locally
@@ -133,6 +137,30 @@ factory('DataFactory', [
   factory.getExchange = function() {
     return ExchangeFactory;
   }
+
+  factory.addPhoneNumber = function(phoneNumber) {
+    var d = $q.defer();
+    glideraFactory.addPhoneNumber(phoneNumber, function(e, r, b) {
+      r >= 200 && r < 300 ? d.resolve(b) : d.reject(b);
+    });
+    return d.promise;
+  };
+
+  factory.confirmPhoneNumber = function(newCode, oldCode) {
+    var d = $q.defer();
+    glideraFactory.confirmPhoneNumber(newCode, oldCode, function(e, r, b) {
+      r >= 200 && r < 300 ? d.resolve(b) : d.reject(b);
+    });
+    return d.promise;
+  };
+
+  factory.getPhoneNumber = function() {
+    var d = $q.defer();
+    glideraFactory.getPhoneNumber(function(e, r, b) {
+      200 == r ? d.resolve(b) : d.reject(b);
+    });
+    return d.promise;
+  };
 
   var bankAccounts = Airbitz.core.readData('bankAccounts') || [];
   factory.getBankAccounts = function() {

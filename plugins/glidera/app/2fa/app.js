@@ -5,16 +5,17 @@ controller('verify2faController', ['$scope', '$state', 'DataFactory', 'UserFacto
     Airbitz.ui.title('2 Factor Verification');
     $scope.exchange = DataFactory.getExchange();
     $scope.account = UserFactory.getUserAccount();
+    $scope.hasNumber = false;
 
     var requestCode = function() {
-      TwoFactor.requestCode(function() {
-        // Success, do nothing
+      TwoFactor.requestCode().then(function(hasNumber) {
+        $scope.hasNumber = hasNumber;
       }, function(error) {
         Airbitz.ui.showAlert('Error', error);
       });
     };
     $scope.submit2FA = function() {
-      TwoFactor.finish($scope.verificationCode);
+      TwoFactor.finish($scope.verificationCode, $scope.oldVerificationCode);
     };
     $scope.resendSMS = function(phone){
       requestCode();
@@ -26,30 +27,44 @@ factory('TwoFactor', ['$state', '$q', 'glideraFactory',
     'use strict';
 
     var code = '';
+    var oldCode = '';
     var nextAction = function() { };
-    var factory = {
-      showTwoFactor: function(finishedCallback) {
-        if (finishedCallback) {
-          this.nextAction = finishedCallback;
-        }
-        $state.go('verify2FA');
-      },
-      requestCode: function() {
-        return $q(function(resolve, reject) {
-          glideraFactory.getTwoFactorCode(function(e, r, b) {
-            r == 200 ? resolve(b) : reject(b);
-          });
+    var factory = {};
+    factory.showTwoFactor = function(finishedCallback) {
+      if (finishedCallback) {
+        this.nextAction = finishedCallback;
+      }
+      $state.go('verify2FA');
+    };
+    factory.checkPhone = function() {
+      var deferred = $q.defer();
+      glideraFactory.getPhoneNumber(function(e, r, b) {
+        200 == r ? deferred.resolve(b) : deferred.reject(b);
+      });
+      return deferred.promise;
+    };
+    factory.requestCode = function() {
+      return factory.checkPhone().then(function(data) {
+        var hasNumber = data.phoneNumber !== null ? true : false;
+        var d = $q.defer();
+        glideraFactory.getTwoFactorCode(function(e, r, b) {
+          r >= 200 && r < 300 ? d.resolve(hasNumber) : d.reject(b);
         });
-      },
-      finish: function(c) {
-        this.code = c;
-        if (this.nextAction) {
-          this.nextAction();
-        }
-      },
-      getCode: function() {
-        return this.code;
+        return d.promise;
+      });
+    };
+    factory.finish = function(c, o) {
+      this.code = c;
+      this.oldCode = o;
+      if (this.nextAction) {
+        this.nextAction();
       }
     };
+    factory.getCode = function() {
+      return this.code;
+    };
+    factory.getOldCode = function() {
+      return this.oldCode;
+    }
     return factory;
   }]);
