@@ -241,3 +241,6 @@ body .live-price-expiration .expiration-data {
   font-weight: bold;
   color: #64a6cb;
 }
+body .error-screen {
+  margin-top: 20px;
+}

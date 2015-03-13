@@ -101,4 +101,10 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
       templateUrl: "app/user/partials/userAccount.html",
       controller: "userAccountController",
     })
+    // route for errors
+    .state("error", {
+      url: "/error/",
+      templateUrl: "app/error/partials/error.html",
+      controller: "errorController",
+    })
 }]);
