@@ -38,8 +38,8 @@ angular.module('app.user', ['app.dataFactory', 'app.constants'])
       $scope.account = {};
       UserFactory.clearUser();
       // Clear api
-      glideraFactory.key = '';
-      glideraFactory.secret = '';
+      glideraFactory.key = null;
+      glideraFactory.secret = null;
       // Clear all storage
       Airbitz.core.clearData();
       $state.go('signup');
