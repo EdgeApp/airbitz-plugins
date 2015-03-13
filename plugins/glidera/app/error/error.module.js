@@ -33,7 +33,11 @@
         } else if (res.code == 'InvalidParameterValue') {
           Airbitz.ui.showAlert('Invalid', res.message);
         } else if (res.code == 'UnauthorizedException') {
-          Airbitz.ui.showAlert('Unauthorized', res.message);
+          if (res.message && res.message.match(/nonce/i)) {
+            $state.go('error');
+          } else {
+            Airbitz.ui.showAlert('Unauthorized', res.message);
+          }
         } else if (res.code == 'ConflictException') {
           if (res.message && res.message.match(/email not verified/i)) {
             $state.go('verifyEmail');
