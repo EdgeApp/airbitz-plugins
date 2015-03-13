@@ -2,30 +2,29 @@
   'use strict';
 
   angular.module('app.2fa', ['app.dataFactory', 'app.glidera'])
-    .controller('verify2faController', ['$state', '$stateParams', 'DataFactory', 'UserFactory', 'TwoFactor', otpController])
+    .controller('verify2faController', ['$scope', '$state', '$stateParams', 'DataFactory', 'UserFactory', 'TwoFactor', otpController])
     .factory('TwoFactor', ['$state', '$q', 'glideraFactory', otpFactory]);
 
-  function otpController($state, $stateParams, DataFactory, UserFactory, TwoFactor) {
-    var vm = this;
+  function otpController($scope, $state, $stateParams, DataFactory, UserFactory, TwoFactor) {
     Airbitz.ui.title('2 Factor Verification');
-    vm.exchange = DataFactory.getExchange();
-    vm.account = UserFactory.getUserAccount();
-    vm.hasNumber = false;
+    $scope.exchange = DataFactory.getExchange();
+    $scope.account = UserFactory.getUserAccount();
+    $scope.hasNumber = false;
 
     var requestCode = function() {
       TwoFactor.requestCode().then(function(hasNumber) {
         if ($stateParams.confirmNumber == 'confirm') {
-          vm.hasNumber = hasNumber;
+          $scope.hasNumber = hasNumber;
         }
       }, function(error) {
         $state.go('exchange');
         Airbitz.ui.showAlert('Error', 'Unable to request 2fa token. Please retry again later.');
       });
     };
-    vm.submit2FA = function() {
-      TwoFactor.finish(vm.verificationCode, vm.oldVerificationCode);
+    $scope.submit2FA = function() {
+      TwoFactor.finish($scope.verificationCode, $scope.oldVerificationCode);
     };
-    vm.resendSMS = function(phone){
+    $scope.resendSMS = function(phone){
       requestCode();
     };
     requestCode();
