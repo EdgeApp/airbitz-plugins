@@ -25,7 +25,7 @@
     return factory;
 
     function reject(res) {
-      if (!res.code) {
+      if (!res || !res.code) {
         Airbitz.ui.showAlert('Error', 'An unknown error occurred.');
       } else {
         if (res.code == 'MissingRequiredParameter') {

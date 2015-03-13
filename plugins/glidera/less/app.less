@@ -12,6 +12,8 @@
 @ab-gray-dark: #333;
 @ab-gray-light: #efefef;
 
+@ab-red: #ff7777;
+
 /*
     FIXES FOR WEIRD STUFF
 */
@@ -311,6 +313,7 @@ body {
       transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
     }
 
+
     input[type=text],
     input[type=number] {
 
@@ -354,10 +357,37 @@ body {
     }
   }
 
+  .verify-phone-info {
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  .verify-phone-form {
+
+    input[name="phone"] {
+      text-align: center;
+    }
+
+  }
+
+  .error-message-console {
+    height: 20px;
+    text-align: center;
+    color: @ab-red
+  }
 
   .error-screen {
     margin-top: 20px;
   }
+
+  .input-error {
+    position: absolute;
+    right: 14px;
+    margin-top: -11px;
+  }
+
+  .user-account-form {}
+
+
 
 } // body
 

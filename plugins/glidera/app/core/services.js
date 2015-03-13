@@ -84,7 +84,7 @@ factory('UserFactory', [
             // XXX: This is kind of hacky
             if (b.birthDate) {
               var birthDate = b.birthDate.replace(/T.*/, '');
-              account.birthDate = $filter('date')(birthDate, 'yyyy-MM-dd');
+              account.birthDate = new Date(birthDate);
             }
             account.registered = true;
 
@@ -103,7 +103,7 @@ factory('UserFactory', [
         glideraFactory.updateBasicInfo({
           'firstName': account.firstName,
           'lastName': account.lastName,
-          'birthDate': account.birthDate,
+          'birthDate': $filter('date')(account.birthDate, 'yyyy-MM-dd'),
           'address1': account.address1,
           'address2': account.address2,
           'city': account.city,
@@ -112,9 +112,9 @@ factory('UserFactory', [
         }, function(e, s, b) {
           if (s === 200) {
             Airbitz.core.writeData('account', account);
-            resolve();
+            resolve(b);
           } else {
-            reject();
+            reject(b);
           }
         });
       });
@@ -141,7 +141,7 @@ factory('DataFactory', [
 
           // return dummyData
         } else {
-          reject();
+          reject(b);
         }
       });
     });
@@ -213,7 +213,7 @@ factory('DataFactory', [
         if (s >= 200 && s < 300) {
           resolve(b);
         } else {
-          reject();
+          reject(b);
         }
       });
     });

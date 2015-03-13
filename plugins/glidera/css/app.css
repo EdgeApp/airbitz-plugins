@@ -241,6 +241,23 @@ body .live-price-expiration .expiration-data {
   font-weight: bold;
   color: #64a6cb;
 }
+body .verify-phone-info {
+  margin-bottom: 20px;
+  text-align: center;
+}
+body .verify-phone-form input[name="phone"] {
+  text-align: center;
+}
+body .error-message-console {
+  height: 20px;
+  text-align: center;
+  color: #ff7777;
+}
 body .error-screen {
   margin-top: 20px;
+}
+body .input-error {
+  position: absolute;
+  right: 14px;
+  margin-top: -11px;
 }

@@ -1,50 +1,93 @@
-<div class="row">
-  <form ng-submit="saveUserAccount()" class="exchange-sign-up col-xs-12">
+<div class="user-account-form row">
+  <form name="form" ng-submit="saveUserAccount()" class="exchange-sign-up col-xs-12" novalidate>
 
     <div class="form-group">
       <label for="inputFirstName" class="">Name</label>
       <input ng-model="account.firstName" ng-required="true"
-             type="text" id="inputFirstName" class="form-control" placeholder="First name" autofocus="true" autocomplete="off">
+             type="text" id="inputFirstName" class="form-control" placeholder="First name" autofocus="true" autocomplete="off"
+             name="firstName"
+             required="" />
+      <div class="input-error" ng-show="form.$submitted || form.firstName.$touched">
+        <span ng-show="form.firstName.$error.required" class="label label-danger">Required</span>
+      </div>
     </div>
 
     <div class="form-group">
       <label for="inputLastName" class="sr-only">Last</label>
       <input ng-model="account.lastName" ng-required="true"
-             type="text" id="inputLastName" class="form-control" placeholder="Last name" autofocus="" autocomplete="off">
+             type="text" id="inputLastName" class="form-control" placeholder="Last name" autofocus="" autocomplete="off"
+             name="lastName"
+             required="" />
+      <div class="input-error" ng-show="form.$submitted || form.lastName.$touched">
+        <span ng-show="form.lastName.$error.required" class="label label-danger">Required</span>
+      </div>
     </div>
 
     <div class="form-group">
       <label for="inputAddress" class="">Address</label>
-      <input ng-model="account.address1" type="text" id="inputAddressStreet" class="form-control" placeholder="Address" autofocus="" autocomplete="off">
+      <input ng-model="account.address1"
+             type="text" id="inputAddressStreet" class="form-control" placeholder="Address" autofocus="" autocomplete="off"
+             name="address"
+             required="" />
+      <div class="input-error" ng-show="form.$submitted || form.address.$touched">
+        <span ng-show="form.address.$error.required" class="label label-danger">Required</span>
+      </div>
     </div>
 
     <div class="form-group">
-      <label for="inputAddress" class="sr-only">Address 2</label>
-      <input ng-model="account.address2" type="text" id="inputAddressStreet" class="form-control" placeholder="Address 2" autofocus="" autocomplete="off">
+      <label for="inputAddress2" class="sr-only">Address 2</label>
+      <input ng-model="account.address2"
+             type="text" id="inputAddressStreet2" class="form-control" placeholder="Address 2" autofocus="" autocomplete="off" />
     </div>
 
     <div class="form-group">
       <label for="inputAddressCity" class="sr-only">City</label>
-      <input ng-model="account.city" type="text" id="inputAddressCity" class="form-control" placeholder="City" autofocus="" autocomplete="off">
+      <input ng-model="account.city"
+             type="text" id="inputAddressCity" class="form-control" placeholder="City" autofocus="" autocomplete="off"
+             name="city"
+             required="" />
+      <div class="input-error" ng-show="form.$submitted || form.city.$touched">
+        <span ng-show="form.city.$error.required" class="label label-danger">Required</span>
+      </div>
     </div>
 
     <div class="row">
       <div class="form-group col-xs-6">
-        <select ng-options="o.name for o in states" ng-model="account.state" class="form-control">
+        <select ng-options="o.name for o in states" ng-model="account.state" class="form-control"
+                name="state"
+                required="" />
           <option value="">-- Select a State --</option>
         </select>
+        <div class="input-error" ng-show="form.$submitted || form.state.$touched">
+          <span ng-show="form.state.$error.required" class="label label-danger">Required</span>
+        </div>
       </div>
     </div>
 
     <div class="form-group">
       <label for="inputAddressZip" class="sr-only">Zip</label>
-      <input ng-model="account.zipCode" type="text" id="inputAddressZip" class="form-control" placeholder="Postal Code" autofocus="" autocomplete="off">
+      <input ng-model="account.zipCode"
+             type="text" id="inputAddressZip" class="form-control" placeholder="Postal Code" autofocus="" autocomplete="off"
+             name="zip"
+             required="" />
+      <div class="input-error" ng-show="form.$submitted || form.zip.$touched">
+        <span ng-show="form.zip.$error.required" class="label label-danger">Required</span>
+        <span ng-show="form.zip.$error.number" class="label label-danger">Number Required</span>
+      </div>
     </div>
 
 
     <div class="form-group">
       <label for="inputDob" class="">Date of Birth</label>
-      <input ng-model="account.birthDate" type="text" id="inputDob" class="form-control" placeholder="YYYY-MM-DD" autofocus="" autocomplete="off">
+      <input ng-model="account.birthDate"
+             type="date" id="inputDob" class="form-control" placeholder="YYYY-MM-DD" autofocus=""
+             autocomplete="off"
+             name="dob"
+             required="" />
+      <div class="input-error" ng-show="form.$submitted || form.dob.$touched">
+        <span ng-show="form.dob.$error.required" class="label label-danger">Required</span>
+        <span ng-show="form.dob.$error.date" class="label label-danger">Date Required</span>
+      </div>
     </div>
 
     <div class="row text-right" style="margin-top: 40px;">

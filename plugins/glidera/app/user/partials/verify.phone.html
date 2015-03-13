@@ -1,34 +1,38 @@
-<div class="row text-center">
+<div class="verify-phone-info row">
   <h3 class="col-xs-12">Verification codes sent from:</h3>
   <h3 class="col-xs-12"><label class="label label-outline">{{exchange.phoneVerificationNumber}}</label></h3>
 </div>
 
-<div class="row text-center" style="margin-top: 40px">
-  <form name="form" class="form col-xs-offset-2 col-xs-8" novalidate>
-    <div class="form-group">
-      <label for="inputPhone" class="sr-only">Verification Code</label>
-      <input ng-model="account.phone" name="phone" type="tel" id="inputPhone" class="form-control" 
-             placeholder="111-111-1111"
-             autofocus="true"
-             autocomplete="off"
-             phone-number-validator />
+<div class="verify-phone-form text-center row">
+  <form name="form" class="form col-xs-12" novalidate>
+    <div class="row">
+      <div class="form-group col-xs-offset-2 col-xs-8">
+        <label for="inputPhone" class="sr-only">Verification Code</label>
+        <input ng-model="account.phone" name="phone" type="tel" id="inputPhone" class="form-control"
+               placeholder="777-555-1212"
+               autofocus="true"
+               autocomplete="off"
+               phone-number-validator />
 
-      <div ng-show="form.$submitted || form.phone.$touched">
-        <div ng-show="form.phone.$error.required">Required.</div>
-        <div ng-show="form.phone.$error.tel">This is not a valid phone number.</div>
       </div>
+
+      <div class="error-message-console col-xs-12" ng-show="form.$submitted || form.phone.$touched">
+        <span ng-show="form.phone.$error.required">Required.</span>
+        <span ng-show="form.phone.$error.tel">Not a valid phone number.</span>
+      </div>
+
     </div>
 
     <div class="row" style="margin: 20px 0">
       <p><label class="label label-warning">Note</label> Phone must be able to receive SMS text messages.</p>
     </div>
 
-    <div class="row text-right" style="margin-top: 40px;">
+    <div class="text-right row" style="margin-top: 40px;">
       <div class="col-xs-12">
         <button type="button" ui-sref="exchange" class="buy-sell-next btn btn-lg btn-link">Later</button>
-        <button type="submit" 
-                ng-click="submitPhone()" 
-                ng-disabled="form.$invalid" 
+        <button type="submit"
+                ng-click="submitPhone()"
+                ng-disabled="form.$invalid"
                 class="buy-sell-next btn btn-lg btn-success">Validate</button>
       </div>
     </div>
