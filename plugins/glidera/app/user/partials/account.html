@@ -1,23 +1,23 @@
 <div class="exchange-user-account row">
   <div class="col-xs-12">
     <ul class="list-group">
-      <li class="header list-group-item"><i class="fa fa-user"></i> {{ account.firstName || '' }} {{ account.lastName || '' }}
+      <li ng-click="showAccountOptions()"class="header list-group-item"><i class="fa fa-user"></i> {{ account.firstName || '' }} {{ account.lastName || '' }}
         <label
-          class="label label-primary pull-right">
+          class="status label label-primary pull-right">
           {{ userStatus.userCanTransact | statusFilter }}
         </label>
       </li>
-      <li class="list-group-item">Email
-        <label class="label label-outline pull-right">{{ userStatus.userEmailIsSetup | statusFilter }}</label>
+      <li ng-show="showOptions" class="list-group-item">Email
+        <label class="status label label-outline pull-right">{{ userStatus.userEmailIsSetup | statusFilter }}</label>
       </li>
-      <li ui-sref="verifyPhone" class="list-group-item">Mobile Phone
-        <label class="label label-outline pull-right">{{ userStatus.userPhoneIsSetup | statusFilter }}</label>
+      <li ng-show="showOptions" ui-sref="verifyPhone" class="list-group-item">Mobile Phone
+        <label class="status label label-outline pull-right">{{ userStatus.userPhoneIsSetup | statusFilter }}</label>
       </li>
-      <li ui-sref="account" class="list-group-item">Account Info
-        <label class="label label-outline pull-right">{{ userStatus.userBasicInfoIsSetup | statusFilter }}</label>
+      <li ng-show="showOptions" ui-sref="account" class="list-group-item">Account Info
+        <label class="status label label-outline pull-right">{{ userStatus.userBasicInfoIsSetup | statusFilter }}</label>
       </li>
-      <li ng-click="routeBankAccount()" class="list-group-item">Bank Account
-        <label class="label label-outline pull-right">{{ userStatus.userBankAccountIsSetup | statusFilter }}</label>
+      <li ng-show="showOptions" ng-click="routeBankAccount()" class="list-group-item">Bank Account
+        <label class="status label label-outline pull-right">{{ userStatus.userBankAccountIsSetup | statusFilter }}</label>
       </li>
     </ul>
   </div>

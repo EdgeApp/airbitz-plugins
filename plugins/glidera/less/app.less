@@ -1,5 +1,5 @@
 @ab-blue: #2291cf;
-@ab-blue-gray: #446275;
+@ab-blue-gray: #5A7991;
 @ab-blue-dark: #0f5791;
 @ab-blue-light: #64a6cb;
 
@@ -133,6 +133,63 @@ body {
     &.label-outline {
       border: 1px solid white;
     }
+
+    &.status {
+      font-size: 10px;
+      position: absolute;
+      right: -1px;
+      bottom: -6px;
+      border-color: @ab-blue-light;
+      border-bottom-right-radius: 0;
+      border-top-right-radius: 0;
+      border-right: 0;
+      border-bottom: 0;
+    }
+  }
+
+  .exchange-ticker {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 5px 0;
+    position: relative;
+    top: -10px;
+    width: 100%;
+    left: 15px;
+    border-radius: 5px;
+  }
+
+  .exchange-limits {
+
+    h4 {
+      margin-top: 0px;
+      color: @ab-blue-gray;
+    }
+
+    .buy-limits {
+      background-color: rgba(0,0,0,.2);
+      padding: 5px;
+      border-radius: 5px;
+
+      .limit-label {
+
+      }
+      .limit-data {
+        color: @ab-green;
+      }
+    }
+
+    .sell-limits {
+      background-color: rgba(0,0,0,.2);
+      padding: 5px;
+      border-radius: 5px;
+
+      .limit-label {
+
+      }
+      .limit-data {
+        color: @ab-blue;
+      }
+    }
+
   }
 
   // exchange options list
@@ -164,7 +221,7 @@ body {
   // exchange functions
   .buy-sell {
     margin-top: 20px;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
 
     .btn-group {
 
@@ -181,7 +238,7 @@ body {
   }
 
   .exchange-user-account {
-    margin-top: 20px;
+    margin-top: 30px;
     margin-bottom: 20px;
 
     .list-group-item {
@@ -271,7 +328,6 @@ body {
     }
     .limit-data {
       color: @ab-green;
-
     }
   }
 

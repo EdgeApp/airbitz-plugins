@@ -1,3 +1,9 @@
+<div class="exchange-ticker row">
+  <div class="text-right col-xs-12">
+    <div price-update price-type="{{ order.orderAction }}"></div>
+  </div>
+</div>
+
 <div ng-if="userStatus.userCanTransact" class="buy-sell row">
   <div class="col-xs-6">
     <button ng-click="buy()" class="buy-button btn-success btn-lg btn-block btn"><i class="fa fa-bitcoin"></i> BUY</button>
@@ -12,7 +18,7 @@
 <div account-summary></div>
 
 
-<div ng-if="userStatus.userCanTransact" class="exchange-payment-list row">
+<!-- <div ng-if="userStatus.userCanTransact" class="exchange-payment-list row">
   <div class="col-xs-12">
     <ul class="exchange-payment-options list-group" ng-model="bankAccounts">
       <li class="list-group-item header"><i class="fa fa-bank"></i>Payment Methods <button ng-if="bankAccounts.length == 0" ng-click="addBankAccount()" class="btn btn-primary btn-xs pull-right">ADD NEW</button></li>
@@ -31,10 +37,10 @@
       </li>
     </ul>
   </div>
-</div>
+</div> -->
 
 <div class="row">
   <div class="col-xs-12">
-    <button ui-sref="exchangeTransactions" class="btn btn-lg btn-block btn-default">Transactions</button>
+    <button ui-sref="exchangeTransactions" class="btn btn-lg btn-block btn-info">Transactions</button>
   </div>
 </div>

@@ -48,6 +48,11 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices', 'app
       $state.go('exchangeOrder', {'orderAction': 'sell'});
     };
 
+    $scope.showOptions = false;
+    $scope.showAccountOptions = function() {
+      $scope.showOptions = !$scope.showOptions;
+    };
+
     $scope.addBankAccount = function(){
       $state.go('exchangeAddBankAccount');
     };
