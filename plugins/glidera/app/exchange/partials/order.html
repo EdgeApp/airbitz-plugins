@@ -16,7 +16,7 @@
 <div class="exchange-buy-sell-interface row">
   <div class="col-xs-12">
 
-    <form ng-submit="next()" class="form">
+    <form ng-submit="next()" class="form" name="form">
       <div class="row">
         <div class="col-xs-6 form-group">
           <label for="inputBtcWallet" class="">BTC Wallet</label>
@@ -48,12 +48,13 @@
             ng-model="order.orderFiatInput"
             ng-change="convertFiatValue(order.orderFiatInput)"
             type="number"
+            name="orderFiatInput"
             class="large"
             id="inputFiatAmount"
             placeholder="100.00"
             autofocus="true"
             step="any"
-          >
+            required="" />
         </div>
       </div>
 
@@ -64,19 +65,25 @@
             ng-model="order.orderBtcInput"
             ng-change="convertBtcValue(order.orderBtcInput)"
             type="number"
+            name="orderBtcInput"
             class="large"
             id="inputBtcAmount"
             placeholder="0.5"
-            autofocus="true"
+            autofocus=""
             step="any"
-          >
+            required="" />
         </div>
       </div>
+
+     <div ng-show="form.$submitted || form.orderBtcInput.$touched || form.orderFiatInput.$touched">
+        <div ng-show="form.orderBtcInput.$error.required">BTC amount is required.</div>
+        <div ng-show="form.orderFiatInput.$error.required">Fiat Amount is required.</div>
+     </div>
 
       <div class="row text-right" style="margin-top: 40px;">
         <div class="col-xs-12">
           <button type="button" ui-sref="exchange" class="buy-sell-next btn btn-lg btn-link">Cancel</button>
-          <button type="submit" class="buy-sell-next btn btn-lg btn-success">Next</button>
+          <button type="submit" ng-disabled="form.$invalid" class="buy-sell-next btn btn-lg btn-success">Next</button>
         </div>
       </div>
     </form>
