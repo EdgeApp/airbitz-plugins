@@ -74,8 +74,8 @@ angular.module('app.user', ['app.dataFactory', 'app.constants'])
       }, Error.reject);
     };
   }])
-.controller('verifyPhoneController', ['$scope', '$state', 'Error', 'DataFactory', 'UserFactory', 'TwoFactor',
-    function($scope, $state, Error, DataFactory, UserFactory, TwoFactor) {
+.controller('verifyPhoneController', ['$scope', '$state', '$stateParams', 'Error', 'DataFactory', 'UserFactory', 'TwoFactor',
+    function($scope, $state, $stateParams, Error, DataFactory, UserFactory, TwoFactor) {
       Airbitz.ui.title('Glidera: Verify Phone');
 
       $scope.exchange = DataFactory.getExchange();
@@ -88,7 +88,11 @@ angular.module('app.user', ['app.dataFactory', 'app.constants'])
       };
       $scope.submitPhone = function(){
         DataFactory.addPhoneNumber($scope.account.phone).then(function() {
-          TwoFactor.confirmTwoFactor(verifyCode);
+          if ($stateParams.change) {
+            TwoFactor.showTwoFactor(verifyCode);
+          } else {
+            TwoFactor.confirmTwoFactor(verifyCode);
+          }
         }, Error.reject);
       };
     }]).

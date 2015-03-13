@@ -32,7 +32,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
     })
     // route for phone verification
     .state("verifyPhone", {
-      url: "/signup/verify/phone/",
+      url: "/signup/verify/phone/:change",
       templateUrl: "app/user/partials/verify.phone.html",
       controller: "verifyPhoneController",
     })
