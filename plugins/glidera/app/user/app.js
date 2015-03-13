@@ -64,7 +64,7 @@ angular.module('app.user', ['app.dataFactory', 'app.constants'])
           // If the email is successfully verified, continue
           $state.go('verifyInfo');
         }, function(b) {
-          if (b.code == "ConflictException") {
+          if (b.code && b.code == "ConflictException") {
             Error.reject(b);
           } else {
             $state.go('verifyInfo');
