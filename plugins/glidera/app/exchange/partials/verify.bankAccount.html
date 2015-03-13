@@ -4,7 +4,7 @@
       <div class="row">
           <p class="col-xs-12" style="margin-top: 15px; margin-bottom: 15px;">Please check your account for two deposits from <label class="label label-info">{{ exchange.depositId }}</label> and input them below.</p>
           <div class="col-xs-6">
-              <label for="inputDepositAmount1" class="">Deposit 1</label>
+              <label for="inputDepositAmount1" class="">Deposit Amount</label>
               <input ng-model="deposit.amount1" name="amount1" type="number" id="inputDepositAmount1" class="form-control"
                      placeholder="0.35"
                      autofocus=""
@@ -13,19 +13,6 @@
               <div ng-show="verifyForm.$submitted || verifyForm.amount1.$touched">
                   <div ng-show="verifyForm.amount1.$error.required">Required.</div>
                   <div ng-show="verifyForm.amount1.$error.number">This is not a valid number.</div>
-              </div>
-          </div>
-          <div class="col-xs-6">
-              <label for="inputDepositAmount2" class="">Deposit 2</label>
-              <input ng-model="deposit.amount2" name="amount2" type="number" id="inputDepositAmount2" class="form-control"
-                     placeholder="0.15"
-                     autofocus=""
-                     autocomplete="off"
-                     required="" />
-
-              <div ng-show="verifyForm.$submitted || verifyForm.amount2.$touched">
-                  <div ng-show="verifyForm.amount2.$error.required">Required.</div>
-                  <div ng-show="verifyForm.amount2.$error.number">This is not a valid number.</div>
               </div>
           </div>
       </div>

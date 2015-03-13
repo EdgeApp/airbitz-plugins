@@ -78,8 +78,7 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices', 'app
     $scope.verifyAccount = function() {
       DataFactory.verifyBankAccount(
         $scope.bankAccount.bankAccountUuid,
-        $scope.deposit.amount1,
-        $scope.deposit.amount2
+        $scope.deposit.amount1
       )
       .then(function() {
         $state.go('exchange');

@@ -225,8 +225,7 @@ var Glidera = (function () {
       return this._request(true, '/user/bankaccount/' + accountId + '/verify', {
           'method': 'POST',
           'data': {
-            'depositAmount1': amount1,
-            'depositAmount2': amount2
+            'depositAmount1': amount1
           },
           'callback': callback
       });
