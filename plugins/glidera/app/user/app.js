@@ -48,14 +48,14 @@ angular.module('app.user', ['app.dataFactory', 'app.constants'])
       $scope.account = UserFactory.getUserAccount();
 
       $scope.next = function() {
-        UserFactory.fetchUserAccountStatus().done(function(userStatus) {
+        UserFactory.fetchUserAccountStatus().then(function(userStatus) {
           if (userStatus.userEmailIsSetup) {
             $state.go('verifyInfo');
           } else {
             Airbitz.ui.showAlert('Verify Email', 'Please verify your email address before proceeding!');
             $state.go('verifyEmail');
           }
-        });
+        }, Error.reject);
       };
     }])
 .controller('verifyInfoController', ['$scope', '$state', 'Error', 'States', 'DataFactory', 'UserFactory',

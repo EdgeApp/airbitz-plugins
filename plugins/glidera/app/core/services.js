@@ -53,19 +53,19 @@ factory('UserFactory', [
     };
     factory.getUserAccountStatus = function() {
       return userStatus;
-    }
+    };
     factory.fetchUserAccountStatus = function() {
-      return $q(function(resolve, reject){
-        glideraFactory.userStatus(function(e,s,b) {
-          if (s == 200) {
-            userStatus = b;
-            Airbitz.core.writeData('userStatus', userStatus);
-            resolve(userStatus);
-          } else {
-            reject(b);
-          }
-        });
+      var d = $q.defer();
+      glideraFactory.userStatus(function(e,s,b) {
+        if (s == 200) {
+          userStatus = b;
+          Airbitz.core.writeData('userStatus', userStatus);
+          d.resolve(userStatus);
+        } else {
+          d.reject(b);
+        }
       });
+      return d.promise;
     };
     factory.getFullUserAccount = function() {
       return $q(function(resolve, reject) {
