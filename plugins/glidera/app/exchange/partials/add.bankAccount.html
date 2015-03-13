@@ -8,13 +8,13 @@
                name="description"
                type="text"
                id="inputBankAccountDescription"
-               class="form-control" 
+               class="form-control"
                placeholder="My Checking"
                autofocus=""
                autocomplete="off"
                required="" />
-        <div ng-show="form.$submitted || form.description.$touched">
-            <div ng-show="form.description.$error.required">Required.</div>
+        <div class="input-error" ng-show="form.$submitted || form.description.$touched">
+            <div ng-show="form.description.$error.required" class="label label-danger">Required.</div>
         </div>
       </div>
 
@@ -28,8 +28,8 @@
           <option value="SAVINGS">Savings</option>
         </select>
 
-        <div ng-show="form.$submitted || form.description.$touched">
-            <div ng-show="form.bankAccountType.$error.required">Required.</div>
+        <div class="input-error" ng-show="form.$submitted || form.description.$touched">
+            <div ng-show="form.bankAccountType.$error.required" class="label label-danger">Required.</div>
         </div>
       </div>
 
@@ -42,10 +42,10 @@
                class="form-control"
                placeholder="123456789"
                autofocus=""
-               autocomplete="off" 
+               autocomplete="off"
                required="" />
-        <div ng-show="form.$submitted || form.accountNumber.$touched">
-            <div ng-show="form.accountNumber.$error.required">Required.</div>
+        <div class="input-error" ng-show="form.$submitted || form.accountNumber.$touched">
+            <div ng-show="form.accountNumber.$error.required" class="label label-danger">Required.</div>
         </div>
       </div>
 
@@ -61,9 +61,9 @@
                autocomplete="off"
                required=""
                routing-number-validator />
-        <div ng-show="form.$submitted || form.routingNumber.$touched">
-            <div ng-show="form.routingNumber.$error.required">Required.</div>
-            <div ng-show="form.routingNumber.$error.routingNumber">This is not a valid routing number.</div>
+        <div class="input-error" ng-show="form.$submitted || form.routingNumber.$touched">
+            <div ng-show="form.routingNumber.$error.required" class="label label-danger">Required.</div>
+            <div ng-show="form.routingNumber.$error.routingNumber" class="label label-danger">Valid routing number required</div>
         </div>
       </div>
 
