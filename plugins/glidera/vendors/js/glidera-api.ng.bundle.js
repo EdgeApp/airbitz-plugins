@@ -54,26 +54,30 @@ d[5]);return b},e:function(a,b,c){a===s&&(a={});if(b===s)return a;for(var d in b
 sjcl.misc.cachedPbkdf2=function(a,b){var c=sjcl.misc.ca,d;b=b||{};d=b.iter||1E3;c=c[a]=c[a]||{};d=c[d]=c[d]||{firstSalt:b.salt&&b.salt.length?b.salt.slice(0):sjcl.random.randomWords(2,0)};c=b.salt===s?d.firstSalt:b.salt;d[c]=d[c]||sjcl.misc.pbkdf2(a,c,b.iter);return{key:d[c].slice(0),salt:c.slice(0)}};
 
 
-var module = {};
-var glideraInterface = angular.module('glidera', []);
-glideraInterface.factory('glideraApi', ['$http', function($http) {
-  Glidera.request = function(opts, callback) {
-    return $http(opts).success(function(data, status, header, config) {
-      callback(null, status, data);
-    }).error(function(data, status, header, config) {
-      callback(null, status, data);
-    });
-  };
-  Glidera.hmacsha256 = function(message, secret) {
-    var hmac = new sjcl.misc.hmac(sjcl.codec.utf8String.toBits(secret), sjcl.hash.sha256);
-    return sjcl.codec.hex.fromBits(hmac.encrypt(message));
-  };
-  Glidera.jsonParse = JSON.parse;
-  Glidera.prepareData = function(req, opts, json) {
-    req.data = opts.data;
-  };
-  return Glidera;
-}]);
+(function() {
+  angular.module('glidera', [])
+    .factory('glideraApi', ['$http', glideraService]);
+
+  function glideraService($http) {
+    return Glidera;
+
+    Glidera.request = function(opts, callback) {
+      return $http(opts).success(function(data, status, header, config) {
+        callback(null, status, data);
+      }).error(function(data, status, header, config) {
+        callback(null, status, data);
+      });
+    };
+    Glidera.hmacsha256 = function(message, secret) {
+      var hmac = new sjcl.misc.hmac(sjcl.codec.utf8String.toBits(secret), sjcl.hash.sha256);
+      return sjcl.codec.hex.fromBits(hmac.encrypt(message));
+    };
+    Glidera.jsonParse = JSON.parse;
+    Glidera.prepareData = function(req, opts, json) {
+      req.data = opts.data;
+    };
+  }
+})();
 
 
 var Glidera = (function () {
@@ -149,7 +153,7 @@ var Glidera = (function () {
     },
 
     hasRegistered: function() {
-      return (this.key && this.secret);
+      return this.key && this.secret ? true : false;
     },
 
     getBasicInfo: function(callback) {
@@ -221,7 +225,7 @@ var Glidera = (function () {
       });
     },
 
-    verifyBankAccount: function(accountId, amount1, amount2, callback) {
+    verifyBankAccount: function(accountId, amount1, callback) {
       return this._request(true, '/user/bankaccount/' + accountId + '/verify', {
           'method': 'POST',
           'data': {
