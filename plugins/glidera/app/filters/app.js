@@ -1,15 +1,7 @@
 angular.module('app.filters', []).
 filter('statusFilter', function() {
   return function(status) {
-    switch(status) {
-      case 'BASIC_INFO_NOT_VERIFIED':
-      case 'BASIC_INFO_VERIFIED_BANK_ACCOUNT_NEEDED':
-        return 'Not Verified';
-      case 'BASIC_INFO_VERIFIED':
-        return 'Verified';
-      default:
-        return 'ACCOUNT UNKNOWN';
-    }
+    return (status) ? 'Verified' : 'Unverified';
   };
 }).
 filter('titlecase', function() {

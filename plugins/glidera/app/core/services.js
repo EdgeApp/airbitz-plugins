@@ -253,10 +253,9 @@ factory('DataFactory', [
   };
 
   // MAPS TO: https://sandbox.glidera.com/documentation.xhtml#apiReference-verifyBankAccount
-  factory.verifyBankAccount = function(uuid, amount1, amount2, description) {
-    console.log(uuid + ' ' + amount1 + ' ' + amount2 + ' ' + description);
+  factory.verifyBankAccount = function(uuid, amount1) {;
     return $q(function(resolve, reject) {
-      glideraFactory.verifyBankAccount(uuid, amount1, amount2,
+      glideraFactory.verifyBankAccount(uuid, amount1,
       function(e, s, b) {
         (s == 200) ?  resolve(b) : reject(b);
       });

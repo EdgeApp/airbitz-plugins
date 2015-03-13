@@ -24,11 +24,16 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices', 'app
       $scope.bankAccounts = bankAccounts;
     }, Error.reject);
 
-    $scope.routeBankAccount = function(bankAccount) {
-      if(bankAccount.status == 'Pending') {
-        $state.go('exchangeVerifyBankAccount', {'uuid': bankAccount.bankAccountUuid});
+    $scope.routeBankAccount = function() {
+      if ($scope.bankAccounts.length) {
+        var bankAccount = $scope.bankAccounts[0]; // get first bank account if available
+        if(bankAccount.status == 'Pending') {
+          $state.go('exchangeVerifyBankAccount', {'uuid': bankAccount.bankAccountUuid});
+        } else {
+          $state.go('exchangeEditBankController', {'uuid': bankAccount.bankAccountUuid});
+        }
       } else {
-        $state.go('exchangeEditBankController', {'uuid': bankAccount.bankAccountUuid});
+        $state.go('exchangeAddBankAccount')
       }
     };
 

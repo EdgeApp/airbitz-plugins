@@ -4,20 +4,20 @@
       <li class="header list-group-item"><i class="fa fa-user"></i> {{ account.firstName || '' }} {{ account.lastName || '' }}
         <label
           class="label label-primary pull-right">
-          {{ account.status | statusFilter }}
+          {{ userStatus.userCanTransact | statusFilter }}
         </label>
       </li>
       <li ui-sref="verifyEmail" class="list-group-item">Email
-        <label class="label label-outline pull-right">{{ userStatus.userCanTransact }}</label>
+        <label class="label label-outline pull-right">{{ userStatus.userEmailIsSetup | statusFilter }}</label>
       </li>
       <li ui-sref="verifyPhone" class="list-group-item">Mobile Phone
-        <label class="label label-outline pull-right">{{ userStatus.userPhoneSetup }}</label>
+        <label class="label label-outline pull-right">{{ userStatus.userPhoneIsSetup | statusFilter }}</label>
       </li>
       <li ui-ref="account" class="list-group-item">Account Info
-        <label class="label label-outline pull-right">{{ userStatus.userBasicInfoSetup }}</label>
+        <label class="label label-outline pull-right">{{ userStatus.userBasicInfoIsSetup | statusFilter }}</label>
       </li>
-      <li ui-sref="exchangeAddBankAccount" class="list-group-item">Bank Account
-        <label class="label label-outline pull-right">{{ userStatus.userBankAccountIsSetup }}</label>
+      <li ng-click="routeBankAccount()" class="list-group-item">Bank Account
+        <label class="label label-outline pull-right">{{ userStatus.userBankAccountIsSetup | statusFilter }}</label>
       </li>
     </ul>
   </div>
