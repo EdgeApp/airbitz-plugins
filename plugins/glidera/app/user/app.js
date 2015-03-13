@@ -1,7 +1,7 @@
 
 angular.module('app.user', ['app.dataFactory', 'app.constants'])
-.controller('userAccountController', ['$scope', '$state', 'Error', 'DataFactory', 'States', 'UserFactory',
-  function ($scope, $state, Error, DataFactory, States, UserFactory) {
+.controller('userAccountController', ['$scope', '$state', 'Error', 'States', 'UserFactory',
+  function ($scope, $state, Error, States, UserFactory) {
     $scope.states = States.getStates();
     $scope.account = UserFactory.getUserAccount();
     $scope.hasRegistered = UserFactory.isRegistered();
@@ -21,8 +21,8 @@ angular.module('app.user', ['app.dataFactory', 'app.constants'])
       }, Error.reject);
     };
   }])
-.controller('signupController', ['$scope', '$state', 'Error', 'DataFactory', 'States', 'UserFactory',
-  function ($scope, $state, Error, DataFactory, States, UserFactory) {
+.controller('signupController', ['$scope', '$state', 'Error', 'States', 'UserFactory',
+  function ($scope, $state, Error, States, UserFactory) {
     Airbitz.ui.title('Glidera Signup');
     $scope.account = UserFactory.getUserAccount();
 
@@ -41,10 +41,9 @@ angular.module('app.user', ['app.dataFactory', 'app.constants'])
       }
     };
   }])
-.controller('verifyEmailController', ['$scope', '$state', 'Error', 'DataFactory', 'UserFactory',
-    function($scope, $state, Error, DataFactory, UserFactory) {
+.controller('verifyEmailController', ['$scope', '$state', 'Error', 'UserFactory',
+    function($scope, $state, Error, UserFactory) {
       Airbitz.ui.title('Glidera: Verify Email');
-      $scope.exchange = DataFactory.getExchange();
       $scope.account = UserFactory.getUserAccount();
 
       $scope.next = function() {
@@ -58,8 +57,8 @@ angular.module('app.user', ['app.dataFactory', 'app.constants'])
         }, Error.reject);
       };
     }])
-.controller('verifyInfoController', ['$scope', '$state', 'Error', 'States', 'DataFactory', 'UserFactory',
-  function($scope, $state, Error, States, DataFactory, UserFactory) {
+.controller('verifyInfoController', ['$scope', '$state', 'Error', 'States', 'UserFactory',
+  function($scope, $state, Error, States, UserFactory) {
     $scope.states = States.getStates();
     $scope.account = UserFactory.getUserAccount();
 
@@ -74,8 +73,6 @@ angular.module('app.user', ['app.dataFactory', 'app.constants'])
 .controller('verifyPhoneController', ['$scope', '$state', 'Error', 'DataFactory', 'UserFactory', 'TwoFactor',
     function($scope, $state, Error, DataFactory, UserFactory, TwoFactor) {
       Airbitz.ui.title('Glidera: Verify Phone');
-
-      $scope.exchange = DataFactory.getExchange();
       $scope.account = UserFactory.getUserAccount();
 
       var verifyCode = function() {
