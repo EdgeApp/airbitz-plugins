@@ -111,7 +111,7 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices', 'app
     $scope.deleteBankAccount = function() {
       TwoFactor.showTwoFactor(function() {
         DataFactory.deleteBankAccount($scope.bankAccount.bankAccountUuid).then(function() {
-          Airbitz.ui.showAlert('Bank Account Deleted', $scope.bankAccount + ' deleted');
+          Airbitz.ui.showAlert('Bank Account Deleted', $scope.bankAccount.description + ' deleted');
           $state.go('exchange');
         }, Error.reject);
       });
@@ -227,21 +227,27 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices', 'app
     })
 
   }]).
-  directive('accountSummary', [function() {
-    return {
-      templateUrl: 'app/user/partials/account.html'
-    };
-  }]);
-
-
-
-
-
-
-
-
-
-
-
-
-
+directive('accountSummary', [function() {
+  return {
+    templateUrl: 'app/user/partials/account.html'
+  };
+}]).
+directive('routingNumberValidator', [function() {
+  return {
+    require: 'ngModel',
+    link: function(scope, elm, attrs, ctrl) {
+      ctrl.$validators.routingNumber = function(mv) {
+        if (!mv || !mv.toString().match(/^\d{9}$/)) {
+          return false;
+        }
+        var s = mv.toString().split('').map(function(i) {
+          return parseInt(i);
+        });
+        checksum = (7 * (s[0] + s[3] + s[6]) +
+                    3 * (s[1] + s[4] + s[7]) +
+                    9 * (s[2] + s[5])) % 10;
+        return s[8] == checksum;
+      }
+    }
+  };
+}]);
