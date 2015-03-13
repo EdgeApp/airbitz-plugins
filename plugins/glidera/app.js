@@ -107,4 +107,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
       templateUrl: "app/error/partials/error.html",
       controller: "errorController",
     })
+}]).
+run(['$rootScope', 'DataFactory', function ($rootScope, DataFactory) {
+  $rootScope.exchange = DataFactory.getExchange();
 }]);
