@@ -18,6 +18,12 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
       templateUrl: "app/user/partials/signup.html",
       controller: "signupController",
     })
+    // route for signup
+    .state("apiKeys", {
+      url: "/keys/",
+      templateUrl: "app/user/partials/apikeys.html",
+      controller: "apiKeyController",
+    })
     // route for email verification
     .state("verifyEmail", {
       url: "/signup/verify/email/",

@@ -1,0 +1,45 @@
+
+<div class="row" style="margin-top: 20px;" >
+  <form name="form" class="exchange-sign-up col-xs-12" novalidate>
+
+    <div class="form-group">
+      <label for="key" class="">Name</label>
+      <input ng-model="account.key" name="key" type="text" id="key" class="form-control" 
+             placeholder="Glidera Key"
+             autofocus="true"
+             autocomplete="off"
+             required="" />
+      <div ng-show="form.$submitted || form.key.$touched">
+        <div ng-show="form.key.$error.required">Required.</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="secret" class="sr-only">Last</label>
+      <input ng-model="account.secret" name="secret" type="text" id="secret" class="form-control" 
+             placeholder="Glidera Secret" 
+             autofocus=""
+             autocomplete="off"
+             required="" />
+      <div ng-show="form.$submitted || form.secret.$touched">
+        <div ng-show="form.secret.$error.required">Required.</div>
+      </div>
+    </div>
+
+    <div class="row text-right" style="margin-top: 40px;">
+      <div class="col-xs-12">
+        <button type="button" 
+                ng-click="deleteAccount()" 
+                class="btn btn-lg btn-danger pull-left">Remove Account</button>
+        <button type="button" 
+                ng-click="cancel()" 
+                class="btn btn-lg btn-link">Cancel</button>
+        <button type="submit"
+                ng-disabled="form.$invalid" 
+                ng-click="submit()" 
+                class="btn btn-lg btn-success">Authenticate</button>
+      </div>
+    </div>
+
+  </form>
+</div>

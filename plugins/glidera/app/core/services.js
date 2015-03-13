@@ -27,6 +27,10 @@ factory('UserFactory', [
     factory.getUserAccount = function() {
       return account;
     };
+    factory.clearUser = function() {
+      account = {};
+      Airbitz.core.writeData('account', {});
+    };
     factory.registerUser = function(firstName, lastName, email) {
       var d = $q.defer();
       glideraFactory.register(firstName, lastName, email, '', function(success, b) {
