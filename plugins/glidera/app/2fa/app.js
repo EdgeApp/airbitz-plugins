@@ -2,8 +2,10 @@
   'use strict';
 
   angular.module('app.2fa', ['app.dataFactory', 'app.glidera'])
-    .controller('verify2faController', ['$scope', '$state', '$stateParams', 'DataFactory', 'UserFactory', 'TwoFactor', otpController])
-    .factory('TwoFactor', ['$state', '$q', 'glideraFactory', otpFactory]);
+    .controller('verify2faController',
+      ['$scope','$state', '$stateParams', 'DataFactory', 'UserFactory', 'TwoFactor', otpController])
+    .factory('TwoFactor',
+      ['$state', '$q', 'glideraFactory', otpFactory]);
 
   function otpController($scope, $state, $stateParams, DataFactory, UserFactory, TwoFactor) {
     Airbitz.ui.title('2 Factor Verification');
@@ -12,13 +14,14 @@
     $scope.hasNumber = false;
 
     var requestCode = function() {
-      TwoFactor.requestCode().then(function(hasNumber) {
-        if ($stateParams.confirmNumber == 'confirm') {
-          $scope.hasNumber = hasNumber;
+      UserFactory.fetchUserAccountStatus().then(function(userStatus) {
+        if ($stateParams.confirmNumber == 'confirm' && userStatus.userPhoneIsSetup) {
+          $scope.hasNumber = true;
         }
-      }, function(error) {
-        $state.go('exchange');
-        Airbitz.ui.showAlert('Error', 'Unable to request 2fa token. Please retry again later.');
+        TwoFactor.requestCode().then(function() { }, function(error) {
+          $state.go('exchange');
+          Airbitz.ui.showAlert('Error', 'Unable to request 2fa token. Please retry again later.');
+        });
       });
     };
     $scope.submit2FA = function() {
@@ -60,23 +63,13 @@
           $state.go('verify2FA', {'confirmNumber': ''});
         }
       };
-      factory.checkPhone = function() {
-        var deferred = $q.defer();
-        glideraFactory.getPhoneNumber(function(e, r, b) {
-          200 == r ? deferred.resolve(b) : deferred.reject(b);
-        });
-        return deferred.promise;
-      };
       factory.requestCode = function() {
-        return factory.checkPhone().then(function(data) {
-          var hasNumber = data.phoneNumber !== null ? true : false;
-          var d = $q.defer();
-          glideraFactory.getTwoFactorCode(function(e, r, b) {
-            that.lastFetch = new Date();
-            r >= 200 && r < 300 ? d.resolve(hasNumber) : d.reject(b);
-          });
-          return d.promise;
+        var d = $q.defer();
+        glideraFactory.getTwoFactorCode(function(e, r, b) {
+          that.lastFetch = new Date();
+          r >= 200 && r < 300 ? d.resolve(b) : d.reject(b);
         });
+        return d.promise;
       };
       factory.finish = function(c, o) {
         that.code = c;

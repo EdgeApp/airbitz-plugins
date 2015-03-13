@@ -48,15 +48,12 @@ angular.module('app.user', ['app.dataFactory', 'app.constants'])
       $scope.account = UserFactory.getUserAccount();
 
       $scope.next = function() {
-        Airbitz.ui.title('Saving...');
-        UserFactory.getFullUserAccount().then(function() {
-          // If the email is successfully verified, continue
-          $state.go('verifyInfo');
-        }, function(b) {
-          if (b.code && b.code == "ConflictException") {
-            Error.reject(b);
-          } else {
+        UserFactory.fetchUserAccountStatus().done(function(userStatus) {
+          if (userStatus.userEmailIsSetup) {
             $state.go('verifyInfo');
+          } else {
+            Airbitz.ui.showAlert('Verify Email', 'Please verify your email address before proceeding!');
+            $state.go('verifyEmail');
           }
         });
       };
@@ -74,8 +71,8 @@ angular.module('app.user', ['app.dataFactory', 'app.constants'])
       }, Error.reject);
     };
   }])
-.controller('verifyPhoneController', ['$scope', '$state', '$stateParams', 'Error', 'DataFactory', 'UserFactory', 'TwoFactor',
-    function($scope, $state, $stateParams, Error, DataFactory, UserFactory, TwoFactor) {
+.controller('verifyPhoneController', ['$scope', '$state', 'Error', 'DataFactory', 'UserFactory', 'TwoFactor',
+    function($scope, $state, Error, DataFactory, UserFactory, TwoFactor) {
       Airbitz.ui.title('Glidera: Verify Phone');
 
       $scope.exchange = DataFactory.getExchange();
@@ -88,11 +85,7 @@ angular.module('app.user', ['app.dataFactory', 'app.constants'])
       };
       $scope.submitPhone = function(){
         DataFactory.addPhoneNumber($scope.account.phone).then(function() {
-          if ($stateParams.change) {
-            TwoFactor.showTwoFactor(verifyCode);
-          } else {
-            TwoFactor.confirmTwoFactor(verifyCode);
-          }
+          TwoFactor.confirmTwoFactor(verifyCode);
         }, Error.reject);
       };
     }]).
