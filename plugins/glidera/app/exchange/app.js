@@ -10,6 +10,7 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices', 'app
     Airbitz.ui.title('Glidera');
     $scope.exchange = DataFactory.getExchange();
     $scope.account = UserFactory.getUserAccount();
+    $scope.userStatus = UserFactory.getUserAccountStatus();
     UserFactory.fetchUserAccountStatus().then(function(b) {
       $scope.userStatus = b;
     });

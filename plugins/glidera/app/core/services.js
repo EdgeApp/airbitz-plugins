@@ -45,10 +45,25 @@ factory('UserFactory', [
       });
       return d.promise;
     };
+    var userStatus = Airbitz.core.readData('userStatus') || {
+      'userCanTransact': false,
+      'userEmailIsSetup': false,
+      'userBankAccountIsSetup': false,
+      'userBasicInfoIsSetup': false
+    };
+    factory.getUserAccountStatus = function() {
+      return userStatus;
+    }
     factory.fetchUserAccountStatus = function() {
       return $q(function(resolve, reject){
         glideraFactory.userStatus(function(e,s,b) {
-          (s === 200) ? resolve(b) : reject(b);
+          if (s == 200) {
+            userStatus = b;
+            Airbitz.core.writeData('userStatus', userStatus);
+            resolve(userStatus);
+          } else {
+            reject(b);
+          }
         });
       });
     };
