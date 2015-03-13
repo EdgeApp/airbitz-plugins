@@ -256,7 +256,7 @@ factory('DataFactory', [
   factory.verifyBankAccount = function(uuid, amount1, amount2, description) {
     console.log(uuid + ' ' + amount1 + ' ' + amount2 + ' ' + description);
     return $q(function(resolve, reject) {
-      glideraFactory.verifyBankAccount(uuid, amount1, amount2, description,
+      glideraFactory.verifyBankAccount(uuid, amount1, amount2,
       function(e, s, b) {
         (s == 200) ?  resolve(b) : reject(b);
       });

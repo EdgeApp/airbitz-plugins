@@ -17,13 +17,15 @@
     <ul class="exchange-payment-options list-group" ng-model="bankAccounts">
       <li class="list-group-item header"><i class="fa fa-bank"></i>Payment Methods <button ng-if="bankAccounts.length == 0" ng-click="addBankAccount()" class="btn btn-primary btn-xs pull-right">ADD NEW</button></li>
 
-      <li ui-sref="exchangeEditBankController({uuid: a.bankAccountUuid})" class="list-group-item" ng-repeat="a in bankAccounts">
+      <li ng-click="routeBankAccount(bankAccount)"
+          class="list-group-item"
+          ng-repeat="bankAccount in bankAccounts">
         <div class="row">
-          <div class="col-xs-12">{{ a.description }}</div>
+          <div class="col-xs-12">{{ bankAccount.description }}</div>
         </div>
         <div class="row">
           <div class="col-xs-12">
-            <small>{{a.accountNumber}}</small> <label class="label label-outline pull-right">{{ a.status || 'UNKNOWN' }}</label>
+            <small>{{bankAccount.accountNumber}}</small> <label class="label label-outline pull-right">{{ bankAccount.status || 'UNKNOWN' }}</label>
           </div>
         </div>
       </li>

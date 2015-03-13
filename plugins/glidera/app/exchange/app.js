@@ -26,6 +26,14 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices', 'app
       Airbitz.ui.showAlert('Error', 'TODO: Error! Error!');
     });
 
+    $scope.routeBankAccount = function(bankAccount) {
+      if(bankAccount.status == 'Pending') {
+        $state.go('exchangeVerifyBankAccount', {'uuid': bankAccount.bankAccountUuid});
+      } else {
+        $state.go('exchangeEditBankController', {'uuid': bankAccount.bankAccountUuid});
+      }
+    };
+
     $scope.buy = function(){
       DataFactory.getOrder(true);
       $state.go('exchangeOrder', {'orderAction': 'buy'});
@@ -40,7 +48,7 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices', 'app
       $state.go('exchangeAddBankAccount');
     };
   }])
-.controller('addAccountController',
+.controller('addBankAccountController',
   ['$scope', '$state', 'DataFactory', 'UserFactory', 'TwoFactor',
   function ($scope, $state, DataFactory, UserFactory, TwoFactor) {
     Airbitz.ui.title('Add Bank Account');
@@ -59,6 +67,29 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices', 'app
       });
     };
   }])
+.controller('verifyBankAccountController',
+  ['$scope', '$state', '$stateParams', 'Error', 'DataFactory', 'UserFactory', 'TwoFactor',
+  function ($scope, $state, $stateParams, Error, DataFactory, UserFactory, TwoFactor) {
+    Airbitz.ui.title('Verify Bank Account');
+    $scope.account = UserFactory.getUserAccount();
+    $scope.bankAccount = DataFactory.getBankAccount($stateParams.uuid);
+
+    DataFactory.fetchBankAccount($stateParams.uuid).then(function(bankAccount) {
+        $scope.bankAccount = bankAccount;
+      }, Error.reject);
+
+    $scope.deposit = {};
+    $scope.verifyAccount = function() {
+      DataFactory.verifyBankAccount(
+        $scope.bankAccount.bankAccountUuid,
+        $scope.deposit.amount1,
+        $scope.deposit.amount2
+      )
+      .then(function() {
+        $state.go('exchange');
+      }, Error.reject);
+    };
+  }])
 .controller('editBankAccountController',
   ['$scope', '$state', '$stateParams', 'Error', 'DataFactory', 'UserFactory', 'TwoFactor',
   function ($scope, $state, $stateParams, Error, DataFactory, UserFactory, TwoFactor) {
@@ -70,15 +101,6 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices', 'app
     }, function() {
       Airbitz.ui.showAlert('Error', 'TODO: Error! Error!');
     });
-
-    $scope.deposit = {};
-    $scope.verifyAccount = function() {
-      DataFactory.verifyBankAccount(
-          $scope.bankAccount.bankAccountUuid, $scope.deposit.amount1,
-          $scope.deposit.amount2, $scope.bankAccount.description).then(function() {
-        $state.go('exchange');
-      }, Error.reject);
-    };
 
     $scope.saveBankAccount = function() {
       DataFactory.updateBankAccount($scope.bankAccount).then(function() {

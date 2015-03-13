@@ -52,7 +52,13 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
     .state("exchangeAddBankAccount", {
       url: "/exchange/add/bankAccount/",
       templateUrl: "app/exchange/partials/add.bankAccount.html",
-      controller: "addAccountController",
+      controller: "addBankAccountController",
+    })
+    // route for verifying a bank account
+    .state("exchangeVerifyBankAccount", {
+      url: "/exchange/verify/:uuid/",
+      templateUrl: "app/exchange/partials/verify.bankAccount.html",
+      controller: "verifyBankAccountController",
     })
     .state("exchangeEditBankController", {
       url: "/exchange/edit/bankAccount/:uuid/",
