@@ -135,7 +135,7 @@ factory('DataFactory', [
   factory.getTransactions = function() {
     return $q(function(resolve, reject) {
       glideraFactory.transactions(function(e, s, b) {
-        if (e === null) {
+        if (s >= 200 && s < 300) {
           resolve(b.transactions);
           console.log(b.transactions);
 
@@ -191,12 +191,12 @@ factory('DataFactory', [
   factory.fetchBankAccounts = function() {
     return $q(function(resolve, reject) {
       glideraFactory.getBankAccounts(function(e, s, b) {
-        if (e === null) {
+        if (s >= 200 && s < 300) {
           bankAccounts = b.bankAccounts; //cache bank accounts
           Airbitz.core.writeData('bankAccounts', bankAccounts);
           resolve(b.bankAccounts);
         } else {
-          reject();
+          reject(b);
         }
       });
     });
@@ -210,7 +210,7 @@ factory('DataFactory', [
   factory.fetchBankAccount = function(uuid) {
     return $q(function(resolve, reject) {
       glideraFactory.getBankAccount(uuid, function(e, s, b) {
-        if (e === null) {
+        if (s >= 200 && s < 300) {
           resolve(b);
         } else {
           reject();
