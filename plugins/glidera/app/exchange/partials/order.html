@@ -8,8 +8,10 @@
   </div>
 
   <div class="text-right col-xs-6">
-    <div price-update price-type="{{ order.orderAction }}"></div>
-    <div price-expires price-type="{{ order.orderAction }}"></div>
+    <div class="live-ticker">
+      <div price-update price-type="{{ order.orderAction }}"></div>
+      <div price-expires price-type="{{ order.orderAction }}"></div>
+    </div>
   </div>
 </div>
 
@@ -28,10 +30,12 @@
           </select>
         </div>
 
-        <div class="order-limits col-xs-6">
+        <div class="col-xs-6">
           <label>Your {{order.orderAction | titlecase}} Limits</label>
-          <div ng-show="{{order.orderAction=='buy'}}" buy-limits></div>
-          <div ng-show="{{order.orderAction=='sell'}}" sell-limits></div>
+          <div class="order-limits">
+            <div ng-show="{{order.orderAction=='buy'}}" buy-limits></div>
+            <div ng-show="{{order.orderAction=='sell'}}" sell-limits></div>
+          </div>
         </div>
       </div>
 

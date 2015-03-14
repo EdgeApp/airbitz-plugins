@@ -8,11 +8,15 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices', 'app
 .controller('dashboardController', ['$scope', '$state', 'Error', 'DataFactory', 'UserFactory', 'Limits',
   function ($scope, $state, Error, DataFactory, UserFactory, Limits) {
     Airbitz.ui.title('Glidera');
+    // set variables that might be cached locally to make sure they load faster if available
     $scope.exchange = DataFactory.getExchange();
     $scope.account = UserFactory.getUserAccount();
     $scope.userStatus = UserFactory.getUserAccountStatus();
+    $scope.showOptions = !$scope.userStatus.userCanTransact;
+
     UserFactory.fetchUserAccountStatus().then(function(b) {
       $scope.userStatus = b;
+      $scope.showOptions = !$scope.userStatus.userCanTransact;
     });
 
     $scope.limits = Limits.getLimits();
@@ -48,7 +52,6 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices', 'app
       $state.go('exchangeOrder', {'orderAction': 'sell'});
     };
 
-    $scope.showOptions = false;
     $scope.showAccountOptions = function() {
       $scope.showOptions = !$scope.showOptions;
     };

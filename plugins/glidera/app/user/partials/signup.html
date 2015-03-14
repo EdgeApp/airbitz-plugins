@@ -4,7 +4,7 @@
 
     <div class="form-group">
       <label for="inputFirstName" class="">Name</label>
-      <input ng-model="account.firstName" name="firstName" type="text" id="inputFirstName" class="form-control" 
+      <input ng-model="account.firstName" name="firstName" type="text" id="inputFirstName" class="form-control"
              placeholder="First Name"
              autofocus="true"
              autocomplete="off"
@@ -16,8 +16,8 @@
 
     <div class="form-group">
       <label for="inputLastName" class="sr-only">Last</label>
-      <input ng-model="account.lastName" name="lastName" type="text" id="inputLastName" class="form-control" 
-             placeholder="Last Name" 
+      <input ng-model="account.lastName" name="lastName" type="text" id="inputLastName" class="form-control"
+             placeholder="Last Name"
              autofocus=""
              autocomplete="off"
              required="" />
@@ -28,7 +28,7 @@
 
     <div class="form-group">
       <label for="inputEmail" class="">Email</label>
-      <input ng-model="account.email" name="email" type="email" id="inputEmail" class="form-control" 
+      <input ng-model="account.email" name="email" type="email" id="inputEmail" class="form-control"
              placeholder="user@email.com"
              autofocus=""
              autocomplete="off"
@@ -41,19 +41,19 @@
 
     <div class="row text-right" style="margin-top: 40px;">
       <div class="col-xs-12">
-        <button type="button" 
-                ng-click="cancelSignup()" 
+        <button type="button"
+                ng-click="cancelSignup()"
                 class="btn btn-lg btn-link">Cancel</button>
         <button type="submit"
-                ng-disabled="form.$invalid" 
-                ng-click="submitSignUp()" 
+                ng-disabled="form.$invalid"
+                ng-click="submitSignUp()"
                 class="btn btn-lg btn-success">Next</button>
       </div>
     </div>
 
     <div class="row text-right" style="margin-top: 40px;">
       <div class="col-xs-12">
-        <button type="button" ui-sref="apiKeys" class="btn btn-sm btn-link">Keys</button>
+        <button type="button" ui-sref="apiKeys" class="btn btn-sm btn-primary"><i class="fa fa-key"></i> Keys</button>
       </div>
     </div>
 

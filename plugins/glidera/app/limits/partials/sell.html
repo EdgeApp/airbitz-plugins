@@ -1,6 +1,8 @@
-<div class="limit-daily-buy">
-  <span class="limit-label">Daily: </span><span class="limit-data">{{ limits.dailySellRemaining | currency:"$" }}</span>
-</div>
-<div class="limit-daily-buy">
-  <span class="limit-label">Monthly: </span><span class="limit-data">{{ limits.monthlySellRemaining | currency:"$" }}</span>
+<div class="sell-limits">
+  <div class="limit-sell-daily">
+  <span class="limit-label">Daily</span> <span class="limit-data">{{ limits.dailySellRemaining | currency:"$" }}</span>
+  </div>
+  <div class="limit-sell-monthly">
+    <span class="limit-label">Monthly</span> <span class="limit-data">{{ limits.monthlySellRemaining | currency:"$" }}</span>
+  </div>
 </div>

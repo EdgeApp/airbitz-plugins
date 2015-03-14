@@ -1,15 +1,15 @@
 <div class="exchange-ticker row">
-  <div class="text-right col-xs-12">
+  <div class="live-ticker text-right col-xs-12">
     <div price-update price-type="{{ order.orderAction }}"></div>
   </div>
 </div>
 
 <div ng-if="userStatus.userCanTransact" class="buy-sell row">
   <div class="col-xs-6">
-    <button ng-click="buy()" class="buy-button btn-success btn-lg btn-block btn"><i class="fa fa-bitcoin"></i> BUY</button>
+    <button ng-click="buy()" class="buy-button btn-success btn-lg btn-block btn">BUY</button>
   </div>
   <div class="col-xs-6">
-    <button ng-click="sell()" class="sell-button btn-primary btn-lg btn-block btn"><i class="fa fa-dollar"></i> SELL</button>
+    <button ng-click="sell()" class="sell-button btn-primary btn-lg btn-block btn">SELL</button>
   </div>
 </div>
 
@@ -39,15 +39,14 @@
   </div>
 </div> -->
 
-<div class="row">
-  <div class="col-xs-12">
-    <button type="button" ui-sref="exchangeTransactions" class="btn btn-lg btn-block btn-info">Transactions</button>
-  </div>
-</div>
+<hr />
 
-<div class="row" style="margin-top: 10px;">
-  <div class="col-xs-12">
-    <button type="button" ui-sref="apiKeys" class="btn btn-lg btn-block btn-default">Keys</button>
+<div class="row">
+  <div class="col-xs-6">
+    <button type="button" ui-sref="exchangeTransactions" class="btn btn-block btn-info">Log</button>
+  </div>
+  <div class="col-xs-6">
+    <button type="button" ui-sref="apiKeys" class="btn btn-block btn-danger">Keys</button>
   </div>
 </div>
 
