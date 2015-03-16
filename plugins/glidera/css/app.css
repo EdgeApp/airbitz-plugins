@@ -86,6 +86,7 @@ body hr.page {
 }
 body input[type='text'],
 body input[type='number'],
+body input[type='tel'],
 body input[type='email'] {
   background: rgba(0, 0, 0, 0.2);
   color: white;
@@ -133,7 +134,15 @@ body .table.table-no-border th,
 body .table.table-no-border td {
   border-top: none;
 }
-body .input-group input[type="number"] {
+body .form-control::-webkit-input-placeholder {
+  color: #aaa;
+}
+body .form-group input[type="text"],
+body .input-group input[type="text"],
+body .form-group input[type="number"],
+body .input-group input[type="number"],
+body .form-group input[type="tel"],
+body .input-group input[type="tel"] {
   display: block;
   width: 100%;
   padding: 6px 12px;
@@ -144,37 +153,56 @@ body .input-group input[type="number"] {
   -o-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
   transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
 }
-body .input-group input[type=text].large,
-body .input-group input[type=number].large {
+body .form-group input[type="text"].large,
+body .input-group input[type="text"].large,
+body .form-group input[type="number"].large,
+body .input-group input[type="number"].large,
+body .form-group input[type="tel"].large,
+body .input-group input[type="tel"].large {
+  height: auto;
   padding: 12px 12px;
   font-size: 180%;
   border: none;
 }
-body .input-group input[type=text].left-square,
-body .input-group input[type=number].left-square {
+body .form-group input[type="text"].left-square,
+body .input-group input[type="text"].left-square,
+body .form-group input[type="number"].left-square,
+body .input-group input[type="number"].left-square,
+body .form-group input[type="tel"].left-square,
+body .input-group input[type="tel"].left-square {
   border-left: none;
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
 }
-body .input-group input[type=text].right-square,
-body .input-group input[type=number].right-square {
+body .form-group input[type="text"].right-square,
+body .input-group input[type="text"].right-square,
+body .form-group input[type="number"].right-square,
+body .input-group input[type="number"].right-square,
+body .form-group input[type="tel"].right-square,
+body .input-group input[type="tel"].right-square {
   border-right: none;
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
 }
-body .input-group input[type=text]:focus,
-body .input-group input[type=number]:focus {
+body .form-group input[type="text"]:focus,
+body .input-group input[type="text"]:focus,
+body .form-group input[type="number"]:focus,
+body .input-group input[type="number"]:focus,
+body .form-group input[type="tel"]:focus,
+body .input-group input[type="tel"]:focus {
   outline: none;
   border: none !important;
   -webkit-box-shadow: none !important;
   -moz-box-shadow: none !important;
   box-shadow: none !important;
 }
+body .form-group .input-group-addon,
 body .input-group .input-group-addon {
   background: rgba(0, 0, 0, 0.2);
   color: white;
   border: 1px solid rgba(255, 255, 255, 0.5);
 }
+body .form-group .input-group-addon.large,
 body .input-group .input-group-addon.large {
   font-size: 180%;
   border: none;
@@ -335,6 +363,9 @@ body .exchange-balances {
 }
 body .exchange-user-account {
   margin-top: 30px;
+  margin-bottom: 20px;
+}
+body .exchange-user-account .account-message {
   margin-bottom: 20px;
 }
 body .exchange-user-account .list-group-item small {

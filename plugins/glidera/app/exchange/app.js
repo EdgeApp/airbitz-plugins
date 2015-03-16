@@ -5,8 +5,8 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices', 'app
     $scope.exchange = DataFactory.getExchange();
     $scope.account = UserFactory.getUserAccount();
   }])
-.controller('dashboardController', ['$scope', '$state', 'Error', 'DataFactory', 'UserFactory', 'Limits',
-  function ($scope, $state, Error, DataFactory, UserFactory, Limits) {
+.controller('dashboardController', ['$scope', '$sce', '$state', 'Error', 'DataFactory', 'UserFactory', 'Limits',
+  function ($scope, $sce, $state, Error, DataFactory, UserFactory, Limits) {
     Airbitz.ui.title('Glidera');
     // set variables that might be cached locally to make sure they load faster if available
     $scope.exchange = DataFactory.getExchange();
@@ -40,6 +40,32 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices', 'app
       } else {
         $state.go('exchangeAddBankAccount')
       }
+    };
+
+    $scope.regMessage = function() {
+      var msg = '';
+      var counter = 0;
+
+      if (!$scope.userStatus.userEmailIsSetup) {
+        counter++;
+        msg += '<h5><strong>' + counter + "</strong>. Please verify email</h5>";
+      }
+      if (!$scope.userStatus.userBasicInfoIsSetup) {
+        counter++;
+        msg += '<h5><strong>' + counter + "</strong>. Please verify account info</h5>";
+      }
+      if (!$scope.userStatus.userPhoneIsSetup) {
+        counter++;
+        msg += '<h5><strong>' + counter + "</strong>. Please verify mobile phone</h5>";
+      }
+      if (!$scope.userStatus.userBankAccountIsSetup) {
+        counter++;
+        msg += '<h5><strong>' + counter + "</strong>. Please verify bank account & deposit amount</h5>";
+      }
+      if (msg !== '') {
+        msg = '<h4 style="margin-top: 0;">To Buy or Sell Bitcoin:</h4>' + msg;
+      }
+      return $sce.trustAsHtml(msg);
     };
 
     $scope.buy = function(){

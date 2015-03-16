@@ -57,7 +57,6 @@ input[type=number]::-webkit-inner-spin-button {
 }
 
 
-
 // setup main containers
 body {
 
@@ -122,9 +121,11 @@ body {
 
   input[type='text'],
   input[type='number'],
+  input[type='tel'],
   input[type='email'] {
     .glass-input;
   }
+
   .container {
     padding-bottom: 20px;
 
@@ -185,9 +186,18 @@ body {
     }
   }
 
+  .form-control {
+    &::-webkit-input-placeholder {
+      color: #aaa;
+    }
+  }
+
+  .form-group,
   .input-group {
     // substitute for form-control to prevent number fields from breaking due to height
-    input[type="number"] {
+    input[type="text"],
+    input[type="number"],
+    input[type="tel"] {
       display: block;
       width: 100%;
       // height: 34px; // do not put height on number field with font size increased
@@ -200,9 +210,12 @@ body {
       transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
     }
 
-    input[type=text],
-    input[type=number] {
+    input[type="text"],
+    input[type="number"],
+    input[type="tel"] {
+
       &.large {
+        height: auto;
         padding: 12px 12px;
         font-size: 180%;
         border: none;
@@ -410,6 +423,9 @@ body {
     margin-top: 30px;
     margin-bottom: 20px;
 
+    .account-message {
+      margin-bottom: 20px;
+    }
     .list-group-item {
       small {
         margin-left: 12px;
