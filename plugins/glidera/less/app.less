@@ -6,13 +6,13 @@
 @ab-green: #80c342;
 @ab-green-gray: #7e9867;
 @ab-green-light: #44D417;
-@ab-green-dark: #437e0d;
+@ab-green-dark: #42832E;
 
 @ab-gray: #999;
-@ab-gray-dark: #333;
+@ab-gray-dark: #555;
 @ab-gray-light: #efefef;
 
-@ab-red: #ff7777;
+@ab-red: #D9534F;
 
 // mix-ins
 .shadow-text {
@@ -25,17 +25,23 @@
   border: 1px solid rgba(255,255,255,.5);
 }
 .glass-input {
-  background: rgba(0,0,0,.5);
+  background: rgba(0,0,0,.2);
   color: white;
   .glass-border;
 }
 .data-container {
-  background-color: rgba(0,0,0,.2);
+  background-color: rgba(255,255,255,.2);
   padding: 6px 5px;
   border-radius: 5px;
   .glass-border;
 }
-
+.noglow {
+  outline: none;
+  border: none !important;
+  -webkit-box-shadow: none !important;
+  -moz-box-shadow: none !important;
+  box-shadow: none !important;
+}
 
 /*
     FIXES FOR WEIRD STUFF
@@ -145,6 +151,11 @@ body {
       .shadow-text;
       box-shadow: none;
     }
+
+    &:focus,
+    &:active:focus {
+      outline: none;
+    }
   }
 
   .help-block {
@@ -174,26 +185,75 @@ body {
     }
   }
 
+  .input-group {
+    // substitute for form-control to prevent number fields from breaking due to height
+    input[type="number"] {
+      display: block;
+      width: 100%;
+      // height: 34px; // do not put height on number field with font size increased
+      padding: 6px 12px;
+      border-radius: 4px;
+      -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+      box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+      -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+      -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+      transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    }
+
+    input[type=text],
+    input[type=number] {
+      &.large {
+        padding: 12px 12px;
+        font-size: 180%;
+        border: none;
+      }
+      &.left-square {
+        border-left: none;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+      }
+      &.right-square {
+        border-right: none;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+      }
+      &:focus {
+        .noglow;
+      }
+    }
+
+    .input-group-addon {
+      .glass-input;
+
+      &.large {
+        font-size: 180%;
+        border: none;
+      }
+    }
+  }
+
+
+
   .list-group {
 
     .list-group-item,
     a.list-group-item {
-      color: white;
-      background: rgba(0,0,0,.2);
+      color: @ab-blue-dark;
+      background: rgba(255,255,255,.2);
       font-size: 20px;
       .glass-border;
       cursor: pointer;
       &.header {
-        background-color: rgba(0,0,0,.5);
-        color: white;
+        background-color: rgba(255,255,255,.5);
+        color: @ab-blue-dark;
 
         &:hover, &:active, &:focus {
-          background-color: rgba(0,0,0,.5);
+          background-color: rgba(255,255,255,.5);
         }
       }
 
       &:hover, &:active, &:focus {
-        background-color: rgba(0,0,0,.5);
+        background-color: rgba(255,255,255,.5);
       }
 
       &:hover, &:active, &:focus, &:visited {
@@ -260,10 +320,6 @@ body {
     .shadow-text;
   }
 
-  .limit-data{
-    .shadow-text;
-  }
-
   .buy-limits {
     float: left;
     width: 100%;
@@ -276,7 +332,7 @@ body {
     .limit-data {
       display: inline-block;
       float: right;
-      color: @ab-green-light;
+      color: @ab-green-dark;
     }
     .limit-buy-daily,
     .limit-buy-monthly {
@@ -296,7 +352,7 @@ body {
     .limit-data {
       display: inline-block;
       float: right;
-      color: @ab-blue-light;
+      color: @ab-blue-dark;
     }
     .limit-sell-daily,
     .limit-sell-monthly {
@@ -399,34 +455,6 @@ body {
   // exchange buy sell interface
   .exchange-buy-sell-interface {
 
-    // substitute for form-control to prevent number fields from breaking due to height
-    input[type="number"] {
-      display: block;
-      width: 100%;
-      // height: 34px; // do not put height on number field with font size increased
-      padding: 6px 12px;
-      border-radius: 4px;
-      -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
-      box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
-      -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
-      -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-      transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-    }
-
-    input[type=text],
-    input[type=number] {
-      &.large {
-        padding: 12px 12px;
-        font-size: 180%;
-        border-top-left-radius: 0;
-        border-bottom-left-radius: 0;
-      }
-    }
-
-    .input-group-addon {
-      font-size: 180%;
-      .glass-input;
-    }
   }
 
   .order-limits {
@@ -498,15 +526,16 @@ body {
   }
 
   .live-ticker {
-    .shadow-text;
 
     .live-price-rate {
       font-size: 17px;
 
-      .price-rate-label {}
+      .price-rate-label {
+        .shadow-text;
+      }
       .price-rate-data {
         font-weight: bold;
-        color: @ab-green-light;
+        color: @ab-green-dark;
       }
     }
 
@@ -514,7 +543,7 @@ body {
       .expiration-label {}
       .expiration-data {
         font-weight: bold;
-        color: @ab-blue-light;
+        color: @ab-gray-dark;
       }
     }
   }
