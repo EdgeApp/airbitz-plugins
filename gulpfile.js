@@ -11,9 +11,9 @@ var plugins = fs.readdirSync('plugins');
 var core = function(bridge) {
   return gulp.src(['./lib/vendor/js/jquery-2.1.3.min.js',
             './lib/vendor/js/bootstrap.min.js',
-            './lib/vendor/js/qrcode.min.js',
-            bridge,
-            './lib/js/airbitz-core.js'])
+            './lib/vendor/js/qrcode.min.js'].
+            concat(bridge).concat(
+            ['./lib/js/airbitz-core.js']))
     .pipe(concat('core.js'))
     .pipe(gulp.dest('./build/intermediates/js'));
 }
@@ -25,11 +25,11 @@ gulp.task('corestyle', function() {
 });
 
 gulp.task('coredev', ['corestyle'], function() {
-  return core('./lib/js/airbitz-bridge-dev.js');
+  return core(['./lib/js/config.js', './lib/js/airbitz-bridge-dev.js']);
 });
 
 gulp.task('core', ['corestyle'], function() {
-  return core('./lib/js/airbitz-bridge.js');
+  return core(['./lib/js/airbitz-bridge.js']);
 });
 
 plugins.map(function(plugin) {
