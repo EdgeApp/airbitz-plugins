@@ -14,7 +14,7 @@ var core = function(bridge) {
             './lib/vendor/js/qrcode.min.js'].
             concat(bridge).concat(
             ['./lib/js/airbitz-core.js']))
-    .pipe(concat('core.js'))
+    .pipe(concat('abc.js'))
     .pipe(gulp.dest('./build/intermediates/js'));
 }
 

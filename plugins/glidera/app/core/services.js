@@ -410,8 +410,7 @@ factory('ExchangeFactory', [function() {
     'depositId': 'GLIDER-USA-002',
     'supportsBankAccounts': true,
     'supportsCreditCards': false,
-    'currencyNum': 840,
-    'exchangeRate': Airbitz.core.exchangeRate()
+    'currencyNum': 840
   };
 }]).
 factory('States', [function() {

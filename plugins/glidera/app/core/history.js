@@ -14,7 +14,6 @@
         $location.path('/signup/');
         return;
       }
-      console.log('history: ' + next + ' ' + current);
       if (history.length == 0) {
         history.push(current);
       }
@@ -22,11 +21,14 @@
       if (next.match(/\.html#\/exchange\/$/)
         || next.match(/\.html#\/signup\/$/)) {
         history.length = 0;
+        Airbitz.ui.navStackClear();
       }
       history.push(next);
+      Airbitz.ui.navStackPush(next);
     });
     Airbitz._bridge.back = function() {
       var el = history.pop();
+      Airbitz.ui.navStackPop();
       if (history.length == 0) {
         Airbitz._bridge.exit();
       } else {
