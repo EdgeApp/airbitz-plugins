@@ -232,6 +232,10 @@ body .buy-limits .limit-data {
   float: right;
   color: #44d417;
 }
+body .buy-limits .limit-buy-daily,
+body .buy-limits .limit-buy-monthly {
+  clear: both;
+}
 body .sell-limits {
   float: left;
   width: 100%;
@@ -245,6 +249,10 @@ body .sell-limits .limit-data {
   display: inline-block;
   float: right;
   color: #3bcfff;
+}
+body .sell-limits .limit-sell-daily,
+body .sell-limits .limit-sell-monthly {
+  clear: both;
 }
 body .exchange-options {
   margin: 40px 0;

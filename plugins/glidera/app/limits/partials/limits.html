@@ -2,10 +2,10 @@
   <div class="col-xs-6">
     <label class="limit-header">Buy Limits</label>
     <div class="buy-limits">
-      <div class="limit-daily-buy">
+      <div class="limit-buy-daily">
         <span class="limit-label">Daily: </span><span class="limit-data">{{ limits.dailyBuyRemaining | currency:"$"}}</span>
       </div>
-      <div class="limit-daily-buy">
+      <div class="limit-buy-monthly">
         <span class="limit-label">Monthly: </span><span class="limit-data">{{ limits.monthlyBuyRemaining | currency:"$"}}</span>
       </div>
     </div>
@@ -14,10 +14,10 @@
   <div class="col-xs-6">
     <label class="limit-header">Sell Limits</label>
     <div class="sell-limits">
-      <div class="limit-daily-buy">
+      <div class="limit-sell-daily">
         <span class="limit-label">Daily: </span><span class="limit-data">{{ limits.dailySellRemaining | currency:"$"}}</span>
       </div>
-      <div class="limit-daily-buy">
+      <div class="limit-sell-monthly">
         <span class="limit-label">Monthly: </span><span class="limit-data">{{ limits.monthlySellRemaining | currency:"$"}}</span>
       </div>
     </div>
