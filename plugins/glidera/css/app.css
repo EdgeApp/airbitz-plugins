@@ -52,7 +52,7 @@ html body #wrap .container {
 }
 html body #footer {
   position: absolute;
-  bottom: 0;
+  bottom: 40px;
   width: 100%;
   height: 40px;
   background: rgba(0, 0, 0, 0.2);
@@ -223,7 +223,7 @@ body .input-group .input-group-addon.large {
 }
 body .list-group .list-group-item,
 body .list-group a.list-group-item {
-  color: #0f5791;
+  color: #3bcfff;
   background: rgba(255, 255, 255, 0.2);
   font-size: 20px;
   border: 1px solid rgba(255, 255, 255, 0.5);
@@ -350,6 +350,9 @@ body .exchange-options .list-group-item i {
   width: 24px;
   margin-right: 10px;
 }
+body .disclaimer p {
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+}
 body .exchange-sign-up h2 {
   margin-bottom: 20px;
 }
@@ -385,18 +388,6 @@ body .exchange-user-account .list-group-item small {
 body .exchange-user-account .list-group-item i {
   width: 24px;
   margin-right: 10px;
-}
-body .exchange-payment-list {
-  margin-top: 20px;
-  margin-bottom: 20px;
-}
-body .exchange-payment-list .list-group-item i {
-  width: 24px;
-  margin-right: 10px;
-}
-body .exchange-payment-list .ending {
-  color: #3bcfff;
-  font-weight: 300;
 }
 body .row.next-cancel {
   margin-top: 40px;

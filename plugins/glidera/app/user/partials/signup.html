@@ -1,12 +1,26 @@
+<div ng-show="showDisclaimer" class="row">
+  <div class="col-xs-12">
+    <h4>Airbitz Disclaimer</h4>
+    <p class="shadow-text">You are now signing up for Glidera, a third party exchange service.  Your personal information is transmitted to Glidera Inc. directly.</p>
+    <p class="shadow-text">A copy of your information will be encrypted and stoed locally for your future use.</p>
+    <p class="shadow-text">Airbitz will never have access to your personal information which is encrypted on your device.</p>
+  </div>
+</div>
 
-<div class="row" style="margin-top: 20px;" >
+<div class="row" style="margin-top: 10px; margin-bottom: 20px;">
+  <div class="col-xs-12">
+    <button ng-click="showDisclaimer = !showDisclaimer" class="pull-left btn btn-xs btn-success">Read Disclaimer</button>
+  </div>
+</div>
+
+<div class="row">
   <form name="form" class="exchange-sign-up col-xs-12" novalidate>
 
     <div class="form-group">
       <label for="inputFirstName" class="">Name</label>
       <input ng-model="account.firstName" name="firstName" type="text" id="inputFirstName" class="form-control"
              placeholder="First Name"
-             autofocus="true"
+             autofocus=""
              autocomplete="off"
              required="" />
       <div class="input-error" ng-show="form.$submitted || form.firstName.$touched">
@@ -18,7 +32,6 @@
       <label for="inputLastName" class="sr-only">Last</label>
       <input ng-model="account.lastName" name="lastName" type="text" id="inputLastName" class="form-control"
              placeholder="Last Name"
-             autofocus=""
              autocomplete="off"
              required="" />
       <div class="input-error" ng-show="form.$submitted || form.lastName.$touched">
@@ -30,7 +43,6 @@
       <label for="inputEmail" class="">Email</label>
       <input ng-model="account.email" name="email" type="email" id="inputEmail" class="form-control"
              placeholder="user@email.com"
-             autofocus=""
              autocomplete="off"
              required="" />
       <div class="input-error" ng-show="form.$submitted || form.email.$touched">
@@ -51,11 +63,11 @@
       </div>
     </div>
 
-    <div class="row text-right" style="margin-top: 40px;">
+<!--     <div class="row text-right" style="margin-top: 40px;">
       <div class="col-xs-12">
         <button type="button" ui-sref="apiKeys" class="btn btn-sm btn-primary">Keys</button>
       </div>
-    </div>
+    </div> -->
 
   </form>
 </div>
