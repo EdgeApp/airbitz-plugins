@@ -13,6 +13,8 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices', 'app
     $scope.account = UserFactory.getUserAccount();
     $scope.userStatus = UserFactory.getUserAccountStatus();
     $scope.showOptions = !$scope.userStatus.userCanTransact;
+    $scope.showDebug = false;
+    $scope.debugClicks = 0;
 
     UserFactory.fetchUserAccountStatus().then(function(b) {
       $scope.userStatus = b;
@@ -80,6 +82,14 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices', 'app
 
     $scope.showAccountOptions = function() {
       $scope.showOptions = !$scope.showOptions;
+    };
+
+    $scope.showAccountDebug = function() {
+      $scope.debugClicks++
+      console.log('TOGGLE DEBUG');
+      if($scope.debugClicks++ > 7) {
+        $scope.showDebug = !$scope.showDebug;
+      }
     };
 
     $scope.addBankAccount = function(){
