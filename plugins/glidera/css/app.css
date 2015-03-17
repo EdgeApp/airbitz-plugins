@@ -406,7 +406,7 @@ body .order-limits {
 }
 body .order-review {
   margin-top: 30px;
-  margin-bottom: 30px;
+  margin-bottom: 10px;
 }
 body .order-review table {
   background-color: rgba(255, 255, 255, 0.2);
