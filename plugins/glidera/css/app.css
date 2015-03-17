@@ -289,9 +289,15 @@ body .exchange-ticker {
   width: 100%;
   left: 15px;
 }
-body .limit-header {
+body .exchange-limits .limit-header-buy {
+  text-transform: uppercase;
+  color: #42832e;
+  text-shadow: none;
+}
+body .exchange-limits .limit-header-sell {
   text-transform: uppercase;
   color: #0f5791;
+  text-shadow: none;
 }
 body .limit-label {
   text-transform: uppercase;
