@@ -36,35 +36,44 @@ input[type=number]::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-body #wrap {
+html {
+  position: relative;
+  min-height: 100%;
+}
+html body {
+  margin-bottom: 35px;
+}
+html body #wrap {
   min-height: 100%;
   height: auto !important;
-  margin-bottom: 40px;
 }
-body #wrap .container {
+html body #wrap .container {
   margin-top: 20px;
 }
-body #footer {
-  position: fixed;
+html body #footer {
+  position: absolute;
   bottom: 0;
   width: 100%;
+  height: 40px;
   background: rgba(0, 0, 0, 0.2);
   border: 1px solid rgba(255, 255, 255, 0.5);
   border-bottom: none;
   border-left: none;
   border-right: none;
 }
-body #footer .container {
+html body #footer .container {
   padding-bottom: 0;
 }
-body #footer p {
+html body #footer p {
   margin-bottom: 0;
   padding: 10px 0;
 }
 body {
   color: white;
   background: #0f5791;
-  background: url('img/bg_app.jpg');
+  background: url('http://d.pr/i/11dpH+') center no-repeat;
+  background-size: cover;
+  background-position: fixed;
   font-family: Lato, sans-serif;
 }
 body h1,
@@ -246,6 +255,9 @@ body .list-group .list-group-item:visited,
 body .list-group a.list-group-item:visited {
   text-decoration: none;
 }
+body .list-group .list-group-item-text {
+  font-size: 10px !important;
+}
 body label {
   color: white;
   font-weight: 300;
@@ -277,27 +289,14 @@ body .exchange-ticker {
   width: 100%;
   left: 15px;
 }
-body .exchange-limits .buy-limits {
-  background-color: rgba(255, 255, 255, 0.2);
-  padding: 6px 5px;
-  border-radius: 5px;
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  float: left;
-  width: 100%;
-}
-body .exchange-limits .sell-limits {
-  background-color: rgba(255, 255, 255, 0.2);
-  padding: 6px 5px;
-  border-radius: 5px;
-  border: 1px solid rgba(255, 255, 255, 0.5);
-}
 body .limit-header {
   text-transform: uppercase;
-  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+  color: #0f5791;
 }
 body .limit-label {
   text-transform: uppercase;
   letter-spacing: -1px;
+  color: white;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
 }
 body .buy-limits {

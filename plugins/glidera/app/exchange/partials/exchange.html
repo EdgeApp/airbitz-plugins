@@ -1,4 +1,4 @@
-<div class="exchange-ticker row">
+<div ng-click="showAccountDebug()" class="exchange-ticker row">
   <div class="live-ticker text-right col-xs-12">
     <div price-update price-type="{{ order.orderAction }}"></div>
   </div>
@@ -13,7 +13,7 @@
   </div>
 </div>
 
-<div ng-if="userStatus.userCanTransact" exchange-limits></div>
+<!-- <div ng-if="userStatus.userCanTransact" exchange-limits></div> -->
 
 <div account-summary></div>
 

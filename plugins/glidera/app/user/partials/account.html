@@ -4,23 +4,36 @@
   </div>
   <div class="col-xs-12">
     <ul class="list-group">
-      <li ng-show="userStatus.userCanTransact" ng-click="showAccountOptions()"class="header list-group-item">{{ account.firstName || 'First' }} {{ account.lastName || 'Last' }}
+      <li ng-show="userStatus.userCanTransact" ng-click="showAccountOptions()" class="header list-group-item">
+        <span class="list-group-item-heading">{{ account.firstName || 'first' | titlecase }} {{ account.lastName || 'last' | titlecase }}</span>
+        <p class="list-group-item-text">Tap to view your account details</p>
         <label class="status label label-outline pull-right"
                ng-class="{'label-success': userStatus.userCanTransact}">{{ userStatus.userCanTransact | statusFilter }}</label>
       </li>
-      <li ng-show="showOptions" class="list-group-item">Email
+      <li ng-if="userStatus.userCanTransact" ng-show="showOptions" class="list-group-item">
+        <div exchange-limits></div>
+      </li>
+      <li ng-show="showOptions" class="list-group-item">
+        <span class="list-group-item-heading">Email</span>
+        <p class="list-group-item-text">{{account.email || 'email'}}</p>
         <label class="status label label-outline pull-right"
                ng-class="{'label-success': userStatus.userEmailIsSetup}">{{ userStatus.userEmailIsSetup | statusFilter }}</label>
       </li>
-      <li ng-show="showOptions" ui-sref="account" class="list-group-item">Account Info
+      <li ng-show="showOptions" ui-sref="account" class="list-group-item">
+        <span class="list-group-item-heading">Account Information</span>
+        <p class="list-group-item-text">Tap to edit</p>
         <label class="status label label-outline pull-right"
                ng-class="{'label-success': userStatus.userBasicInfoIsSetup}">{{ userStatus.userBasicInfoIsSetup | statusFilter }}</label>
       </li>
-      <li ng-show="showOptions" ui-sref="verifyPhone" class="list-group-item">Mobile Phone
+      <li ng-show="showOptions" ui-sref="verifyPhone" class="list-group-item">
+        <span class="list-group-item-heading">Mobile Phone</span>
+        <p class="list-group-item-text">Tap to edit</p>
         <label class="status label label-outline pull-right"
                ng-class="{'label-success': userStatus.userPhoneIsSetup}">{{ userStatus.userPhoneIsSetup | statusFilter }}</label>
       </li>
-      <li ng-show="showOptions" ng-click="routeBankAccount()" class="list-group-item">Bank Account
+      <li ng-show="showOptions" ng-click="routeBankAccount()" class="list-group-item">
+        <span class="list-group-item-heading">Bank Account</span>
+        <p class="list-group-item-text">Tap to edit</p>
         <label class="status label label-outline pull-right"
                ng-class="{'label-success': userStatus.userBankAccountIsSetup}">{{ userStatus.userBankAccountIsSetup | statusFilter }}</label>
       </li>
