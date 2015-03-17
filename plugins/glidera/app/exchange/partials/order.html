@@ -56,6 +56,10 @@
             required="" />
           <span class="large input-group-addon">USD</span>
         </div>
+        <div class="input-error"
+             ng-show="form.$submitted || form.orderFiatInput.$touched">
+          <div ng-show="form.orderFiatInput.$error.required" class="label label-danger">Required</div>
+        </div>
       </div>
 
       <div class="form-group">
@@ -73,12 +77,11 @@
             required="" />
           <span class="large input-group-addon">BTC</span>
         </div>
+        <div class="input-error"
+             ng-show="form.$submitted || form.orderBtcInput.$touched">
+          <div ng-show="form.orderBtcInput.$error.required" class="label label-danger">Required</div>
+        </div>
       </div>
-
-     <div ng-show="form.$submitted || form.orderBtcInput.$touched || form.orderFiatInput.$touched">
-        <div ng-show="form.orderBtcInput.$error.required">BTC amount is required.</div>
-        <div ng-show="form.orderFiatInput.$error.required">Fiat Amount is required.</div>
-     </div>
 
       <div class="row text-right" style="margin-top: 40px;">
         <div class="col-xs-12">
