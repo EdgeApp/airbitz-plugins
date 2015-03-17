@@ -58,41 +58,45 @@ input[type=number]::-webkit-inner-spin-button {
 
 
 // setup main containers
-body {
+html {
+  position: relative;
+  min-height: 100%;
 
-  #wrap {
-    min-height: 100%;
-    height: auto !important;
-    margin-bottom: 40px;
+  body {
+    margin-bottom: 35px;
 
-    .container {
-      margin-top: 20px;
-    }
-  }
+    #wrap {
+      min-height: 100%;
+      height: auto !important;
+      // margin-bottom: 40px;
 
-  #footer {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    background: rgba(0, 0, 0, .2);
-    .glass-border;
-    border-bottom: none;
-    border-left: none;
-    border-right: none;
-
-    .container {
-      padding-bottom: 0;
+      .container {
+        margin-top: 20px;
+      }
     }
 
-    p {
-      margin-bottom: 0;
-      padding: 10px 0;
+    #footer {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 40px;
+      background: rgba(0, 0, 0, .2);
+      .glass-border;
+      border-bottom: none;
+      border-left: none;
+      border-right: none;
+
+      .container {
+        padding-bottom: 0;
+      }
+
+      p {
+        margin-bottom: 0;
+        padding: 10px 0;
+      }
     }
   }
 }
-
-
-
 
 
 
@@ -100,7 +104,9 @@ body {
   // margin: 20px 0 40px;
   color: white;
   background: @ab-blue-dark;
-  background: url('http://d.pr/i/11dpH+');
+  background: url('http://d.pr/i/11dpH+') center no-repeat;
+  background-size: cover;
+  background-position: fixed;
   font-family: Lato, sans-serif;
 
 
