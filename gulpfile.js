@@ -42,6 +42,9 @@ plugins.map(function(plugin) {
       base: './build/intermediates'
     }))
     .pipe(gulp.dest('build/' + platform + '/' + plugin));
+
+    gulp.src('./plugins/' + plugin + '/img/*')
+        .pipe(gulp.dest('build/' + platform + '/' + plugin + '/img'));
   };
   gulp.task(plugin + '-partials', function() {
     return gulp.src(["./plugins/glidera/partials/*.html",
