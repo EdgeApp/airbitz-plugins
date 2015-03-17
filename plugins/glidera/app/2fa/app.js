@@ -80,6 +80,10 @@
         });
         return d.promise;
       };
+      factory.reset = function() {
+        that.lastFetch = null;
+        that.code = '';
+      };
       factory.finish = function(c, o) {
         that.code = c;
         that.oldCode = o;

@@ -2,8 +2,8 @@
   'use strict';
 
   angular
-    .module('app.error', [])
-    .factory('Error', ['$state', errorService])
+    .module('app.error', ['app.2fa'])
+    .factory('Error', ['$state', 'TwoFactor', errorService])
     .controller('errorController', [
       '$scope',
       '$state',
@@ -20,7 +20,7 @@
     }
   }
 
-  function errorService($state) {
+  function errorService($state, TwoFactor) {
     var factory = {
       'reject': reject
     };
@@ -38,6 +38,12 @@
         } else if (res.code == 'UnauthorizedException') {
           if (res.message && res.message.match(/nonce/i)) {
             $state.go('error');
+          } else if (res.message && res.message.match(/2FACode/i)) {
+            Airbitz.ui.showAlert('Unauthorized', 'Invalid 2 Factor code.');
+            TwoFactor.reset();  // reset the old token
+            TwoFactor.showTwoFactor(function() {
+              $state.go("reviewOrder");
+            });
           } else {
             Airbitz.ui.showAlert('Unauthorized', res.message);
           }
