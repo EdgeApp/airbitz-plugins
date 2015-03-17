@@ -1,9 +1,18 @@
-<div class="row" style="margin-top: 20px;">
-  <h2 class="col-xs-6" style="margin-top: 0;"><span class="label label-outline">Receipt {{ order.orderAction || "Buy" | uppercase }} Order</span></h2>
-</div>
+<h2 class="order-receipt-heading">
+  <img class="bitcoin-logo" src="./img/bitcoin-icon-logo.png"> Order Details
+</h2>
 
 <div class="order-review row">
   <div class="col-xs-12">
+    <table class="table table-bordered">
+      <tbody>
+        <tr>
+          <td>Order Type</td>
+          <td>{{ order.orderAction || "orderAction" | titlecase }} Order</td>
+        </tr>
+      </tbody>
+    </table>
+
     <table class="table table-bordered">
       <tbody>
         <tr ng-show="{{ order.orderAction === 'buy' }}">
@@ -24,6 +33,7 @@
         </tr>
       </tbody>
     </table>
+
     <table class="table table-bordered">
       <tbody>
         <tr>
@@ -49,6 +59,6 @@
 
 <div class="row">
   <div class="text-right col-xs-12">
-    <button ng-click="finish()" class="btn btn-lg btn-link">Finish</button>
+    <button ng-click="finish()" class="btn btn-lg btn-primary">Finish</button>
   </div>
 </div>

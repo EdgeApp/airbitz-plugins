@@ -88,6 +88,7 @@ body h6 {
 body hr {
   margin: 20px 0;
   border: 1px solid rgba(255, 255, 255, 0.5);
+  border-bottom: 0;
 }
 body hr.page {
   margin: 80px 0;
@@ -256,6 +257,7 @@ body .list-group a.list-group-item:visited {
   text-decoration: none;
 }
 body .list-group .list-group-item-text {
+  color: #333333;
   font-size: 10px !important;
 }
 body label {
@@ -281,10 +283,6 @@ body .label.status {
   border-bottom: 0;
 }
 body .exchange-ticker {
-  background-color: rgba(255, 255, 255, 0.2);
-  padding: 6px 5px;
-  border-radius: 5px;
-  border: 1px solid rgba(255, 255, 255, 0.5);
   position: relative;
   width: 100%;
   left: 15px;
@@ -354,11 +352,14 @@ body .exchange-sign-up h2 {
 body .exchange-email-edit {
   margin: 60px 0;
 }
-body .buy-sell {
-  margin-top: 20px;
+body .exchange-buy-sell {
+  margin-top: 30px;
   margin-bottom: 30px;
 }
-body .buy-sell .btn-group .btn.active {
+body .buy-sell-header {
+  margin-bottom: 30px;
+}
+body .buy-sell-header .btn-group .btn.active {
   background: none;
   border: 1px solid rgba(255, 255, 255, 0.5);
 }
@@ -409,6 +410,7 @@ body .order-review {
   margin-bottom: 10px;
 }
 body .order-review table {
+  margin-bottom: 10px;
   background-color: rgba(255, 255, 255, 0.2);
   padding: 6px 5px;
   border-radius: 5px;
@@ -421,11 +423,22 @@ body .order-review table td:first-child {
   font-weight: 300;
   background: rgba(255, 255, 255, 0.5);
 }
+body .order-receipt-heading {
+  font-weight: 300;
+  margin-top: 0;
+}
+body .order-receipt-heading .bitcoin-logo {
+  height: 32px;
+  padding-bottom: 4px;
+}
 body .twofa {
   margin-top: 30px;
 }
 body .twofa input[type="number"] {
   margin-bottom: 10px;
+}
+body .transactions .table {
+  width: 100%;
 }
 body .transactions .table thead {
   background: rgba(0, 0, 0, 0.7);
@@ -433,7 +446,7 @@ body .transactions .table thead {
 }
 body .transactions .table td {
   background: rgba(0, 0, 0, 0.2);
-  font-size: 10px;
+  font-size: 8px;
 }
 body .live-ticker .live-price-rate {
   font-size: 17px;
@@ -443,11 +456,12 @@ body .live-ticker .live-price-rate .price-rate-label {
 }
 body .live-ticker .live-price-rate .price-rate-data {
   font-weight: bold;
-  color: #42832e;
+  color: #5ccc3a;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
 }
 body .live-ticker .live-price-expiration .expiration-data {
   font-weight: bold;
-  color: #555555;
+  color: #333333;
 }
 body .verify-phone-info {
   margin-bottom: 20px;

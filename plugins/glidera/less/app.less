@@ -5,11 +5,11 @@
 
 @ab-green: #80c342;
 @ab-green-gray: #7e9867;
-@ab-green-light: #44D417;
+@ab-green-light: #5CCC3A;
 @ab-green-dark: #42832E;
 
 @ab-gray: #999;
-@ab-gray-dark: #555;
+@ab-gray-dark: #333;
 @ab-gray-light: #efefef;
 
 @ab-red: #D9534F;
@@ -118,6 +118,7 @@ body {
   hr {
     margin: 20px 0;
     .glass-border;
+    border-bottom: 0;
 
     &.page {
       margin: 80px 0;
@@ -283,6 +284,7 @@ body {
     }
 
     .list-group-item-text {
+      color: @ab-gray-dark;
       font-size: 10px !important;
     }
   }
@@ -314,7 +316,7 @@ body {
   }
 
   .exchange-ticker {
-    .data-container;
+    // .data-container;
     position: relative;
     width: 100%;
     left: 15px;
@@ -409,10 +411,13 @@ body {
     margin: 60px 0;
   }
 
-
   // exchange functions
-  .buy-sell {
-    margin-top: 20px;
+  .exchange-buy-sell {
+    margin-top: 30px;
+    margin-bottom: 30px;
+  }
+
+  .buy-sell-header {
     margin-bottom: 30px;
 
     .btn-group {
@@ -494,6 +499,7 @@ body {
     margin-bottom: 10px;
 
     table {
+      margin-bottom: 10px;
       .data-container;
       color: @ab-blue-dark;
 
@@ -505,6 +511,16 @@ body {
           background: rgba(255,255,255,.5);
         }
       }
+    }
+  }
+
+  .order-receipt-heading {
+    font-weight: 300;
+    margin-top: 0;
+
+    .bitcoin-logo {
+      height: 32px;
+      padding-bottom: 4px;
     }
   }
 
@@ -521,13 +537,15 @@ body {
   .transactions {
 
     .table {
+      width: 100%;
+
       thead {
         background: rgba(0,0,0,.7);
         color: white;
       }
       td {
         background: rgba(0,0,0,.2);
-        font-size: 10px;
+        font-size: 8px;
       }
     }
   }
@@ -542,7 +560,8 @@ body {
       }
       .price-rate-data {
         font-weight: bold;
-        color: @ab-green-dark;
+        color: @ab-green-light;
+        .shadow-text;
       }
     }
 

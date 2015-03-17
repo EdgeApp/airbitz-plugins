@@ -1,10 +1,10 @@
 <div ng-click="showAccountDebug()" class="exchange-ticker row">
-  <div class="live-ticker text-right col-xs-12">
+  <div class="live-ticker text-right">
     <div price-update price-type="{{ order.orderAction }}"></div>
   </div>
 </div>
 
-<div ng-if="userStatus.userCanTransact" class="buy-sell row">
+<div ng-if="userStatus.userCanTransact" class="exchange-buy-sell row">
   <div class="col-xs-6">
     <button ng-click="buy()" class="buy-button btn-success btn-lg btn-block btn">BUY</button>
   </div>
