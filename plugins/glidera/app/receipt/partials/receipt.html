@@ -1,0 +1,54 @@
+<div class="row" style="margin-top: 20px;">
+  <h2 class="col-xs-6" style="margin-top: 0;"><span class="label label-outline">Receipt {{ order.orderAction || "Buy" | uppercase }} Order</span></h2>
+</div>
+
+<div class="order-review row">
+  <div class="col-xs-12">
+    <table class="table table-bordered">
+      <tbody>
+        <tr ng-show="{{ order.orderAction === 'buy' }}">
+          <td>Payment Method</td>
+          <td>{{order.transferFromBankAccount.description || "FakeVisa 4494" }}</td>
+        </tr>
+        <tr ng-show="{{ order.orderAction === 'buy' }}">
+          <td>Destination Wallet</td>
+          <td>{{ order.transferToWallet.name || "Travel Spending" }}</td>
+        </tr>
+        <tr ng-show="{{ order.orderAction === 'sell' }}">
+          <td>Sell From</td>
+          <td>{{ order.transferToWallet.name || "Travel Spending" }}</td>
+        </tr>
+        <tr ng-show="{{ order.orderAction === 'sell' }}">
+          <td>Deposit To</td>
+          <td>{{order.transferFromBankAccount.description || "FakeVisa 4494" }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table table-bordered">
+      <tbody>
+        <tr>
+          <td>BTC Price:</td>
+          <td>{{ order.details.price | currency }}</td>
+        </tr>
+        <tr>
+          <td>Sub Total:</td>
+          <td>{{ order.details.subtotal }}</td>
+        </tr>
+        <tr>
+          <td>Fees:</td>
+          <td>{{ order.details.fees }}</td>
+        </tr>
+        <tr>
+          <td>Total:</td>
+          <td>{{ order.details.total }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="row">
+  <div class="text-right col-xs-12">
+    <button ng-click="finish()" class="btn btn-lg btn-link">Finish</button>
+  </div>
+</div>

@@ -313,8 +313,9 @@ factory('DataFactory', [
       glideraFactory.buy(TwoFactor.getCode(), address, qty, opts, function(e, r, b) {
         console.log(JSON.stringify(b));
         if (r == 200) {
+          factory.getOrder(false).details = b;
           Airbitz.core.finalizeRequest(wallet, requestId);
-          deferred.resolve();
+          deferred.resolve(b);
         } else {
           deferred.reject(errorMap(b));
         }
@@ -379,7 +380,12 @@ factory('DataFactory', [
         var opts = {'priceUuid': Prices.sellUuid()};
         glideraFactory.sell(TwoFactor.getCode(), data.refundAddress, data.signedTx, opts, function(e, r, b) {
           console.log(JSON.stringify(b));
-          r === 200 ? resolve(b) : reject(errorMap(b));
+          if (r == 200) {
+            factory.getOrder(false).details = b;
+            resolve(b);
+          } else {
+            reject(errorMap(b));
+          }
         });
       });
     }).catch(function(data) {

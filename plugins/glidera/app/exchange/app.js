@@ -231,14 +231,14 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices', 'app
     $scope.executeOrder = function() {
       console.log(JSON.stringify(order));
       if (order.orderAction == 'buy') {
-        DataFactory.buy(order.transferToWallet, order.orderBtcInput).then(function() {
+        DataFactory.buy(order.transferToWallet, order.orderBtcInput).then(function(data) {
           Airbitz.ui.showAlert('Bought Bitcoin', 'You bought bitcoin!');
-          $state.go('exchange');
+          $state.go('orderReceipt');
         }, Error.reject);
       } else {
-        DataFactory.sell(order.transferToWallet, order.orderBtcInput).then(function() {
+        DataFactory.sell(order.transferToWallet, order.orderBtcInput).then(function(data) {
           Airbitz.ui.showAlert('Sold Bitcoin', 'You sold bitcoin!');
-          $state.go('exchange');
+          $state.go('orderReceipt');
         }, Error.reject);
       }
     };

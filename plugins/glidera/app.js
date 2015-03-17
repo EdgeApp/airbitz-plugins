@@ -1,5 +1,5 @@
 
-var app = angular.module('app', ['app.core', 'app.history', 'app.exchange', 'app.user', 'app.2fa']);
+var app = angular.module('app', ['app.core', 'app.history', 'app.exchange', 'app.user', 'app.2fa', 'app.receipt']);
 
 app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
 
@@ -88,6 +88,12 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
       url: "/exchange/order/:orderAction/",
       templateUrl: "app/exchange/partials/order.html",
       controller: "orderController",
+    })
+    // route for creating an order
+    .state("orderReceipt", {
+      url: "/receipt/",
+      templateUrl: "app/receipt/partials/receipt.html",
+      controller: "receiptController",
     })
     // route for transactions
     .state("exchangeTransactions", {
