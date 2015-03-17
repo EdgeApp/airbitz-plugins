@@ -1,19 +1,4 @@
 
-function errorMap(res) {
-  if (!res.code) {
-    return "An unknown error occurred.";
-  }
-  switch(res.code) {
-    case "MissingRequiredParameter":
-      return "This request is missing required data."
-    case "InvalidParameterValue":
-    case "UnauthorizedException":
-      return res.message;
-    default:
-      return "An unknown error occurred."
-  }
-}
-
 angular.module('app.dataFactory', ['app.glidera', 'app.2fa', 'app.constants', 'app.limits']).
 factory('UserFactory', [
   '$q', '$filter', 'States', 'ExchangeFactory', 'glideraFactory', 'TwoFactor',
@@ -354,43 +339,40 @@ factory('DataFactory', [
       });
     }).then(function(data) {
       var sellAddress = data["sellAddress"];
-      return $q(function(resolve, reject) {
-        createAddress(wallet, 'Glidera Refund', btcToSatoshi(qty), amountFiat, 'Exchange:Refund Bitcoin', '', function(req) {
-          resolve({'sellAddress': sellAddress,
-                   'refundAddress': req['address']});
-        }, reject);
-      });
+      var d = $q.defer();
+      createAddress(wallet, 'Glidera Refund', btcToSatoshi(qty), 
+                    amountFiat, 'Exchange:Refund Bitcoin', '', function(req) {
+        d.resolve({'sellAddress': sellAddress, 'refundAddress': req['address']});
+      }, d.reject);
+      return d.promise;
     }).then(function(data) {
-      console.log('sellAddress: ' + data.sellAddress);
-      console.log('refundAddress: ' + data.refundAddress);
-      return $q(function(resolve, reject) {
-        Airbitz.core.requestSpend(wallet, data.sellAddress, btcToSatoshi(qty), amountFiat, {
-          label: 'Glidera',
-          category: 'Exchange:Sell Bitcoin',
-          notes: '',
-          success: function(signedTx) {
-            resolve({'sellAddress': data.sellAddress,
+      var d = $q.defer();
+      Airbitz.core.requestSpend(wallet, data.sellAddress, btcToSatoshi(qty), amountFiat, {
+        label: 'Glidera',
+        category: 'Exchange:Sell Bitcoin',
+        notes: '',
+        success: function(signedTx) {
+          d.resolve({'sellAddress': data.sellAddress,
                      'refundAddress': data.refundAddress,
                      'signedTx': signedTx});
-          },
-          error: function() {
-            reject('Aborted spend');
-          }
-        });
+        },
+        error: function() {
+          d.reject('Aborted spend');
+        }
       });
+      return d.promise;
     }).then(function(data) {
-      return $q(function(resolve, reject) {
-        var opts = {'priceUuid': Prices.sellUuid()};
-        glideraFactory.sell(TwoFactor.getCode(), data.refundAddress, data.signedTx, opts, function(e, r, b) {
-          console.log(JSON.stringify(b));
-          if (r == 200) {
-            factory.getOrder(false).details = b;
-            resolve(b);
-          } else {
-            reject(b);
-          }
-        });
+      var d = $q.defer();
+      var opts = {'priceUuid': Prices.sellUuid()};
+      glideraFactory.sell(TwoFactor.getCode(), data.refundAddress, data.signedTx, opts, function(e, r, b) {
+        if (r == 200) {
+          factory.getOrder(false).details = b;
+          d.resolve(b);
+        } else {
+          d.reject(b);
+        }
       });
+      return d.promise;
     }).catch(function(data) {
       return $q(function(resolve, reject) {
         reject(data);
