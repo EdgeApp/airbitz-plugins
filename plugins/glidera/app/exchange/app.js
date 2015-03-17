@@ -106,12 +106,14 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices', 'app
     $scope.bankAccount.bankAccountType = 'CHECKING';
 
     $scope.saveBankAccount = function() {
+      var accountDepositText = "Please check your bank account in the next 24 to 48 hours for a small deposit from Glidera to complete the bank account verification process.";
       var account = $scope.bankAccount.accountNumber;
       var accountSuffix = account.substr(account.length - 4);
       $scope.bankAccount.description = $scope.bankAccount.bankAccountType + " - " + accountSuffix; // auto generate description
 
       TwoFactor.showTwoFactor(function() {
         DataFactory.createBankAccount($scope.bankAccount).then(function() {
+          Airbitz.ui.showAlert('Bank Account Added', accountDepositText);
           $state.go('exchange');
         }, Error.reject);
       });
