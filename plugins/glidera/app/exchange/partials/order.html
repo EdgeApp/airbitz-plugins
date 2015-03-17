@@ -51,6 +51,7 @@
             id="inputFiatAmount"
             placeholder="100.00"
             autofocus="true"
+            tabindex="1"
             step="any"
             required="" />
           <span class="large input-group-addon">USD</span>
@@ -67,7 +68,7 @@
             class="large right-square"
             id="inputBtcAmount"
             placeholder="0.5"
-            autofocus=""
+            tabindex="2"
             step="any"
             required="" />
           <span class="large input-group-addon">BTC</span>
@@ -81,8 +82,14 @@
 
       <div class="row text-right" style="margin-top: 40px;">
         <div class="col-xs-12">
-          <button type="button" ui-sref="exchange" class="buy-sell-next btn btn-lg btn-link">Cancel</button>
-          <button type="submit" ng-disabled="form.$invalid" class="buy-sell-next btn btn-lg btn-success">Next</button>
+          <button type="button"
+                  ui-sref="exchange"
+                  tabindex="4"
+                  class="buy-sell-next btn btn-lg btn-link">Cancel</button>
+          <button type="submit"
+                  ng-disabled="form.$invalid"
+                  tabindex="3"
+                  class="buy-sell-next btn btn-lg btn-success">Next</button>
         </div>
       </div>
     </form>
