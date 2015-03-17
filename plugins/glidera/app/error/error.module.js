@@ -13,8 +13,11 @@
 
   function errorController($scope, $state, $stateParams) {
     console.log('here');
-    $scope.title = 'Unknown Error';
+    $scope.title = 'Authentication Error';
     $scope.message = 'Please try again.';
+    $scope.refresh = function() {
+      $state.go('exchange');
+    }
   }
 
   function errorService($state) {
