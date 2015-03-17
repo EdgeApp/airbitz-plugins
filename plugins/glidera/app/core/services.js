@@ -293,11 +293,14 @@ factory('DataFactory', [
     exchangeOrder = {};
   };
 
-  var createAddress = function(wallet, name, category, notes, resolve, reject) {
+  var createAddress = function(wallet, label, amountSatoshi, amountFiat,
+                               category, notes, resolve, reject) {
       Airbitz.core.createReceiveRequest(wallet, {
-        name: name,
+        label: label,
         category: category,
         notes: notes,
+        amountSatoshi: amountSatoshi,
+        amountFiat: amountFiat,
         success: resolve,
         error: reject
       })
@@ -317,7 +320,7 @@ factory('DataFactory', [
           Airbitz.core.finalizeRequest(wallet, requestId);
           deferred.resolve(b);
         } else {
-          deferred.reject(errorMap(b));
+          deferred.reject(b);
         }
       });
     } else {
@@ -326,10 +329,10 @@ factory('DataFactory', [
     return deferred.promise;
   };
 
-  factory.buy = function(wallet, qty) {
+  factory.buy = function(wallet, qty, amountFiat) {
     // TODO: check buy limits
     return $q(function (resolve, reject) {
-      createAddress(wallet, 'Glidera', 'Transfer:Glidera', '', resolve, reject);
+      createAddress(wallet, 'Glidera', btcToSatoshi(qty), amountFiat, 'Exchange:Buy Bitcoin', '', resolve, reject);
     }).then(function(request) {
       return executeBuy(wallet, qty, request);
     }, function(error) {
@@ -343,7 +346,7 @@ factory('DataFactory', [
     return btc * 100000000;
   };
 
-  factory.sell = function(wallet, qty) {
+  factory.sell = function(wallet, qty, amountFiat) {
     // TODO: check sell limits
     return $q(function(resolve, reject) {
       glideraFactory.sellAddress(qty, function(e, r, b) {
@@ -352,7 +355,7 @@ factory('DataFactory', [
     }).then(function(data) {
       var sellAddress = data["sellAddress"];
       return $q(function(resolve, reject) {
-        createAddress(wallet, 'Glidera Refund', 'Transfer:Refund', '', function(req) {
+        createAddress(wallet, 'Glidera Refund', btcToSatoshi(qty), amountFiat, 'Exchange:Refund Bitcoin', '', function(req) {
           resolve({'sellAddress': sellAddress,
                    'refundAddress': req['address']});
         }, reject);
@@ -361,9 +364,9 @@ factory('DataFactory', [
       console.log('sellAddress: ' + data.sellAddress);
       console.log('refundAddress: ' + data.refundAddress);
       return $q(function(resolve, reject) {
-        Airbitz.core.requestSpend(wallet, data.sellAddress, btcToSatoshi(qty), {
+        Airbitz.core.requestSpend(wallet, data.sellAddress, btcToSatoshi(qty), amountFiat, {
           label: 'Glidera',
-          category: 'Transfer:Glidera',
+          category: 'Exchange:Sell Bitcoin',
           notes: '',
           success: function(signedTx) {
             resolve({'sellAddress': data.sellAddress,
@@ -384,7 +387,7 @@ factory('DataFactory', [
             factory.getOrder(false).details = b;
             resolve(b);
           } else {
-            reject(errorMap(b));
+            reject(b);
           }
         });
       });
