@@ -34,11 +34,19 @@
         </tr>
         <tr>
           <td>{{ exchange.order.currency }} Amount</td>
-          <td>{{ order.orderBtcInput || "3.14" }} {{ exchange.order.currency || "BTC" }}</td>
+          <td>{{ order.orderBtcInput || "3.14" | roundBtc }} {{ exchange.order.currency || "BTC" }}</td>
+        </tr>
+        <tr>
+          <td>Subtotal</td>
+          <td>{{ exchange.order.currencySymbol || "$" }}{{ priceObj.subtotal || "priceSubtotal" | roundFiat }} {{ exchange.order.currency || "USD" }}</td>
+        </tr>
+        <tr>
+          <td>Fees</td>
+          <td>{{ exchange.order.currencySymbol || "$" }}{{ priceObj.fees || "priceFees" | roundFiat }} {{ exchange.order.currency || "USD" }}</td>
         </tr>
         <tr>
           <td>Total</td>
-          <td>{{ exchange.order.currencySymbol || "$" }}{{ order.orderBtcInput * order.price || "orderTotal" }} {{ exchange.order.currency || "USD" }}</td>
+          <td>{{ exchange.order.currencySymbol || "$" }}{{ priceObj.total || "priceTotal" | roundFiat }} {{ exchange.order.currency || "USD" }}</td>
         </tr>
       </tbody>
     </table>

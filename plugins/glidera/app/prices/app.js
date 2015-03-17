@@ -33,33 +33,46 @@ factory('Prices', ['$q', 'glideraFactory',
     };
     factory.currentBuy = {};
     factory.currentSell = {};
+    factory.buyQty = 1;
+    factory.sellQty = 1;
+
+    factory.setBuyQty = function(qty) {
+      factory.buyQty = qty;
+      factory.currentBuy = {};
+      return factory.updateBuy();
+    }
+    factory.setSellQty = function(qty) {
+      factory.sellQty = qty;
+      factory.currentSell = {};
+      return factory.updateSell();
+    }
     factory.buyUuid = function() {
-      return this.currentBuy.priceUuid;
+      return factory.currentBuy.priceUuid;
     };
     factory.updateBuy = function() {
       console.log('updateBuy');
       var deferred = $q.defer();
-      if (cached(this.currentBuy)) {
-        deferred.resolve(cached(this.currentBuy));
+      if (cached(factory.currentBuy)) {
+        deferred.resolve(cached(factory.currentBuy));
       } else {
-        glideraFactory.buyPrices(1, function(e, r, b) {
-          this.currentBuy = b;
+        glideraFactory.buyPrices(factory.buyQty, function(e, r, b) {
+          factory.currentBuy = b;
           (r == 200) ?  deferred.resolve(b) : deferred.reject();
         });
       }
       return deferred.promise;
     };
     factory.sellUuid = function() {
-      return this.currentSell.priceUuid;
+      return factory.currentSell.priceUuid;
     };
     factory.updateSell = function() {
       console.log('updateSell');
       var deferred = $q.defer();
-      if (cached(this.currentSell)) {
-        deferred.resolve(cached(this.currentSell));
+      if (cached(factory.currentSell)) {
+        deferred.resolve(cached(factory.currentSell));
       } else {
-        glideraFactory.sellPrices(1, function(e, r, b) {
-          this.currentSell = b;
+        glideraFactory.sellPrices(factory.sellQty, function(e, r, b) {
+          factory.currentSell = b;
           (r == 200) ?  deferred.resolve(b) : deferred.reject();
         });
       }

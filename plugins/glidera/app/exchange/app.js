@@ -169,8 +169,8 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices', 'app
   }])
 
 .controller('orderController',
-  ['$scope', '$state', '$stateParams', 'Error', 'DataFactory', 'UserFactory', 'TwoFactor', 'Limits',
-  function ($scope, $state, $stateParams, Error, DataFactory, UserFactory, TwoFactor, Limits) {
+  ['$scope', '$state', '$stateParams', '$filter', 'Error', 'DataFactory', 'UserFactory', 'TwoFactor', 'Limits', 'Prices',
+  function ($scope, $state, $stateParams, $filter, Error, DataFactory, UserFactory, TwoFactor, Limits, Prices) {
     Airbitz.ui.title('Place Order');
     $scope.exchange = DataFactory.getExchange();
     $scope.account = UserFactory.getUserAccount();
@@ -182,6 +182,10 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices', 'app
 
     $scope.order = DataFactory.getOrder(false); // initialize new order and clear existing order
     $scope.order.orderAction = $stateParams.orderAction; // set order action
+
+    Prices.setBuyQty(1).then(function() {
+      Prices.setSellQty(1);
+    });
 
     $scope.bankAccounts = DataFactory.getBankAccounts();
     DataFactory.fetchBankAccounts().then(function(bankAccounts) {
@@ -199,23 +203,20 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices', 'app
       // console.log('convert: ' + input + ' fiat to btc');
       if (typeof(input)==='undefined') input = 0;
 
-      output = Airbitz.core.formatSatoshi(
-        Airbitz.core.currencyToSatoshi(input, $scope.exchange.currencyNum), false
-      );
-
-      $scope.order.orderBtcInput = parseFloat(output);
+      var price = ($scope.order.orderAction == 'buy')
+                ? Prices.currentBuy.price : Prices.currentSell.price;
+      var btcValue = input / parseFloat(price);
+      $scope.order.orderBtcInput = parseFloat($filter('roundBtc')(btcValue));
     };
 
     $scope.convertBtcValue = function(input) {
       // console.log(input + ' satoshi = ' + input / 100000000 + ' BTC');
       if (typeof(input)==='undefined') input = 0;
       // convert to btc before currency conversion to match ui
-      input = input * 100000000;
-
-      output = Airbitz.core.formatCurrency(
-        Airbitz.core.satoshiToCurrency(input, $scope.exchange.currencyNum), false
-      );
-      $scope.order.orderFiatInput = parseFloat(output);
+      var price = ($scope.order.orderAction == 'buy')
+          ? Prices.currentBuy.price : Prices.currentSell.price;
+      output = input * price;
+      $scope.order.orderFiatInput = parseFloat($filter('roundFiat')(parseFloat(output)));
     };
     $scope.next = function() {
       if ($scope.order.orderAction == 'buy' && !Limits.isBuyAllowed($scope.order.orderBtcInput)) {
@@ -225,19 +226,24 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices', 'app
         Airbitz.ui.showAlert('Error', 'The sell limit will be exceeded. Please reduce your sell amount.');
         return;
       }
-      TwoFactor.showTwoFactor(function() {
-        $state.go("reviewOrder");
+      var d = $scope.order.orderAction == 'buy' ? Prices.setBuyQty($scope.order.orderBtcInput) : Prices.setSellQty($scope.order.orderBtcInput);
+      d.then(function() {
+        TwoFactor.showTwoFactor(function() {
+          $state.go("reviewOrder");
+        });
       });
     };
   }])
 
-.controller('reviewOrderController', ['$scope', '$state', 'Error', 'DataFactory', 'UserFactory', 'TwoFactor',
-  function ($scope, $state, Error, DataFactory, UserFactory, TwoFactor) {
+.controller('reviewOrderController', ['$scope', '$state', 'Error', 'DataFactory', 'UserFactory', 'TwoFactor', 'Prices',
+  function ($scope, $state, Error, DataFactory, UserFactory, TwoFactor, Prices) {
     var order = DataFactory.getOrder(false);
     console.log(JSON.stringify(order));
     $scope.order = order;
     $scope.exchange = DataFactory.getExchange();
     $scope.account = UserFactory.getUserAccount();
+    $scope.priceObj = ($scope.order.orderAction == 'buy')
+                    ? Prices.currentBuy : Prices.currentSell;
     if (!order.orderAction) {
       $state.go('exchange');
     }
