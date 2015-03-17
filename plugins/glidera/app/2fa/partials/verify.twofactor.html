@@ -13,7 +13,6 @@
         id="inputOldVerificationCode"
         class="large text-center"
         placeholder="Previous 2FA Code"
-        autofocus="true"
         autocomplete="off"
       />
     </div>
@@ -21,11 +20,12 @@
       <label for="inputVerificationCode" class="sr-only">Verification Code</label>
       <input
         ng-model="verificationCode"
+        autofocus
         type="number"
         id="inputVerificationCode"
         class="large text-center"
         placeholder="Your Code"
-        autofocus="true"
+
         autocomplete="off"
       />
       <button type="submit" ng-click="submit2FA()"

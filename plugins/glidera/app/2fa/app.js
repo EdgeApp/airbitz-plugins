@@ -5,7 +5,16 @@
     .controller('verify2faController',
       ['$scope','$state', '$stateParams', 'DataFactory', 'UserFactory', 'TwoFactor', otpController])
     .factory('TwoFactor',
-      ['$state', '$q', 'glideraFactory', otpFactory]);
+      ['$state', '$q', 'glideraFactory', otpFactory])
+    .directive('autofocus', ['$document', function($document) {
+      return {
+        link: function($scope, $element, attrs) {
+          setTimeout(function() {
+            $element[0].focus();
+          }, 100);
+        }
+      };
+    }]);
 
   function otpController($scope, $state, $stateParams, DataFactory, UserFactory, TwoFactor) {
     Airbitz.ui.title('2 Factor Verification');
