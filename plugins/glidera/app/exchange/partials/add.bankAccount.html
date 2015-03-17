@@ -3,22 +3,6 @@
   <div class="col-xs-12">
     <form ng-submit="saveBankAccount()" name="form" class="form" novalidate>
       <div class="form-group">
-        <label for="inputBankAccountDescription" class="">Description</label>
-        <input ng-model="bankAccount.description"
-               name="description"
-               type="text"
-               id="inputBankAccountDescription"
-               class="form-control"
-               placeholder="My Checking"
-               autofocus=""
-               autocomplete="off"
-               required="" />
-        <div class="input-error" ng-show="form.$submitted || form.description.$touched">
-            <div ng-show="form.description.$error.required" class="label label-danger">Required.</div>
-        </div>
-      </div>
-
-      <div class="form-group">
         <label for="inputAccountType" class="">Account Type</label>
         <select ng-model="bankAccount.bankAccountType"
                 id="inputAccountType"
@@ -41,7 +25,6 @@
                id="inputBankAccountNumber"
                class="form-control"
                placeholder="123456789"
-               autofocus=""
                autocomplete="off"
                required="" />
         <div class="input-error" ng-show="form.$submitted || form.accountNumber.$touched">
@@ -57,7 +40,6 @@
                id="inputBankRoutingNumber"
                class="form-control"
                placeholder="987654321"
-               autofocus=""
                autocomplete="off"
                required=""
                routing-number-validator />
