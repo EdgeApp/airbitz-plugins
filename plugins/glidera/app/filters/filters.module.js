@@ -1,7 +1,9 @@
 (function() {
   angular.module('app.filters', [])
     .filter('statusFilter', statusFilter)
-    .filter('titlecase', titleCase);
+    .filter('titlecase', titleCase)
+    .filter('roundFiat', roundFiat)
+    .filter('roundBtc', roundBtc);
 
   function statusFilter() {
     return function(status) {
@@ -29,4 +31,18 @@
       });
     }
   }
+
+  function roundFiat(){
+    return function(val,to){
+        console.log(val);
+        return val.toFixed(to || 2);
+    }
+  }
+
+  function roundBtc(){
+    return function(val,to){
+        return val.toFixed(to || 5);
+    }
+  }
+
 })();
