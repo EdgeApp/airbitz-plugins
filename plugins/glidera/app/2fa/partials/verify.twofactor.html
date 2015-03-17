@@ -1,7 +1,7 @@
 <div class="twofa row text-center">
-  <form class="form col-xs-offset-3 col-xs-6" novalidate>
+  <form class="form col-xs-offset-2 col-xs-8" novalidate>
     <div ng-show="hasNumber" class="form-group">
-      <div class="row" style="margin: 20px 0">
+      <div class="row">
         <p><label class="label label-warning">Note</label> You already have a
         phone number set. In order to change the number you have to include the
         previous two factor code.</p>
@@ -15,7 +15,6 @@
         placeholder="Previous 2FA Code"
         autofocus="true"
         autocomplete="off"
-        style="border-bottom-left-radius: 0; border-bottom-right-radius: 0;"
       />
     </div>
     <div class="form-group">
@@ -24,20 +23,18 @@
         ng-model="verificationCode"
         type="number"
         id="inputVerificationCode"
-        class="large text-center large"
-        placeholder="Code"
+        class="large text-center"
+        placeholder="Your Code"
         autofocus="true"
         autocomplete="off"
-        style="border-bottom-left-radius: 0; border-bottom-right-radius: 0;"
       />
       <button type="submit" ng-click="submit2FA()"
-              class="buy-sell-next btn btn-lg btn-block btn-success"
-              style="border-top-left-radius: 0; border-top-right-radius: 0;">Verify Code</button>
+              class="buy-sell-next btn btn-lg btn-block btn-success">Verify Code</button>
     </div>
   </form>
 </div>
 
 <div class="row text-center">
-  <h3 class="col-xs-12">Verification code sent to:</h3>
-  <h3 class="col-xs-12"><label class="label label-outline"><span style="color: #ddd;">Phone:</span> {{account.phone||"321-555-1212"}}</label></h3>
+  <h3 class="col-xs-12">Code sent to:</h3>
+  <h3 class="col-xs-12" style="margin-top: 0;"><label class="label label-outline"><span style="color: #ddd;">Phone:</span> {{account.phone||"321-555-1212"}}</label></h3>
 </div>
