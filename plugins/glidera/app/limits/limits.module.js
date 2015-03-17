@@ -1,7 +1,12 @@
 
-angular.module('app.limits', ['app.glidera']).
-factory('Limits', ['$q', 'glideraFactory',
-  function($q, glideraFactory) {
+(function() {
+  angular.module('app.limits', ['app.glidera'])
+    .factory('Limits', ['$q', 'glideraFactory', limitsFactory])
+    .directive('exchangeLimits', exchangeLimits)
+    .directive('buyLimits', buyLimits)
+    .directive('sellLimits', sellLimits);
+
+  function limitsFactory($q, glideraFactory) {
     var limits = {};
     var factory = {};
     var toFiat = function(input) {
@@ -52,19 +57,20 @@ factory('Limits', ['$q', 'glideraFactory',
       }
     }
     return factory;
-  }]).
-directive('exchangeLimits', [function() {
+  }
+  function exchangeLimits() {
     return {
       templateUrl: 'app/limits/partials/limits.html'
     };
-  }]).
-directive('buyLimits', [function() {
+  }
+  function buyLimits() {
     return {
       templateUrl: 'app/limits/partials/buy.html'
     };
-  }]).
-directive('sellLimits', [function() {
+  }
+  function sellLimits() {
     return {
       templateUrl: 'app/limits/partials/sell.html'
     };
-  }]);
+  }
+})();
