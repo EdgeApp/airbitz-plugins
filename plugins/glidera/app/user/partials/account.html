@@ -10,28 +10,28 @@
         <label class="status label label-outline pull-right"
                ng-class="{'label-success': userStatus.userCanTransact}">{{ userStatus.userCanTransact | statusFilter }}</label>
       </li>
-      <li ng-if="userStatus.userCanTransact" ng-show="showOptions" class="list-group-item">
+      <li ng-if="userStatus.userCanTransact" ng-show="showOptions" class="ng-trans ng-trans-scale-up easeOutBack list-group-item">
         <div exchange-limits></div>
       </li>
-      <li ng-show="showOptions" class="list-group-item">
+      <li ng-show="showOptions" class="ng-trans ng-trans-scale-up easeOutBack list-group-item">
         <span class="list-group-item-heading">Email</span>
         <p class="list-group-item-text">{{account.email || 'email'}}</p>
         <label class="status label label-outline pull-right"
                ng-class="{'label-success': userStatus.userEmailIsSetup}">{{ userStatus.userEmailIsSetup | statusFilter }}</label>
       </li>
-      <li ng-show="showOptions" ui-sref="account" class="list-group-item">
+      <li ng-show="showOptions" ui-sref="account" class="ng-trans ng-trans-scale-up easeOutBack list-group-item">
         <span class="list-group-item-heading">Account Information</span>
         <p class="list-group-item-text">Tap to edit</p>
         <label class="status label label-outline pull-right"
                ng-class="{'label-success': userStatus.userBasicInfoIsSetup}">{{ userStatus.userBasicInfoIsSetup | statusFilter }}</label>
       </li>
-      <li ng-show="showOptions" ui-sref="verifyPhone" class="list-group-item">
+      <li ng-show="showOptions" ui-sref="verifyPhone" class="ng-trans ng-trans-scale-up easeOutBack list-group-item">
         <span class="list-group-item-heading">Mobile Phone</span>
         <p class="list-group-item-text">Tap to edit</p>
         <label class="status label label-outline pull-right"
                ng-class="{'label-success': userStatus.userPhoneIsSetup}">{{ userStatus.userPhoneIsSetup | statusFilter }}</label>
       </li>
-      <li ng-show="showOptions" ng-click="routeBankAccount()" class="list-group-item">
+      <li ng-show="showOptions" ng-click="routeBankAccount()" class="ng-trans ng-trans-scale-up easeOutBack list-group-item">
         <span class="list-group-item-heading">Bank Account</span>
         <p class="list-group-item-text">Tap to edit</p>
         <label class="status label label-outline pull-right"
