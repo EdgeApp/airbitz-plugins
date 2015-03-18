@@ -1,9 +1,12 @@
 
 angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices', 'app.limits', 'app.core'])
-.controller('homeController', ['$scope', '$state', 'DataFactory', 'UserFactory',
-  function ($scope, $state, DataFactory, UserFactory) {
-    $scope.exchange = DataFactory.getExchange();
-    $scope.account = UserFactory.getUserAccount();
+.controller('homeController', ['$scope', '$state', 'UserFactory',
+  function ($scope, $state, UserFactory) {
+    if (UserFactory.isRegistered()) {
+      $state.go("exchange");
+    } else {
+      $state.go("signup");
+    }
   }])
 .controller('dashboardController', ['$scope', '$sce', '$state', 'Error', 'DataFactory', 'UserFactory', 'Limits',
   function ($scope, $sce, $state, Error, DataFactory, UserFactory, Limits) {

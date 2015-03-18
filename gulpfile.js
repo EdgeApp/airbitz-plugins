@@ -28,8 +28,12 @@ gulp.task('coredev', ['corestyle'], function() {
   return core(['./lib/js/config.js', './lib/js/airbitz-bridge-dev.js']);
 });
 
-gulp.task('core', ['corestyle'], function() {
-  return core(['./lib/js/airbitz-bridge.js']);
+gulp.task('core-android', ['corestyle'], function() {
+  return core(['./lib/js/airbitz-bridge-android.js']);
+});
+
+gulp.task('core-ios', ['corestyle'], function() {
+  return core(['./lib/js/airbitz-bridge-ios.js']);
 });
 
 plugins.map(function(plugin) {
@@ -58,8 +62,11 @@ plugins.map(function(plugin) {
   gulp.task(plugin + '-dev', ['coredev', plugin + '-partials'], function() {
     build('dev', plugin);
   });
-  gulp.task(plugin + '-android', ['core', plugin + '-partials'], function() {
+  gulp.task(plugin + '-android', ['core-android', plugin + '-partials'], function() {
     build('android', plugin);
+  });
+  gulp.task(plugin + '-ios', ['core-ios', plugin + '-partials'], function() {
+    build('ios', plugin);
   });
   gulp.task(plugin + '-watch', function () {
       watch('./plugins/' + plugin + '/**/*', function () {
