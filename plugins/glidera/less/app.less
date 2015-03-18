@@ -1,3 +1,5 @@
+@import "ng-trans.less";
+
 @ab-blue: #2291cf;
 @ab-blue-gray: #5A7991;
 @ab-blue-dark: #0f5791;
@@ -59,8 +61,9 @@ input[type=number]::-webkit-inner-spin-button {
 
 // setup main containers
 html {
-  position: relative;
+  position: absolute;
   min-height: 100%;
+  width: 100%;
 
   body {
     margin-bottom: 35px;
@@ -100,14 +103,26 @@ html {
 
 
 
+
+html {
+  background: url('./img/bg_app.jpg');
+  background-repeat: no-repeat;
+  background-size: 100%;
+  background-position: center center;
+  background-attachment: fixed;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+
+
+
+
 body {
   // margin: 20px 0 40px;
   color: white;
-  background: @ab-blue-dark;
-  background: url('./img/bg_app.jpg') center no-repeat;
-  background-size: cover;
-  background-position: fixed;
   font-family: Lato, sans-serif;
+  background: transparent;
 
 
   h1,h2,h3,h4,h5,h6 {
@@ -134,7 +149,9 @@ body {
   }
 
   .container {
-    padding-bottom: 20px;
+    position: absolute;
+    width: 100%;
+    // padding-bottom: 20px;
 
     &.phone-size {
       width: 384px;
@@ -143,12 +160,12 @@ body {
       outline: 1px solid @ab-blue-light;
     }
 
-    .screen {
-      position: abosolute;
-      top: 0;
-      bottom: 0;
-      width: 100%;
-    }
+    // .screen {
+    //   position: abosolute;
+    //   top: 0;
+    //   bottom: 0;
+    //   width: 100%;
+    // }
   }
 
   .btn {
@@ -261,7 +278,7 @@ body {
 
     .list-group-item,
     a.list-group-item {
-      color: @ab-blue-light;
+      color: @ab-blue-dark;
       background: rgba(255,255,255,.2);
       font-size: 20px;
       .glass-border;
@@ -626,36 +643,11 @@ body {
 
 
 
-// [ui-view].ng-enter, [ui-view].ng-leave {
-//   position: relative;
-//   top: 0;
-//   left: 0;
-//     -webkit-transition: 200ms cubic-bezier(0.250, 0.100, 0.250, 1.000) all;
-//     -moz-transition: 200ms cubic-bezier(0.250, 0.100, 0.250, 1.000) all;
-//     -ms-transition: 200ms cubic-bezier(0.250, 0.100, 0.250, 1.000) all;
-//     -o-transition: 200ms cubic-bezier(0.250, 0.100, 0.250, 1.000) all;
-//     transition: 200ms cubic-bezier(0.250, 0.100, 0.250, 1.000) all;
-// }
 
-// [ui-view].ng-enter {
-//   opacity: 0;
-//   left: 100%;
-// }
 
-// [ui-view].ng-enter-active {
-//   opacity: 1;
-//   left: 0;
-// }
 
-// [ui-view].ng-leave {
-//   opacity: 1;
-//   left: 0;
-// }
 
-// [ui-view].ng-leave-active {
-//   opacity: 0;
-//   left: -100%;
-// }
+
 
 
 
