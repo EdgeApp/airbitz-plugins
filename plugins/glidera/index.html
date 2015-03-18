@@ -8,8 +8,6 @@
   <title>Glidera Exchange</title>
 
   <link rel="stylesheet" href="css/core.css">
-  <!-- <link rel="stylesheet" href="vendors/css/animate.min.css"> -->
-  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="css/app.css">
 
 </head>
@@ -17,12 +15,10 @@
 <body>
 
   <div id="wrap">
-    <div class="container">
-      <div class="screen" ui-view ng-cloak ng-animate="{enter: 'enter', leave: 'leave'}">
-        <h1 class="text-center">
-          <i class="fa fa-spinner fa-spin"></i> Loading
-        </h1>
-      </div>
+    <div class="container ng-trans ng-trans-fade easeInOutQuad" ui-view ng-cloak ng-animate="{enter: 'enter', leave: 'leave'}">
+      <h1 class="text-center">
+        <i class="fa fa-spinner fa-spin"></i> Loading
+      </h1>
     </div><!-- /.container -->
   </div>
 
