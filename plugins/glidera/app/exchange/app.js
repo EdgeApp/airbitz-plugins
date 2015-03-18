@@ -90,6 +90,11 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices', 'app
       if($scope.debugClicks++ > 7) {
         $scope.showDebug = !$scope.showDebug;
       }
+      if ($scope.showDebug) {
+        Airbitz.ui.hideNavBar();
+      } else {
+        Airbitz.ui.showNavBar();
+      }
     };
 
     $scope.addBankAccount = function(){
@@ -252,13 +257,15 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices', 'app
     };
     $scope.executeOrder = function() {
       console.log(JSON.stringify(order));
+      var amountFiat = DataFactory.getExchange().currencyNum == order.transferToWallet.currencyNum
+                     ? order.orderFiatInput : 0;
       if (order.orderAction == 'buy') {
-        DataFactory.buy(order.transferToWallet, order.orderBtcInput, order.orderFiatInput).then(function(data) {
+        DataFactory.buy(order.transferToWallet, order.orderBtcInput, amountFiat).then(function(data) {
           Airbitz.ui.showAlert('Bought Bitcoin', 'You bought bitcoin!');
           $state.go('orderReceipt');
         }, Error.reject);
       } else {
-        DataFactory.sell(order.transferToWallet, order.orderBtcInput, order.orderFiatInput).then(function(data) {
+        DataFactory.sell(order.transferToWallet, order.orderBtcInput, amountFiat).then(function(data) {
           Airbitz.ui.showAlert('Sold Bitcoin', 'You sold bitcoin!');
           $state.go('orderReceipt');
         }, Error.reject);
