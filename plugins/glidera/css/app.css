@@ -390,39 +390,12 @@ input[type=number]::-webkit-inner-spin-button {
   margin: 0;
 }
 html {
-  position: absolute;
-  min-height: 100%;
+  height: 100%;
   width: 100%;
 }
 html body {
-  margin-bottom: 35px;
-}
-html body #wrap {
   min-height: 100%;
-  height: auto !important;
-}
-html body #wrap .container {
-  margin-top: 20px;
-}
-html body #footer {
-  position: absolute;
-  bottom: 0;
   width: 100%;
-  height: 40px;
-  background: rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  border-bottom: none;
-  border-left: none;
-  border-right: none;
-}
-html body #footer .container {
-  padding-bottom: 0;
-}
-html body #footer p {
-  margin-bottom: 0;
-  padding: 10px 0;
-}
-html {
   background: url('img/bg_app.jpg');
   background-repeat: no-repeat;
   background-size: 100%;
@@ -430,6 +403,36 @@ html {
   background-attachment: fixed;
   overflow-x: hidden;
   overflow-y: auto;
+}
+html body #main-content {
+  position: absolute;
+  width: 100%;
+  padding-bottom: 70px;
+}
+html body #wrap {
+  position: absolute;
+  min-height: 100%;
+  width: 100%;
+  padding-top: 20px;
+}
+html body #wrap #footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 40px;
+  background: #1e76a7;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-bottom: none;
+  border-left: none;
+  border-right: none;
+}
+html body #wrap #footer .container {
+  margin-top: 0;
+  padding-bottom: 0;
+}
+html body #wrap #footer p {
+  margin-bottom: 0;
+  padding: 10px 0;
 }
 body {
   color: white;
@@ -461,16 +464,6 @@ body input[type='email'] {
   background: rgba(0, 0, 0, 0.2);
   color: white;
   border: 1px solid rgba(255, 255, 255, 0.5);
-}
-body .container {
-  position: absolute;
-  width: 100%;
-}
-body .container.phone-size {
-  width: 384px;
-  height: 640px;
-  overflow: scroll;
-  outline: 1px solid #3bcfff;
 }
 body .btn {
   box-shadow: 0 2px 0px rgba(0, 0, 0, 0.4);
