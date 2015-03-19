@@ -43,6 +43,26 @@
         <label for="inputFiatAmount">Amount to <span class="label label-outline">{{ order.orderAction | uppercase }}</span></label>
         <div class="input-group">
           <input
+            ng-model="order.orderBtcInput"
+            ng-change="convertBtcValue(order.orderBtcInput)"
+            type="number"
+            name="orderBtcInput"
+            class="large right-square"
+            id="inputBtcAmount"
+            placeholder="0.5"
+            step="any"
+            required="" />
+          <span class="large input-group-addon">BTC</span>
+        </div>
+        <div class="input-error"
+             ng-show="form.$submitted || form.orderBtcInput.$touched">
+          <div ng-show="form.orderBtcInput.$error.required" class="label label-danger">Required</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="input-group">
+          <input
             ng-model="order.orderFiatInput"
             ng-change="convertFiatValue(order.orderFiatInput)"
             type="number"
@@ -62,36 +82,14 @@
         </div>
       </div>
 
-      <div class="form-group">
-        <div class="input-group">
-          <input
-            ng-model="order.orderBtcInput"
-            ng-change="convertBtcValue(order.orderBtcInput)"
-            type="number"
-            name="orderBtcInput"
-            class="large right-square"
-            id="inputBtcAmount"
-            placeholder="0.5"
-            tabindex="2"
-            step="any"
-            required="" />
-          <span class="large input-group-addon">BTC</span>
-        </div>
-        <div class="input-error"
-             ng-show="form.$submitted || form.orderBtcInput.$touched">
-          <div ng-show="form.orderBtcInput.$error.required" class="label label-danger">Required</div>
-        </div>
-      </div>
-
       <div class="row text-right" style="margin-top: 40px;">
         <div class="col-xs-12">
           <button type="button"
                   ui-sref="exchange"
-                  tabindex="4"
                   class="buy-sell-next btn btn-lg btn-link">Cancel</button>
           <button type="submit"
                   ng-disabled="form.$invalid"
-                  tabindex="3"
+                  tabindex="2"
                   class="buy-sell-next btn btn-lg btn-success">Next</button>
         </div>
       </div>
