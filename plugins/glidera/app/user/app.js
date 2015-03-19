@@ -6,7 +6,9 @@ angular.module('app.user', ['app.dataFactory', 'app.constants'])
     $scope.account = UserFactory.getUserAccount();
     UserFactory.getFullUserAccount().then(function(account) {
       $scope.account = account;
-    }, Error.reject);
+    }, function() {
+      // ignore errors on get so that new accounts don't get the wrong impression.
+    });
 
     $scope.cancelSignup = function(){
       $state.go('exchange');
@@ -84,7 +86,7 @@ angular.module('app.user', ['app.dataFactory', 'app.constants'])
   }])
 .controller('verifyEmailController', ['$scope', '$state', 'Error', 'UserFactory',
     function($scope, $state, Error, UserFactory) {
-      Airbitz.ui.title('Glidera: Verify Email');
+      Airbitz.ui.title('Verify Email');
       $scope.account = UserFactory.getUserAccount();
 
       $scope.next = function() {
@@ -100,6 +102,7 @@ angular.module('app.user', ['app.dataFactory', 'app.constants'])
     }])
 .controller('verifyInfoController', ['$scope', '$state', 'Error', 'States', 'UserFactory',
   function($scope, $state, Error, States, UserFactory) {
+    Airbitz.ui.title('Verify User Information');
     $scope.states = States.getStates();
     $scope.account = UserFactory.getUserAccount();
 
@@ -113,7 +116,7 @@ angular.module('app.user', ['app.dataFactory', 'app.constants'])
   }])
 .controller('verifyPhoneController', ['$scope', '$state', 'Error', 'DataFactory', 'UserFactory', 'TwoFactor',
     function($scope, $state, Error, DataFactory, UserFactory, TwoFactor) {
-      Airbitz.ui.title('Glidera: Verify Phone');
+      Airbitz.ui.title('Verify Phone');
       $scope.account = UserFactory.getUserAccount();
 
       var verifyCode = function() {
