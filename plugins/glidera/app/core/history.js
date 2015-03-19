@@ -8,14 +8,16 @@
   /* TODO: remove match(//) regexp and replace with state lookups */
   function history($rootScope, $window, $location, UserFactory) {
     var history = [];
+    var skip = false;
     $rootScope.$on('$locationChangeStart', function(event, next, current) {
       if (!UserFactory.isRegistered() && !next.match(/signup.html/)) {
         console.log('Not registered. Redirecting to registration form.');
         $location.path('/signup/');
         return;
       }
-      if (history.length == 0) {
+      if (!skip) {
         history.push(current);
+        Airbitz.ui.navStackPush(current);
       }
       // if we are on the dashboard screen, empty history
       if (next.match(/\.html#\/exchange\/$/)
@@ -23,17 +25,19 @@
         history.length = 0;
         Airbitz.ui.navStackClear();
       }
-      history.push(next);
-      Airbitz.ui.navStackPush(next);
+      skip = false;
     });
     Airbitz._bridge.back = function() {
-      var el = history.pop();
-      Airbitz.ui.navStackPop();
       if (history.length == 0) {
         Airbitz._bridge.exit();
       } else {
-        $window.history.back();
+        var el = history.pop().replace(/.*#/, '');
+        Airbitz.ui.navStackPop();
+
+        $location.path(el).replace();
+        skip = true; // don't record this change in the history stack
       }
+      $rootScope.$apply();
     };
   };
 })();
