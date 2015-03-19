@@ -19,11 +19,18 @@ html {
     min-height: 100%;
     width: 100%;
 
+    -webkit-animation: fadein 500ms; /* Safari, Chrome and Opera > 12.1 */
+       -moz-animation: fadein 500ms; /* Firefox < 16 */
+        -ms-animation: fadein 500ms; /* Internet Explorer */
+         -o-animation: fadein 500ms; /* Opera < 12.1 */
+            animation: fadein 500ms;
+
     // background for app
+
     background: url('./img/bg_app.jpg');
     background-repeat: no-repeat;
     background-size: 100%;
-    background-position: center center;
+    background-position: top center;
     background-attachment: fixed;
     overflow-x: hidden;
     overflow-y: auto;
@@ -483,7 +490,7 @@ body {
 
 
   .twofa {
-    margin-top: 30px;
+    margin-top: 0;
 
     input[type="number"] {
       margin-bottom: 10px;
