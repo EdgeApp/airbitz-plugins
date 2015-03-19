@@ -31,7 +31,9 @@
       if (!res || !res.code) {
         Airbitz.ui.showAlert('Error', 'An unknown error occurred.');
       } else {
-        if (res.code == 'MissingRequiredParameter') {
+        if (res.code == 'IgnoreAction') {
+          return;
+        } else if (res.code == 'MissingRequiredParameter') {
           Airbitz.ui.showAlert('Error', 'The request is missing required data.');
         } else if (res.code == 'InvalidParameterValue') {
           Airbitz.ui.showAlert('Invalid', res.message);

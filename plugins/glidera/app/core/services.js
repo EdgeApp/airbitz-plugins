@@ -357,7 +357,7 @@ factory('DataFactory', [
                      'signedTx': signedTx});
         },
         error: function() {
-          d.reject('Aborted spend');
+          d.reject({"code": "IgnoreAction"});
         }
       });
       return d.promise;
