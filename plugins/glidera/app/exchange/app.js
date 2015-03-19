@@ -7,7 +7,7 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices', 'app
   }])
 .controller('dashboardController', ['$scope', '$sce', '$state', 'Error', 'DataFactory', 'UserFactory', 'Limits',
   function ($scope, $sce, $state, Error, DataFactory, UserFactory, Limits) {
-    Airbitz.ui.title('Glidera');
+    Airbitz.ui.title('Buy/Sell Bitcoin');
     // set variables that might be cached locally to make sure they load faster if available
     $scope.exchange = DataFactory.getExchange();
     $scope.account = UserFactory.getUserAccount();
@@ -176,7 +176,6 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices', 'app
 .controller('orderController',
   ['$scope', '$state', '$stateParams', '$filter', 'Error', 'DataFactory', 'UserFactory', 'TwoFactor', 'Limits', 'Prices',
   function ($scope, $state, $stateParams, $filter, Error, DataFactory, UserFactory, TwoFactor, Limits, Prices) {
-    Airbitz.ui.title('Place Order');
     $scope.exchange = DataFactory.getExchange();
     $scope.account = UserFactory.getUserAccount();
 
@@ -187,6 +186,12 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices', 'app
 
     $scope.order = DataFactory.getOrder(false); // initialize new order and clear existing order
     $scope.order.orderAction = $stateParams.orderAction; // set order action
+
+    if ($scope.order.orderAction == 'buy') {
+      Airbitz.ui.title('Buy Bitcoin');
+    } else {
+      Airbitz.ui.title('Sell Bitcoin');
+    }
 
     Prices.setBuyQty(1).then(function() {
       Prices.setSellQty(1);
