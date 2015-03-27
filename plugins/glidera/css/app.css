@@ -489,7 +489,7 @@ html body #wrap #footer p {
 }
 body {
   color: white;
-  font-family: Lato, sans-serif;
+  /* font-family: Lato, sans-serif; */
   background: transparent;
 }
 body h1,
