@@ -21,6 +21,7 @@
       <input ng-model="account.firstName" name="firstName" type="text" id="inputFirstName" class="form-control"
              placeholder="First Name"
              autofocus=""
+             autocorrect="off"
              autocomplete="off"
              required="" />
       <div class="input-error" ng-show="form.$submitted || form.firstName.$touched">
@@ -32,6 +33,7 @@
       <label for="inputLastName" class="sr-only">Last</label>
       <input ng-model="account.lastName" name="lastName" type="text" id="inputLastName" class="form-control"
              placeholder="Last Name"
+             autocorrect="off"
              autocomplete="off"
              required="" />
       <div class="input-error" ng-show="form.$submitted || form.lastName.$touched">

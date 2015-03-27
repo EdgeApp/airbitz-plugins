@@ -22,10 +22,9 @@
       <div class="row">
         <div class="col-xs-6 form-group">
           <label for="inputBtcWallet" class="">BTC Wallet</label>
-          <select
+          <select id="inputBtcWallet"
             ng-model="order.transferToWallet"
             ng-options="w.name for w in userWallets"
-            id="inputBtcWallet"
             class="form-control input-lg">
           </select>
         </div>
@@ -51,6 +50,7 @@
             id="inputBtcAmount"
             placeholder="0.5"
             step="any"
+            autocorrect="off"
             required="" />
           <span class="large input-group-addon">BTC</span>
         </div>
@@ -70,6 +70,7 @@
             class="large right-square"
             id="inputFiatAmount"
             placeholder="100.00"
+            autocorrect="off"
             autofocus="true"
             tabindex="1"
             step="any"

@@ -7,26 +7,25 @@
         previous two factor code.</p>
       </div>
       <label for="inputOldVerificationCode" class="sr-only">Old Verification Code</label>
-      <input
-        ng-model="oldVerificationCode"
-        type="text"
+      <input type="number"
         id="inputOldVerificationCode"
         class="large text-center"
         placeholder="Previous 2FA Code"
+        autocorrect="off"
         autocomplete="off"
+        ng-model="oldVerificationCode"
       />
     </div>
     <div class="form-group">
       <label for="inputVerificationCode" class="sr-only">Verification Code</label>
-      <input
-        ng-model="verificationCode"
-        autofocus
-        type="number"
+      <input type="number"
         id="inputVerificationCode"
         class="large text-center"
         placeholder="Your Code"
-
+        autocorrect="off"
         autocomplete="off"
+        ng-model="verificationCode"
+        autofocus
       />
       <button type="submit" ng-click="submit2FA()"
               class="buy-sell-next btn btn-lg btn-block btn-success">Verify Code</button>
