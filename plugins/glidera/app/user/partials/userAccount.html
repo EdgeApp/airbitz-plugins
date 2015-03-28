@@ -61,7 +61,7 @@
         <label for="inputAddressZip" class="sr-only">Zip</label>
         <input ng-model="account.zipCode"
                type="text" id="inputAddressZip" class="form-control"
-               placeholder="Postal Code" autofocus="" autocomplete="off" autocorrect="off"
+               placeholder="Postal Code" autofocus="" autocomplete="off" autocorrect="off" pattern="[0-9]*"
                name="zip"
                required="" />
         <div class="input-error" ng-show="form.$submitted || form.zip.$touched">
