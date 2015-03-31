@@ -24,6 +24,11 @@
         || next.match(/\.html#\/signup\/$/)) {
         history.length = 0;
         Airbitz.ui.navStackClear();
+      } else if (next.match(/\.html#\/receipt\/$/)) {
+        Airbitz.ui.navStackClear();
+
+        history.push('/exchange/');
+        Airbitz.ui.navStackPush('/exchange/');
       }
       skip = false;
     });
