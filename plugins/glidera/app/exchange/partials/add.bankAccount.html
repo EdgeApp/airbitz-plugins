@@ -26,7 +26,9 @@
                class="form-control"
                placeholder="123456789"
                autocomplete="off"
-               required="" />
+               required=""
+               pattern="[0-9]*" 
+               />
         <div class="input-error" ng-show="form.$submitted || form.accountNumber.$touched">
             <div ng-show="form.accountNumber.$error.required" class="label label-danger">Required.</div>
         </div>
@@ -36,13 +38,15 @@
         <label for="inputBankRoutingNumber" class="">Routing Number</label>
         <input ng-model="bankAccount.routingNumber"
                name="routingNumber"
-               type="number"
+               type="text"
                id="inputBankRoutingNumber"
                class="form-control"
                placeholder="987654321"
                autocomplete="off"
                required=""
-               routing-number-validator />
+               routing-number-validator 
+               pattern="[0-9]*"
+               />
         <div class="input-error" ng-show="form.$submitted || form.routingNumber.$touched">
             <div ng-show="form.routingNumber.$error.required" class="label label-danger">Required.</div>
             <div ng-show="form.routingNumber.$error.routingNumber" class="label label-danger">Valid routing number required</div>
