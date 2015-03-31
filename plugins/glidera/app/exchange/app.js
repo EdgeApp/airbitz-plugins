@@ -171,7 +171,15 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices', 'app
         DataFactory.deleteBankAccount($scope.bankAccount.bankAccountUuid).then(function() {
           Airbitz.ui.showAlert('Bank Account Deleted', $scope.bankAccount.description + ' deleted');
           $state.go('exchange');
-        }, Error.reject);
+        }, function(res) {
+          if (res && res.message && res.message.match(/2FACode/i)) {
+            Airbitz.ui.showAlert('Unauthorized', 'Invalid 2 Factor code.');
+            TwoFactor.reset();
+            $state.go('exchangeEditBankController', {'uuid': $stateParams.uuid});
+          } else {
+            Error.reject(res);
+          }
+        });
       });
     };
   }])
