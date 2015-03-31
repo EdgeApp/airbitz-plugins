@@ -251,7 +251,7 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices', 'app
 .controller('reviewOrderController', ['$scope', '$state', 'Error', 'DataFactory', 'UserFactory', 'TwoFactor', 'Prices',
   function ($scope, $state, Error, DataFactory, UserFactory, TwoFactor, Prices) {
     var order = DataFactory.getOrder(false);
-    console.log(JSON.stringify(order));
+    Airbitz.ui.title('Confirm Order');
     $scope.order = order;
     $scope.exchange = DataFactory.getExchange();
     $scope.account = UserFactory.getUserAccount();
