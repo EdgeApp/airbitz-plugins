@@ -107,14 +107,16 @@ var Glidera = (function () {
       return Glidera.request(req, opts.callback);
     },
 
-    register: function(firstName, lastName, email, code, cb) {
+    register: function(firstName, lastName, email, countryCode, registrationCode, cb) {
       var that = this;
       this._request(false, '/user/register', {
         'method': 'POST',
         'data': {
           'firstName': firstName,
           'lastName': lastName,
-          'email': email
+          'email': email,
+          'countryCode': countryCode,
+          'registrationCode': registrationCode,
         },
         'callback': function(error, statusCode, body) {
           if (statusCode == 200) {

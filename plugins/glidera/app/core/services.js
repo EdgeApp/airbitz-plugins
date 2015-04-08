@@ -16,13 +16,14 @@ factory('UserFactory', [
       account = {};
       Airbitz.core.writeData('account', {});
     };
-    factory.registerUser = function(firstName, lastName, email) {
+    factory.registerUser = function(firstName, lastName, email, countryCode, registrationCode) {
       var d = $q.defer();
-      glideraFactory.register(firstName, lastName, email, '', function(success, b) {
+      glideraFactory.register(firstName, lastName, email, countryCode, registrationCode, function(success, b) {
         var account = factory.getUserAccount();
         account.firstName = firstName;
         account.lastName = lastName;
         account.email = email;
+        account.countryCode = countryCode;
         account.key = b["key"];
         account.secret = b["secret"];
         if (success) {
@@ -68,6 +69,8 @@ factory('UserFactory', [
             account.city = b.city;
             account.zipCode = b.zipCode;
             account.state = States.findState(b.state);
+            account.country = b.countryCode;
+            account.occupation = b.occupation;
             account.status = b.status.status;
 
             // XXX: This is kind of hacky
@@ -97,6 +100,7 @@ factory('UserFactory', [
           'address2': account.address2,
           'city': account.city,
           'state': account.state.id,
+          'occupation': account.occupation,
           'zipCode': account.zipCode
         }, function(e, s, b) {
           if (s === 200) {
@@ -464,6 +468,47 @@ factory('States', [function() {
     },
     findState: function(code) {
       var l = states.filter(function(s) {
+        return s.id === code;
+      });
+      return l.length >= 1 ? l[0] : null;
+    }
+  }
+}]).
+factory('Occupations', [function() {
+  var occupations = [
+    {"id": "1", "name": "Accounting"},
+    {"id": "2", "name": "Administration"},
+    {"id": "3", "name": "Arts, Culture"},
+    {"id": "4", "name": "Business"},
+    {"id": "5", "name": "Communications"},
+    {"id": "6", "name": "Customer Service"},
+    {"id": "7", "name": "Education"},
+    {"id": "8", "name": "Energy, Utilities"},
+    {"id": "9", "name": "Engineering"},
+    {"id": "10", "name": "Finance"},
+    {"id": "11", "name": "Financial Services"},
+    {"id": "12", "name": "Government"},
+    {"id": "13", "name": "Health"},
+    {"id": "14", "name": "Hospitality"},
+    {"id": "15", "name": "Human Resources"},
+    {"id": "16", "name": "Internet"},
+    {"id": "17", "name": "Legal"},
+    {"id": "18", "name": "Manufacturing"},
+    {"id": "19", "name": "Marketing"},
+    {"id": "20", "name": "Non profit"},
+    {"id": "21", "name": "Recreation"},
+    {"id": "22", "name": "Religion"},
+    {"id": "23", "name": "Research"},
+    {"id": "24", "name": "Sales"},
+    {"id": "25", "name": "Sports, Fitness"},
+    {"id": "26", "name": "Student"}
+  ];
+  return {
+    getOccupations: function() {
+      return occupations;
+    },
+    findOccupations: function(code) {
+      var l = occupations.filter(function(s) {
         return s.id === code;
       });
       return l.length >= 1 ? l[0] : null;

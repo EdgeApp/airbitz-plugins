@@ -53,6 +53,34 @@
       </div>
     </div>
 
+    <!--
+    <div class="form-group">
+        <label for="inputCountry" class="">Country</label>
+        <select ng-model="account.countryCode" class="form-control"
+            name="countryCode"
+            id="inputCountry"
+            required="" />
+            <option value="US">United States</option>
+        </select>
+      <div class="input-error" ng-show="form.$submitted || form.countryCode.$touched">
+        <span ng-show="form.countryCode.$error.required" class="label label-danger">Required</span>
+        <span ng-show="form.countryCode.$error.countryCode" class="label label-danger">Country Required</span>
+      </div>
+    </div>
+    -->
+
+    <div class="form-group">
+      <label for="inputCode" class="">Registration Code</label>
+      <input ng-model="registrationCode" name="registrationCode" type="text" id="inputCode" class="form-control"
+             placeholder=""
+             autocomplete="off"
+             required="" />
+      <div class="input-error" ng-show="form.$submitted || form.registrationCode.$touched">
+        <span ng-show="form.registrationCode.$error.required" class="label label-danger">Required</span>
+        <span ng-show="form.registrationCode.$error.registrationCode" class="label label-danger">Valid registration code required</span>
+      </div>
+    </div>
+
     <div class="row text-right" style="margin-top: 40px;">
       <div class="col-xs-12">
         <button type="button"

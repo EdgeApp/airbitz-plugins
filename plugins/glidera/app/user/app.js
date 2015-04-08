@@ -1,8 +1,9 @@
 
 angular.module('app.user', ['app.dataFactory', 'app.constants'])
-.controller('userAccountController', ['$scope', '$state', 'Error', 'States', 'UserFactory',
-  function ($scope, $state, Error, States, UserFactory) {
+.controller('userAccountController', ['$scope', '$state', 'Error', 'States', 'Occupations', 'UserFactory',
+  function ($scope, $state, Error, States, Occupations, UserFactory) {
     $scope.states = States.getStates();
+    $scope.occupations = Occupations.getOccupations();
     $scope.account = UserFactory.getUserAccount();
     UserFactory.getFullUserAccount().then(function(account) {
       $scope.account = account;
@@ -68,6 +69,7 @@ angular.module('app.user', ['app.dataFactory', 'app.constants'])
   function ($scope, $state, Error, States, UserFactory) {
     Airbitz.ui.title('Glidera Signup');
     $scope.account = UserFactory.getUserAccount();
+    $scope.registrationCode = '';
 
     $scope.cancelSignup = function(){
       $state.go('home');
@@ -78,7 +80,9 @@ angular.module('app.user', ['app.dataFactory', 'app.constants'])
       if (UserFactory.isRegistered()) {
         $state.go('verifyEmail');
       } else {
-        UserFactory.registerUser($scope.account.firstName, $scope.account.lastName, $scope.account.email).then(function() {
+        UserFactory.registerUser($scope.account.firstName,
+            $scope.account.lastName, $scope.account.email,
+            "US", $scope.registrationCode).then(function() {
           $state.go('verifyEmail');
         }, Error.reject);
       }
@@ -92,7 +96,7 @@ angular.module('app.user', ['app.dataFactory', 'app.constants'])
       $scope.next = function() {
         UserFactory.fetchUserAccountStatus().then(function(userStatus) {
           if (userStatus.userEmailIsSetup) {
-            $state.go('verifyInfo');
+            $state.go('verifyPhone');
           } else {
             Airbitz.ui.showAlert('Verify Email', 'Please verify your email address before proceeding!');
             $state.go('verifyEmail');
@@ -100,10 +104,11 @@ angular.module('app.user', ['app.dataFactory', 'app.constants'])
         }, Error.reject);
       };
     }])
-.controller('verifyInfoController', ['$scope', '$state', 'Error', 'States', 'UserFactory',
-  function($scope, $state, Error, States, UserFactory) {
+.controller('verifyInfoController', ['$scope', '$state', 'Error', 'States', 'Occupations', 'UserFactory',
+  function($scope, $state, Error, States, Occupations, UserFactory) {
     Airbitz.ui.title('Verify User Information');
     $scope.states = States.getStates();
+    $scope.occupations = Occupations.getOccupations();
     $scope.account = UserFactory.getUserAccount();
 
     $scope.saveUserAccount = function() {
