@@ -53,23 +53,7 @@
       </div>
     </div>
 
-    <!--
-    <div class="form-group">
-        <label for="inputCountry" class="">Country</label>
-        <select ng-model="account.countryCode" class="form-control"
-            name="countryCode"
-            id="inputCountry"
-            required="" />
-            <option value="US">United States</option>
-        </select>
-      <div class="input-error" ng-show="form.$submitted || form.countryCode.$touched">
-        <span ng-show="form.countryCode.$error.required" class="label label-danger">Required</span>
-        <span ng-show="form.countryCode.$error.countryCode" class="label label-danger">Country Required</span>
-      </div>
-    </div>
-    -->
-
-    <div class="form-group">
+    <div class="form-group" ng-show="regCodeRequired">
       <label for="inputCode" class="">Registration Code</label>
       <input ng-model="registrationCode" name="registrationCode" type="text" id="inputCode" class="form-control"
              placeholder=""

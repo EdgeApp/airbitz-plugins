@@ -16,6 +16,17 @@ factory('UserFactory', [
       account = {};
       Airbitz.core.writeData('account', {});
     };
+    factory.registrationMode = function() {
+      var d = $q.defer();
+      glideraFactory.registrationMode(function(success, isOpen) {
+        if (success) {
+          d.resolve(isOpen);
+        } else {
+          d.reject();
+        }
+      });
+      return d.promise;
+    };
     factory.registerUser = function(firstName, lastName, email, countryCode, registrationCode) {
       var d = $q.defer();
       glideraFactory.register(firstName, lastName, email, countryCode, registrationCode, function(success, b) {

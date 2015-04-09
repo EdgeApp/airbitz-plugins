@@ -107,6 +107,14 @@ var Glidera = (function () {
       return Glidera.request(req, opts.callback);
     },
 
+    registrationMode: function(cb) {
+      this._request(false, '/user/register/mode', {
+        'method': 'GET',
+        'callback': function(error, statusCode, body) {
+          cb(statusCode == 200, body.mode === 'OPEN');
+        }
+      });
+    },
     register: function(firstName, lastName, email, countryCode, registrationCode, cb) {
       var that = this;
       this._request(false, '/user/register', {

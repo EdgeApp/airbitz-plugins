@@ -70,6 +70,12 @@ angular.module('app.user', ['app.dataFactory', 'app.constants'])
     Airbitz.ui.title('Glidera Signup');
     $scope.account = UserFactory.getUserAccount();
     $scope.registrationCode = '';
+    $scope.regCodeRequired = false;
+
+    UserFactory.registrationMode().then(function(isOpen) {
+      $scope.regCodeRequired = true; // !isOpen;
+    }, function() {
+    });
 
     $scope.cancelSignup = function(){
       $state.go('home');
