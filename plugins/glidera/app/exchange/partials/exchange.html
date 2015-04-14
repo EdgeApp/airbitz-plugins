@@ -1,5 +1,5 @@
-<div class="exchange-ticker row">
-  <div ng-click="showAccountDebug()" class="live-ticker text-right">
+<div class="exchange-ticker row" ng-click="showAccountDebug()">
+  <div class="live-ticker text-right">
     <div price-update price-type="{{ order.orderAction }}"></div>
   </div>
 </div>
@@ -13,35 +13,10 @@
   </div>
 </div>
 
-<!-- <div ng-if="userStatus.userCanTransact" exchange-limits></div> -->
-
 <div account-summary></div>
-
-
-<!-- <div ng-if="userStatus.userCanTransact" class="exchange-payment-list row">
-  <div class="col-xs-12">
-    <ul class="exchange-payment-options list-group" ng-model="bankAccounts">
-      <li class="list-group-item header"><i class="fa fa-bank"></i>Payment Methods <button ng-if="bankAccounts.length == 0" ng-click="addBankAccount()" class="btn btn-primary btn-xs pull-right">ADD NEW</button></li>
-
-      <li ng-click="routeBankAccount(bankAccount)"
-          class="list-group-item"
-          ng-repeat="bankAccount in bankAccounts">
-        <div class="row">
-          <div class="col-xs-12">{{ bankAccount.description }}</div>
-        </div>
-        <div class="row">
-          <div class="col-xs-12">
-            <small>{{bankAccount.accountNumber}}</small> <label class="label label-outline pull-right">{{ bankAccount.status || 'UNKNOWN' }}</label>
-          </div>
-        </div>
-      </li>
-    </ul>
-  </div>
-</div> -->
 
 <div ng-show="showDebug" class="ng-trans ng-trans-fade-up easeOutSine">
   <hr />
-
   <div class="row">
     <div class="col-xs-6">
       <button type="button" ui-sref="exchangeTransactions" class="btn btn-block btn-info">Log</button>

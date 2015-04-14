@@ -1,13 +1,5 @@
 
 angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices', 'app.limits', 'app.core'])
-.controller('homeController', ['$scope', '$state', 'UserFactory',
-  function ($scope, $state, UserFactory) {
-    if (UserFactory.isRegistered()) {
-      $state.go("exchange");
-    } else {
-      $state.go("signup");
-    }
-  }])
 .controller('dashboardController', ['$scope', '$sce', '$state', 'Error', 'DataFactory', 'UserFactory', 'Limits',
   function ($scope, $sce, $state, Error, DataFactory, UserFactory, Limits) {
     Airbitz.ui.title('Buy/Sell Bitcoin');
@@ -91,11 +83,6 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices', 'app
       console.log('TOGGLE DEBUG');
       if($scope.debugClicks++ > 7) {
         $scope.showDebug = !$scope.showDebug;
-      }
-      if ($scope.showDebug) {
-        Airbitz.ui.hideNavBar();
-      } else {
-        Airbitz.ui.showNavBar();
       }
     };
 
@@ -186,12 +173,7 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices', 'app
   ['$scope', '$state', '$stateParams', '$filter', 'Error', 'DataFactory', 'UserFactory', 'TwoFactor', 'Limits', 'Prices',
   function ($scope, $state, $stateParams, $filter, Error, DataFactory, UserFactory, TwoFactor, Limits, Prices) {
     $scope.account = UserFactory.getUserAccount();
-
     $scope.limits = Limits.getLimits();
-    Limits.fetchLimits().then(function(limits) {
-      $scope.limits = limits;
-    });
-
     $scope.order = DataFactory.getOrder(false); // initialize new order and clear existing order
     $scope.order.orderAction = $stateParams.orderAction; // set order action
 
@@ -201,24 +183,20 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices', 'app
       Airbitz.ui.title('Sell Bitcoin');
     }
 
-    Prices.setBuyQty(1).then(function() {
-      Prices.setSellQty(1);
+    Limits.fetchLimits().then(function(limits) {
+      $scope.limits = limits;
+    }).then(function() {
+      return Prices.setBuyQty(1).then(function() {
+        Prices.setSellQty(1);
+      });
+    }).then(function() {
+      return DataFactory.getUserWallets().then(function(userWallets) {
+        $scope.userWallets = userWallets;
+        $scope.order.transferToWallet = userWallets[0]
+      }, Error.reject);
     });
 
-    $scope.bankAccounts = DataFactory.getBankAccounts();
-    DataFactory.fetchBankAccounts().then(function(bankAccounts) {
-      $scope.bankAccounts = bankAccounts;
-      $scope.order.transferFromBankAccount = bankAccounts[0];
-    }, Error.reject);
-
-    DataFactory.getUserWallets().then(function(userWallets) {
-      $scope.userWallets = userWallets;
-      $scope.order.transferToWallet = userWallets[0]
-    }, Error.reject);
-
-
     $scope.convertFiatValue = function(input) {
-      // console.log('convert: ' + input + ' fiat to btc');
       if (typeof(input)==='undefined') input = 0;
 
       var price = ($scope.order.orderAction == 'buy')
@@ -228,9 +206,8 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices', 'app
     };
 
     $scope.convertBtcValue = function(input) {
-      // console.log(input + ' satoshi = ' + input / 100000000 + ' BTC');
       if (typeof(input)==='undefined') input = 0;
-      // convert to btc before currency conversion to match ui
+
       var price = ($scope.order.orderAction == 'buy')
           ? Prices.currentBuy.price : Prices.currentSell.price;
       output = input * price;
@@ -294,12 +271,9 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices', 'app
   }])
 .controller('transactionsController', ['$scope', '$state', 'DataFactory',
   function ($scope, $state, DataFactory) {
-    // $scope.transactions = DataFactory.getTransactions();
-    // console.log('TRANSACTIONS: ' + $scope.transactions);
     DataFactory.getTransactions().then(function(transactions) {
       $scope.transactions = transactions;
     })
-
   }]).
 directive('accountSummary', [function() {
   return {

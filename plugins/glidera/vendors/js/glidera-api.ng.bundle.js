@@ -73,7 +73,7 @@ var Glidera = (function () {
 
   Glidera.prototype = {
     _nextNonce: function() {
-      return this.nonce++;
+      return new Date().getTime();
     },
     _request: function(authRequired, uri, opts) {
       opts = opts || {};

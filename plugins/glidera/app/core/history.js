@@ -12,7 +12,7 @@
     $rootScope.$on('$locationChangeStart', function(event, next, current) {
       if (!UserFactory.isRegistered() && !next.match(/signup.html/)) {
         console.log('Not registered. Redirecting to registration form.');
-        $location.path('/signup/');
+        $location.path('/');
         return;
       }
       if (!skip) {

@@ -1,5 +1,18 @@
 
 angular.module('app.user', ['app.dataFactory', 'app.constants'])
+.controller('homeController', ['$scope', '$state', 'UserFactory',
+  function ($scope, $state, UserFactory) {
+    if (UserFactory.isRegistered()) {
+      $state.go("exchange");
+    } else {
+      if (Airbitz.core.readData('disclaimer')) {
+        $state.go("signup");
+      } else {
+        Airbitz.core.writeData('disclaimer', false);
+        $state.go("disclaimer");
+      }
+    }
+  }])
 .controller('userAccountController', ['$scope', '$state', 'Error', 'States', 'Occupations', 'UserFactory',
   function ($scope, $state, Error, States, Occupations, UserFactory) {
     $scope.states = States.getStates();
@@ -65,20 +78,35 @@ angular.module('app.user', ['app.dataFactory', 'app.constants'])
       });
     };
   }])
+.controller('disclaimerController', ['$scope', '$state', 'Error', 'States', 'UserFactory',
+  function ($scope, $state, Error, States, UserFactory) {
+    Airbitz.ui.title('Disclaimer');
+    $scope.showDisclaimer = true;
+
+    $scope.cancelSignup = function(){
+      Airbitz.ui.exit();
+    };
+
+    $scope.continueSignup = function(form) {
+      $state.go('signup');
+      Airbitz.core.writeData('disclaimer', true);
+    };
+  }])
 .controller('signupController', ['$scope', '$state', 'Error', 'States', 'UserFactory',
   function ($scope, $state, Error, States, UserFactory) {
     Airbitz.ui.title('Glidera - ' + $scope.countryName);
     $scope.account = UserFactory.getUserAccount();
     $scope.registrationCode = '';
     $scope.regCodeRequired = false;
+    $scope.showDisclaimer = true;
 
     UserFactory.registrationMode().then(function(isOpen) {
-      $scope.regCodeRequired = true; // !isOpen;
+      $scope.regCodeRequired = !isOpen;
     }, function() {
     });
 
     $scope.cancelSignup = function(){
-      $state.go('home');
+      $state.go('disclaimer');
     };
 
     $scope.submitSignUp = function(form) {

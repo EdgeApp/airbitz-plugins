@@ -1,13 +1,5 @@
 <div class="buy-sell-header row">
-  <!-- <div class="col-xs-6">
-    <div class="btn-group pull-left" data-toggle-name="btc-fiat-toggle" data-toggle="buttons-radio">
-      <button  ui-sref="exchangeOrder({orderAction: 'buy'})" ng-class="{ 'active' : order.orderAction == 'buy' }" type="button" value="default" data-toggle="button" class="btn btn-success">BUY</button>
-      <button  ui-sref="exchangeOrder({orderAction: 'sell'})" ng-class="{ 'active' : order.orderAction == 'sell' }" type="button" value="distance" data-toggle="button"
-      class="btn btn-primary">SELL</button>
-    </div>
-  </div> -->
-
-  <div class="text-right col-xs-offset-6 col-xs-6">
+  <div class="text-right col-xs-12">
     <div class="live-ticker">
       <div price-update price-type="{{ order.orderAction }}"></div>
       <div price-expires price-type="{{ order.orderAction }}"></div>

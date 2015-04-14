@@ -9,8 +9,13 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
     // route for signup TODO, move partial
     .state("home", {
       url: "/",
-      templateUrl: "app/core/partials/index.html",
+      templateUrl: "app/user/partials/redirect.html",
       controller: "homeController",
+    })
+    .state("disclaimer", {
+      url: "/",
+      templateUrl: "app/user/partials/disclaimer.html",
+      controller: "disclaimerController",
     })
     // route for signup
     .state("signup", {
