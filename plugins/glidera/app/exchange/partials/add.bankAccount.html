@@ -34,22 +34,61 @@
         </div>
       </div>
 
-      <div class="form-group">
-        <label for="inputBankRoutingNumber" class="">Routing Number</label>
-        <input ng-model="bankAccount.routingNumber"
-               name="routingNumber"
-               type="text"
-               id="inputBankRoutingNumber"
-               class="form-control"
-               placeholder="987654321"
-               autocomplete="off"
-               required=""
-               routing-number-validator 
-               pattern="[0-9]*"
-               />
-        <div class="input-error" ng-show="form.$submitted || form.routingNumber.$touched">
-            <div ng-show="form.routingNumber.$error.required" class="label label-danger">Required.</div>
-            <div ng-show="form.routingNumber.$error.routingNumber" class="label label-danger">Valid routing number required</div>
+      <div ng-if="countryCode == 'US'">
+        <div class="form-group">
+          <label for="inputBankRoutingNumber" class="">Routing Number</label>
+          <input ng-model="bankAccount.routingNumber"
+                name="routingNumber"
+                type="text"
+                id="inputBankRoutingNumber"
+                class="form-control"
+                placeholder="987654321"
+                autocomplete="off"
+                required=""
+                routing-number-validator 
+                pattern="[0-9]*"
+                />
+          <div class="input-error" ng-show="form.$submitted || form.routingNumber.$touched">
+              <div ng-show="form.routingNumber.$error.required" class="label label-danger">Required.</div>
+              <div ng-show="form.routingNumber.$error.routingNumber" class="label label-danger">Valid routing number required</div>
+          </div>
+        </div>
+      </div>
+
+      <div ng-if="countryCode == 'CA'">
+        <div class="form-group">
+          <label for="inputTransit" class="">Transit</label>
+          <input ng-model="bankAccount.transit"
+                name="transit"
+                type="text"
+                id="inputTransit"
+                class="form-control"
+                placeholder="12345"
+                autocomplete="off"
+                required=""
+                pattern="[0-9]*"
+                />
+          <div class="input-error" ng-show="form.$submitted || form.transit.$touched">
+              <div ng-show="form.transit.$error.required" class="label label-danger">Required.</div>
+              <div ng-show="form.transit.$error.transit" class="label label-danger">Valid transit number required</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputInstitution" class="">Institution</label>
+          <input ng-model="bankAccount.institution"
+                name="institution"
+                type="text"
+                id="inputInstitution"
+                class="form-control"
+                placeholder="123"
+                autocomplete="off"
+                required=""
+                pattern="[0-9]*"
+                />
+          <div class="input-error" ng-show="form.$submitted || form.institution.$touched">
+              <div ng-show="form.institution.$error.required" class="label label-danger">Required.</div>
+              <div ng-show="form.institution.$error.institution" class="label label-danger">Valid institution number required</div>
+          </div>
         </div>
       </div>
 

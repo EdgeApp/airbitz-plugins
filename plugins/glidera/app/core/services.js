@@ -1,8 +1,8 @@
 
 angular.module('app.dataFactory', ['app.glidera', 'app.2fa', 'app.constants', 'app.limits']).
 factory('UserFactory', [
-  '$q', '$filter', 'States', 'ExchangeFactory', 'glideraFactory', 'TwoFactor',
-  function($q, $filter, States, ExchangeFactory, glideraFactory, TwoFactor) {
+  '$q', '$filter', 'States', 'Occupations', 'ExchangeFactory', 'glideraFactory', 'TwoFactor',
+  function($q, $filter, States, Occupations, ExchangeFactory, glideraFactory, TwoFactor) {
     var factory = {};
     var account = Airbitz.core.readData('account') || {};
 
@@ -55,6 +55,7 @@ factory('UserFactory', [
     factory.getUserAccountStatus = function() {
       return userStatus;
     };
+
     factory.fetchUserAccountStatus = function() {
       var d = $q.defer();
       glideraFactory.userStatus(function(e,s,b) {
@@ -72,6 +73,7 @@ factory('UserFactory', [
       return $q(function(resolve, reject) {
         glideraFactory.getBasicInfo(function(e, s, b) {
           if (s === 200) {
+            account.email = account.email || b.email;
             account.firstName = b.firstName;
             account.middleName = b.middleName;
             account.lastName = b.lastName;
@@ -81,7 +83,7 @@ factory('UserFactory', [
             account.zipCode = b.zipCode;
             account.state = States.findState(b.state);
             account.country = b.countryCode;
-            account.occupation = b.occupation;
+            account.occupation = Occupations.find(b.occupation);
             account.status = b.status.status;
 
             // XXX: This is kind of hacky
@@ -111,8 +113,9 @@ factory('UserFactory', [
           'address2': account.address2,
           'city': account.city,
           'state': account.state.id,
-          'occupation': account.occupation,
-          'zipCode': account.zipCode
+          'occupation': account.occupation ? account.occupation.id : null,
+          'zipCode': account.zipCode,
+          'ip': '127.0.0.1'
         }, function(e, s, b) {
           if (s === 200) {
             Airbitz.core.writeData('account', account);
@@ -231,6 +234,8 @@ factory('DataFactory', [
         TwoFactor.getCode(),
         bankAccount.routingNumber,
         bankAccount.accountNumber,
+        bankAccount.transit,
+        bankAccount.institution,
         bankAccount.description,
         bankAccount.bankAccountType,
         function(e, s, b) {
@@ -412,15 +417,15 @@ factory('ExchangeFactory', [function() {
     'depositBankAccount2': '23002223932',
     'orderTimeout': '60',
     'depositTimeout': '3600',
-    'verificationCode': 'someCode',
     'depositId': 'GLIDER-USA-002',
     'supportsBankAccounts': true,
     'supportsCreditCards': false,
-    'currencyNum': 840
+    'currencyNum': Airbitz.config.get("CURRENCY_CODE"),
+    'currency': Airbitz.config.get("CURRENCY_ABBREV")
   };
 }]).
 factory('States', [function() {
-  var states = [
+  var usStates = [
     {"id": "AL", "name": "Alabama"},
     {"id": "AK", "name": "Alaska"},
     {"id": "AZ", "name": "Arizona"},
@@ -473,6 +478,19 @@ factory('States', [function() {
     {"id": "WI", "name": "Wisconsin"},
     {"id": "WY", "name": "Wyoming"}
   ];
+  var caProvinces = [
+    {"id": "ON", "name": "Ontario"},
+    {"id": "QC", "name": "Quebec"},
+    {"id": "NS", "name": "Nova Scotia"},
+    {"id": "NB", "name": "New Brunswick"},
+    {"id": "MB", "name": "Manitoba"},
+    {"id": "BC", "name": "British Columbia"},
+    {"id": "PE", "name": "Prince Edward Island"},
+    {"id": "SK", "name": "Saskatchewan"},
+    {"id": "AB", "name": "Alberta"},
+    {"id": "NL", "name": "Newfoundland and Labrador"}
+  ];
+  var states = Airbitz.config.get("COUNTRY_CODE") === "US" ? usStates : caProvinces;
   return {
     getStates: function() {
       return states;
@@ -518,9 +536,9 @@ factory('Occupations', [function() {
     getOccupations: function() {
       return occupations;
     },
-    findOccupations: function(code) {
+    find: function(code) {
       var l = occupations.filter(function(s) {
-        return s.id === code;
+        return s.id === code.toString();
       });
       return l.length >= 1 ? l[0] : null;
     }

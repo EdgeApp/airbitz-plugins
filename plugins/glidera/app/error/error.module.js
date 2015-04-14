@@ -12,7 +12,6 @@
     ]);
 
   function errorController($scope, $state, $stateParams) {
-    console.log('here');
     $scope.title = 'Authentication Error';
     $scope.message = 'Please try again.';
     $scope.refresh = function() {

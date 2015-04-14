@@ -1,6 +1,6 @@
 <div class="row text-center">
   <h3 class="col-xs-12"><label class="label label-info">{{exchange.order.type||"BUY"}}</label></h3>
-  <h3 class="col-xs-12">Please deposit <label class="label label-default">{{exchange.order.currencySymbol||"$"}}{{exchange.order.getExchangeRate()||"5555.91"}} {{exchange.order.currency||"USD"}}</label></h3>
+  <h3 class="col-xs-12">Please deposit <label class="label label-default">{{exchange.currencySymbol || "$" }}{{ exchange.order.getExchangeRate() ||"5555.91"}} {{exchange.currency || "USD"}}</label></h3>
   <h3 class="col-xs-12">Bank <label class="label label-outline">{{exchange.depositBankName1}}</label></h3>
   <h3 class="col-xs-12">Accout # <label class="label label-outline">{{exchange.depositBankAccount1}}</label></h3>
   <h2 class="col-xs-12">or</h2>

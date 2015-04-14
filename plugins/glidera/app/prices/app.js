@@ -87,6 +87,7 @@ directive('priceUpdate', ['$interval', '$filter', 'Prices',
       link: function(scope, elements, attrs){
         return priceLink($interval, Prices, scope, elements, attrs, function(scope, b) {
           scope.price = $filter('currency')(b.price, '$', 2);
+          scope.currency = b.currency;
         });
       }
     };

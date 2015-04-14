@@ -38,15 +38,15 @@
         </tr>
         <tr>
           <td>Subtotal</td>
-          <td>{{ exchange.order.currencySymbol || "$" }}{{ priceObj.subtotal || "priceSubtotal" | roundFiat }} {{ exchange.order.currency || "USD" }}</td>
+          <td>{{ exchange.order.currencySymbol || "$" }}{{ priceObj.subtotal || "priceSubtotal" | roundFiat }} {{ exchange.currency || "USD" }}</td>
         </tr>
         <tr>
           <td>Fees</td>
-          <td>{{ exchange.order.currencySymbol || "$" }}{{ priceObj.fees || "priceFees" | roundFiat }} {{ exchange.order.currency || "USD" }}</td>
+          <td>{{ exchange.order.currencySymbol || "$" }}{{ priceObj.fees || "priceFees" | roundFiat }} {{ exchange.currency || "USD" }}</td>
         </tr>
         <tr>
           <td>Total</td>
-          <td>{{ exchange.order.currencySymbol || "$" }}{{ priceObj.total || "priceTotal" | roundFiat }} {{ exchange.order.currency || "USD" }}</td>
+          <td>{{ exchange.order.currencySymbol || "$" }}{{ priceObj.total || "priceTotal" | roundFiat }} {{ exchange.currency || "USD" }}</td>
         </tr>
       </tbody>
     </table>

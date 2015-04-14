@@ -195,13 +195,15 @@ var Glidera = (function () {
       });
     },
 
-    createBankAccount: function(otpCode, routingNumber, accountNumber, description, accountType, callback) {
+    createBankAccount: function(otpCode, routingNumber, accountNumber, transit, institution, description, accountType, callback) {
       return this._request(true, '/user/bankaccount', {
         'method': 'POST',
         'otpCode': otpCode,
         'data': {
             'routingNumber': routingNumber,
             'accountNumber': accountNumber,
+            'transit': transit,
+            'institution': institution,
             'description': description,
             'bankAccountType': accountType
           },

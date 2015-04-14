@@ -74,7 +74,7 @@
             tabindex="1"
             step="any"
             required="" />
-          <span class="large input-group-addon">USD</span>
+            <span class="large input-group-addon">{{ exchange.currency || "USD" }}</span>
         </div>
         <div class="input-error"
              ng-show="form.$submitted || form.orderFiatInput.$touched">

@@ -12,9 +12,10 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices', 'app
   function ($scope, $sce, $state, Error, DataFactory, UserFactory, Limits) {
     Airbitz.ui.title('Buy/Sell Bitcoin');
     // set variables that might be cached locally to make sure they load faster if available
-    $scope.exchange = DataFactory.getExchange();
     $scope.account = UserFactory.getUserAccount();
     $scope.userStatus = UserFactory.getUserAccountStatus();
+    $scope.bankAccounts = DataFactory.getBankAccounts();
+    $scope.limits = Limits.getLimits();
     $scope.showOptions = !$scope.userStatus.userCanTransact;
     $scope.showDebug = false;
     $scope.debugClicks = 0;
@@ -22,17 +23,15 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices', 'app
     UserFactory.fetchUserAccountStatus().then(function(b) {
       $scope.userStatus = b;
       $scope.showOptions = !$scope.userStatus.userCanTransact;
+    }).then(function() {
+      Limits.fetchLimits().then(function(limits) {
+        $scope.limits = limits;
+      });
+    }).then(function() {
+      DataFactory.fetchBankAccounts().then(function(bankAccounts) {
+        $scope.bankAccounts = bankAccounts;
+      }, Error.reject);
     });
-
-    $scope.limits = Limits.getLimits();
-    Limits.fetchLimits().then(function(limits) {
-      $scope.limits = limits;
-    });
-
-    $scope.bankAccounts = DataFactory.getBankAccounts();
-    DataFactory.fetchBankAccounts().then(function(bankAccounts) {
-      $scope.bankAccounts = bankAccounts;
-    }, Error.reject);
 
     $scope.routeBankAccount = function() {
       if ($scope.bankAccounts.length) {
@@ -108,7 +107,6 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices', 'app
   ['$scope', '$state', 'Error', 'DataFactory', 'UserFactory', 'TwoFactor',
   function ($scope, $state, Error, DataFactory, UserFactory, TwoFactor) {
     Airbitz.ui.title('Add Bank Account');
-    $scope.exchange = DataFactory.getExchange();
     $scope.account = UserFactory.getUserAccount();
     $scope.bankAccount = {};
     $scope.bankAccount.bankAccountType = 'CHECKING';
@@ -187,7 +185,6 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices', 'app
 .controller('orderController',
   ['$scope', '$state', '$stateParams', '$filter', 'Error', 'DataFactory', 'UserFactory', 'TwoFactor', 'Limits', 'Prices',
   function ($scope, $state, $stateParams, $filter, Error, DataFactory, UserFactory, TwoFactor, Limits, Prices) {
-    $scope.exchange = DataFactory.getExchange();
     $scope.account = UserFactory.getUserAccount();
 
     $scope.limits = Limits.getLimits();
@@ -261,7 +258,6 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices', 'app
     var order = DataFactory.getOrder(false);
     Airbitz.ui.title('Confirm Order');
     $scope.order = order;
-    $scope.exchange = DataFactory.getExchange();
     $scope.account = UserFactory.getUserAccount();
     $scope.priceObj = ($scope.order.orderAction == 'buy')
                     ? Prices.currentBuy : Prices.currentSell;
@@ -290,7 +286,6 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices', 'app
   }])
 .controller('executeOrderController', ['$scope', '$state', 'DataFactory', 'UserFactory',
   function ($scope, $state, DataFactory, UserFactory) {
-    $scope.exchange = DataFactory.getExchange();
     $scope.account = UserFactory.getUserAccount();
 
     $scope.exchange.confirmDeposit = function(){

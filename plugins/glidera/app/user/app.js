@@ -47,7 +47,7 @@ angular.module('app.user', ['app.dataFactory', 'app.constants'])
       Airbitz.core.clearData();
       $state.go('signup');
 
-      Airbitz.ui.showAlert('Acctoun Removed', 'Your account has been removed. Please register a new account or enter your access keys from Glidera.');
+      Airbitz.ui.showAlert('Account Removed', 'Your account has been removed. Please register a new account or enter your access keys from Glidera.');
     };
 
     $scope.submit = function(form) {
@@ -67,7 +67,7 @@ angular.module('app.user', ['app.dataFactory', 'app.constants'])
   }])
 .controller('signupController', ['$scope', '$state', 'Error', 'States', 'UserFactory',
   function ($scope, $state, Error, States, UserFactory) {
-    Airbitz.ui.title('Glidera Signup');
+    Airbitz.ui.title('Glidera - ' + $scope.countryName);
     $scope.account = UserFactory.getUserAccount();
     $scope.registrationCode = '';
     $scope.regCodeRequired = false;
@@ -86,9 +86,10 @@ angular.module('app.user', ['app.dataFactory', 'app.constants'])
       if (UserFactory.isRegistered()) {
         $state.go('verifyEmail');
       } else {
+        var countryCode = Airbitz.config.get('COUNTRY_CODE');
         UserFactory.registerUser($scope.account.firstName,
             $scope.account.lastName, $scope.account.email,
-            "US", $scope.registrationCode).then(function() {
+            countryCode, $scope.registrationCode).then(function() {
           $state.go('verifyEmail');
         }, Error.reject);
       }

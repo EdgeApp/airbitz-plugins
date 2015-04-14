@@ -122,4 +122,6 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
 }]).
 run(['$rootScope', 'DataFactory', function ($rootScope, DataFactory) {
   $rootScope.exchange = DataFactory.getExchange();
+  $rootScope.countryCode = Airbitz.config.get('COUNTRY_CODE');
+  $rootScope.countryName = Airbitz.config.get('COUNTRY_NAME');
 }]);
