@@ -1,7 +1,20 @@
+(function () {
+  'use strict';
 
-angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices', 'app.limits', 'app.core'])
-.controller('dashboardController', ['$scope', '$sce', '$state', 'Error', 'DataFactory', 'UserFactory', 'Limits',
-  function ($scope, $sce, $state, Error, DataFactory, UserFactory, Limits) {
+  angular
+    .module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices', 'app.limits', 'app.core'])
+    .controller('dashboardController', ['$scope', '$sce', '$state', 'Error', 'DataFactory', 'UserFactory', 'Limits', dashboardController])
+    .controller('addBankAccountController', ['$scope', '$state', 'Error', 'DataFactory', 'UserFactory', 'TwoFactor', addBankAccountController])
+    .controller('verifyBankAccountController', ['$scope', '$state', '$stateParams', 'Error', 'DataFactory', 'UserFactory', 'TwoFactor', verifyBankAccountController])
+    .controller('editBankAccountController', ['$scope', '$state', '$stateParams', 'Error', 'DataFactory', 'UserFactory', 'TwoFactor', editBankAccountController])
+    .controller('orderController', ['$scope', '$state', '$stateParams', '$filter', 'Error', 'DataFactory', 'UserFactory', 'TwoFactor', 'Limits', 'Prices', orderController])
+    .controller('reviewOrderController', ['$scope', '$state', 'Error', 'DataFactory', 'UserFactory', 'TwoFactor', 'Prices', reviewOrderController])
+    .controller('executeOrderController', ['$scope', '$state', 'DataFactory', 'UserFactory', executeOrderController])
+    .controller('transactionsController', ['$scope', '$state', 'DataFactory', transactionsController])
+    .directive('accountSummary', accountSummary)
+    .directive('routingNumberValidator', routingNumberValidator);
+
+  function dashboardController($scope, $sce, $state, Error, DataFactory, UserFactory, Limits) {
     Airbitz.ui.title('Buy/Sell Bitcoin');
     // set variables that might be cached locally to make sure they load faster if available
     $scope.account = UserFactory.getUserAccount();
@@ -16,11 +29,11 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices', 'app
       $scope.userStatus = b;
       $scope.showOptions = !$scope.userStatus.userCanTransact;
     }).then(function() {
-      Limits.fetchLimits().then(function(limits) {
+      return Limits.fetchLimits().then(function(limits) {
         $scope.limits = limits;
       });
     }).then(function() {
-      DataFactory.fetchBankAccounts().then(function(bankAccounts) {
+      return DataFactory.fetchBankAccounts().then(function(bankAccounts) {
         $scope.bankAccounts = bankAccounts;
       }, Error.reject);
     });
@@ -89,10 +102,8 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices', 'app
     $scope.addBankAccount = function(){
       $state.go('exchangeAddBankAccount');
     };
-  }])
-.controller('addBankAccountController',
-  ['$scope', '$state', 'Error', 'DataFactory', 'UserFactory', 'TwoFactor',
-  function ($scope, $state, Error, DataFactory, UserFactory, TwoFactor) {
+  }
+  function addBankAccountController($scope, $state, Error, DataFactory, UserFactory, TwoFactor) {
     Airbitz.ui.title('Add Bank Account');
     $scope.account = UserFactory.getUserAccount();
     $scope.bankAccount = {};
@@ -111,10 +122,8 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices', 'app
         }, Error.reject);
       });
     };
-  }])
-.controller('verifyBankAccountController',
-  ['$scope', '$state', '$stateParams', 'Error', 'DataFactory', 'UserFactory', 'TwoFactor',
-  function ($scope, $state, $stateParams, Error, DataFactory, UserFactory, TwoFactor) {
+  }
+  function verifyBankAccountController($scope, $state, $stateParams, Error, DataFactory, UserFactory, TwoFactor) {
     Airbitz.ui.title('Verify Bank Account');
     $scope.account = UserFactory.getUserAccount();
     $scope.bankAccount = DataFactory.getBankAccount($stateParams.uuid);
@@ -133,10 +142,8 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices', 'app
         $state.go('exchange');
       }, Error.reject);
     };
-  }])
-.controller('editBankAccountController',
-  ['$scope', '$state', '$stateParams', 'Error', 'DataFactory', 'UserFactory', 'TwoFactor',
-  function ($scope, $state, $stateParams, Error, DataFactory, UserFactory, TwoFactor) {
+  }
+  function editBankAccountController($scope, $state, $stateParams, Error, DataFactory, UserFactory, TwoFactor) {
     Airbitz.ui.title('Edit Bank Account');
     $scope.account = UserFactory.getUserAccount();
     $scope.bankAccount = DataFactory.getBankAccount($stateParams.uuid);
@@ -167,11 +174,8 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices', 'app
         });
       });
     };
-  }])
-
-.controller('orderController',
-  ['$scope', '$state', '$stateParams', '$filter', 'Error', 'DataFactory', 'UserFactory', 'TwoFactor', 'Limits', 'Prices',
-  function ($scope, $state, $stateParams, $filter, Error, DataFactory, UserFactory, TwoFactor, Limits, Prices) {
+  }
+  function orderController($scope, $state, $stateParams, $filter, Error, DataFactory, UserFactory, TwoFactor, Limits, Prices) {
     $scope.account = UserFactory.getUserAccount();
     $scope.limits = Limits.getLimits();
     $scope.order = DataFactory.getOrder(false); // initialize new order and clear existing order
@@ -228,10 +232,8 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices', 'app
         });
       });
     };
-  }])
-
-.controller('reviewOrderController', ['$scope', '$state', 'Error', 'DataFactory', 'UserFactory', 'TwoFactor', 'Prices',
-  function ($scope, $state, Error, DataFactory, UserFactory, TwoFactor, Prices) {
+  }
+  function reviewOrderController($scope, $state, Error, DataFactory, UserFactory, TwoFactor, Prices) {
     var order = DataFactory.getOrder(false);
     Airbitz.ui.title('Confirm Order');
     $scope.order = order;
@@ -260,42 +262,41 @@ angular.module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices', 'app
         }, Error.reject);
       }
     };
-  }])
-.controller('executeOrderController', ['$scope', '$state', 'DataFactory', 'UserFactory',
-  function ($scope, $state, DataFactory, UserFactory) {
+  }
+  function executeOrderController($scope, $state, DataFactory, UserFactory) {
     $scope.account = UserFactory.getUserAccount();
 
     $scope.exchange.confirmDeposit = function(){
       $state.go('confirmDeposit');
     };
-  }])
-.controller('transactionsController', ['$scope', '$state', 'DataFactory',
-  function ($scope, $state, DataFactory) {
+  }
+  function transactionsController($scope, $state, DataFactory) {
     DataFactory.getTransactions().then(function(transactions) {
       $scope.transactions = transactions;
     })
-  }]).
-directive('accountSummary', [function() {
-  return {
-    templateUrl: 'app/user/partials/account.html'
-  };
-}]).
-directive('routingNumberValidator', [function() {
-  return {
-    require: 'ngModel',
-    link: function(scope, elm, attrs, ctrl) {
-      ctrl.$validators.routingNumber = function(mv) {
-        if (!mv || !mv.toString().match(/^\d{9}$/)) {
-          return false;
+  }
+  function accountSummary() {
+    return {
+      templateUrl: 'app/user/partials/account.html'
+    };
+  }
+  function routingNumberValidator() {
+    return {
+      require: 'ngModel',
+      link: function(scope, elm, attrs, ctrl) {
+        ctrl.$validators.routingNumber = function(mv) {
+          if (!mv || !mv.toString().match(/^\d{9}$/)) {
+            return false;
+          }
+          var s = mv.toString().split('').map(function(i) {
+            return parseInt(i);
+          });
+          checksum = (7 * (s[0] + s[3] + s[6]) +
+                      3 * (s[1] + s[4] + s[7]) +
+                      9 * (s[2] + s[5])) % 10;
+          return s[8] == checksum;
         }
-        var s = mv.toString().split('').map(function(i) {
-          return parseInt(i);
-        });
-        checksum = (7 * (s[0] + s[3] + s[6]) +
-                    3 * (s[1] + s[4] + s[7]) +
-                    9 * (s[2] + s[5])) % 10;
-        return s[8] == checksum;
       }
-    }
-  };
-}]);
+    };
+  }
+})();

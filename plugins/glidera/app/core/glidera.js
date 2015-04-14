@@ -1,5 +1,7 @@
 
 (function() {
+  'use strict';
+
   angular.module('app.glidera', ['glidera'])
     .factory('glideraFactory', ['glideraApi', glideraCactory]);
 

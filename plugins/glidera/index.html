@@ -5,20 +5,15 @@
   <meta name=viewport content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1.0, user-scalable=no">
   <!-- iOS meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, target-densityDpi=device-dpi" / -->
   <!-- ANDROID meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=1" / -->
-
   <meta name=viewport content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1.0, user-scalable=no">
   <meta name="description" content="Glidera Exchange Interface for Airbitz" />
   <meta charset=utf-8 />
-
   <title>Glidera Exchange</title>
-
   <link rel="stylesheet" href="css/core.css">
   <link rel="stylesheet" href="css/app.css">
-
 </head>
 
 <body>
-
   <div id="wrap">
     <div id="main-content" ui-view class="container ng-trans ng-trans-fade easeInOutQuad" ng-cloak ng-animate="{enter: 'enter', leave: 'leave'}">
         <h1 class="text-center">
@@ -33,9 +28,6 @@
     </div>
   </div>
 
-
-
-
   <script src="js/abc.js" type="text/javascript"></script>
   <script src="vendors/js/angular.min.js" type="text/javascript"></script>
   <script src="vendors/js/angular-touch.min.js" type="text/javascript"></script>
@@ -44,20 +36,20 @@
   <script src="vendors/js/moment.js" type="text/javascript"></script>
   <script src="vendors/js/glidera-api.ng.bundle.js" type="text/javascript"></script>
 
-  <script src="app/2fa/app.js" type="text/javascript"></script>
-  <script src="app/core/app.js" type="text/javascript"></script>
-  <script src="app/core/glidera.js" type="text/javascript"></script>
-  <script src="app/core/history.js" type="text/javascript"></script>
-  <script src="app/exchange/app.js" type="text/javascript"></script>
+  <script src="app/2fa/2fa.module.js" type="text/javascript"></script>
+  <script src="app/exchange/exchange.module.js" type="text/javascript"></script>
   <script src="app/limits/limits.module.js" type="text/javascript"></script>
-  <script src="app/prices/app.js" type="text/javascript"></script>
-  <script src="app/user/app.js" type="text/javascript"></script>
+  <script src="app/prices/prices.module.js" type="text/javascript"></script>
+  <script src="app/user/user.module.js" type="text/javascript"></script>
   <script src="app/filters/filters.module.js" type="text/javascript"></script>
   <script src="app/receipt/receipt.module.js" type="text/javascript"></script>
   <script src="app/error/error.module.js" type="text/javascript"></script>
+  <script src="app/core/core.module.js" type="text/javascript"></script>
+  <script src="app/core/services.js" type="text/javascript"></script>
+  <script src="app/core/glidera.js" type="text/javascript"></script>
+  <script src="app/core/history.js" type="text/javascript"></script>
   <script src="app.js" type="text/javascript"></script>
   <script src="js/partials.js" type="text/javascript"></script>
-  <script src="app/core/services.js" type="text/javascript"></script>
 </body>
 </html>
 

@@ -1,29 +1,35 @@
+(function() {
+  'use strict';
 
-function priceLink($interval, Prices, scope, element, attrs, callback) {
-  var netTimeout;
+  function priceLink($interval, Prices, scope, element, attrs, callback) {
+    var netTimeout;
 
-  function updateView() {
-    var f = attrs.priceType === 'sell' ? Prices.updateSell : Prices.updateBuy;
-    f().then(function(b) {;
-      console.log("B = " + JSON.stringify(b));
-      callback(scope, b);
+    function updateView() {
+      var f = attrs.priceType === 'sell' ? Prices.updateSell : Prices.updateBuy;
+      f().then(function(b) {;
+        console.log("B = " + JSON.stringify(b));
+        callback(scope, b);
+      });
+    }
+
+    element.on('$destroy', function() {
+      $interval.cancel(netTimeout);
     });
+
+    netTimeout = $interval(function() {
+        updateView(); // update DOM
+    }, 5000);
+
+    updateView();
   }
 
-  element.on('$destroy', function() {
-    $interval.cancel(netTimeout);
-  });
+  angular
+    .module('app.prices', ['app.glidera'])
+    .factory('Prices', ['$q', 'glideraFactory', Prices])
+    .directive('priceUpdate', ['$interval', '$filter', 'Prices', priceUpdate])
+    .directive('priceExpires', ['$interval', '$filter', 'Prices', priceExpires])
 
-  netTimeout = $interval(function() {
-      updateView(); // update DOM
-  }, 5000);
-
-  updateView();
-}
-
-angular.module('app.prices', ['app.glidera']).
-factory('Prices', ['$q', 'glideraFactory',
-  function($q, glideraFactory) {
+  function Prices($q, glideraFactory) {
     var factory = {};
     var timeDiff = function(date) {
       return (new Date(date).getTime() - new Date().getTime()) / 1000.0;
@@ -79,9 +85,8 @@ factory('Prices', ['$q', 'glideraFactory',
       return deferred.promise;
     };
     return factory;
-  }]).
-directive('priceUpdate', ['$interval', '$filter', 'Prices',
-  function($interval, $filter, Prices) {
+  }
+  function priceUpdate($interval, $filter, Prices) {
     return {
       templateUrl: 'app/prices/partials/rate.html',
       link: function(scope, elements, attrs){
@@ -91,9 +96,8 @@ directive('priceUpdate', ['$interval', '$filter', 'Prices',
         });
       }
     };
-  }]).
-directive('priceExpires', ['$interval', '$filter', 'Prices',
-  function($interval, $filter, Prices) {
+  }
+  function priceExpires($interval, $filter, Prices) {
     return {
       templateUrl: 'app/prices/partials/expires.html',
       link: function(scope, elements, attrs){
@@ -102,4 +106,5 @@ directive('priceExpires', ['$interval', '$filter', 'Prices',
         });
       }
     };
-  }]);
+  }
+})();
