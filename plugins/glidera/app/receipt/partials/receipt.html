@@ -16,20 +16,12 @@
     <table class="table table-bordered">
       <tbody>
         <tr ng-show="{{ order.orderAction === 'buy' }}">
-          <td>Payment Method</td>
-          <td>{{order.transferFromBankAccount.description || "FakeVisa 4494" }}</td>
-        </tr>
-        <tr ng-show="{{ order.orderAction === 'buy' }}">
           <td>Destination Wallet</td>
-          <td>{{ order.transferToWallet.name || "Travel Spending" }}</td>
+          <td>{{ order.transferToWallet.name || "" }}</td>
         </tr>
         <tr ng-show="{{ order.orderAction === 'sell' }}">
           <td>Sell From</td>
-          <td>{{ order.transferToWallet.name || "Travel Spending" }}</td>
-        </tr>
-        <tr ng-show="{{ order.orderAction === 'sell' }}">
-          <td>Deposit To</td>
-          <td>{{order.transferFromBankAccount.description || "FakeVisa 4494" }}</td>
+          <td>{{ order.transferToWallet.name || "" }}</td>
         </tr>
       </tbody>
     </table>
