@@ -371,7 +371,7 @@
         var sellAddress = data["sellAddress"];
         var d = $q.defer();
         createAddress(wallet, 'Glidera Refund', btcToSatoshi(qty), 
-                      amountFiat, 'Exchange:Refund Bitcoin', '', function(req) {
+                      amountFiat, 'Exchange:Refund Bitcoin', notes, function(req) {
           d.resolve({'sellAddress': sellAddress, 'refundAddress': req['address']});
         }, d.reject);
         return d.promise;
@@ -380,7 +380,7 @@
         Airbitz.core.requestSpend(wallet, data.sellAddress, btcToSatoshi(qty), amountFiat, {
           label: 'Glidera',
           category: 'Exchange:Sell Bitcoin',
-          notes: '',
+          notes: notes,
           success: function(data) {
             if (data && data.back) {
               d.reject({"code": "IgnoreAction"});
