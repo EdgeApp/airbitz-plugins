@@ -6,15 +6,7 @@
       ['$scope','$state', '$stateParams', 'DataFactory', 'UserFactory', 'TwoFactor', otpController])
     .factory('TwoFactor',
       ['$state', '$q', 'glideraFactory', otpFactory])
-    .directive('autofocus', ['$document', function($document) {
-      return {
-        link: function($scope, $element, attrs) {
-          setTimeout(function() {
-            $element[0].focus();
-          }, 100);
-        }
-      };
-    }]);
+    .directive('autoFocus', ['$timeout', autoFocus]);
 
   function otpController($scope, $state, $stateParams, DataFactory, UserFactory, TwoFactor) {
     Airbitz.ui.title('2 Factor Verification');
@@ -45,60 +37,71 @@
   }
 
   function otpFactory($state, $q, glideraFactory) {
-      var code = '';
-      var oldCode = '';
-      var lastFetch = null;
-      var nextAction = function() { };
-      var factory = {};
-      var that = this;
-      factory.cached = function() {
-        if (!that.lastFetch || !that.code) {
-          return false;
-        }
-        // if the code is less than 2 minutes old, don't ask for 2fa
-        return ((new Date().getTime() - that.lastFetch.getTime()) / 1000.0) <= 2 * 60;
-      };
-      factory.confirmTwoFactor = function(finishedCallback) {
+    var code = '';
+    var oldCode = '';
+    var lastFetch = null;
+    var nextAction = function() { };
+    var factory = {};
+    var that = this;
+    factory.cached = function() {
+      if (!that.lastFetch || !that.code) {
+        return false;
+      }
+      // if the code is less than 2 minutes old, don't ask for 2fa
+      return ((new Date().getTime() - that.lastFetch.getTime()) / 1000.0) <= 2 * 60;
+    };
+    factory.confirmTwoFactor = function(finishedCallback) {
+      if (finishedCallback) {
+        that.nextAction = finishedCallback;
+      }
+      $state.go('verify2FA', {'confirmNumber': 'confirm'});
+    };
+    factory.showTwoFactor = function(finishedCallback) {
+      if (factory.cached())  {
+        finishedCallback(that.code);
+      } else {
         if (finishedCallback) {
           that.nextAction = finishedCallback;
         }
-        $state.go('verify2FA', {'confirmNumber': 'confirm'});
-      };
-      factory.showTwoFactor = function(finishedCallback) {
-        if (factory.cached())  {
-          finishedCallback(that.code);
-        } else {
-          if (finishedCallback) {
-            that.nextAction = finishedCallback;
-          }
-          $state.go('verify2FA', {'confirmNumber': ''});
-        }
-      };
-      factory.requestCode = function() {
-        var d = $q.defer();
-        glideraFactory.getTwoFactorCode(function(e, r, b) {
-          that.lastFetch = new Date();
-          r >= 200 && r < 300 ? d.resolve(b) : d.reject(b);
-        });
-        return d.promise;
-      };
-      factory.reset = function() {
-        that.lastFetch = null;
-        that.code = '';
-      };
-      factory.finish = function(c, o) {
-        that.code = c;
-        that.oldCode = o;
-        if (that.nextAction) {
-          that.nextAction();
-        }
-      };
-      factory.getCode = function() {
-        return that.code;
-      };
-      factory.getOldCode = function() {
-        return that.oldCode;
+        $state.go('verify2FA', {'confirmNumber': ''});
       }
-      return factory;
     };
+    factory.requestCode = function() {
+      var d = $q.defer();
+      glideraFactory.getTwoFactorCode(function(e, r, b) {
+        that.lastFetch = new Date();
+        r >= 200 && r < 300 ? d.resolve(b) : d.reject(b);
+      });
+      return d.promise;
+    };
+    factory.reset = function() {
+      that.lastFetch = null;
+      that.code = '';
+    };
+    factory.finish = function(c, o) {
+      that.code = c;
+      that.oldCode = o;
+      if (that.nextAction) {
+        that.nextAction();
+      }
+    };
+    factory.getCode = function() {
+      return that.code;
+    };
+    factory.getOldCode = function() {
+      return that.oldCode;
+    }
+    return factory;
+  };
+
+  function autoFocus($timeout) {
+    return {
+      restrict: 'A',
+      link: function(scope, element) {
+        $timeout(function() {
+          element[0].focus();
+        }, 500);
+      }
+    };
+  }
 })();
