@@ -340,10 +340,18 @@
       return deferred.promise;
     };
 
+    var formatNotes = function(action, amountFiat) {
+      return action + " on " + $filter('date')(new Date().getTime(), 'MM/dd/yyyy @ h:mma') + " for " + $filter('currency')(amountFiat);
+    }
+
+    var btcToSatoshi = function(btc) {
+      return btc * 100000000;
+    };
+
     factory.buy = function(wallet, qty, amountFiat) {
-      // TODO: check buy limits
+      var notes = formatNotes("Purchased", amountFiat);
       return $q(function (resolve, reject) {
-        createAddress(wallet, 'Glidera', btcToSatoshi(qty), amountFiat, 'Exchange:Buy Bitcoin', '', resolve, reject);
+        createAddress(wallet, 'Glidera', btcToSatoshi(qty), amountFiat, 'Exchange:Buy Bitcoin', notes, resolve, reject);
       }).then(function(request) {
         return executeBuy(wallet, qty, request);
       }, function(error) {
@@ -353,12 +361,8 @@
       });
     };
 
-    var btcToSatoshi = function(btc) {
-      return btc * 100000000;
-    };
-
     factory.sell = function(wallet, qty, amountFiat) {
-      // TODO: check sell limits
+      var notes = formatNotes("Sold", amountFiat);
       return $q(function(resolve, reject) {
         glideraFactory.sellAddress(qty, function(e, r, b) {
           (r == 200) ? resolve(b) : reject(b);
@@ -377,13 +381,17 @@
           label: 'Glidera',
           category: 'Exchange:Sell Bitcoin',
           notes: '',
-          success: function(signedTx) {
-            d.resolve({'sellAddress': data.sellAddress,
-                      'refundAddress': data.refundAddress,
-                      'signedTx': signedTx});
+          success: function(data) {
+            if (data && data.back) {
+              d.reject({"code": "IgnoreAction"});
+            } else {
+              d.resolve({'sellAddress': data.sellAddress,
+                        'refundAddress': data.refundAddress,
+                        'signedTx': data});
+            }
           },
           error: function() {
-            d.reject({"code": "IgnoreAction"});
+            d.reject();
           }
         });
         return d.promise;
