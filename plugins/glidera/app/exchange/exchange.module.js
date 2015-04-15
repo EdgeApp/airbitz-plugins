@@ -15,7 +15,7 @@
     .directive('routingNumberValidator', routingNumberValidator);
 
   function dashboardController($scope, $sce, $state, Error, DataFactory, UserFactory, Limits) {
-    Airbitz.ui.title('Buy/Sell Bitcoin');
+    Airbitz.ui.title('Glidera ' + $scope.countryName);
     // set variables that might be cached locally to make sure they load faster if available
     $scope.account = UserFactory.getUserAccount();
     $scope.userStatus = UserFactory.getUserAccountStatus();
