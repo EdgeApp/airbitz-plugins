@@ -36,6 +36,8 @@
       return DataFactory.fetchBankAccounts().then(function(bankAccounts) {
         $scope.bankAccounts = bankAccounts;
       }, Error.reject);
+    }).then(function() {
+      DataFactory.checkPhoneNumber($scope.account);
     });
 
     $scope.routeBankAccount = function() {

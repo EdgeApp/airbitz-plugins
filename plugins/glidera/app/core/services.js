@@ -197,6 +197,15 @@
       return d.promise;
     };
 
+    factory.checkPhoneNumber = function(account) {
+      if (!account.phone) {
+        factory.getPhoneNumber().then(function(data) {
+          account.phone = data.phoneNumber;
+          Airbitz.core.writeData('account', account);
+        });
+      }
+    };
+
     var bankAccounts = Airbitz.core.readData('bankAccounts') || [];
     factory.getBankAccounts = function() {
       return bankAccounts;

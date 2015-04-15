@@ -34,7 +34,8 @@
   </form>
 </div>
 
-<div class="row text-center">
+<div class="row text-center" ng-if="account.phone">
   <h3 class="col-xs-12">Code sent to:</h3>
-  <h3 class="col-xs-12" style="margin-top: 0;"><label class="label label-outline"><span style="color: #ddd;">Phone:</span> {{account.phone||"321-555-1212"}}</label></h3>
+  <h3 class="col-xs-12" style="margin-top: 0;"><label class="label label-outline"><span style="color: #ddd;">Phone:</span> {{ account.phone }}</label></h3>
 </div>
+
