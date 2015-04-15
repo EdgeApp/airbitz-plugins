@@ -430,6 +430,7 @@
     return {
       'name': 'Glidera',
       'emailVerificationAddress': 'admin@glidera.com',
+      'depositId':  'Glidera Inc',
       'orderTimeout': '60',
       'depositTimeout': '3600',
       'countryCode': Airbitz.config.get("COUNTRY_CODE"),
