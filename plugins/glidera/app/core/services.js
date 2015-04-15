@@ -350,7 +350,7 @@
     };
 
     var formatNotes = function(action, amountFiat) {
-      return action + " on " + $filter('date')(new Date().getTime(), 'MM/dd/yyyy @ h:mma') + " for " + $filter('currency')(amountFiat);
+      return action + " on " + $filter('date')(new Date().getTime(), 'yyyy-MM-dd @ H:mm') + " for " + $filter('currency')(amountFiat);
     }
 
     var btcToSatoshi = function(btc) {
