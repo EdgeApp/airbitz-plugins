@@ -381,13 +381,13 @@
           label: 'Glidera',
           category: 'Exchange:Sell Bitcoin',
           notes: notes,
-          success: function(data) {
-            if (data && data.back) {
+          success: function(res) {
+            if (res && res.back) {
               d.reject({"code": "IgnoreAction"});
             } else {
               d.resolve({'sellAddress': data.sellAddress,
                         'refundAddress': data.refundAddress,
-                        'signedTx': data});
+                        'signedTx': res});
             }
           },
           error: function() {
