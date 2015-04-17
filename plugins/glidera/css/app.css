@@ -462,7 +462,6 @@ html body {
 html body #main-content {
   position: absolute;
   width: 100%;
-  padding-bottom: 70px;
 }
 html body #wrap {
   position: absolute;
