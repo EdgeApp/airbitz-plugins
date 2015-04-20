@@ -17,7 +17,7 @@
           <select id="inputBtcWallet"
             ng-model="order.transferToWallet"
             ng-options="w.name for w in userWallets"
-            class="form-control input-lg">
+            class="form-control">
           </select>
         </div>
 
@@ -38,13 +38,13 @@
             ng-change="convertBtcValue(order.orderBtcInput)"
             type="number"
             name="orderBtcInput"
-            class="large right-square"
+            class="right-square"
             id="inputBtcAmount"
             placeholder="Enter Amount"
             step="any"
             autocorrect="off"
             required="" />
-          <span class="large input-group-addon">BTC</span>
+          <span class="input-group-addon">BTC</span>
         </div>
         <div class="input-error"
              ng-show="form.$submitted || form.orderBtcInput.$touched">
@@ -59,14 +59,14 @@
             ng-change="convertFiatValue(order.orderFiatInput)"
             type="number"
             name="orderFiatInput"
-            class="large right-square"
+            class="right-square"
             id="inputFiatAmount"
             placeholder="Enter Amount"
             autocorrect="off"
             tabindex="1"
             step="any"
             required="" />
-            <span class="large input-group-addon">{{ exchange.currency || "USD" }}</span>
+            <span class="input-group-addon">{{ exchange.currency || "USD" }}</span>
         </div>
         <div class="input-error"
              ng-show="form.$submitted || form.orderFiatInput.$touched">
