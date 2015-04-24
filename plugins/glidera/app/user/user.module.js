@@ -9,7 +9,6 @@
     .controller('disclaimerController', ['$scope', '$state', 'Error', 'States', 'UserFactory', disclaimerController])
     .controller('signupController', ['$scope', '$state', 'Error', 'States', 'UserFactory', signupController])
     .controller('verifyEmailController', ['$scope', '$state', 'Error', 'UserFactory', verifyEmailController])
-    .controller('verifyInfoController', ['$scope', '$state', 'Error', 'States', 'Occupations', 'UserFactory', verifyInfoController])
     .controller('verifyPhoneController', ['$scope', '$state', 'Error', 'DataFactory', 'UserFactory', 'TwoFactor', verifyPhoneController])
     .directive('phoneNumberValidator', phoneNumberValidator);
 
@@ -148,20 +147,6 @@
           Airbitz.ui.showAlert('Verify Email', 'Please verify your email address before proceeding!');
           $state.go('verifyEmail');
         }
-      }, Error.reject);
-    };
-  }
-  function verifyInfoController($scope, $state, Error, States, Occupations, UserFactory) {
-    Airbitz.ui.title('Verify User Information');
-    $scope.states = States.getStates();
-    $scope.occupations = Occupations.getOccupations();
-    $scope.account = UserFactory.getUserAccount();
-
-    $scope.saveUserAccount = function() {
-      Airbitz.ui.title('Saving...');
-      UserFactory.updateUserAccount($scope.account).then(function() {
-        Airbitz.ui.showAlert('Saved', 'User information has been updated.');
-        $state.go('verifyPhone');
       }, Error.reject);
     };
   }
