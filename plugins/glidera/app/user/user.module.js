@@ -166,7 +166,7 @@
     };
   }
   function phoneNumberValidator() {
-    var PHONE_REGEXP = /^[0-9]{3}-?[0-9]{3}-?[0-9]{4}$/i;
+    var PHONE_REGEXP = /^\+?[0-9]*[ -]?[0-9]{3}[ -]?[0-9]{3}[ -]?[0-9]{4}$/i;
     return {
       require: 'ngModel',
       link: function(scope, elm, attrs, ctrl) {
