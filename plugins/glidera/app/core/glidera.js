@@ -7,7 +7,7 @@
 
   function glideraCactory(glideraApi) {
     var g = new Glidera({
-      'sandbox': true,
+      'sandbox': Airbitz.config.get('SANDBOX') === 'true' ? true : false,
       'partnerAccessKey': Airbitz.config.get('GLIDERA_PARTNER_TOKEN')
     });
     if (Airbitz.config.get('TESTNET_ADDRESS')) {
