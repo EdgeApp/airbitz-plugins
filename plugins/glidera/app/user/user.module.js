@@ -26,6 +26,8 @@
     }
   }
   function userAccountController($scope, $state, Error, States, Occupations, UserFactory) {
+    var title = 'User Information';
+    Airbitz.ui.title(title);
     $scope.states = States.getStates();
     $scope.occupations = Occupations.getOccupations();
     $scope.account = UserFactory.getUserAccount();
@@ -44,7 +46,10 @@
       UserFactory.updateUserAccount($scope.account).then(function() {
         Airbitz.ui.showAlert('Saved', 'User information has been updated.');
         $state.go('exchange');
-      }, Error.reject);
+      }, function(e) {
+        Error.reject(e);
+        Airbitz.ui.title(title);
+      });
     };
   }
   function apiKeyController($scope, $state, glideraFactory, UserFactory) {
