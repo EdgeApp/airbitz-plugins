@@ -293,7 +293,7 @@
           var s = mv.toString().split('').map(function(i) {
             return parseInt(i);
           });
-          checksum = (7 * (s[0] + s[3] + s[6]) +
+          var checksum = (7 * (s[0] + s[3] + s[6]) +
                       3 * (s[1] + s[4] + s[7]) +
                       9 * (s[2] + s[5])) % 10;
           return s[8] == checksum;

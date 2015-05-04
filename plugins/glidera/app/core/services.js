@@ -552,7 +552,7 @@
       },
       find: function(code) {
         var l = occupations.filter(function(s) {
-          return s.id === code.toString();
+          return code && s.id === code.toString();
         });
         return l.length >= 1 ? l[0] : null;
       }
