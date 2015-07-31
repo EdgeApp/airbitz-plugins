@@ -3,20 +3,22 @@
   'use strict';
 
   angular.module('app.glidera', ['glidera'])
-    .factory('glideraFactory', ['glideraApi', glideraCactory]);
+    .factory('glideraFactory', ['glideraApi', glideraFactory]);
 
-  function glideraCactory(glideraApi) {
+  function glideraFactory(glideraApi) {
+    console.log('Sandbox: ' + Airbitz.config.get('SANDBOX'))
     var g = new Glidera({
-      'sandbox': Airbitz.config.get('SANDBOX') === 'true' ? true : false,
-      'partnerAccessKey': Airbitz.config.get('GLIDERA_PARTNER_TOKEN')
+      'sandbox': Airbitz.config.get('SANDBOX') == 'true' ? true : false,
+      'clientId': Airbitz.config.get('GLIDERA_CLIENT_ID'),
+      'clientSecret': Airbitz.config.get('GLIDERA_CLIENT_SECRET')
     });
     if (Airbitz.config.get('TESTNET_ADDRESS')) {
       g.sandboxAddress = Airbitz.config.get('TESTNET_ADDRESS')
     }
     var account = Airbitz.core.readData('account') || {};
     if (account) {
-      g.key = account.key;
-      g.secret = account.secret;
+      g.accessToken = account.accessToken;
+      g.accessTokenType = account.accessTokenType;
     }
     return g;
   }

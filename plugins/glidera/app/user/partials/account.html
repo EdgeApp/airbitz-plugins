@@ -29,7 +29,7 @@
         <span class="list-group-item-heading">Account Information</span>
         <p class="list-group-item-text">Tap to edit</p>
         <label class="status label label-outline pull-right"
-               ng-class="{'label-success': userStatus.userBasicInfoIsSetup}">{{ userStatus.userBasicInfoIsSetup | statusFilter }}</label>
+               ng-class="{'label-success': userStatus.personalInfoState == 'VERIFIED'}">{{ userStatus.personalInfoState | statusFilter }}</label>
       </li>
       <li ng-if="showOptions" ng-click="routeBankAccount()" class="ng-trans ng-trans-scale-up easeOutBack list-group-item">
         <span class="list-group-item-heading">Bank Account</span>

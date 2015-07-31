@@ -3,27 +3,145 @@
 
   angular
     .module('app.user', ['app.dataFactory', 'app.constants'])
-    .controller('homeController', ['$scope', '$state', 'UserFactory', homeController])
+    .controller('homeController', ['$scope', '$state', '$location', 'UserFactory', homeController])
+    .controller('dashboardController', ['$scope', '$sce', '$state', 'Error', 'DataFactory', 'UserFactory', 'Limits', dashboardController])
     .controller('userAccountController', ['$scope', '$state', 'Error', 'States', 'Occupations', 'UserFactory', userAccountController])
-    .controller('apiKeyController', ['$scope', '$state', 'glideraFactory', 'UserFactory', apiKeyController])
+    .controller('bankController', ['$scope', '$state', 'UserFactory', bankController])
     .controller('disclaimerController', ['$scope', '$state', 'Error', 'States', 'UserFactory', disclaimerController])
-    .controller('signupController', ['$scope', '$state', 'Error', 'States', 'UserFactory', signupController])
+    .controller('authController', ['$scope', '$state', '$location', 'UserFactory', authController])
     .controller('verifyEmailController', ['$scope', '$state', 'Error', 'UserFactory', verifyEmailController])
     .controller('verifyPhoneController', ['$scope', '$state', 'Error', 'DataFactory', 'UserFactory', 'TwoFactor', verifyPhoneController])
     .directive('phoneNumberValidator', phoneNumberValidator);
 
-  function homeController($scope, $state, UserFactory) {
-    if (UserFactory.isRegistered()) {
-      $state.go("exchange");
+  function homeController($scope, $state, $location, UserFactory) {
+    var d = parseParameters($location);
+    if (d && d['state']) {
+      handleUri($state, UserFactory, d);
     } else {
-      if (Airbitz.core.readData('disclaimer')) {
-        $state.go("signup");
+      if (UserFactory.isAuthorized()) {
+        $state.go("dashboard");
       } else {
-        Airbitz.core.writeData('disclaimer', false);
-        $state.go("disclaimer");
+        if (Airbitz.core.readData('disclaimer')) {
+          $state.go("authorize");
+        } else {
+          Airbitz.core.writeData('disclaimer', false);
+          $state.go("disclaimer");
+        }
       }
     }
   }
+
+  function parseParameters($location) {
+    var d = $location.search();
+    if (!d.state) {
+      var url = window.location.href;
+      url = url.replace(/\#.*/, ''); // strip hash
+      url = url.replace(/.*\?/, ''); // strip up to ?
+      var params = url.split("&");
+      params.forEach(function(e) {
+        var pair = e.split("=");
+        d[pair[0]] = pair[1];
+      });
+    }
+    return d;
+  }
+  
+  function handleUri($state, UserFactory, d) {
+    if ("authorize" === d.state) {
+      Airbitz.ui.title('Authenticating');
+      UserFactory.requestAccessToken(d.code, function(success, results) {
+        if (success) {
+          $state.go('dashboard');
+        } else {
+          $state.go('authorize');
+        }
+      });
+    } else if ("backaccount" == d.state) {
+      $state.go('dashboard');
+    }
+  }
+
+  function dashboardController($scope, $sce, $state, Error, DataFactory, UserFactory, Limits) {
+    Airbitz.ui.title('Glidera ' + $scope.countryName);
+    // set variables that might be cached locally to make sure they load faster if available
+    $scope.account = UserFactory.getUserAccount();
+    $scope.userStatus = UserFactory.getUserAccountStatus();
+    $scope.limits = Limits.getLimits();
+    $scope.showOptions = !$scope.userStatus.userCanTransact;
+    $scope.showDebug = false;
+    $scope.debugClicks = 0;
+
+    UserFactory.fetchUserAccountStatus().then(function(b) {
+      $scope.userStatus = b;
+      $scope.showOptions = !$scope.userStatus.userCanTransact;
+    }).then(function() {
+      return UserFactory.getFullUserAccount();
+    }).then(function() {
+      return Limits.fetchLimits().then(function(limits) {
+        $scope.limits = limits;
+      });
+    }).then(function() {
+      DataFactory.checkPhoneNumber($scope.account);
+    });
+
+    $scope.regMessage = function() {
+      var msg = '';
+      var counter = 0;
+
+      if (!$scope.userStatus.userEmailIsSetup) {
+        counter++;
+        msg += '<h5><strong>' + counter + "</strong>. Please verify email</h5>";
+      }
+      if (!$scope.userStatus.userBasicInfoIsSetup) {
+        counter++;
+        msg += '<h5><strong>' + counter + "</strong>. Please verify account info</h5>";
+      }
+      if (!$scope.userStatus.userPhoneIsSetup) {
+        counter++;
+        msg += '<h5><strong>' + counter + "</strong>. Please verify mobile phone</h5>";
+      }
+      if (!$scope.userStatus.userBankAccountIsSetup) {
+        counter++;
+        msg += '<h5><strong>' + counter + "</strong>. Please verify bank account & deposit amount</h5>";
+      }
+      if (msg !== '') {
+        msg = '<h4 style="margin-top: 0;">To Buy or Sell Bitcoin:</h4>' + msg;
+      }
+      return $sce.trustAsHtml(msg);
+    };
+
+    $scope.buy = function(){
+      DataFactory.getOrder(true);
+      $state.go('exchangeOrder', {'orderAction': 'buy'});
+    };
+
+    $scope.sell = function(){
+      DataFactory.getOrder(true);
+      $state.go('exchangeOrder', {'orderAction': 'sell'});
+    };
+
+    $scope.showAccountOptions = function() {
+      $scope.showOptions = !$scope.showOptions;
+    };
+
+    $scope.showAccountDebug = function() {
+      $scope.debugClicks++
+      console.log('TOGGLE DEBUG');
+      if($scope.debugClicks++ > 7) {
+        $scope.showDebug = !$scope.showDebug;
+      }
+    };
+
+    $scope.routeBankAccount = function() {
+      $state.go('bankAccounts')
+    };
+
+    $scope.logout = function() {
+      UserFactory.clearUser();
+      $state.go('home');
+    }
+  }
+
   function userAccountController($scope, $state, Error, States, Occupations, UserFactory) {
     var title = 'User Information';
     Airbitz.ui.title(title);
@@ -37,61 +155,26 @@
     });
 
     $scope.cancelSignup = function(){
-      $state.go('exchange');
+      $state.go('dashboard');
     };
 
     $scope.saveUserAccount = function() {
       Airbitz.ui.title('Saving...');
       UserFactory.updateUserAccount($scope.account).then(function() {
         Airbitz.ui.showAlert('Saved', 'User information has been updated.');
-        $state.go('exchange');
+        $state.go('dashboard');
       }, function(e) {
         Error.reject(e);
         Airbitz.ui.title(title);
       });
     };
   }
-  function apiKeyController($scope, $state, glideraFactory, UserFactory) {
-    Airbitz.ui.title('Glidera API Keys');
-    $scope.account = UserFactory.getUserAccount();
 
-    $scope.cancel = function(){
-      if (UserFactory.isRegistered()) {
-        $state.go('exchange');
-      } else {
-        $state.go('signup');
-      }
-    };
-
-    $scope.deleteAccount = function(form) {
-      // Empty account
-      $scope.account = {};
-      UserFactory.clearUser();
-      // Clear api
-      glideraFactory.key = null;
-      glideraFactory.secret = null;
-      // Clear all storage
-      Airbitz.core.clearData();
-      $state.go('signup');
-
-      Airbitz.ui.showAlert('Account Removed', 'Your account has been removed. Please register a new account or enter your access keys from Glidera.');
-    };
-
-    $scope.submit = function(form) {
-      Airbitz.ui.title('Saving...');
-      Airbitz.core.clearData();
-      glideraFactory.key = $scope.account.key;
-      glideraFactory.secret = $scope.account.secret;
-      UserFactory.getFullUserAccount().then(function() {
-        Airbitz.core.writeData('account', $scope.account);
-        $state.go("exchange");
-      }, function() {
-        Airbitz.ui.showAlert('Authentication Error', 'Unable to connect to API with new api keys');
-        glideraFactory.key = '';
-        glideraFactory.secret = '';
-      });
-    };
+  function bankController($scope, $state, UserFactory) {
+    Airbitz.ui.title('Edit Bank Account');
+    location.href = UserFactory.createBankAccountUrl();
   }
+
   function disclaimerController($scope, $state, Error, States, UserFactory) {
     Airbitz.ui.title('Disclaimer');
     $scope.showDisclaimer = true;
@@ -101,40 +184,16 @@
     };
 
     $scope.continueSignup = function(form) {
-      $state.go('signup');
+      $state.go('authorize');
       Airbitz.core.writeData('disclaimer', true);
     };
   }
-  function signupController($scope, $state, Error, States, UserFactory) {
-    Airbitz.ui.title('Glidera - ' + $scope.countryName);
-    $scope.account = UserFactory.getUserAccount();
-    $scope.registrationCode = '';
-    $scope.regCodeRequired = false;
-    $scope.showDisclaimer = true;
 
-    UserFactory.registrationMode().then(function(isOpen) {
-      $scope.regCodeRequired = !isOpen;
-    }, function() {
-    });
-
-    $scope.cancelSignup = function(){
-      $state.go('disclaimer');
-    };
-
-    $scope.submitSignUp = function(form) {
-      Airbitz.ui.title('Saving...');
-      if (UserFactory.isRegistered()) {
-        $state.go('verifyEmail');
-      } else {
-        var countryCode = Airbitz.config.get('COUNTRY_CODE');
-        UserFactory.registerUser($scope.account.firstName,
-            $scope.account.lastName, $scope.account.email,
-            countryCode, $scope.registrationCode).then(function() {
-          $state.go('verifyEmail');
-        }, Error.reject);
-      }
-    };
+  function authController($scope, $state, $location, UserFactory) {
+    console.log('authController');
+    location.href = UserFactory.authorizeUrl();
   }
+
   function verifyEmailController($scope, $state, Error, UserFactory) {
     Airbitz.ui.title('Verify Email');
     $scope.account = UserFactory.getUserAccount();
@@ -150,13 +209,14 @@
       }, Error.reject);
     };
   }
+
   function verifyPhoneController($scope, $state, Error, DataFactory, UserFactory, TwoFactor) {
     Airbitz.ui.title('Verify Phone');
     $scope.account = UserFactory.getUserAccount();
 
     var verifyCode = function() {
       DataFactory.confirmPhoneNumber(TwoFactor.getCode(), TwoFactor.getOldCode()).then(function() {
-        $state.go('exchange');
+        $state.go('dashboard');
       }, Error.reject);
     };
     $scope.submitPhone = function(){
@@ -165,6 +225,7 @@
       }, Error.reject);
     };
   }
+
   function phoneNumberValidator() {
     var PHONE_REGEXP = /^\+?[0-9]*[ -]?[0-9]{3}[ -]?[0-9]{3}[ -]?[0-9]{4}$/i;
     return {

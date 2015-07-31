@@ -59,16 +59,22 @@ var Glidera = (function () {
 
   var Glidera = function(o) {
     o = o || {};
-    if (!o.partnerAccessKey) {
-      Glidera.error('Missing partnerAccessKey');
+    if (!o.clientId) {
+      Glidera.error('Missing clientId');
     }
-    this.partnerAccessKey = o.partnerAccessKey;
+    if (!o.clientSecret) {
+      Glidera.error('Missing clientSecret');
+    }
+    this.clientId = o.clientId;
+    this.clientSecret = o.clientSecret;
     this.nonce = new Date().getTime();
+    this.accessToken = '';
+    this.accessTokenType = '';
     this.key = o.key || '';
     this.secret = o.secret || '';
     this.GLIDERA_URL = o.sandbox == true
-        ? 'https://sandbox.glidera.com/api/v1'
-        : 'https://www.glidera.com/api/v1';
+        ? 'https://sandbox.glidera.com'
+        : 'https://www.glidera.com';
   }
 
   Glidera.prototype = {
@@ -78,7 +84,7 @@ var Glidera = (function () {
     _request: function(authRequired, uri, opts) {
       opts = opts || {};
       var method = opts.method || 'GET';
-      var url = this.GLIDERA_URL + uri;
+      var url = this.GLIDERA_URL + '/api/v1' + uri;
 
       var headers = {},
           nonce = (this._nextNonce()).toString(),
@@ -88,11 +94,8 @@ var Glidera = (function () {
             url: url,
             headers: headers
           };
-      headers.PARTNER_ACCESS_KEY = this.partnerAccessKey;
-      if (authRequired) {
-          headers.ACCESS_KEY = this.key;
-          headers.ACCESS_NONCE = nonce;
-          headers.ACCESS_SIGNATURE = Glidera.hmacsha256(nonce + url + json, this.secret);
+      if (this.accessToken) {
+          headers.Authorization = "Bearer " + this.accessToken;
       }
       if (opts.otpCode) {
         headers['2FA_CODE'] = opts.otpCode;
@@ -115,39 +118,50 @@ var Glidera = (function () {
         }
       });
     },
-    register: function(firstName, lastName, email, countryCode, registrationCode, cb) {
+    redirectUrl: function(next, scope, state) {
+      return [this.GLIDERA_URL, '/oauth2/auth',
+        '?response_type=', 'code',
+        '&client_id=', this.clientId,
+        '&redirect_uri=', encodeURIComponent(next),
+        '&scope=', encodeURIComponent(scope),
+        '&state=', encodeURIComponent(state)].join('');
+    },
+    requestAccessToken: function(code, cb, opts) {
       var that = this;
-      this._request(false, '/user/register', {
+      var data = {
+        'grant_type': 'authorization_code',
+        'code': code,
+        'client_id': this.clientId,
+        'client_secret': this.clientSecret,
+      };
+      if (opts && opts.redirectUri) {
+        data['redirect_uri'] = opts.redirectUri;
+      }
+      this._request(false, '/oauth/token', {
         'method': 'POST',
-        'data': {
-          'firstName': firstName,
-          'lastName': lastName,
-          'email': email,
-          'countryCode': countryCode,
-          'registrationCode': registrationCode,
-        },
+        'data': data,
         'callback': function(error, statusCode, body) {
           if (statusCode == 200) {
-            that.key = body.key;
-            that.secret = body.secret;
+            that.accessTokenType = body.token_type;
+            that.accessToken = body.access_token;
           }
           cb(statusCode == 200, body);
         }
       });
     },
 
-    hasRegistered: function() {
-      return this.key && this.secret ? true : false;
+    isAuthorized: function() {
+      return this.accessToken ? true : false;
     },
 
-    getBasicInfo: function(callback) {
-      return this._request(true, '/user/basicinfo', {
+    getPersonalInfo: function(callback) {
+      return this._request(true, '/user/personalinfo', {
         'callback': callback
       });
     },
 
-    updateBasicInfo: function(data, callback) {
-      return this._request(true, '/user/basicinfo', {
+    updatePersonalInfo: function(data, callback) {
+      return this._request(true, '/user/personalinfo', {
         'method': 'POST',
         'data': data,
         'callback': callback
@@ -195,30 +209,12 @@ var Glidera = (function () {
       });
     },
 
-    createBankAccount: function(otpCode, routingNumber, accountNumber, transit, institution, description, accountType, callback) {
-      return this._request(true, '/user/bankaccount', {
-        'method': 'POST',
-        'otpCode': otpCode,
-        'data': {
-            'routingNumber': routingNumber,
-            'accountNumber': accountNumber,
-            'transit': transit,
-            'institution': institution,
-            'description': description,
-            'bankAccountType': accountType
-          },
-          'callback': callback
-      });
-    },
-
-    verifyBankAccount: function(accountId, amount1, callback) {
-      return this._request(true, '/user/bankaccount/' + accountId + '/verify', {
-          'method': 'POST',
-          'data': {
-            'depositAmount1': amount1
-          },
-          'callback': callback
-      });
+    createBankAccount: function(uri, state) {
+      return [this.GLIDERA_URL, '/user/bankaccounts',
+        '?response_type=', 'code',
+        '&access_token=', this.accessToken,
+        '&redirect_uri=', encodeURIComponent(uri),
+        '&state=', encodeURIComponent(state)].join('');
     },
 
     getBankAccounts: function(callback) {

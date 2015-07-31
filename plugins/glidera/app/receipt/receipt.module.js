@@ -10,7 +10,7 @@
     $scope.order = DataFactory.getOrder(false);
     $scope.account = UserFactory.getUserAccount();
     $scope.finish = function() {
-      $state.go('exchange');
+      $state.go('dashboard');
     };
   }
 })();

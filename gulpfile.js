@@ -5,6 +5,7 @@ var gulp    = require('gulp'),
     uglify  = require('gulp-uglify'),
     ngHtml2Js = require("gulp-ng-html2js"),
     watch     = require('gulp-watch'),
+    connect   = require('gulp-connect'),
     fs        = require('fs');
 
 var plugins = fs.readdirSync('plugins');
@@ -18,21 +19,29 @@ var core = function(bridge) {
     .pipe(gulp.dest('./build/intermediates/js'));
 }
 
-gulp.task('corestyle', function() {
+gulp.task('corestyle-android', function() {
   return gulp.src(['./lib/vendors/css/bootstrap.min.css'])
-    .pipe(concat('core.css'))
+    .pipe(concat('./lib/css/core.css'))
+    .pipe(concat('./lib/css/core-android.css'))
     .pipe(gulp.dest('./build/intermediates/css'));
 });
 
-gulp.task('coredev', ['corestyle'], function() {
+gulp.task('corestyle-ios', function() {
+  return gulp.src(['./lib/vendors/css/bootstrap.min.css'])
+    .pipe(concat('./lib/css/core.css'))
+    .pipe(concat('./lib/css/core-ios.css'))
+    .pipe(gulp.dest('./build/intermediates/css'));
+});
+
+gulp.task('coredev', ['corestyle-android'], function() {
   return core(['./lib/js/config.js', './lib/js/airbitz-bridge-dev.js']);
 });
 
-gulp.task('core-android', ['corestyle'], function() {
+gulp.task('core-android', ['corestyle-android'], function() {
   return core(['./lib/js/airbitz-bridge-android.js']);
 });
 
-gulp.task('core-ios', ['corestyle'], function() {
+gulp.task('core-ios', ['corestyle-ios'], function() {
   return core(['./lib/js/airbitz-bridge-ios.js']);
 });
 
@@ -48,7 +57,8 @@ plugins.map(function(plugin) {
     .pipe(gulp.dest('build/' + platform + '/' + plugin));
 
     gulp.src('./plugins/' + plugin + '/img/*')
-        .pipe(gulp.dest('build/' + platform + '/' + plugin + '/img'));
+        .pipe(gulp.dest('build/' + platform + '/' + plugin + '/img'))
+        .pipe(connect.reload());
   };
   gulp.task(plugin + '-partials', function() {
     return gulp.src(["./plugins/glidera/partials/*.html",
@@ -67,6 +77,11 @@ plugins.map(function(plugin) {
   });
   gulp.task(plugin + '-ios', ['core-ios', plugin + '-partials'], function() {
     build('ios', plugin);
+  });
+  gulp.task(plugin + '-serve', [plugin + '-dev'], function() {
+    connect.server({
+      root: ['build/dev/' + plugin]
+    });
   });
   gulp.task(plugin + '-watch', function () {
       watch('./plugins/' + plugin + '/**/*', function () {

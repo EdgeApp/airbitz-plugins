@@ -10,25 +10,26 @@
     var history = [];
     var skip = false;
     $rootScope.$on('$locationChangeStart', function(event, next, current) {
-      if (!UserFactory.isRegistered() && !next.match(/signup.html/)) {
+      // If the user is not authorized and if the query string does not have
+      // the glidera 'state' parameter 
+      if (!UserFactory.isAuthorized() && !next.match(/state=/)) {
         console.log('Not registered. Redirecting to registration form.');
-        $location.path('/');
+        $location.path('/authorizeRedirect/');
         return;
       }
-      if (!skip) {
+      if (!skip && !next.match(/Redirect/)) {
         history.push(current);
         Airbitz.ui.navStackPush(current);
       }
       // if we are on the dashboard screen, empty history
-      if (next.match(/\.html#\/exchange\/$/)
-        || next.match(/\.html#\/signup\/$/)) {
+      if (next.match(/\/dashboard\/$/)) {
         history.length = 0;
         Airbitz.ui.navStackClear();
       } else if (next.match(/\.html#\/receipt\/$/)) {
         Airbitz.ui.navStackClear();
 
-        history.push('/exchange/');
-        Airbitz.ui.navStackPush('/exchange/');
+        history.push('/dashboard/');
+        Airbitz.ui.navStackPush('/dashboard/');
       }
       skip = false;
     });

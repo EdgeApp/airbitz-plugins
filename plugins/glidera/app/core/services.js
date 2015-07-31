@@ -16,15 +16,36 @@
     var factory = {};
     var account = Airbitz.core.readData('account') || {};
 
-    factory.isRegistered = function() {
-      return glideraFactory.hasRegistered();
+    factory.isAuthorized = function() {
+      return glideraFactory.isAuthorized();
     };
     factory.getUserAccount = function() {
       return account;
     };
     factory.clearUser = function() {
       account = {};
+      glideraFactory.accessToken = null;
+      glideraFactory.accessTokenType = null;
       Airbitz.core.writeData('account', {});
+    };
+
+    var redirectUri = Airbitz.config.get('REDIRECT_URI');
+    factory.authorizeUrl = function() {
+      return glideraFactory.redirectUrl(redirectUri, 'view_email_address personal_info transact transaction_history', 'authorize');
+    };
+    factory.createBankAccountUrl = function() {
+      return glideraFactory.createBankAccount(redirectUri, 'bankaccount');
+    };
+    factory.requestAccessToken = function(code, cb) {
+      glideraFactory.requestAccessToken(code, function(success, results) {
+        if (success) {
+          account.accessToken = glideraFactory.accessToken;
+          account.accessTokenType = glideraFactory.accessTokenType;
+          // persist access token
+          Airbitz.core.writeData('account', account);
+        }
+        cb(success, results); 
+      }, {'redirectUri': redirectUri});
     };
     factory.registrationMode = function() {
       var d = $q.defer();
@@ -33,25 +54,6 @@
           d.resolve(isOpen);
         } else {
           d.reject();
-        }
-      });
-      return d.promise;
-    };
-    factory.registerUser = function(firstName, lastName, email, countryCode, registrationCode) {
-      var d = $q.defer();
-      glideraFactory.register(firstName, lastName, email, countryCode, registrationCode, function(success, b) {
-        var account = factory.getUserAccount();
-        account.firstName = firstName;
-        account.lastName = lastName;
-        account.email = email;
-        account.countryCode = countryCode;
-        account.key = b["key"];
-        account.secret = b["secret"];
-        if (success) {
-          Airbitz.core.writeData('account', account);
-          d.resolve(b);
-        } else {
-          d.reject(b);
         }
       });
       return d.promise;
@@ -65,7 +67,6 @@
     factory.getUserAccountStatus = function() {
       return userStatus;
     };
-
     factory.fetchUserAccountStatus = function() {
       var d = $q.defer();
       glideraFactory.userStatus(function(e,s,b) {
@@ -81,7 +82,7 @@
     };
     factory.getFullUserAccount = function() {
       return $q(function(resolve, reject) {
-        glideraFactory.getBasicInfo(function(e, s, b) {
+        glideraFactory.getPersonalInfo(function(e, s, b) {
           if (s === 200) {
             account.email = account.email || b.email;
             account.firstName = b.firstName;
@@ -94,7 +95,6 @@
             account.state = States.findState(b.state);
             account.country = b.countryCode;
             account.occupation = Occupations.find(b.occupation);
-            account.status = b.status.status;
 
             // XXX: This is kind of hacky
             if (b.birthDate) {
@@ -115,7 +115,7 @@
     }
     factory.updateUserAccount = function(account) {
       return $q(function(resolve, reject) {
-        glideraFactory.updateBasicInfo({
+        glideraFactory.updatePersonalInfo({
           'firstName': account.firstName,
           'lastName': account.lastName,
           'birthDate': $filter('date')(account.birthDate, 'yyyy-MM-dd'),
@@ -136,9 +136,6 @@
         });
       });
     };
-
-    // Fetch the user data if available
-    factory.getFullUserAccount();
     return factory;
   }
   function DataFactory($q, $filter, States, ExchangeFactory, glideraFactory, TwoFactor, Prices) {

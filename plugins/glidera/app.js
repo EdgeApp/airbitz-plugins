@@ -13,21 +13,19 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
       controller: "homeController",
     })
     .state("disclaimer", {
-      url: "/",
+      url: "/disclaimer",
       templateUrl: "app/user/partials/disclaimer.html",
       controller: "disclaimerController",
     })
-    // route for signup
-    .state("signup", {
-      url: "/signup/",
-      templateUrl: "app/user/partials/signup.html",
-      controller: "signupController",
+    .state("authorize", {
+      url: "/authorizeRedirect/",
+      controller: "authController",
+      templateUrl: "app/user/partials/redirect.html",
     })
-    // route for signup
-    .state("apiKeys", {
-      url: "/keys/",
-      templateUrl: "app/user/partials/apikeys.html",
-      controller: "apiKeyController",
+    .state("bankAccounts", {
+      url: "/bankAccountRedirect/",
+      templateUrl: "app/user/partials/redirect.html",
+      controller: "bankController",
     })
     // route for email verification
     .state("verifyEmail", {
@@ -47,34 +45,11 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
       templateUrl: "app/2fa/partials/verify.twofactor.html",
       controller: "verify2faController",
     })
-    // route for exchange
-    .state("exchange", {
-      url: "/exchange/",
-      templateUrl: "app/exchange/partials/exchange.html",
+    // route for dashboard
+    .state("dashboard", {
+      url: "/dashboard/",
+      templateUrl: "app/user/partials/dashboard.html",
       controller: "dashboardController",
-    })
-    // route for adding exchange bank account
-    .state("exchangeAddBankAccount", {
-      url: "/exchange/add/bankAccount/",
-      templateUrl: "app/exchange/partials/add.bankAccount.html",
-      controller: "addBankAccountController",
-    })
-    // route for verifying a bank account
-    .state("exchangeVerifyBankAccount", {
-      url: "/exchange/verify/:uuid/",
-      templateUrl: "app/exchange/partials/verify.bankAccount.html",
-      controller: "verifyBankAccountController",
-    })
-    .state("exchangeEditBankController", {
-      url: "/exchange/edit/bankAccount/:uuid/",
-      templateUrl: "app/exchange/partials/edit.bankAccount.html",
-      controller: "editBankAccountController",
-    })
-    // route for adding exchange credit card
-    .state("exchangeAddCreditCard", {
-      url: "/exchange/add/creditCard/",
-      templateUrl: "app/exchange/partials/add.creditCard.html",
-      controller: "addCreditCardController",
     })
     // route for reviewing order
     .state("reviewOrder", {

@@ -11,6 +11,23 @@
     };
   }
 
+  function personalInfoFilter() {
+    return function(status) {
+      if ('SUBMITTED' == status) {
+        return 'Submitted'
+      } else if ('PENDING' === status) {
+        return 'Pending';
+      } else if ('VERIFICATIONSUBMITTED' === status) {
+        return 'Submitted';
+      } else if ('VERIFIED' === status) {
+        return 'Verified';
+      } else if ('FAILED' === status) {
+        return 'Failed';
+      }
+      return 'Unverified';
+    };
+  }
+
   function titleCase() {
     return function (input) {
       var smallWords = /^(a|an|and|as|at|but|by|en|for|if|in|nor|of|on|or|per|the|to|vs?\.?|via)$/i;
@@ -34,7 +51,6 @@
 
   function roundFiat(){
     return function(val,to){
-        console.log(val);
         return val.toFixed(to || 2);
     }
   }

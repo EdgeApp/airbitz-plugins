@@ -3,10 +3,6 @@
 
   angular
     .module('app.exchange', ['app.dataFactory', 'app.2fa', 'app.prices', 'app.limits', 'app.core'])
-    .controller('dashboardController', ['$scope', '$sce', '$state', 'Error', 'DataFactory', 'UserFactory', 'Limits', dashboardController])
-    .controller('addBankAccountController', ['$scope', '$state', 'Error', 'DataFactory', 'UserFactory', 'TwoFactor', addBankAccountController])
-    .controller('verifyBankAccountController', ['$scope', '$state', '$stateParams', 'Error', 'DataFactory', 'UserFactory', 'TwoFactor', verifyBankAccountController])
-    .controller('editBankAccountController', ['$scope', '$state', '$stateParams', 'Error', 'DataFactory', 'UserFactory', 'TwoFactor', editBankAccountController])
     .controller('orderController', ['$scope', '$state', '$stateParams', '$filter', 'Error', 'DataFactory', 'UserFactory', 'TwoFactor', 'Limits', 'Prices', orderController])
     .controller('reviewOrderController', ['$scope', '$state', 'Error', 'DataFactory', 'UserFactory', 'TwoFactor', 'Prices', reviewOrderController])
     .controller('executeOrderController', ['$scope', '$state', 'DataFactory', 'UserFactory', executeOrderController])
@@ -14,169 +10,6 @@
     .directive('accountSummary', accountSummary)
     .directive('routingNumberValidator', routingNumberValidator);
 
-  function dashboardController($scope, $sce, $state, Error, DataFactory, UserFactory, Limits) {
-    Airbitz.ui.title('Glidera ' + $scope.countryName);
-    // set variables that might be cached locally to make sure they load faster if available
-    $scope.account = UserFactory.getUserAccount();
-    $scope.userStatus = UserFactory.getUserAccountStatus();
-    $scope.bankAccounts = DataFactory.getBankAccounts();
-    $scope.limits = Limits.getLimits();
-    $scope.showOptions = !$scope.userStatus.userCanTransact;
-    $scope.showDebug = false;
-    $scope.debugClicks = 0;
-
-    UserFactory.fetchUserAccountStatus().then(function(b) {
-      $scope.userStatus = b;
-      $scope.showOptions = !$scope.userStatus.userCanTransact;
-    }).then(function() {
-      return Limits.fetchLimits().then(function(limits) {
-        $scope.limits = limits;
-      });
-    }).then(function() {
-      return DataFactory.fetchBankAccounts().then(function(bankAccounts) {
-        $scope.bankAccounts = bankAccounts;
-      }, Error.reject);
-    }).then(function() {
-      DataFactory.checkPhoneNumber($scope.account);
-    });
-
-    $scope.routeBankAccount = function() {
-      if ($scope.bankAccounts.length) {
-        var bankAccount = $scope.bankAccounts[0]; // get first bank account if available
-        if (bankAccount.status === 'Pending Verification') {
-          $state.go('exchangeVerifyBankAccount', {'uuid': bankAccount.bankAccountUuid});
-        } else {
-          $state.go('exchangeEditBankController', {'uuid': bankAccount.bankAccountUuid});
-        }
-      } else {
-        $state.go('exchangeAddBankAccount')
-      }
-    };
-
-    $scope.regMessage = function() {
-      var msg = '';
-      var counter = 0;
-
-      if (!$scope.userStatus.userEmailIsSetup) {
-        counter++;
-        msg += '<h5><strong>' + counter + "</strong>. Please verify email</h5>";
-      }
-      if (!$scope.userStatus.userBasicInfoIsSetup) {
-        counter++;
-        msg += '<h5><strong>' + counter + "</strong>. Please verify account info</h5>";
-      }
-      if (!$scope.userStatus.userPhoneIsSetup) {
-        counter++;
-        msg += '<h5><strong>' + counter + "</strong>. Please verify mobile phone</h5>";
-      }
-      if (!$scope.userStatus.userBankAccountIsSetup) {
-        counter++;
-        msg += '<h5><strong>' + counter + "</strong>. Please verify bank account & deposit amount</h5>";
-      }
-      if (msg !== '') {
-        msg = '<h4 style="margin-top: 0;">To Buy or Sell Bitcoin:</h4>' + msg;
-      }
-      return $sce.trustAsHtml(msg);
-    };
-
-    $scope.buy = function(){
-      DataFactory.getOrder(true);
-      $state.go('exchangeOrder', {'orderAction': 'buy'});
-    };
-
-    $scope.sell = function(){
-      DataFactory.getOrder(true);
-      $state.go('exchangeOrder', {'orderAction': 'sell'});
-    };
-
-    $scope.showAccountOptions = function() {
-      $scope.showOptions = !$scope.showOptions;
-    };
-
-    $scope.showAccountDebug = function() {
-      $scope.debugClicks++
-      console.log('TOGGLE DEBUG');
-      if($scope.debugClicks++ > 7) {
-        $scope.showDebug = !$scope.showDebug;
-      }
-    };
-
-    $scope.addBankAccount = function(){
-      $state.go('exchangeAddBankAccount');
-    };
-  }
-  function addBankAccountController($scope, $state, Error, DataFactory, UserFactory, TwoFactor) {
-    Airbitz.ui.title('Add Bank Account');
-    $scope.account = UserFactory.getUserAccount();
-    $scope.bankAccount = {};
-    $scope.bankAccount.bankAccountType = 'CHECKING';
-
-    $scope.saveBankAccount = function() {
-      var accountDepositText = "Please check your bank account in the next 24 to 48 hours for a small deposit from Glidera to complete the bank account verification process.";
-      var account = $scope.bankAccount.accountNumber;
-      var accountSuffix = account.substr(account.length - 4);
-      $scope.bankAccount.description = $scope.bankAccount.bankAccountType + " - " + accountSuffix; // auto generate description
-
-      TwoFactor.showTwoFactor(function() {
-        DataFactory.createBankAccount($scope.bankAccount).then(function() {
-          Airbitz.ui.showAlert('Bank Account Added', accountDepositText);
-          $state.go('exchange');
-        }, Error.reject);
-      });
-    };
-  }
-  function verifyBankAccountController($scope, $state, $stateParams, Error, DataFactory, UserFactory, TwoFactor) {
-    Airbitz.ui.title('Verify Bank Account');
-    $scope.account = UserFactory.getUserAccount();
-    $scope.bankAccount = DataFactory.getBankAccount($stateParams.uuid);
-
-    DataFactory.fetchBankAccount($stateParams.uuid).then(function(bankAccount) {
-        $scope.bankAccount = bankAccount;
-      }, Error.reject);
-
-    $scope.deposit = {};
-    $scope.verifyAccount = function() {
-      DataFactory.verifyBankAccount(
-        $scope.bankAccount.bankAccountUuid,
-        $scope.deposit.amount1
-      )
-      .then(function() {
-        $state.go('exchange');
-      }, Error.reject);
-    };
-  }
-  function editBankAccountController($scope, $state, $stateParams, Error, DataFactory, UserFactory, TwoFactor) {
-    Airbitz.ui.title('Edit Bank Account');
-    $scope.account = UserFactory.getUserAccount();
-    $scope.bankAccount = DataFactory.getBankAccount($stateParams.uuid);
-    DataFactory.fetchBankAccount($stateParams.uuid).then(function(bankAccount) {
-      $scope.bankAccount = bankAccount;
-    }, Error.reject);
-
-    $scope.saveBankAccount = function() {
-      DataFactory.updateBankAccount($scope.bankAccount).then(function() {
-        Airbitz.ui.showAlert('Saved', 'Bank account information has been updated.');
-        $state.go('exchange');
-      }, Error.reject);
-    };
-
-    $scope.deleteBankAccount = function() {
-      TwoFactor.showTwoFactor(function() {
-        DataFactory.deleteBankAccount($scope.bankAccount.bankAccountUuid).then(function() {
-          Airbitz.ui.showAlert('Bank Account Deleted', $scope.bankAccount.description + ' deleted');
-          $state.go('exchange');
-        }, function(res) {
-          if (res && res.message && res.message.match(/2FACode/i)) {
-            Airbitz.ui.showAlert('Unauthorized', 'Invalid 2 Factor code.');
-            TwoFactor.reset();
-            $state.go('exchangeEditBankController', {'uuid': $stateParams.uuid});
-          } else {
-            Error.reject(res);
-          }
-        });
-      });
-    };
-  }
   function orderController($scope, $state, $stateParams, $filter, Error, DataFactory, UserFactory, TwoFactor, Limits, Prices) {
     $scope.account = UserFactory.getUserAccount();
     $scope.limits = Limits.getLimits();
@@ -216,7 +49,7 @@
 
       var price = ($scope.order.orderAction == 'buy')
           ? Prices.currentBuy.price : Prices.currentSell.price;
-      output = input * price;
+      var output = input * price;
       $scope.order.orderFiatInput = parseFloat($filter('roundFiat')(parseFloat(output)));
     };
     $scope.next = function() {
@@ -243,7 +76,7 @@
     $scope.priceObj = ($scope.order.orderAction == 'buy')
                     ? Prices.currentBuy : Prices.currentSell;
     if (!order.orderAction) {
-      $state.go('exchange');
+      $state.go('dashboard');
     }
     $scope.editOrder = function() {
       $state.go('exchangeOrder', {'orderAction': order.orderAction});
@@ -273,6 +106,7 @@
     };
   }
   function transactionsController($scope, $state, DataFactory) {
+    Airbitz.ui.title('Transaction History');
     DataFactory.getTransactions().then(function(transactions) {
       $scope.transactions = transactions;
     })
