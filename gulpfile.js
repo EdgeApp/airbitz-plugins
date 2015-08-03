@@ -20,16 +20,18 @@ var core = function(bridge) {
 }
 
 gulp.task('corestyle-android', function() {
-  return gulp.src(['./lib/vendors/css/bootstrap.min.css'])
-    .pipe(concat('./lib/css/core.css'))
-    .pipe(concat('./lib/css/core-android.css'))
+  return gulp.src(['./lib/vendors/css/bootstrap.min.css',
+          './lib/css/core.css',
+          './lib/css/core-android.css'])
+    .pipe(concat('core.css'))
     .pipe(gulp.dest('./build/intermediates/css'));
 });
 
 gulp.task('corestyle-ios', function() {
-  return gulp.src(['./lib/vendors/css/bootstrap.min.css'])
-    .pipe(concat('./lib/css/core.css'))
-    .pipe(concat('./lib/css/core-ios.css'))
+  return gulp.src(['./lib/vendors/css/bootstrap.min.css',
+          './lib/css/core.css',
+          './lib/css/core-ios.css'])
+    .pipe(concat('core.css'))
     .pipe(gulp.dest('./build/intermediates/css'));
 });
 
