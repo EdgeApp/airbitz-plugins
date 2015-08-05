@@ -73,8 +73,8 @@ var Glidera = (function () {
     this.key = o.key || '';
     this.secret = o.secret || '';
     this.GLIDERA_URL = o.sandbox == true
-        ? 'https://sandbox.glidera.com'
-        : 'https://www.glidera.com';
+        ? 'https://sandbox.glidera.io'
+        : 'https://www.glidera.io';
   }
 
   Glidera.prototype = {
