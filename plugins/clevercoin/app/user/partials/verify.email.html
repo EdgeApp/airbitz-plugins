@@ -1,0 +1,18 @@
+<div class="row text-center">
+  <h3 class="col-xs-12">Please check:</h3>
+  <h3 class="col-xs-12"><label class="label label-outline">{{account.email||"jimmy@hendrix.com"}}</label></h3>
+  <h3 class="col-xs-12">for an email from:</h3>
+  <h3 class="col-xs-12"><label class="label label-outline">{{exchange.emailVerificationAddress}}</label></h3>
+</div>
+
+<div class="row" style="margin: 20px 0">
+  <p><label class="label label-warning">Note</label> Email will contain a link which must be clicked on phone to proceed past this screen.</p>
+</div>
+
+<div class="row text-right" style="margin-top: 40px;">
+  <div class="col-xs-12">
+    <button ng-click="next()" 
+            ng-disabled="form.$invalid" 
+            class="btn btn-lg btn-success">Continue</button>
+  </div>
+</div>

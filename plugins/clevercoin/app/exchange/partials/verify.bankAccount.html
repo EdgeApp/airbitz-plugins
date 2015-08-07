@@ -1,0 +1,32 @@
+<div class="exchange-verify-bank-account row">
+  <div class="col-xs-12">
+    <form name="form" class="form" novalidate>
+      <div class="row">
+          <p class="col-xs-12" style="margin-top: 15px; margin-bottom: 15px;">Please check your account for a deposit from <label class="label label-info">{{ exchange.depositId }}</label> and input them below.</p>
+          <div class="col-xs-6">
+              <label for="inputDepositAmount1" class="">Deposit Amount</label>
+              <input ng-model="deposit.amount1"
+                     type="number"
+                     id="inputDepositAmount1"
+                     class="form-control"
+                     placeholder="0.15"
+                     autofocus=""
+                     autocomplete="off"
+                     name="amount1"
+                     required="" />
+              <div class="input-error" ng-show="form.$submitted || form.amount1.$touched">
+                <span ng-show="form.amount1.$error.required" class="label label-danger">Required</span>
+                <span ng-show="form.amount1.$error.number" class="label label-danger">Number Required</span>
+              </div>
+          </div>
+
+          <div class="col-xs-6" style="margin-top: 25px;">
+              <button type="submit"
+                      ng-disabled="form.$invalid"
+                      ng-click="verifyAccount()"
+                      class="btn btn-block btn-warning">Verify</button>
+          </div>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,60 @@
+<h2 class="order-receipt-heading">
+  <img class="bitcoin-logo" src="./img/bitcoin-icon-logo.png"> Order Receipt
+</h2>
+
+<div class="order-review row">
+  <div class="col-xs-12">
+    <table class="table table-bordered">
+      <tbody>
+        <tr>
+          <td>Order Type</td>
+          <td>{{ order.orderAction || "orderAction" | titlecase }} Order</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table class="table table-bordered">
+      <tbody>
+        <tr ng-show="{{ order.orderAction === 'buy' }}">
+          <td>Destination Wallet</td>
+          <td>{{ order.transferToWallet.name || "" }}</td>
+        </tr>
+        <tr ng-show="{{ order.orderAction === 'sell' }}">
+          <td>Sell From</td>
+          <td>{{ order.transferToWallet.name || "" }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table class="table table-bordered">
+      <tbody>
+        <tr>
+          <td>BTC Price:</td>
+          <td>{{ order.details.price | currency }}</td>
+        </tr>
+        <tr>
+          <td>BTC Amount:</td>
+          <td>{{ order.orderBtcInput }}</td>
+        </tr>
+        <tr>
+          <td>Sub Total:</td>
+          <td>{{ order.details.subtotal }}</td>
+        </tr>
+        <tr>
+          <td>Fees:</td>
+          <td>{{ order.details.fees }}</td>
+        </tr>
+        <tr>
+          <td>Total:</td>
+          <td>{{ order.details.total }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="row">
+  <div class="text-right col-xs-12">
+    <button ng-click="finish()" class="btn btn-lg btn-primary">Finish</button>
+  </div>
+</div>

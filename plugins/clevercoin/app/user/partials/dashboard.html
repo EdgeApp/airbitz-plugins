@@ -1,0 +1,31 @@
+<div>
+  <div class="exchange-ticker row">
+    <div class="live-ticker text-right">
+        <div price-update price-type="buy"></div>
+    </div>
+  </div>
+</div>
+
+<div ng-if="userStatus.userCanTransact" class="exchange-buy-sell row">
+  <div class="col-xs-6">
+    <button ng-click="buy()" class="buy-button btn-success btn-lg btn-block btn">BUY</button>
+  </div>
+  <div class="col-xs-6">
+    <button ng-click="sell()" class="sell-button btn-primary btn-lg btn-block btn">SELL</button>
+  </div>
+</div>
+
+<div account-summary></div>
+
+<div class="ng-trans ng-trans-fade-up easeOutSine">
+  <hr />
+  <div class="row">
+    <div class="col-xs-6">
+      <button type="button" ui-sref="userTransactions" class="btn btn-block btn-info">Transactions</button>
+    </div>
+    <div class="col-xs-6">
+      <button type="button" ui-sref="userFunds" class="btn btn-block btn-info">Funds</button>
+    </div>
+  </div>
+</div>
+

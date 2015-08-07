@@ -1,0 +1,26 @@
+<div class="transactions row">
+
+  <div class="col-xs-12">
+    <table ng-model="transactions" class="table table-bordered">
+      <thead>
+        <tr>
+          <td>Status</td>
+          <td>Type</td>
+          <td>Subtotal</td>
+          <td>Total</td>
+          <td>BTC Price</td>
+          <td>Date</td>
+        </tr>
+      </thead>
+      <tr ng-repeat="t in transactions">
+        <td>{{ t.status || 'status' }}</td>
+        <td>{{ t.type || 'type' }}</td>
+        <td>{{ t.subtotal || 'subtotal' }}</td>
+        <td>{{ t.total || 'total' }}</td>
+        <td>{{ t.subtotal / t.price || 'price each' }}</td>
+        <td>{{ t.estimatedDeliveryDate || 'date' }}</td>
+      </tr>
+    </table>
+  </div>
+
+</div>

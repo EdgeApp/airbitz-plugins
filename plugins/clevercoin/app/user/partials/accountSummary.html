@@ -1,0 +1,27 @@
+<div class="exchange-user-account row">
+  <div class="account-message col-xs-12"
+       ng-if="!userStatus.userCanTransact" ng-bind-html="regMessage()">
+  </div>
+  <div class="col-xs-12">
+    <ul class="list-group">
+      <li ng-if="userStatus.userCanTransact" ng-click="showAccountOptions()" class="header list-group-item">
+        <span class="list-group-item-heading">{{ account.firstname || titlecase }} {{ account.surname || titlecase }}</span>
+        <p class="list-group-item-text">Tap to view your account details</p>
+        <label class="status label label-outline pull-right"
+               ng-class="{'label-success': userStatus.userCanTransact}">{{ userStatus.userCanTransact | statusFilter }}</label>
+      </li>
+      <li ng-if="showOptions" ui-sref="identityVerification" class="ng-trans ng-trans-scale-up easeOutBack list-group-item">
+        <span class="list-group-item-heading">Identity</span>
+        <p class="list-group-item-text">Tap to edit</p>
+        <label class="status label label-outline pull-right"
+               ng-class="{'label-success': userStatus.userIdentitySetup}">{{ userStatus.userIdentitySetup | statusFilter }}</label>
+      </li>
+      <li ng-if="showOptions" ui-sref="addressVerification" class="ng-trans ng-trans-scale-up easeOutBack list-group-item">
+        <span class="list-group-item-heading">Address</span>
+        <p class="list-group-item-text">Tap to edit</p>
+        <label class="status label label-outline pull-right"
+               ng-class="{'label-success': userStatus.userAddressSetup}">{{ userStatus.userAddressSetup | statusFilter }}</label>
+      </li>
+    </ul>
+  </div>
+</div>

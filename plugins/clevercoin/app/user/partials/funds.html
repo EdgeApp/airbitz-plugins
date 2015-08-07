@@ -1,0 +1,24 @@
+<div class="transactions row">
+
+  <div class="col-xs-12">
+    <table ng-model="funds" class="table table-bordered">
+      <thead>
+        <tr>
+          <td>Time</td>
+          <td>Type</td>
+          <td>Currency</td>
+          <td>Amount</td>
+          <td>Fee</td>
+        </tr>
+      </thead>
+      <tr ng-repeat="f in funds.ledger">
+        <td>{{ f.time || 'time' }}</td>
+        <td>{{ f.type || 'type' }}</td>
+        <td>{{ f.currency || 'currency' }}</td>
+        <td>{{ f.amount || 'amount' }}</td>
+        <td>{{ f.fee || 'fee' }}</td>
+      </tr>
+    </table>
+  </div>
+
+</div>
