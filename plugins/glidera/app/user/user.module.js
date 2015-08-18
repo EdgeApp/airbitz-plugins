@@ -68,7 +68,6 @@
     $scope.userStatus = UserFactory.getUserAccountStatus();
     $scope.limits = Limits.getLimits();
     $scope.showOptions = !$scope.userStatus.userCanTransact;
-    $scope.showDebug = false;
     $scope.debugClicks = 0;
 
     UserFactory.fetchUserAccountStatus().then(function(b) {
@@ -122,14 +121,6 @@
 
     $scope.showAccountOptions = function() {
       $scope.showOptions = !$scope.showOptions;
-    };
-
-    $scope.showAccountDebug = function() {
-      $scope.debugClicks++
-      console.log('TOGGLE DEBUG');
-      if($scope.debugClicks++ > 7) {
-        $scope.showDebug = !$scope.showDebug;
-      }
     };
 
     $scope.routeBankAccount = function() {
