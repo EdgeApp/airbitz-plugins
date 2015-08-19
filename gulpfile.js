@@ -86,9 +86,9 @@ plugins.map(function(plugin) {
     });
   });
   gulp.task(plugin + '-watch', function () {
-      watch('./plugins/' + plugin + '/**/*', function () {
-          gulp.start(plugin + '-dev');
-      });
+    watch(['./plugins/' + plugin + '/**/*', './lib/**/*'], function () {
+      gulp.start(plugin + '-dev');
+    });
   });
 })
 
