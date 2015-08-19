@@ -56,7 +56,7 @@
           $state.go('authorize');
         }
       });
-    } else if ("backaccount" == d.state) {
+    } else {
       $state.go('dashboard');
     }
   }
