@@ -1,36 +1,76 @@
-@import 'animations.less';
 @import 'ab-browser-fixes.less';
+@import 'animations.less';
+@import 'misc.less';
 
 
-.shadow-text {
-  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+// VARIABLES
+@ab-green: #80c342;
+@ab-green-dark: #55af00;
+@ab-blue: #2291cf;
+@ab-blue-dark: #003E61;
+@ab-blue-light: #02A4E2;
+
+
+// BOOTSTRAP OVERWRITES
+#main-content {
+  padding-right: 0;
+  padding-left: 0;
 }
-.shadow-box {
-  box-shadow: 0 2px 0px rgba(0, 0, 0, 0.4);
+
+#main-content .row {
+  // outline: 3px solid #ccff00;
+  margin-left: 0;
+  margin-right: 0;
 }
-.glass-border {
-  border: 1px solid rgba(255, 255, 255, 0.5);
+
+.contain {
+  padding-left: 15px;
+  padding-right: 15px;
 }
-.glass-input {
-  background: rgba(0, 0, 0, 0.2);
-  color: #000;
-  border: 1px solid rgba(255, 255, 255, 0.5);
+
+.no-pad {
+  padding-left: 0;
+  padding-right: 0;
 }
-.data-container {
-  background-color: rgba(0, 0, 0, 0.2);
-  padding: 6px 5px;
-  border-radius: 5px;
-  border: 1px solid rgba(0, 0, 0, 0.5);
-}
-.noglow {
-  outline: none;
-  border: none !important;
-  -webkit-box-shadow: none !important;
-  -moz-box-shadow: none !important;
-  box-shadow: none !important;
+
+.btn {
+  border-radius: 0;
 }
 
 
+
+.text-shadow(){
+  text-shadow: 0px 1px 0px rgba(0, 0, 0, 0.2);
+}
+
+
+
+// EXCHANGE TICKER
+.exchange-ticker {
+  position: relative;
+  width: 100%;
+  padding: 5px 15px;
+  background: @ab-blue-dark;
+
+  .live-ticker {
+
+    .live-price-rate {
+      font-size: 17px;
+
+      .price-rate-label {
+        color: #fff;
+      }
+      .price-rate-data {
+        color: @ab-green;
+      }
+    }
+
+    .live-price-expiration .expiration-data {
+      font-weight: bold;
+      color: #333333;
+    }
+  }
+}
 
 
 
@@ -51,11 +91,13 @@ html {
     /* Opera < 12.1 */
     animation: fadein 500ms;
 
-    overflow-x: hidden;
+    overflow-x: auto;
+    // overflow-x: hidden;
     overflow-y: auto;
 
     background: url('img/postcard_mountain.jpg');
     background-size: cover;
+    background-attachment: fixed;
 
     #main-content {
       position: absolute;
@@ -66,7 +108,7 @@ html {
       position: absolute;
       min-height: 100%;
       width: 100%;
-      padding-top: 20px;
+      // padding-top: 20px;
 
       #footer {
         position: fixed;
@@ -93,7 +135,7 @@ html {
 
     h1, h2, h3, h4, h5, h6 {
       color: #000;
-      text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+      .text-shadow;
     }
     hr {
       margin: 20px 0;
@@ -103,6 +145,29 @@ html {
       &.page {
         margin: 80px 0;
         border-color: #000;
+      }
+    }
+
+
+    .exchange-user-account {
+      .account-message {
+        margin-bottom: 20px;
+        h4 {
+          color: @ab-blue;
+          font-weight: 800;
+          text-transform: uppercase;
+        }
+        h5 {
+          margin-bottom: 15px;
+        }
+        .step {
+          border-radius: 1000px;
+          background: @ab-blue;
+          color: #fff;
+          padding: 2px 6px;
+          font-weight: 300;
+          font-size: 12px;
+        }
       }
     }
   }
@@ -123,7 +188,7 @@ body .btn {
 }
 body .btn.btn-link {
   color: #000;
-  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+  .text-shadow;
   box-shadow: none;
 }
 body .btn:focus,
@@ -268,7 +333,7 @@ body .list-group .list-group-item-text {
 body label {
   color: #000;
   font-weight: 300;
-  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+  .text-shadow;
 }
 body .label {
   font-weight: 300;
@@ -287,11 +352,6 @@ body .label.status {
   border-right: 0;
   border-bottom: 0;
 }
-body .exchange-ticker {
-  position: relative;
-  width: 100%;
-  left: 15px;
-}
 body .exchange-limits .limit-header-buy {
   text-transform: uppercase;
   color: #42832e;
@@ -306,7 +366,7 @@ body .limit-label {
   text-transform: uppercase;
   letter-spacing: -1px;
   color: #000;
-  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+  .text-shadow;
 }
 body .buy-limits {
   float: left;
@@ -352,7 +412,7 @@ body .exchange-options .list-group-item i {
   margin-right: 10px;
 }
 body .disclaimer p {
-  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+  .text-shadow;
 }
 body .exchange-sign-up h2 {
   margin-bottom: 20px;
@@ -377,9 +437,6 @@ body .exchange-balances {
 }
 body .exchange-user-account {
   margin-top: 30px;
-  margin-bottom: 20px;
-}
-body .exchange-user-account .account-message {
   margin-bottom: 20px;
 }
 body .exchange-user-account .list-group-item small {
@@ -443,21 +500,6 @@ body .transactions .table thead {
 body .transactions .table td {
   background: rgba(0, 0, 0, 0.2);
   font-size: 8px;
-}
-body .live-ticker .live-price-rate {
-  font-size: 17px;
-}
-body .live-ticker .live-price-rate .price-rate-label {
-  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
-}
-body .live-ticker .live-price-rate .price-rate-data {
-  font-weight: bold;
-  color: #5ccc3a;
-  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
-}
-body .live-ticker .live-price-expiration .expiration-data {
-  font-weight: bold;
-  color: #333333;
 }
 body .verify-phone-info {
   margin-bottom: 20px;

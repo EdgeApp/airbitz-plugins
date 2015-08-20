@@ -45,7 +45,7 @@
     }
     return d;
   }
-  
+
   function handleUri($state, UserFactory, d) {
     if ("authorize" === d.state) {
       Airbitz.ui.title('Authenticating');
@@ -89,19 +89,19 @@
 
       if (!$scope.userStatus.userEmailIsSetup) {
         counter++;
-        msg += '<h5><strong>' + counter + "</strong>. Please verify email</h5>";
+        msg += '<h5><strong class="step">' + counter + "</strong> Verify email</h5>";
       }
       if (!$scope.userStatus.userBasicInfoIsSetup) {
         counter++;
-        msg += '<h5><strong>' + counter + "</strong>. Please verify account info</h5>";
+        msg += '<h5><strong class="step">' + counter + "</strong> Verify account info</h5>";
       }
       if (!$scope.userStatus.userPhoneIsSetup) {
         counter++;
-        msg += '<h5><strong>' + counter + "</strong>. Please verify mobile phone</h5>";
+        msg += '<h5><strong class="step">' + counter + "</strong> Verify mobile phone</h5>";
       }
       if (!$scope.userStatus.userBankAccountIsSetup) {
         counter++;
-        msg += '<h5><strong>' + counter + "</strong>. Please verify bank account & deposit amount</h5>";
+        msg += '<h5><strong class="step">' + counter + "</strong> Verify bank account & deposit amount</h5>";
       }
       if (msg !== '') {
         msg = '<h4 style="margin-top: 0;">To Buy or Sell Bitcoin:</h4>' + msg;
