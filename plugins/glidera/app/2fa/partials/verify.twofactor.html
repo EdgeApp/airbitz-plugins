@@ -37,8 +37,8 @@
   </form>
 </div>
 
-<div class="row text-center" ng-if="account.phone">
+<div class="twofa-phone-preview row text-center" ng-if="account.phone">
   <h3 class="col-xs-12">Code sent to:</h3>
-  <h3 class="col-xs-12" style="margin-top: 0;"><label class="label label-outline"><span style="color: #ddd;">Phone:</span> {{ account.phone }}</label></h3>
+  <h3 class="col-xs-12" style="margin-top: 0;"><label class="label label-outline"><span class="phone-label">Phone:</span> <span class="phone-data">{{ account.phone }}</span></label></h3>
 </div>
 

@@ -180,6 +180,28 @@ html {
         }
       }
     }
+
+    // PHONE TWOFA
+    .twofa {
+      .app-top-margin;
+
+      input[type="number"] {
+        margin-bottom: 10px;
+      }
+    }
+    .twofa-phone-preview {
+      .phone-label {
+        color: #555;
+      }
+      .phone-data {
+        color: @ab-blue;
+      }
+    }
+
+    // USER ACCOUNT INFO
+    .user-account-form {
+      .app-top-margin;
+    }
   }
 }
 
@@ -493,12 +515,6 @@ body .order-receipt-heading {
 body .order-receipt-heading .bitcoin-logo {
   height: 32px;
   padding-bottom: 4px;
-}
-body .twofa {
-  margin-top: 0;
-}
-body .twofa input[type="number"] {
-  margin-bottom: 10px;
 }
 body .transactions .table {
   width: 100%;
