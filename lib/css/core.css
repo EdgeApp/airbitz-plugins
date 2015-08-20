@@ -5,7 +5,9 @@
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 input[type=number]::-webkit-outer-spin-button,
-input[type=number]::-webkit-inner-spin-button {
+input[type=number]::-webkit-inner-spin-button,
+input[type=date]::-webkit-outer-spin-button,
+input[type=date]::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
@@ -446,11 +448,20 @@ input[type=number]::-webkit-inner-spin-button {
   padding-right: 15px;
 }
 .no-pad {
-  padding-left: 0;
-  padding-right: 0;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+.no-pad-left {
+  padding-left: 0 !important;
+}
+.no-pad-right {
+  padding-right: 0 !important;
 }
 .btn {
   border-radius: 0;
+}
+.app-top-margin {
+  margin-top: 20px;
 }
 .exchange-ticker {
   position: relative;
@@ -543,12 +554,13 @@ html body .exchange-user-account .account-message {
   margin-bottom: 20px;
 }
 html body .exchange-user-account .account-message h4 {
+  margin-bottom: 20px;
   color: #2291cf;
   font-weight: 800;
   text-transform: uppercase;
 }
 html body .exchange-user-account .account-message h5 {
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 html body .exchange-user-account .account-message .step {
   border-radius: 1000px;
@@ -558,16 +570,31 @@ html body .exchange-user-account .account-message .step {
   font-weight: 300;
   font-size: 12px;
 }
+html body .twofa {
+  margin-top: 20px;
+}
+html body .twofa input[type="number"] {
+  margin-bottom: 10px;
+}
+html body .twofa-phone-preview .phone-label {
+  color: #555;
+}
+html body .twofa-phone-preview .phone-data {
+  color: #2291cf;
+}
+html body .user-account-form {
+  margin-top: 20px;
+}
 body input[type='text'],
 body input[type='number'],
 body input[type='tel'],
-body input[type='email'] {
-  background: rgba(0, 0, 0, 0.2);
-  color: #000;
-  border: 1px solid rgba(255, 255, 255, 0.5);
-}
-body .btn {
-  box-shadow: 0 2px 0px rgba(0, 0, 0, 0.4);
+body input[type='email'],
+body input[type='date'] {
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  border: none;
+  border-bottom: 1px solid #999;
+  border-radius: 0 !important;
 }
 body .btn.btn-link {
   color: #000;
@@ -866,12 +893,6 @@ body .order-receipt-heading {
 body .order-receipt-heading .bitcoin-logo {
   height: 32px;
   padding-bottom: 4px;
-}
-body .twofa {
-  margin-top: 0;
-}
-body .twofa input[type="number"] {
-  margin-bottom: 10px;
 }
 body .transactions .table {
   width: 100%;

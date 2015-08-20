@@ -1,7 +1,7 @@
 <div>
   <div class="exchange-ticker row">
     <div class="live-ticker text-right">
-        <div price-update price-type="{{ order.orderAction }}"></div>
+      <div price-update price-type="{{ order.orderAction }}"></div>
     </div>
   </div>
 </div>
@@ -17,13 +17,13 @@
 
 <div account-summary></div>
 
-<div class="ng-trans ng-trans-fade-up easeOutSine">
+<div class="dashboard-bottom-buttons ng-trans ng-trans-fade-up easeOutSine">
   <div class="row">
     <div class="col-xs-6 no-pad">
-      <button type="button" ui-sref="exchangeTransactions" class="btn btn-block btn-info">Transactions</button>
+      <button type="button" ui-sref="exchangeTransactions" class="btn btn-block btn-lg btn-info">Transactions</button>
     </div>
     <div class="col-xs-6 no-pad">
-      <button type="button" ng-click="logout()" class="btn btn-block btn-danger">Logout</button>
+      <button type="button" ng-click="logout()" class="btn btn-block btn-lg btn-danger">Logout</button>
     </div>
   </div>
 </div>

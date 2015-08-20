@@ -158,17 +158,23 @@ html {
       }
     }
 
+    // .dashboard-bottom-buttons {
+    //   position: fixed;
+    //   width: 100%;
+    //   bottom: 0;
+    // }
 
     .exchange-user-account {
       .account-message {
         margin-bottom: 20px;
         h4 {
+          margin-bottom: 20px;
           color: @ab-blue;
           font-weight: 800;
           text-transform: uppercase;
         }
         h5 {
-          margin-bottom: 15px;
+          margin-bottom: 20px;
         }
         .step {
           border-radius: 1000px;
@@ -210,13 +216,13 @@ html {
 body input[type='text'],
 body input[type='number'],
 body input[type='tel'],
-body input[type='email'] {
-  background: rgba(0, 0, 0, 0.2);
-  color: #000;
-  border: 1px solid rgba(255, 255, 255, 0.5);
-}
-body .btn {
-  box-shadow: 0 2px 0px rgba(0, 0, 0, 0.4);
+body input[type='email'],
+body input[type='date'] {
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  border: none;
+  border-bottom: 1px solid #999;
+  border-radius: 0 !important;
 }
 body .btn.btn-link {
   color: #000;
