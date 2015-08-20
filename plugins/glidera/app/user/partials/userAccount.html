@@ -57,7 +57,7 @@
     </div>
 
     <div class="row">
-      <div class="form-group col-xs-6">
+      <div class="no-pad-left form-group col-xs-6">
         <label for="inputAddressZip" class="sr-only">Postal Code</label>
         <input ng-model="account.zipCode"
                type="text" id="inputAddressZip" class="form-control"
@@ -69,7 +69,7 @@
           <span ng-show="form.zip.$error.number" class="label label-danger">Number Required</span>
         </div>
       </div>
-      <div class="form-group col-xs-6">
+      <div class="no-pad-right form-group col-xs-6">
         <select ng-options="o.name for o in states" ng-model="account.state" class="form-control"
                 name="state"
                 required="" />
