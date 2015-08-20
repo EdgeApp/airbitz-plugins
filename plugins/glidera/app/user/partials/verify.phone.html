@@ -7,7 +7,7 @@
     </div>
 
     <div class="row">
-      <div class="form-group col-xs-offset-1 col-xs-10">
+      <div class="form-group col-xs-12">
         <label for="inputPhone" class="sr-only">Verification Code</label>
         <input ng-model="account.phone" name="phone" type="tel" id="inputPhone"
                class="large glass-input form-control"
@@ -31,6 +31,7 @@
 
     <div class="text-right row" style="margin-top: 40px;">
       <div class="col-xs-12">
+        <button type="button" ng-click="cancelSignup()" class="btn btn-lg btn-link">Cancel</button>
         <button type="submit"
                 ng-click="submitPhone()"
                 ng-disabled="form.$invalid"

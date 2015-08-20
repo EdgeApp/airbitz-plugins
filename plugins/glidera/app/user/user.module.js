@@ -215,6 +215,9 @@
         TwoFactor.confirmTwoFactor(verifyCode);
       }, Error.reject);
     };
+    $scope.cancelSignup = function(){
+      $state.go('dashboard');
+    };
   }
 
   function phoneNumberValidator() {
