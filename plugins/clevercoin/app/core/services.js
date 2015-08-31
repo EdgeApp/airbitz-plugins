@@ -193,31 +193,53 @@
       return btc * 100000000;
     };
 
-    factory.buy = function(qty) {
-      var deferred = $q.defer();
-      CcFactory.marketBuy(qty, function(e, r, b) {
-        console.log(JSON.stringify(b));
-        if (r == 200) {
-          console.log(b);
-          deferred.resolve(b);
+    var createAddress = function(wallet, label, amountSatoshi, amountFiat,
+                                 category, notes, resolve, reject) {
+        if (Airbitz._bridge.inDevMod()) {
+          resolve({'address': Airbitz.config.get('MAINNET_ADDRESS')});
         } else {
-          deferred.reject(b);
+          Airbitz.core.createReceiveRequest(wallet, {
+            label: label,
+            category: category,
+            notes: notes,
+            amountSatoshi: amountSatoshi,
+            amountFiat: amountFiat,
+            success: resolve,
+            error: reject
+          });
         }
-      });
-      return deferred.promise;
     };
 
-    factory.sell = function(qty) {
+    factory.paymentMethods = function() {
       var d = $q.defer();
-      CcFactory.marketSell(qty, function(e, r, b) {
-        if (r == 200) {
-          d.resolve(b);
-        } else {
-          d.reject(b);
-        }
+      CcFactory.paymentMethods(function(e, r, b) {
+        r === 200 ? d.resolve(b) : d.reject(b);
       });
       return d.promise;
     };
+
+    factory.buy = function(wallet, qty, paymentMethod) {
+      var d = $q.defer();
+      var uri = Airbitz.config.get('REDIRECT_URI');
+      createAddress(wallet, 'CleverCoin', qty, '', 'Exchange:CleverCoin', 'Here are some notes', function(request) {
+        var address = request['address'];
+        CcFactory.quote(qty, 'BTC', paymentMethod, uri, '', address, function(e, r, b) {
+          r == 200 ? d.resolve(b) : d.reject(b);
+        });
+      }, function() {
+        Airbitz.ui.alert('Unable to create a receive address. Please try again later.');
+      });
+      return d.promise;
+    };
+
+    factory.sell = function(wallet, qty, paymentMethod) {
+      var d = $q.defer();
+      CcFactory.quote(-1 * qty, 'BTC', paymentMethod, uri, '', null, function(e, r, b) {
+        r == 200 ? d.resolve(b) : d.reject(b);
+      });
+      return d.promise;
+    };
+
     return factory;
   }
 

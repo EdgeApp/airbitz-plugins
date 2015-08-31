@@ -207,44 +207,24 @@ var CleverCoin = (function () {
       });
     },
 
-    buy: function(otpCode, destinationAddress, qty, opts, callback) {
-      var data = {
-        'destinationAddress': destinationAddress,
-        'qty': qty
-      };
-      if (opts.priceUuid) {
-        data.priceUuid = opts.priceUuid;
-      } else {
-        data.useCurrentPrice = true;
-      }
-      return this._request(true, '/buy', {
-        'method': 'POST',
-        'otpCode': otpCode,
-        'data': data,
-        'callback': callback
-      });
-    },
-
-    sellAddress: function(qty, callback) {
-      return this._request(true, '/user/create_sell_address', {
+    paymentMethods: function(callback) {
+      return this._request(true, '/quote/paymentmethods', {
         'method': 'GET',
         'callback': callback
       });
     },
 
-    sell: function(otpCode, refundAddress, signedTransaction, opts, callback) {
+    quote: function(amount, currencyShort, paymentMethod, callBackLink, paymentParameter, address, callback) {
       var data = {
-        'refundAddress': refundAddress,
-        'signedTransaction': signedTransaction
+        'amount': amount,
+        'currencyShort': currencyShort,
+        'paymentMethod': paymentMethod,
+        'callBackLink': callBackLink,
+        'paymentParameter': paymentParameter,
+        'directWithdrawAddress': address
       };
-      if (opts.priceUuid) {
-        data.priceUuid = opts.priceUuid;
-      } else {
-        data.useCurrentPrice = true;
-      }
-      return this._request(true, '/sell', {
+      return this._request(true, '/quote', {
         'method': 'POST',
-        'otpCode': otpCode,
         'data': data,
         'callback': callback
       });
@@ -272,28 +252,7 @@ var CleverCoin = (function () {
       return this._request(true, '/funds/ledger', {
         'callback': callback
       });
-    },
-
-    ordersLimited: function(type, amount, price, callback) {
-      return this._request(true, '/orders/limited', {
-        'method': 'POST',
-        'data': {
-          'type': type,
-          'amount': amount,
-          'price': price
-        },
-        'callback': callback
-      });
-    },
-
-    marketBuy: function(amount, callback) {
-      return this.ordersLimited('bid', amount, 100000, callback);
-    },
-
-    marketSell: function(amount, callback) {
-      return this.ordersLimited('ask', amount, 0.01, callback);
-    },
-
+    }
   };
   return CleverCoin;
 

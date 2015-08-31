@@ -25,20 +25,12 @@
           <td>{{ order.transferToWallet.name || "" }}</td>
         </tr>
         <tr>
+          <td>Payment Method</td>
+          <td>{{ order.paymentMethod.name || "" }}</td>
+        </tr>
+        <tr>
           <td>{{ exchange.order.currency }} Amount</td>
           <td>{{ order.orderBtcInput || "3.14" }} {{ exchange.order.currency || "BTC" }}</td>
-        </tr>
-        <tr>
-          <td>Subtotal</td>
-          <td>{{ exchange.order.currencySymbol || "$" }}{{ priceObj.subtotal || "priceSubtotal" }} {{ exchange.currency || "EUR" }}</td>
-        </tr>
-        <tr>
-          <td>Fees</td>
-          <td>{{ exchange.order.currencySymbol || "$" }}{{ priceObj.fees || "priceFees" }} {{ exchange.currency || "EUR" }}</td>
-        </tr>
-        <tr>
-          <td>Total</td>
-          <td>{{ exchange.order.currencySymbol || "$" }}{{ priceObj.total || "priceTotal"  }} {{ exchange.currency || "EUR" }}</td>
         </tr>
       </tbody>
     </table>

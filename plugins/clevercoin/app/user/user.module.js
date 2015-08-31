@@ -61,7 +61,7 @@
     };
   }
   function dashboardController($scope, $sce, $state, Error, DataFactory, UserFactory) {
-    Airbitz.ui.title('CleverCoin ' + $scope.countryName);
+    Airbitz.ui.title('CleverCoin');
     // set variables that might be cached locally to make sure they load faster if available
     $scope.account = UserFactory.getUserAccount();
     $scope.userStatus = UserFactory.getUserAccountStatus();
@@ -121,7 +121,7 @@
     });
 
     $scope.cancelSignup = function(){
-      $state.go('exchange');
+      $state.go('dashboard');
     };
 
     $scope.saveUserAccount = function() {
