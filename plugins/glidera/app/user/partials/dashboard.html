@@ -17,14 +17,10 @@
 
 <div account-summary></div>
 
-<div class="dashboard-bottom-buttons ng-trans ng-trans-fade-up easeOutSine">
+<div ng-if="userStatus.userCanTransact" class="dashboard-bottom-buttons ng-trans ng-trans-fade-up easeOutSine">
   <div class="row">
-    <div class="col-xs-6 no-pad">
+    <div class="col-xs-12 no-pad">
       <button type="button" ui-sref="exchangeTransactions" class="btn btn-block btn-lg btn-info">Transactions</button>
-    </div>
-    <div class="col-xs-6 no-pad">
-      <button type="button" ng-click="logout()" class="btn btn-block btn-lg btn-danger">Logout</button>
-    </div>
   </div>
 </div>
 

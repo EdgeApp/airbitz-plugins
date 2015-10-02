@@ -500,9 +500,11 @@ html body {
   animation: fadein 500ms;
   overflow-x: auto;
   overflow-y: auto;
+  /*
   background: url('img/postcard_mountain.jpg');
   background-size: cover;
   background-attachment: fixed;
+  */
 }
 html body #main-content {
   position: absolute;

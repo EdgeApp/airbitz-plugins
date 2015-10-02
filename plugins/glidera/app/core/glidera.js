@@ -9,16 +9,12 @@
     console.log('Sandbox: ' + Airbitz.config.get('SANDBOX'))
     var g = new Glidera({
       'sandbox': Airbitz.config.get('SANDBOX') == 'true' ? true : false,
-      'clientId': Airbitz.config.get('GLIDERA_CLIENT_ID'),
-      'clientSecret': Airbitz.config.get('GLIDERA_CLIENT_SECRET')
+      'clientId': Airbitz.config.get('GLIDERA_CLIENT_ID')
     });
-    if (Airbitz.config.get('TESTNET_ADDRESS')) {
-      g.sandboxAddress = Airbitz.config.get('TESTNET_ADDRESS')
-    }
     var account = Airbitz.core.readData('account') || {};
     if (account) {
-      g.accessToken = account.accessToken;
-      g.accessTokenType = account.accessTokenType;
+      g.accessKey = account.accessKey;
+      g.secret = account.secret;
     }
     return g;
   }

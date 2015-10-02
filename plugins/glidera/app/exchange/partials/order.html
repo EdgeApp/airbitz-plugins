@@ -12,15 +12,6 @@
 
     <form ng-submit="next()" class="form" name="form">
       <div class="row">
-        <div class="col-xs-6 form-group">
-          <label for="inputBtcWallet" class="">BTC Wallet</label>
-          <select id="inputBtcWallet"
-            ng-model="order.transferToWallet"
-            ng-options="w.name for w in userWallets"
-            class="form-control">
-          </select>
-        </div>
-
         <div class="col-xs-6">
           <label>Your {{order.orderAction | titlecase}} Limits</label>
           <div class="order-limits">

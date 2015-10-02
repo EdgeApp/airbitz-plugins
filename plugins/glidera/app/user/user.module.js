@@ -5,7 +5,7 @@
     .module('app.user', ['app.dataFactory', 'app.constants'])
     .controller('homeController', ['$scope', '$state', '$location', 'UserFactory', homeController])
     .controller('dashboardController', ['$scope', '$sce', '$state', 'Error', 'DataFactory', 'UserFactory', 'Limits', dashboardController])
-    .controller('userAccountController', ['$scope', '$state', 'Error', 'States', 'Occupations', 'UserFactory', userAccountController])
+    .controller('userAccountController', ['$scope', '$state', 'Error', 'States', 'UserFactory', userAccountController])
     .controller('bankController', ['$scope', '$state', 'UserFactory', bankController])
     .controller('disclaimerController', ['$scope', '$state', 'Error', 'States', 'UserFactory', disclaimerController])
     .controller('authController', ['$scope', '$state', '$location', 'UserFactory', authController])
@@ -49,7 +49,7 @@
   function handleUri($state, UserFactory, d) {
     if ("authorize" === d.state) {
       Airbitz.ui.title('Authenticating');
-      UserFactory.requestAccessToken(d.code, function(success, results) {
+      UserFactory.requestAccessToken(function(success, results) {
         if (success) {
           $state.go('dashboard');
         } else {
@@ -73,6 +73,8 @@
     UserFactory.fetchUserAccountStatus().then(function(b) {
       $scope.userStatus = b;
       $scope.showOptions = !$scope.userStatus.userCanTransact;
+    }).then(function() {
+      return UserFactory.getEmailAddress();
     }).then(function() {
       return UserFactory.getFullUserAccount();
     }).then(function() {
@@ -133,11 +135,10 @@
     }
   }
 
-  function userAccountController($scope, $state, Error, States, Occupations, UserFactory) {
+  function userAccountController($scope, $state, Error, States, UserFactory) {
     var title = 'User Information';
     Airbitz.ui.title(title);
     $scope.states = States.getStates();
-    $scope.occupations = Occupations.getOccupations();
     $scope.account = UserFactory.getUserAccount();
     UserFactory.getFullUserAccount().then(function(account) {
       $scope.account = account;

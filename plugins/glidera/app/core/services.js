@@ -3,16 +3,15 @@
 
   angular
     .module('app.dataFactory', ['app.glidera', 'app.2fa', 'app.constants', 'app.limits'])
-    .factory('UserFactory', [ '$q', '$filter', 'States', 'Occupations', 'ExchangeFactory', 'glideraFactory', 'TwoFactor', UserFactory])
+    .factory('UserFactory', [ '$q', '$filter', 'States', 'ExchangeFactory', 'glideraFactory', 'TwoFactor', UserFactory])
     .factory('DataFactory', [ '$q', '$filter', 'States', 'ExchangeFactory', 'glideraFactory', 'TwoFactor', 'Prices', DataFactory]);
 
   angular
     .module('app.constants', [])
     .factory('ExchangeFactory', [ExchangeFactory])
-    .factory('States', [States])
-    .factory('Occupations', [Occupations])
+    .factory('States', [States]);
 
-  function UserFactory($q, $filter, States, Occupations, ExchangeFactory, glideraFactory, TwoFactor) {
+  function UserFactory($q, $filter, States, ExchangeFactory, glideraFactory, TwoFactor) {
     var factory = {};
     var account = Airbitz.core.readData('account') || {};
 
@@ -24,28 +23,37 @@
     };
     factory.clearUser = function() {
       account = {};
-      glideraFactory.accessToken = null;
-      glideraFactory.accessTokenType = null;
+      glideraFactory.accessKey = null;
+      glideraFactory.secret = null;
       Airbitz.core.writeData('account', {});
     };
 
     var redirectUri = Airbitz.config.get('REDIRECT_URI');
+    var domainUri = Airbitz.config.get('SANDBOX') == 'true'
+      ? 'bitid:sandbox.glidera.io/api/v1/authentication/bitid' : 'bitid:www.glidera.io/api/v1/authentication/bitid';
     factory.authorizeUrl = function() {
-      return glideraFactory.redirectUrl(redirectUri, 'view_email_address personal_info transact transaction_history', 'authorize');
+      var message = glideraFactory.bitidAuthUri();
+      console.log(message);
+      var address = Airbitz.core.bitidAddress(domainUri, message);
+      var signature = Airbitz.core.bitidSignature(domainUri, message);
+      return glideraFactory.bitidAuthRedirect(redirectUri, address, message, signature, 'authorize');
     };
     factory.createBankAccountUrl = function() {
-      return glideraFactory.createBankAccount(redirectUri, 'bankaccount');
+      return glideraFactory.createBankAccountRedirect(redirectUri, 'bankaccount');
     };
-    factory.requestAccessToken = function(code, cb) {
-      glideraFactory.requestAccessToken(code, function(success, results) {
+    factory.requestAccessToken = function(cb) {
+      var message = glideraFactory.bitidTokenUri();
+      console.log(message);
+      var address = Airbitz.core.bitidAddress(domainUri, message);
+      var signature = Airbitz.core.bitidSignature(domainUri, message);
+      glideraFactory.bitidAccessToken(address, message, signature, function(success, results) {
         if (success) {
-          account.accessToken = glideraFactory.accessToken;
-          account.accessTokenType = glideraFactory.accessTokenType;
-          // persist access token
+          account.accessKey = glideraFactory.accessKey;
+          account.secret = glideraFactory.secret;
           Airbitz.core.writeData('account', account);
         }
         cb(success, results); 
-      }, {'redirectUri': redirectUri});
+      });
     };
     factory.registrationMode = function() {
       var d = $q.defer();
@@ -80,6 +88,19 @@
       });
       return d.promise;
     };
+    factory.getEmailAddress = function() {
+      return $q(function(resolve, reject) {
+        glideraFactory.getEmailAddress(function(e, s, b) {
+          if (s === 200) {
+            account.email = b.email;
+            Airbitz.core.writeData('account', account);
+            resolve(account.email);
+          } else {
+            reject(b);
+          }
+        });
+      });
+    }
     factory.getFullUserAccount = function() {
       return $q(function(resolve, reject) {
         glideraFactory.getPersonalInfo(function(e, s, b) {
@@ -94,7 +115,6 @@
             account.zipCode = b.zipCode;
             account.state = States.findState(b.state);
             account.country = b.countryCode;
-            account.occupation = Occupations.find(b.occupation);
 
             // XXX: This is kind of hacky
             if (b.birthDate) {
@@ -103,7 +123,7 @@
             }
             account.registered = true;
 
-            // persiste locally
+            // persist locally
             console.log(account);
             Airbitz.core.writeData('account', account);
             resolve(account);
@@ -117,13 +137,13 @@
       return $q(function(resolve, reject) {
         glideraFactory.updatePersonalInfo({
           'firstName': account.firstName,
+          'middleName': account.middleName,
           'lastName': account.lastName,
-          'birthDate': $filter('date')(account.birthDate, 'yyyy-MM-dd'),
+          'birthDate': account.birthDate ? $filter('date')(account.birthDate, 'yyyy-MM-dd') : null,
           'address1': account.address1,
           'address2': account.address2,
           'city': account.city,
-          'state': account.state.id,
-          'occupation': account.occupation ? account.occupation.id : null,
+          'state': account.state ? account.state.id : null,
           'zipCode': account.zipCode,
           'ip': '127.0.0.1'
         }, function(e, s, b) {
@@ -145,14 +165,16 @@
     factory.getTransactions = function() {
       return $q(function(resolve, reject) {
         glideraFactory.transactions(function(e, s, b) {
-          if (s >= 200 && s < 300) {
-            resolve(b.transactions);
-            console.log(b.transactions);
+          s >= 200 && s < 300 ?  resolve(b.transactions) : reject(b);
+        });
+      });
+    };
 
-            // return dummyData
-          } else {
-            reject(b);
-          }
+    factory.getSelectedWallet = function() {
+      return $q(function(resolve, reject) {
+        Airbitz.core.selectedWallet({
+          success: resolve,
+          error: reject
         });
       });
     };
@@ -203,91 +225,6 @@
       }
     };
 
-    var bankAccounts = Airbitz.core.readData('bankAccounts') || [];
-    factory.getBankAccounts = function() {
-      return bankAccounts;
-    };
-    factory.fetchBankAccounts = function() {
-      return $q(function(resolve, reject) {
-        glideraFactory.getBankAccounts(function(e, s, b) {
-          if (s >= 200 && s < 300) {
-            bankAccounts = b.bankAccounts; //cache bank accounts
-            Airbitz.core.writeData('bankAccounts', bankAccounts);
-            resolve(b.bankAccounts);
-          } else {
-            reject(b);
-          }
-        });
-      });
-    };
-    factory.getBankAccount = function(uuid) {
-      var l = bankAccounts.filter(function(b) {
-        return b.bankAccountUuid == uuid;
-      });
-      return l.length > 0 ? l[0] : null;
-    };
-    factory.fetchBankAccount = function(uuid) {
-      return $q(function(resolve, reject) {
-        glideraFactory.getBankAccount(uuid, function(e, s, b) {
-          if (s >= 200 && s < 300) {
-            resolve(b);
-          } else {
-            reject(b);
-          }
-        });
-      });
-    };
-
-    // MAPS TO: https://sandbox.glidera.com/documentation.xhtml#apiReference-createBankAccount
-    factory.createBankAccount = function(bankAccount) {
-      console.log(bankAccount);
-      return $q(function(resolve, reject) {
-        glideraFactory.createBankAccount(
-          TwoFactor.getCode(),
-          bankAccount.routingNumber,
-          bankAccount.accountNumber,
-          bankAccount.transit,
-          bankAccount.institution,
-          bankAccount.description,
-          bankAccount.bankAccountType,
-          function(e, s, b) {
-            (s === 200) ? resolve(b.bankAccountUuid) : reject(b);
-        });
-      });
-    };
-
-    // MAPS TO: https://sandbox.glidera.com/documentation.xhtml#apiReference-verifyBankAccount
-    factory.verifyBankAccount = function(uuid, amount1) {;
-      return $q(function(resolve, reject) {
-        glideraFactory.verifyBankAccount(uuid, amount1,
-        function(e, s, b) {
-          (s == 200) ?  resolve(b) : reject(b);
-        });
-      });
-    };
-
-    // MAPS TO: https://sandbox.glidera.com/documentation.xhtml#apiReference-updateBankAccount
-    factory.updateBankAccount = function(bankAccount) {
-      return $q(function(resolve, reject) {
-        glideraFactory.updateBankAccount(
-            bankAccount.bankAccountUuid, bankAccount.description,
-            bankAccount.primary,
-        function(e, s, b) {
-          (s === 200) ? resolve(b) : reject(b);
-        });
-      });
-    };
-
-    // MAPS TO: https://sandbox.glidera.com/documentation.xhtml#apiReference-deleteBankAccount
-    factory.deleteBankAccount = function(accountId) {
-      return $q(function(resolve, reject) {
-        glideraFactory.deleteBankAccount(TwoFactor.getCode(), accountId,
-        function(e, s, b) {
-          (s == 200) ? resolve(b) : reject(b);
-        });
-      });
-    };
-
     // initialize exchangeOrder
     var exchangeOrder = {};
 
@@ -300,7 +237,7 @@
     };
 
     factory.getOrder = function(clear) {
-      if(clear) {
+      if (clear) {
         this.clearOrder();
       }
       return exchangeOrder;
@@ -436,7 +373,7 @@
     };
   }
   function States() {
-    var usStates = [
+    var states = [
       {"id": "AL", "name": "Alabama"},
       {"id": "AK", "name": "Alaska"},
       {"id": "AZ", "name": "Arizona"},
@@ -489,19 +426,6 @@
       {"id": "WI", "name": "Wisconsin"},
       {"id": "WY", "name": "Wyoming"}
     ];
-    var caProvinces = [
-      {"id": "ON", "name": "Ontario"},
-      {"id": "QC", "name": "Quebec"},
-      {"id": "NS", "name": "Nova Scotia"},
-      {"id": "NB", "name": "New Brunswick"},
-      {"id": "MB", "name": "Manitoba"},
-      {"id": "BC", "name": "British Columbia"},
-      {"id": "PE", "name": "Prince Edward Island"},
-      {"id": "SK", "name": "Saskatchewan"},
-      {"id": "AB", "name": "Alberta"},
-      {"id": "NL", "name": "Newfoundland and Labrador"}
-    ];
-    var states = Airbitz.config.get("COUNTRY_CODE") === "US" ? usStates : caProvinces;
     return {
       getStates: function() {
         return states;
@@ -509,47 +433,6 @@
       findState: function(code) {
         var l = states.filter(function(s) {
           return s.id === code;
-        });
-        return l.length >= 1 ? l[0] : null;
-      }
-    }
-  }
-  function Occupations() {
-    var occupations = [
-      {"id": "1", "name": "Accounting"},
-      {"id": "2", "name": "Administration"},
-      {"id": "3", "name": "Arts, Culture"},
-      {"id": "4", "name": "Business"},
-      {"id": "5", "name": "Communications"},
-      {"id": "6", "name": "Customer Service"},
-      {"id": "7", "name": "Education"},
-      {"id": "8", "name": "Energy, Utilities"},
-      {"id": "9", "name": "Engineering"},
-      {"id": "10", "name": "Finance"},
-      {"id": "11", "name": "Financial Services"},
-      {"id": "12", "name": "Government"},
-      {"id": "13", "name": "Health"},
-      {"id": "14", "name": "Hospitality"},
-      {"id": "15", "name": "Human Resources"},
-      {"id": "16", "name": "Internet"},
-      {"id": "17", "name": "Legal"},
-      {"id": "18", "name": "Manufacturing"},
-      {"id": "19", "name": "Marketing"},
-      {"id": "20", "name": "Non profit"},
-      {"id": "21", "name": "Recreation"},
-      {"id": "22", "name": "Religion"},
-      {"id": "23", "name": "Research"},
-      {"id": "24", "name": "Sales"},
-      {"id": "25", "name": "Sports, Fitness"},
-      {"id": "26", "name": "Student"}
-    ];
-    return {
-      getOccupations: function() {
-        return occupations;
-      },
-      find: function(code) {
-        var l = occupations.filter(function(s) {
-          return code && s.id === code.toString();
         });
         return l.length >= 1 ? l[0] : null;
       }

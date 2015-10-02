@@ -62,19 +62,13 @@ var Glidera = (function () {
     if (!o.clientId) {
       Glidera.error('Missing clientId');
     }
-    if (!o.clientSecret) {
-      Glidera.error('Missing clientSecret');
-    }
     this.clientId = o.clientId;
-    this.clientSecret = o.clientSecret;
-    this.nonce = new Date().getTime();
-    this.accessToken = '';
-    this.accessTokenType = '';
-    this.key = o.key || '';
+    this.accessKey = '';
     this.secret = o.secret || '';
-    this.GLIDERA_URL = o.sandbox == true
-        ? 'https://sandbox.glidera.io'
-        : 'https://www.glidera.io';
+    this.GLIDERA_DOMAIN = o.sandbox == true
+        ? 'sandbox.glidera.io'
+        : 'www.glidera.io';
+    this.GLIDERA_URL = 'https://' + this.GLIDERA_DOMAIN;
   }
 
   Glidera.prototype = {
@@ -86,7 +80,7 @@ var Glidera = (function () {
       var method = opts.method || 'GET';
       var url = this.GLIDERA_URL + '/api/v1' + uri;
 
-      var headers = {},
+      var headers = opts.headers ? opts.headers : {},
           nonce = (this._nextNonce()).toString(),
           json = opts.data ? JSON.stringify(opts.data) : '',
           req = {
@@ -94,8 +88,12 @@ var Glidera = (function () {
             url: url,
             headers: headers
           };
-      if (this.accessToken) {
-          headers.Authorization = "Bearer " + this.accessToken;
+      if (authRequired && this.accessKey) {
+          var nonce = new Date().getTime();
+          headers['X-CLIENT-ID'] = this.clientId;
+          headers['X-ACCESS-KEY'] = this.accessKey;
+          headers['X-ACCESS-NONCE'] = nonce;
+          headers['X-ACCESS-SIGNATURE'] = Glidera.hmacsha256(nonce + url + json, this.secret);
       }
       if (opts.otpCode) {
         headers['2FA_CODE'] = opts.otpCode;
@@ -118,40 +116,74 @@ var Glidera = (function () {
         }
       });
     },
-    redirectUrl: function(next, scope, state) {
-      return [this.GLIDERA_URL, '/oauth2/auth',
-        '?response_type=', 'code',
-        '&client_id=', this.clientId,
+    bitidAuthUri: function() {
+      return ['bitid://', this.GLIDERA_DOMAIN, '/bitid/auth?x=', new Date().getTime()].join('');
+    },
+    bitidAuthRedirect: function(next, bitid_address, bitid_uri, bitid_signature, state) {
+      return [this.GLIDERA_URL, '/bitid/auth',
+        '?client_id=', this.clientId,
+        '&bitid_address=', encodeURIComponent(bitid_address),
+        '&bitid_uri=', encodeURIComponent(bitid_uri),
+        '&bitid_signature=', encodeURIComponent(bitid_signature),
         '&redirect_uri=', encodeURIComponent(next),
-        '&scope=', encodeURIComponent(scope),
         '&state=', encodeURIComponent(state)].join('');
     },
-    requestAccessToken: function(code, cb, opts) {
+    bitidTokenUri: function() {
+      return ['https://', this.GLIDERA_DOMAIN, '/api/v1/authentication/oauth1/create?x=', new Date().getTime()].join('');
+    },
+    bitidAccessToken: function(bitid_address, bitid_uri, bitid_signature, cb) {
       var that = this;
-      var data = {
-        'grant_type': 'authorization_code',
-        'code': code,
-        'client_id': this.clientId,
-        'client_secret': this.clientSecret,
+      var headers = {
+        'X-CLIENT-ID': this.clientId,
+        'X-BITID-ADDRESS': bitid_address,
+        'X-BITID-URI': bitid_uri,
+        'X-BITID-SIGNATURE': bitid_signature
       };
-      if (opts && opts.redirectUri) {
-        data['redirect_uri'] = opts.redirectUri;
-      }
-      this._request(false, '/oauth/token', {
+      this._request(false, '/authentication/oauth1/create', {
         'method': 'POST',
-        'data': data,
+        'headers': headers,
         'callback': function(error, statusCode, body) {
           if (statusCode == 200) {
-            that.accessTokenType = body.token_type;
-            that.accessToken = body.access_token;
+            that.accessKey = body.access_key;
+            that.secret = body.secret;
           }
           cb(statusCode == 200, body);
         }
       });
     },
 
+    createBankAccountRedirect: function(next, state) {
+      var nonce = new Date().getTime();
+      var url = [this.GLIDERA_URL, '/user/bankaccountcreate',
+        '?redirect_uri=', encodeURIComponent(next),
+        '&state=', encodeURIComponent(state),
+        '&X-CLIENT-ID=', this.clientId,
+        '&X-ACCESS-KEY=', this.accessKey,
+        '&X-ACCESS-NONCE=', nonce].join('');
+      url += '&X-ACCESS-SIGNATURE=' + Glidera.hmacsha256(url, this.secret);
+      return url;
+    },
+
+    bankAccountsRedirect: function(next, state) {
+      var nonce = new Date().getTime();
+      var url = [this.GLIDERA_URL, '/user/bankaccounts',
+        '?redirect_uri=', encodeURIComponent(next),
+        '&state=', encodeURIComponent(state),
+        '&X-CLIENT-ID=', this.clientId,
+        '&X-ACCESS-KEY=', this.accessKey,
+        '&X-ACCESS-NONCE=', nonce].join('');
+      url += '&X-ACCESS-SIGNATURE=' + Glidera.hmacsha256(url, this.secret);
+      return url;
+    },
+
     isAuthorized: function() {
-      return this.accessToken ? true : false;
+      return this.accessKey ? true : false;
+    },
+
+    getEmailAddress: function(callback) {
+      return this._request(true, '/user/email', {
+        'callback': callback
+      });
     },
 
     getPersonalInfo: function(callback) {
@@ -205,45 +237,6 @@ var Glidera = (function () {
 
     getPhoneNumber: function(callback) {
       return this._request(true, '/user/phone', {
-        'callback': callback
-      });
-    },
-
-    createBankAccount: function(uri, state) {
-      return [this.GLIDERA_URL, '/user/bankaccounts',
-        '?response_type=', 'code',
-        '&access_token=', this.accessToken,
-        '&redirect_uri=', encodeURIComponent(uri),
-        '&state=', encodeURIComponent(state)].join('');
-    },
-
-    getBankAccounts: function(callback) {
-      return this._request(true, '/user/bankaccount', {
-        'callback': callback
-      });
-    },
-
-    getBankAccount: function(accountId, callback) {
-      return this._request(true, '/user/bankaccount/' + accountId, {
-        'callback': callback
-      });
-    },
-
-    updateBankAccount: function(accountId, desc, setPrimary, callback) {
-      return this._request(true, '/user/bankaccount/' + accountId, {
-        'method': 'POST',
-        'data': {
-          'description': desc,
-          'setAsPrimary': setPrimary
-        },
-        'callback': callback
-      });
-    },
-
-    deleteBankAccount: function(otpCode, accountId, callback) {
-      return this._request(true, '/user/bankaccount/' + accountId, {
-        'otpCode': otpCode,
-        'method': 'DELETE',
         'callback': callback
       });
     },
@@ -348,7 +341,6 @@ var Glidera = (function () {
   function jsonParse(j) {
     return JSON.parse(j);
   }
-
 })();
 
 
