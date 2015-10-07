@@ -1,9 +1,13 @@
 
 var app = angular.module('app', ['app.core', 'app.history', 'app.exchange', 'app.user', 'app.2fa', 'app.receipt']);
 
-app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+app.config(['$stateProvider', '$urlRouterProvider', '$sceDelegateProvider', function($stateProvider, $urlRouterProvider, $sceDelegateProvider) {
 
   $urlRouterProvider.otherwise('/');
+  $sceDelegateProvider.resourceUrlWhitelist([
+    'self',
+    'https://*.glidera.io/**'
+  ]);
 
   $stateProvider
     // route for signup TODO, move partial
@@ -21,11 +25,6 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
       url: "/authorizeRedirect/",
       controller: "authController",
       templateUrl: "app/user/partials/redirect.html",
-    })
-    .state("bankAccounts", {
-      url: "/bankAccountRedirect/",
-      templateUrl: "app/user/partials/redirect.html",
-      controller: "bankController",
     })
     // route for email verification
     .state("verifyEmail", {

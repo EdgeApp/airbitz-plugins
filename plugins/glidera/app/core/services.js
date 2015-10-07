@@ -41,6 +41,9 @@
     factory.createBankAccountUrl = function() {
       return glideraFactory.createBankAccountRedirect(redirectUri, 'bankaccount');
     };
+    factory.editBankAccountUrl = function() {
+      return glideraFactory.bankAccountsRedirect(redirectUri, 'bankaccount');
+    };
     factory.requestAccessToken = function(cb) {
       var message = glideraFactory.bitidTokenUri();
       console.log(message);

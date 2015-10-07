@@ -6,7 +6,6 @@
     .controller('homeController', ['$scope', '$state', '$location', 'UserFactory', homeController])
     .controller('dashboardController', ['$scope', '$sce', '$state', 'Error', 'DataFactory', 'UserFactory', 'Limits', dashboardController])
     .controller('userAccountController', ['$scope', '$state', 'Error', 'States', 'UserFactory', userAccountController])
-    .controller('bankController', ['$scope', '$state', 'UserFactory', bankController])
     .controller('disclaimerController', ['$scope', '$state', 'Error', 'States', 'UserFactory', disclaimerController])
     .controller('authController', ['$scope', '$state', '$location', 'UserFactory', authController])
     .controller('verifyEmailController', ['$scope', '$state', 'Error', 'UserFactory', verifyEmailController])
@@ -126,7 +125,17 @@
     };
 
     $scope.routeBankAccount = function() {
-      $state.go('bankAccounts')
+      var url = '';
+      if ($scope.userStatus.userBankAccountIsSetup) {
+        Airbitz.ui.title('Add Bank Account');
+        console.log(UserFactory.editBankAccountUrl());
+        url = UserFactory.editBankAccountUrl();
+      } else {
+        Airbitz.ui.title('Edit Bank Account');
+        console.log(UserFactory.createBankAccountUrl());
+        url = UserFactory.createBankAccountUrl();
+      }
+      window.location = url;
     };
 
     $scope.logout = function() {
@@ -160,11 +169,6 @@
         Airbitz.ui.title(title);
       });
     };
-  }
-
-  function bankController($scope, $state, UserFactory) {
-    Airbitz.ui.title('Edit Bank Account');
-    location.href = UserFactory.createBankAccountUrl();
   }
 
   function disclaimerController($scope, $state, Error, States, UserFactory) {
