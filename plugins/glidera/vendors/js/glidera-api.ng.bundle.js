@@ -152,6 +152,18 @@ var Glidera = (function () {
       });
     },
 
+    userSetupRedirect: function(next, state) {
+      var nonce = new Date().getTime();
+      var url = [this.GLIDERA_URL, '/user/setup',
+        '?redirect_uri=', encodeURIComponent(next),
+        '&state=', encodeURIComponent(state),
+        '&X-CLIENT-ID=', this.clientId,
+        '&X-ACCESS-KEY=', this.accessKey,
+        '&X-ACCESS-NONCE=', nonce].join('');
+      url += '&X-ACCESS-SIGNATURE=' + Glidera.hmacsha256(url, this.secret);
+      return url;
+    },
+
     createBankAccountRedirect: function(next, state) {
       var nonce = new Date().getTime();
       var url = [this.GLIDERA_URL, '/user/bankaccountcreate',

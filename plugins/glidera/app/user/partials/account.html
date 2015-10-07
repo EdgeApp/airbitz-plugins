@@ -37,6 +37,12 @@
         <label class="status label label-outline pull-right"
                ng-class="{'label-success': userStatus.userBankAccountIsSetup}">{{ userStatus.userBankAccountIsSetup | statusFilter }}</label>
       </li>
+      <li ng-if="showOptions" ng-click="increaseSpendingLimits()" class="ng-trans ng-trans-scale-up easeOutBack list-group-item">
+        <span class="list-group-item-heading">Increase Spending Limits</span>
+        <p class="list-group-item-text">Tap to edit</p>
+        <label class="status label label-outline pull-right"
+               ng-class="{'label-success': userStatus.userBankAccountIsSetup}">{{ extraComplete | statusFilter }}</label>
+      </li>
     </ul>
   </div>
 </div>

@@ -38,6 +38,9 @@
       var signature = Airbitz.core.bitidSignature(domainUri, message);
       return glideraFactory.bitidAuthRedirect(redirectUri, address, message, signature, 'authorize');
     };
+    factory.userSetupRedirect = function() {
+      return glideraFactory.userSetupRedirect(redirectUri, 'usersetup');
+    };
     factory.createBankAccountUrl = function() {
       return glideraFactory.createBankAccountRedirect(redirectUri, 'bankaccount');
     };

@@ -72,6 +72,7 @@
     UserFactory.fetchUserAccountStatus().then(function(b) {
       $scope.userStatus = b;
       $scope.showOptions = !$scope.userStatus.userCanTransact;
+      $scope.extraComplete = b.userSsnIsSetup && b.userOowIsSetup;
     }).then(function() {
       return UserFactory.getEmailAddress();
     }).then(function() {
@@ -122,6 +123,11 @@
 
     $scope.showAccountOptions = function() {
       $scope.showOptions = !$scope.showOptions;
+    };
+
+    $scope.increaseSpendingLimits = function() {
+        Airbitz.ui.title('Additional User Info');
+        window.location = UserFactory.userSetupRedirect();
     };
 
     $scope.routeBankAccount = function() {
