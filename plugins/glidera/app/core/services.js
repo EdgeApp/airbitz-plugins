@@ -81,6 +81,13 @@
     factory.getUserAccountStatus = function() {
       return userStatus;
     };
+    factory.resendEmailVerification = function() {
+      var d = $q.defer();
+      glideraFactory.resendEmailVerification(function(e,s,b) {
+        s >= 200 && s < 300?  d.resolve(b) : d.reject(b);
+      });
+      return d.promise;
+    };
     factory.fetchUserAccountStatus = function() {
       var d = $q.defer();
       glideraFactory.userStatus(function(e,s,b) {

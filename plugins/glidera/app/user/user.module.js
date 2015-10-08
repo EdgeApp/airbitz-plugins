@@ -82,7 +82,11 @@
         $scope.limits = limits;
       });
     }).then(function() {
-      DataFactory.checkPhoneNumber($scope.account);
+      if (!$scope.userStatus.userEmailIsSetup) {
+        $state.go("verifyEmail");
+      } else {
+        DataFactory.checkPhoneNumber($scope.account);
+      }
     });
 
     $scope.regMessage = function() {
@@ -200,10 +204,16 @@
     Airbitz.ui.title('Verify Email');
     $scope.account = UserFactory.getUserAccount();
 
+    $scope.resend = function() {
+      UserFactory.resendEmailVerification().then(function(userStatus) {
+        Airbitz.ui.showAlert('Verify Email', 'Verification email has been resent.');
+      }, Error.reject);
+    };
+
     $scope.next = function() {
       UserFactory.fetchUserAccountStatus().then(function(userStatus) {
         if (userStatus.userEmailIsSetup) {
-          $state.go('verifyPhone');
+          $state.go('dashboard');
         } else {
           Airbitz.ui.showAlert('Verify Email', 'Please verify your email address before proceeding!');
           $state.go('verifyEmail');

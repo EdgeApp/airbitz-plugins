@@ -212,6 +212,13 @@ var Glidera = (function () {
       });
     },
 
+    resendEmailVerification: function(callback) {
+      return this._request(true, '/user/email/resend_verification', {
+        'method': 'POST',
+        'callback': callback
+      });
+    },
+
     userStatus: function(callback) {
       return this._request(true, '/user/status', {
         'callback': callback
