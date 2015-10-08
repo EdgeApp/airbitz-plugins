@@ -2,7 +2,7 @@
   <div class="account-message col-xs-12"
        ng-if="!userStatus.userCanTransact" ng-bind-html="regMessage()">
   </div>
-  <div class="col-xs-12">
+  <div class="col-xs-12 no-pad">
     <ul class="list-group">
       <li ng-if="userStatus.userCanTransact" ng-click="showAccountOptions()" class="header list-group-item">
         <span class="list-group-item-heading">{{ account.firstName || 'first' | titlecase }} {{ account.lastName || 'last' | titlecase }}</span>
@@ -10,9 +10,9 @@
         <label class="status label label-outline pull-right"
                ng-class="{'label-success': userStatus.userCanTransact}">{{ userStatus.userCanTransact | statusFilter }}</label>
       </li>
-      <li ng-if="userStatus.userCanTransact && showOptions" class="ng-trans ng-trans-scale-up easeOutBack list-group-item">
+      <!-- <li ng-if="userStatus.userCanTransact && showOptions" class="ng-trans ng-trans-scale-up easeOutBack list-group-item">
         <div exchange-limits></div>
-      </li>
+      </li> -->
       <li ng-if="showOptions" class="ng-trans ng-trans-scale-up easeOutBack list-group-item">
         <span class="list-group-item-heading">Email</span>
         <p class="list-group-item-text">{{account.email || 'email'}}</p>
