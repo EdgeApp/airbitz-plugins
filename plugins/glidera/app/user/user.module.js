@@ -225,12 +225,23 @@
   function verifyPhoneController($scope, $state, Error, DataFactory, UserFactory, TwoFactor) {
     Airbitz.ui.title('Verify Phone');
     $scope.account = UserFactory.getUserAccount();
+    $scope.userStatus = UserFactory.getUserAccountStatus();
 
     var verifyCode = function() {
       DataFactory.confirmPhoneNumber(TwoFactor.getCode(), TwoFactor.getOldCode()).then(function() {
         $state.go('dashboard');
       }, Error.reject);
     };
+    $scope.deletePhone = function() {
+      TwoFactor.confirmTwoFactor(function() {
+        DataFactory.deletePhoneNumber($scope.account).then(function(b) {
+          $state.go("dashboard");
+        }, function() {
+          Airbitz.ui.showAlert('Error', 'Unable to update phone number.');
+          $state.go("dashboard");
+        });
+      });
+    }
     $scope.submitPhone = function(){
       DataFactory.addPhoneNumber($scope.account.phone).then(function() {
         TwoFactor.confirmTwoFactor(verifyCode);

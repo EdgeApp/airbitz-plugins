@@ -229,6 +229,20 @@
       return d.promise;
     };
 
+    factory.deletePhoneNumber = function(account) {
+      var d = $q.defer();
+      glideraFactory.deletePhoneNumber(TwoFactor.getCode(), function(e, r, b) {
+        if (r >= 200 && r < 300) {
+          account.phone = null;
+          Airbitz.core.writeData('account', account);
+          d.resolve(b);
+        } else {
+          d.reject(b);
+        }
+      });
+      return d.promise;
+    };
+
     factory.checkPhoneNumber = function(account) {
       if (!account.phone) {
         factory.getPhoneNumber().then(function(data) {

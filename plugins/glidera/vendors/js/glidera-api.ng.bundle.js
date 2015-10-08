@@ -241,6 +241,14 @@ var Glidera = (function () {
       });
     },
 
+    deletePhoneNumber: function(otpCode, callback) {
+      return this._request(true, '/user/phone', {
+        'method': 'DELETE',
+        'otpCode': otpCode,
+        'callback': callback
+      });
+    },
+
     confirmPhoneNumber: function(newCode, oldCode, callback) {
       var data = {};
       data.newVerificationCode = newCode;

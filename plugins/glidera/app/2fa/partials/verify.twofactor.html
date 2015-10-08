@@ -1,23 +1,5 @@
 <div class="twofa row text-center">
   <form class="form col-xs-offset-2 col-xs-8" novalidate>
-    <div ng-show="hasNumber" class="form-group">
-      <div class="row">
-        <p><label class="label label-warning">Note</label> You already have a
-        phone number set. In order to change the number you have to include the
-        previous two factor code.</p>
-      </div>
-      <label for="inputOldVerificationCode" class="sr-only">Old Verification Code</label>
-      <input
-        type="number"
-        id="inputOldVerificationCode"
-        class="large text-center"
-        placeholder="Previous 2FA Code"
-        autocorrect="off"
-        autocomplete="off"
-        ng-model="oldVerificationCode"
-        pattern="[0-9]*"
-      />
-    </div>
     <div class="form-group">
       <label for="inputVerificationCode" class="sr-only">Verification Code</label>
       <input

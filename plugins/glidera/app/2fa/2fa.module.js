@@ -19,12 +19,10 @@
         if ($stateParams.confirmNumber == 'confirm' && userStatus.userPhoneIsSetup) {
           $scope.hasNumber = true;
         }
-        if ($stateParams.confirmNumber != 'confirm') {
-          TwoFactor.requestCode().then(function() { }, function(error) {
-            $state.go('exchange');
-            Airbitz.ui.showAlert('Error', 'Unable to request 2fa token. Please retry again later.');
-          });
-        }
+        TwoFactor.requestCode().then(function() { }, function(error) {
+          $state.go('exchange');
+          Airbitz.ui.showAlert('Error', 'Unable to request 2fa token. Please retry again later.');
+        });
       });
     };
     $scope.submit2FA = function() {
