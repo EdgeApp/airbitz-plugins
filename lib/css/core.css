@@ -724,6 +724,9 @@ html body hr.page {
   margin: 80px 0;
   border-color: #000;
 }
+html body .exchange-user-account {
+  margin-bottom: 50px;
+}
 html body .exchange-user-account .account-message {
   margin-bottom: 20px;
 }
@@ -897,11 +900,10 @@ html body .user-account-form {
   width: 100%;
 }
 .transactions .table thead {
-  background: rgba(0, 0, 0, 0.7);
-  color: #000;
+  background: #2291cf;
+  color: #fff;
 }
 .transactions .table td {
-  background: rgba(0, 0, 0, 0.2);
   font-size: 8px;
 }
 .verify-phone-info {
@@ -923,4 +925,9 @@ html body .user-account-form {
   position: absolute;
   right: 14px;
   margin-top: -11px;
+}
+.dashboard-bottom-buttons {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
 }
