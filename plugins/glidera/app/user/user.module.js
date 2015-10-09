@@ -47,6 +47,10 @@
 
   function handleUri($state, UserFactory, d) {
     if ("authorize" === d.state) {
+      if ('RETRY' == d['status']) {
+        Airbitz.ui.exit();
+        return;
+      }
       Airbitz.ui.title('Authenticating');
       UserFactory.requestAccessToken(function(success, results) {
         if (success) {
