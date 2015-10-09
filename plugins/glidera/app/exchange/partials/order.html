@@ -71,7 +71,7 @@
                   ui-sref="dashboard"
                   class="buy-sell-next btn btn-lg btn-link">Cancel</button>
           <button type="submit"
-                  ng-disabled="form.$invalid"
+                  ng-disabled="form.$invalid || !order.transferToWallet"
                   tabindex="2"
                   class="buy-sell-next btn btn-lg btn-success">Next</button>
         </div>
