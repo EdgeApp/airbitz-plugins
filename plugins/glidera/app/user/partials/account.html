@@ -33,7 +33,7 @@
       </li>
       <li ng-if="showOptions" ng-click="routeBankAccount()" class="ng-trans ng-trans-scale-up easeOutBack list-group-item">
         <span class="list-group-item-heading">Bank Account</span>
-        <p class="list-group-item-text">Tap to edit</p>
+        <p class="list-group-item-text">{{ bankMessage }}</p>
         <label class="status label label-outline pull-right"
                ng-class="{'label-success': userStatus.userBankAccountIsSetup}">{{ userStatus.userBankAccountIsSetup | statusFilter }}</label>
       </li>

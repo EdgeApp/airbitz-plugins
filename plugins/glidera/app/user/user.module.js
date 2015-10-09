@@ -68,6 +68,7 @@
     $scope.limits = Limits.getLimits();
     $scope.showOptions = !$scope.userStatus.userCanTransact;
     $scope.debugClicks = 0;
+    $scope.bankMessage = 'Tap to edit';
 
     UserFactory.fetchUserAccountStatus().then(function(b) {
       $scope.userStatus = b;
@@ -87,7 +88,15 @@
       } else {
         DataFactory.checkPhoneNumber($scope.account);
       }
+
+      // Waiting for amounts to be verified
+      if ("PENDING" === $scope.userStatus.bankAccountState) {
+        var msg = 'Please verify amount deposited to your bank account.';
+        $scope.bankMessage = msg;
+        Airbitz.ui.showAlert('Verify', msg);
+      }
     });
+
 
     $scope.regMessage = function() {
       var msg = '';

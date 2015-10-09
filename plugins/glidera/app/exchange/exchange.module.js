@@ -29,10 +29,7 @@
         Prices.setSellQty(1);
       });
     }).then(function() {
-console.log('----------------');
       return DataFactory.getSelectedWallet().then(function(wallet) {
-console.log('++++++++++++++++');
-console.log(wallet);
         $scope.order.transferToWallet = wallet 
       }, Error.reject);
     });
