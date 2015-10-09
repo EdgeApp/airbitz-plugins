@@ -1,10 +1,9 @@
-<div class="row">
-  <h2 class="col-xs-12" style="margin-top: 0;"><span class="label label-outline">{{ order.orderAction || "Buy" | uppercase }} Order</span></h2>
-  <div class="text-right col-xs-12">
-    <div class="live-ticker">
-      <div price-update price-type="{{ order.orderAction }}"></div>
-      <div price-expires price-type="{{ order.orderAction }}"></div>
-    </div>
+<div class="exchange-ticker row">
+  <div class="col-xs-6 no-pad">
+    <div price-expires price-type="{{ order.orderAction }}"></div>
+  </div>
+  <div class="col-xs-6 live-ticker text-right no-pad">
+    <div price-update price-type="{{ order.orderAction }}"></div>
   </div>
 </div>
 
@@ -52,7 +51,7 @@
 
   <div class="text-right col-xs-12">
     <button ng-click="editOrder()" class="btn btn-lg btn-link">Edit</button>
-    <button ng-show="{{ order.orderAction == 'buy' }}" ng-click="executeOrder()" class="btn btn-lg btn-success"><i class="fa fa-checkmark"></i> Confirm</button>
+    <button ng-show="{{ order.orderAction == 'buy' }}" ng-click="executeOrder()" class="btn btn-lg btn-success"><i class="fa fa-checkmark"></i> Confirm {{ order.orderAction | titlecase }}</button>
     <button ng-show="{{ order.orderAction == 'sell' }}" ng-click="executeOrder()" class="btn btn-lg btn-success"><i class="fa fa-checkmark"></i> Authorize Sell</button>
   </div>
 </div>

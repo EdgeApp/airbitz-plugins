@@ -1,6 +1,8 @@
 @import 'ab-browser-fixes.less';
 @import 'animations.less';
 @import 'misc.less';
+@import 'core-android.less';
+@import 'core-ios.less';
 
 
 // VARIABLES
@@ -82,7 +84,7 @@ html {
     }
 
     label {
-      color: #000;
+      color: #000 !important;
       font-weight: 300;
       .text-shadow;
     }
@@ -90,15 +92,20 @@ html {
     .label {
       font-weight: 300;
 
-      &.lable-outline {
-        border: 1px solid rgba(255, 255, 255, 0.5);
+      &.label-outline {
+        color: #555;
+        border: 1px solid rgba(0, 0, 0, 0.5);
+
+        &.label-success {
+          color: white !important;
+        }
       }
       &.status {
         font-size: 10px;
         position: absolute;
         right: -1px;
         bottom: -6px;
-        border: 1px solid rgba(255, 255, 255, 0.5);
+        border: 1px solid rgba(0, 0, 0, 0.5);
         border-bottom-right-radius: 0;
         border-top-right-radius: 0;
         border-right: 0;
@@ -137,8 +144,9 @@ html {
         color: #0f5791;
         background: white;
         font-size: 20px;
-        border-top: 1px solid rgba(0, 0, 0, 0.2);
-        border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+        // border-top: 1px solid rgba(0, 0, 0, 0.2);
+        // border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+        border: 0;
         border-radius: 0px;
         cursor: pointer;
 
@@ -368,26 +376,20 @@ html {
       }
     }
 
-    .live-price-expiration .expiration-data {
-      font-weight: bold;
-      color: #333333;
+  }
+  .live-price-expiration {
+
+    .expiration-label {
+      color: #ff5656;
+    }
+    .expiration-data {
+      color: #fff;
     }
   }
 }
 
 
-.exchange-limits {
-  .limit-header-buy {
-    text-transform: uppercase;
-    color: #42832e;
-    text-shadow: none;
-  }
-  .limit-header-sell {
-    text-transform: uppercase;
-    color: #0f5791;
-    text-shadow: none;
-  }
-}
+
 
 .order-limits {
   float: left;
@@ -464,22 +466,20 @@ html {
   margin: 60px 0;
 }
 .exchange-buy-sell {
-  margin-bottom: 30px;
-}
-.buy-sell-header {
-  margin-bottom: 10px;
 
-  .btn-group .btn.active {
-    background: none;
-    border: 1px solid rgba(255, 255, 255, 0.5);
+  .buy-button,
+  .sell-button {
+    font-size: 20px;
+    padding: 15px 16px;
   }
 }
+
 .exchange-balances {
   margin-top: 20px;
   margin-bottom: 20px;
 }
 .exchange-user-account {
-  margin-top: 30px;
+  // margin-top: 30px;
   margin-bottom: 20px;
   .list-group-item {
 
@@ -499,7 +499,7 @@ html {
 }
 
 .order-review {
-  margin-top: 5px;
+  margin-top: 10px;
   margin-bottom: 5px;
 
   table {

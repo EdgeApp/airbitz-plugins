@@ -1,4 +1,7 @@
-
 /* Fixes flicker issues seen in Safari */
-.ng-trans-fade.ng-enter { display:none; }
-.ng-trans-fade.ng-enter.ng-enter-active { display:block; }
+.ng-trans-fade.ng-enter {
+  display: none;
+}
+.ng-trans-fade.ng-enter.ng-enter-active {
+  display: block;
+}

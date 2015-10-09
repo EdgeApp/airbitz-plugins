@@ -438,6 +438,13 @@ input[type=date]::-webkit-inner-spin-button {
   -moz-box-shadow: none !important;
   box-shadow: none !important;
 }
+/* Fixes flicker issues seen in Safari */
+.ng-trans-fade.ng-enter {
+  display: none;
+}
+.ng-trans-fade.ng-enter.ng-enter-active {
+  display: block;
+}
 html {
   height: 100%;
   width: 100%;
@@ -495,22 +502,26 @@ html body .btn.btn-link {
   box-shadow: none;
 }
 html body label {
-  color: #000;
+  color: #000 !important;
   font-weight: 300;
   text-shadow: 0px 1px 0px rgba(0, 0, 0, 0.2);
 }
 html body .label {
   font-weight: 300;
 }
-html body .label.lable-outline {
-  border: 1px solid rgba(255, 255, 255, 0.5);
+html body .label.label-outline {
+  color: #555;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+}
+html body .label.label-outline.label-success {
+  color: white !important;
 }
 html body .label.status {
   font-size: 10px;
   position: absolute;
   right: -1px;
   bottom: -6px;
-  border: 1px solid rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(0, 0, 0, 0.5);
   border-bottom-right-radius: 0;
   border-top-right-radius: 0;
   border-right: 0;
@@ -536,8 +547,7 @@ html body .list-group a.list-group-item {
   color: #0f5791;
   background: white;
   font-size: 20px;
-  border-top: 1px solid rgba(0, 0, 0, 0.2);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  border: 0;
   border-radius: 0px;
   cursor: pointer;
 }
@@ -764,19 +774,11 @@ html body .user-account-form {
 .exchange-ticker .live-ticker .live-price-rate .price-rate-data {
   color: #80c342;
 }
-.exchange-ticker .live-ticker .live-price-expiration .expiration-data {
-  font-weight: bold;
-  color: #333333;
+.exchange-ticker .live-price-expiration .expiration-label {
+  color: #ff5656;
 }
-.exchange-limits .limit-header-buy {
-  text-transform: uppercase;
-  color: #42832e;
-  text-shadow: none;
-}
-.exchange-limits .limit-header-sell {
-  text-transform: uppercase;
-  color: #0f5791;
-  text-shadow: none;
+.exchange-ticker .live-price-expiration .expiration-data {
+  color: #fff;
 }
 .order-limits {
   float: left;
@@ -842,22 +844,16 @@ html body .user-account-form {
 .exchange-email-edit {
   margin: 60px 0;
 }
-.exchange-buy-sell {
-  margin-bottom: 30px;
-}
-.buy-sell-header {
-  margin-bottom: 10px;
-}
-.buy-sell-header .btn-group .btn.active {
-  background: none;
-  border: 1px solid rgba(255, 255, 255, 0.5);
+.exchange-buy-sell .buy-button,
+.exchange-buy-sell .sell-button {
+  font-size: 20px;
+  padding: 15px 16px;
 }
 .exchange-balances {
   margin-top: 20px;
   margin-bottom: 20px;
 }
 .exchange-user-account {
-  margin-top: 30px;
   margin-bottom: 20px;
 }
 .exchange-user-account .list-group-item small {
@@ -872,7 +868,7 @@ html body .user-account-form {
   margin-top: 40px;
 }
 .order-review {
-  margin-top: 5px;
+  margin-top: 10px;
   margin-bottom: 5px;
 }
 .order-review table {
@@ -928,4 +924,3 @@ html body .user-account-form {
   right: 14px;
   margin-top: -11px;
 }
-
