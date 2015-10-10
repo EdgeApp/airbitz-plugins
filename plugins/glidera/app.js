@@ -93,9 +93,7 @@ app.config(['$stateProvider', '$urlRouterProvider', '$sceDelegateProvider', func
       controller: "errorController",
     })
 }]).
-run(['$rootScope', 'DataFactory', 'glideraFactory', function ($rootScope, DataFactory, glideraFactory) {
-  glideraFactory.accessKey = null;
-  glideraFactory.secret = null;
+run(['$rootScope', 'DataFactory', function ($rootScope, DataFactory) {
   $rootScope.exchange = DataFactory.getExchange();
   $rootScope.countryCode = Airbitz.config.get('COUNTRY_CODE');
   $rootScope.countryName = Airbitz.config.get('COUNTRY_NAME');
