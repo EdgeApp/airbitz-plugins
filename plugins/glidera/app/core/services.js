@@ -54,6 +54,8 @@
       var signature = Airbitz.core.bitidSignature(domainUri, message);
       glideraFactory.bitidAccessToken(address, message, signature, function(success, results) {
         if (success) {
+          account.accessKey = glideraFactory.accessKey;
+          account.secret = glideraFactory.secret;
           Airbitz.core.writeData('account', account);
         }
         cb(success, results); 
