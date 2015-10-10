@@ -108,7 +108,7 @@
     Airbitz.ui.title('Transaction History');
     DataFactory.getTransactions().then(function(transactions) {
       $scope.transactions = transactions;
-    })
+    });
 
     $scope.logout = function() {
       UserFactory.clearUser();

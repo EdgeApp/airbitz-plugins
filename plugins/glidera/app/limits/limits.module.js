@@ -1,23 +1,14 @@
 
 (function() {
   angular.module('app.limits', ['app.glidera'])
-    .factory('Limits', ['$q', 'glideraFactory', limitsFactory])
+    .factory('Limits', ['$q', 'glideraFactory', 'Prices', limitsFactory])
     .directive('exchangeLimits', exchangeLimits)
     .directive('buyLimits', buyLimits)
     .directive('sellLimits', sellLimits);
 
-  function limitsFactory($q, glideraFactory) {
+  function limitsFactory($q, glideraFactory, Prices) {
     var limits = {};
     var factory = {};
-    var toFiat = function(input) {
-      if (typeof(input)==='undefined') input = 0;
-      input = input * 100000000;
-
-      var output = Airbitz.core.formatCurrency(
-        Airbitz.core.satoshiToCurrency(input, 840), false
-      );
-      return parseFloat(output);
-    };
     factory.reset = function() {
         limits = {}; 
     };
@@ -25,10 +16,10 @@
         return limits;
     };
     factory.isBuyAllowed = function(btc) {
-      if (!limits.dailyBuyRemaining|| !limits.monthlyBuyRemaining) {
+      if (!limits.dailyBuyRemaining || !limits.monthlyBuyRemaining) {
         return false;
       }
-      var fiat = toFiat(btc);
+      var fiat = parseFloat(btc) * parseFloat(Prices.currentBuy.price);
       return fiat < limits.dailyBuyRemaining
           && fiat < limits.monthlyBuyRemaining;
     },
@@ -36,7 +27,7 @@
       if (!limits.dailySellRemaining || !limits.monthlySellRemaining) {
         return false;
       }
-      var fiat = toFiat(btc);
+      var fiat = parseFloat(btc) * parseFloat(Prices.currentSell.price);
       return fiat < limits.dailySellRemaining
           && fiat < limits.monthlySellRemaining;
     },
