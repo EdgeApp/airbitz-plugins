@@ -17,8 +17,15 @@
     if (d && d['state']) {
       handleUri($state, UserFactory, d);
     } else {
-      if (UserFactory.isAuthorized()) {
-        $state.go("dashboard");
+      var account = Airbitz.core.readData('account') || {};
+      Airbitz.ui.title('Authenticating');
+      if (account && account.accessKey) {
+        UserFactory.requestAccessToken(function(success, results) {
+          if (!success) {
+            Airbitz.ui.showAlert('', 'Unable to connect to Glidera. Continuing in offline mode.');
+          }
+          $state.go('dashboard');
+        });
       } else {
         if (Airbitz.core.readData('disclaimer')) {
           $state.go("authorize");
