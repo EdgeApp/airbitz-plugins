@@ -160,11 +160,6 @@
       }
       window.location = url;
     };
-
-    $scope.logout = function() {
-      UserFactory.clearUser();
-      $state.go('home');
-    }
   }
 
   function userAccountController($scope, $state, Error, States, UserFactory) {

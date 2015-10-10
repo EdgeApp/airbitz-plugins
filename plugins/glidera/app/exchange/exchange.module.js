@@ -6,7 +6,7 @@
     .controller('orderController', ['$scope', '$state', '$stateParams', '$filter', 'Error', 'DataFactory', 'UserFactory', 'TwoFactor', 'Limits', 'Prices', orderController])
     .controller('reviewOrderController', ['$scope', '$state', 'Error', 'DataFactory', 'UserFactory', 'TwoFactor', 'Prices', reviewOrderController])
     .controller('executeOrderController', ['$scope', '$state', 'DataFactory', 'UserFactory', executeOrderController])
-    .controller('transactionsController', ['$scope', '$state', 'DataFactory', transactionsController])
+    .controller('transactionsController', ['$scope', '$state', 'DataFactory', 'UserFactory', transactionsController])
     .directive('accountSummary', accountSummary)
     .directive('routingNumberValidator', routingNumberValidator);
 
@@ -104,11 +104,16 @@
       $state.go('confirmDeposit');
     };
   }
-  function transactionsController($scope, $state, DataFactory) {
+  function transactionsController($scope, $state, DataFactory, UserFactory) {
     Airbitz.ui.title('Transaction History');
     DataFactory.getTransactions().then(function(transactions) {
       $scope.transactions = transactions;
     })
+
+    $scope.logout = function() {
+      UserFactory.clearUser();
+      Airbitz.ui.exit();
+    }
   }
   function accountSummary() {
     return {
