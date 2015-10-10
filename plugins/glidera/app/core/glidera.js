@@ -12,7 +12,7 @@
       'clientId': Airbitz.config.get('GLIDERA_CLIENT_ID')
     });
     var account = Airbitz.core.readData('account') || {};
-    if (account) {
+    if (false && account) {
       g.accessKey = account.accessKey;
       g.secret = account.secret;
     }
