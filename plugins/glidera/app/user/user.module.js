@@ -21,10 +21,7 @@
       Airbitz.ui.title('Authenticating');
       if (account && account.accessKey) {
         UserFactory.requestAccessToken(function(success, results) {
-          if (!success) {
-            Airbitz.ui.showAlert('', 'Unable to connect to Glidera. Continuing in offline mode.');
-          }
-          $state.go('dashboard');
+          success ?  $state.go('dashboard') : $state.go("authorize");
         });
       } else {
         if (Airbitz.core.readData('disclaimer')) {
