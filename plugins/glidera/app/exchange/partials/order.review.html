@@ -17,11 +17,11 @@
       <tbody>
         <tr ng-show="{{ order.orderAction === 'buy' }}">
           <td>Destination Wallet</td>
-          <td>{{ order.transferToWallet.name || "" }}</td>
+          <td>{{ currentWallet.name || "" }}</td>
         </tr>
         <tr ng-show="{{ order.orderAction === 'sell' }}">
           <td>Sell From</td>
-          <td>{{ order.transferToWallet.name || "" }}</td>
+          <td>{{ currentWallet.name || "" }}</td>
         </tr>
         <tr>
           <td>{{ exchange.order.currency }} Amount</td>

@@ -94,6 +94,16 @@ app.config(['$stateProvider', '$urlRouterProvider', '$sceDelegateProvider', func
     })
 }]).
 run(['$rootScope', 'DataFactory', function ($rootScope, DataFactory) {
+  DataFactory.getSelectedWallet().then(function(newWallet) {
+    Airbitz.currentWallet = newWallet;
+    $rootScope.currentWallet = newWallet;
+  });
+  Airbitz.core.setWalletChangeListener(function(newWallet) {
+    $rootScope.$apply(function() {
+      Airbitz.currentWallet = newWallet;
+      $rootScope.currentWallet = newWallet;
+    });
+  });
   $rootScope.exchange = DataFactory.getExchange();
   $rootScope.countryCode = Airbitz.config.get('COUNTRY_CODE');
   $rootScope.countryName = Airbitz.config.get('COUNTRY_NAME');

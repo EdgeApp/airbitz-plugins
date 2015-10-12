@@ -28,10 +28,6 @@
       return Prices.setBuyQty(1).then(function() {
         Prices.setSellQty(1);
       });
-    }).then(function() {
-      return DataFactory.getSelectedWallet().then(function(wallet) {
-        $scope.order.transferToWallet = wallet 
-      }, Error.reject);
     });
 
     $scope.convertFiatValue = function(input) {
@@ -82,15 +78,16 @@
     };
     $scope.executeOrder = function() {
       console.log(JSON.stringify(order));
-      var amountFiat = DataFactory.getExchange().currencyNum == order.transferToWallet.currencyNum
+      var wallet = order.transferToWallet = Airbitz.currentWallet;
+      var amountFiat = DataFactory.getExchange().currencyNum == wallet.currencyNum
                      ? order.orderFiatInput : 0;
       if (order.orderAction == 'buy') {
-        DataFactory.buy(order.transferToWallet, order.orderBtcInput, amountFiat).then(function(data) {
+        DataFactory.buy(wallet, order.orderBtcInput, amountFiat).then(function(data) {
           Airbitz.ui.showAlert('Bought Bitcoin', 'You bought bitcoin!');
           $state.go('orderReceipt');
         }, Error.reject);
       } else {
-        DataFactory.sell(order.transferToWallet, order.orderBtcInput, amountFiat).then(function(data) {
+        DataFactory.sell(wallet, order.orderBtcInput, amountFiat).then(function(data) {
           Airbitz.ui.showAlert('Sold Bitcoin', 'You sold bitcoin!');
           $state.go('orderReceipt');
         }, Error.reject);
