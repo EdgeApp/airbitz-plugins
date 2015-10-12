@@ -26,6 +26,7 @@
     return factory;
 
     function reject(res) {
+      console.log("Error: " + JSON.stringify(res));
       if (!res || !res.code) {
         Airbitz.ui.showAlert('Error', 'An unknown error occurred.');
       } else {
@@ -110,6 +111,8 @@
       return "Transaction amount is below minimum threshold";
     } else if (3112 == code) {
       return "Transaction cannot be processed because daily limit would be exceeded";
+    } else if (3125 == code) {
+      return "Cannot update because no information has changed";
     } else {
       return "An error occurred";
     }

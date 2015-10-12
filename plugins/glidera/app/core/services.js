@@ -129,14 +129,15 @@
             account.state = States.findState(b.state);
             account.country = b.countryCode;
 
-            // XXX: This is kind of hacky
             if (b.birthDate) {
-              var birthDate = b.birthDate.replace(/T.*/, '');
-              account.birthDate = new Date(birthDate);
+              // XXX: This is kind of hacky
+              var arr = b.birthDate.split("-");
+              account.birthDate = new Date(arr[0], arr[1] - 1, arr[2]);
             }
             account.registered = true;
 
             // persist locally
+            console.log(b);
             console.log(account);
             Airbitz.core.writeData('account', account);
             resolve(account);
@@ -148,7 +149,7 @@
     }
     factory.updateUserAccount = function(account) {
       return $q(function(resolve, reject) {
-        glideraFactory.updatePersonalInfo({
+        var d = {
           'firstName': account.firstName,
           'middleName': account.middleName,
           'lastName': account.lastName,
@@ -159,7 +160,9 @@
           'state': account.state ? account.state.id : null,
           'zipCode': account.zipCode,
           'ip': '127.0.0.1'
-        }, function(e, s, b) {
+        };
+        console.log(d);
+        glideraFactory.updatePersonalInfo(d, function(e, s, b) {
           if (s === 200) {
             Airbitz.core.writeData('account', account);
             resolve(b);
