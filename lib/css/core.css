@@ -894,14 +894,31 @@ html body .user-account-form {
   width: 100%;
 }
 .transactions .table thead {
-  background: #2291cf;
-  color: #fff;
+  background: #fff;
+  color: #2291cf;
+  color: #555;
+  font-weight: 900;
+  text-transform: uppercase;
 }
 .transactions .table td {
   font-size: 8px;
 }
+.transactions .table.table-striped tbody tr.processing td {
+  opacity: 0.4;
+}
+.transactions .table.table-striped tbody td.type.buy {
+  background: #80c342;
+  color: white;
+}
+.transactions .table.table-striped tbody td.type.sell {
+  background: #2291cf;
+  color: white;
+}
 .exchange-buy-sell-interface {
   margin: 20px 0;
+}
+.exchange-transactions-summary {
+  margin-bottom: 50px;
 }
 .verify-phone-info {
   margin-bottom: 20px;

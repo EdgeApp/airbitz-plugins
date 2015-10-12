@@ -25,37 +25,37 @@
 
 <div account-summary></div>
 
-<div ng-if="userStatus.userCanTransact" class="dashboard-bottom-buttons ng-trans ng-trans-fade-up easeOutSine">
-  <div class="row">
-    <div class="col-xs-12 no-pad">
-      <button type="button" ui-sref="exchangeTransactions" class="btn btn-block btn-lg btn-info">Transactions</button>
-    </div>
-  </div>
-
+<div ng-if="userStatus.userCanTransact && transactions" class="exchange-transactions-summary ng-trans ng-trans-fade-up easeOutSine">
   <div ng-if="transactions" class="transactions row">
-
     <div class="col-xs-12 no-pad">
       <table ng-model="transactions" class="table table-bordered table-striped">
         <thead>
           <tr>
-            <td>Status</td>
+            <td>Date</td>
             <td>Type</td>
             <td>Subtotal</td>
             <td>Total</td>
             <td>BTC Price</td>
-            <td>Date</td>
+            <td>Status</td>
           </tr>
         </thead>
-        <tr ng-repeat="t in transactions | limitTo:5 ">
-          <td>{{ t.status || 'status' }}</td>
-          <td>{{ t.type || 'type' }}</td>
-          <td>{{ t.subtotal || 'subtotal' }}</td>
-          <td>{{ t.total || 'total' }}</td>
-          <td>{{ t.subtotal / t.price || 'price each' }}</td>
-          <td>{{ t.estimatedDeliveryDate || 'date' }}</td>
+        <tr ng-repeat="t in transactions" ng-class="{ 'processing': t.status=='PROCESSING', 'complete': t.status=='COMPLETE' }">
+          <td class="date">{{ t.estimatedDeliveryDate || 'date' }}</td>
+          <td class="type" ng-class="{ 'buy': t.type=='BUY', 'sell': t.type=='SELL' }">{{ t.type || 'type' }}</td>
+          <td class="subtotal">{{ t.subtotal || 'subtotal' }}</td>
+          <td class="total">{{ t.total || 'total' }}</td>
+          <td class="price-each">{{ t.subtotal / t.price || 'price each' }}</td>
+          <td class="status">{{ t.status || 'status' }}</td>
         </tr>
       </table>
     </div>
+  </div>
+</div>
+
+<div ng-if="userStatus.userCanTransact" class="dashboard-bottom-buttons ng-trans ng-trans-fade-up easeOutSine">
+  <div class="row">
+    <div class="col-xs-12 no-pad">
+      <button type="button" ui-sref="exchangeTransactions" class="btn btn-block btn-lg btn-info">Transactions</button>
   </div>
 </div>
 

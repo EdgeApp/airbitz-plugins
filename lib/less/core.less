@@ -536,11 +536,46 @@ html {
     width: 100%;
 
     thead {
-      background: @ab-blue;
-      color: #fff;
+      background: #fff;
+      color: @ab-blue;
+      color: #555;
+      font-weight: 900;
+      text-transform: uppercase;
     }
     td {
       font-size: 8px;
+    }
+
+    &.table-striped {
+      tbody {
+        tr {
+          &.processing {
+            td {
+              opacity: .4
+            }
+          }
+          &.complete {
+            td {}
+          }
+        }
+        td {
+          &.date {}
+          &.type {
+            &.buy {
+              background: @ab-green;
+              color: white;
+            }
+            &.sell {
+              background: @ab-blue;
+              color: white;
+            }
+          }
+          &.total {}
+          &.subtotal {}
+          &.price-each {}
+          &.status {}
+        }
+      }
     }
   }
 }
@@ -548,6 +583,10 @@ html {
 
 .exchange-buy-sell-interface {
   margin: 20px 0;
+}
+
+.exchange-transactions-summary {
+  margin-bottom: 50px;
 }
 
 
