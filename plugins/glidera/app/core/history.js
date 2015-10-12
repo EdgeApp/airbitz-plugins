@@ -27,7 +27,7 @@
         Airbitz.ui.navStackClear();
       } else if (next.match(/\.html#\/receipt\/$/)) {
         Airbitz.ui.navStackClear();
-
+        history.length = 0;
         history.push('/dashboard/');
         Airbitz.ui.navStackPush('/dashboard/');
       }
