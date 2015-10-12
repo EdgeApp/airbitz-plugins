@@ -11,7 +11,7 @@
 @ab-blue: #2291cf;
 @ab-blue-dark: #003E61;
 @ab-blue-light: #02A4E2;
-
+@ab-red: #ff5656;
 
 
 html {
@@ -84,7 +84,7 @@ html {
     }
 
     label {
-      color: #000 !important;
+      // color: #000 !important;
       font-weight: 300;
       .text-shadow;
     }
@@ -93,23 +93,22 @@ html {
       font-weight: 300;
 
       &.label-outline {
-        color: #555;
+        color: #333;
         border: 1px solid rgba(0, 0, 0, 0.5);
 
         &.label-success {
           color: white !important;
+        }
+        &.label-danger {
+          // background: @ab-red;
         }
       }
       &.status {
         font-size: 10px;
         position: absolute;
         right: -1px;
-        bottom: -6px;
-        border: 1px solid rgba(0, 0, 0, 0.5);
-        border-bottom-right-radius: 0;
-        border-top-right-radius: 0;
-        border-right: 0;
-        border-bottom: 0;
+        bottom: 0px;
+        border: none;
       }
 
     }
@@ -175,16 +174,16 @@ html {
     }
 
     // FORM INPUT STYLES FOR PLUGIN
-    .form-control::-webkit-input-placeholder {
+    input::-webkit-input-placeholder {
       color: #777;
     }
-    .form-control::-moz-placeholder { /* Firefox 18- */
+    input::-moz-placeholder { /* Firefox 18- */
        color: #777;
     }
-    .form-control:::-moz-placeholder {  /* Firefox 19+ */
+    input:::-moz-placeholder {  /* Firefox 19+ */
        color: #777;
     }
-    .form-control::-ms-input-placeholder {
+    input::-ms-input-placeholder {
        color: #777;
     }
 
@@ -368,7 +367,7 @@ html {
   .live-ticker {
 
     .live-price-rate {
-      font-size: 17px;
+      font-size: 16px;
 
       .price-rate-label {
         color: #fff;
@@ -382,7 +381,7 @@ html {
   .live-price-expiration {
 
     .expiration-label {
-      color: #ff5656;
+      color: @ab-red;
     }
     .expiration-data {
       color: #fff;

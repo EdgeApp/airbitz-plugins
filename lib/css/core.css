@@ -502,7 +502,6 @@ html body .btn.btn-link {
   box-shadow: none;
 }
 html body label {
-  color: #000 !important;
   font-weight: 300;
   text-shadow: 0px 1px 0px rgba(0, 0, 0, 0.2);
 }
@@ -510,7 +509,7 @@ html body .label {
   font-weight: 300;
 }
 html body .label.label-outline {
-  color: #555;
+  color: #333;
   border: 1px solid rgba(0, 0, 0, 0.5);
 }
 html body .label.label-outline.label-success {
@@ -520,12 +519,8 @@ html body .label.status {
   font-size: 10px;
   position: absolute;
   right: -1px;
-  bottom: -6px;
-  border: 1px solid rgba(0, 0, 0, 0.5);
-  border-bottom-right-radius: 0;
-  border-top-right-radius: 0;
-  border-right: 0;
-  border-bottom: 0;
+  bottom: 0px;
+  border: none;
 }
 html body .help-block {
   color: #999999;
@@ -579,18 +574,18 @@ html body .list-group a.list-group-item .list-group-item-text {
   color: #333333;
   font-size: 10px !important;
 }
-html body .form-control::-webkit-input-placeholder {
+html body input::-webkit-input-placeholder {
   color: #777;
 }
-html body .form-control::-moz-placeholder {
+html body input::-moz-placeholder {
   /* Firefox 18- */
   color: #777;
 }
-html body .form-control:::-moz-placeholder {
+html body input:::-moz-placeholder {
   /* Firefox 19+ */
   color: #777;
 }
-html body .form-control::-ms-input-placeholder {
+html body input::-ms-input-placeholder {
   color: #777;
 }
 html body input[type='text'],
@@ -769,7 +764,7 @@ html body .user-account-form {
   background: #003e61;
 }
 .exchange-ticker .live-ticker .live-price-rate {
-  font-size: 17px;
+  font-size: 16px;
 }
 .exchange-ticker .live-ticker .live-price-rate .price-rate-label {
   color: #fff;
