@@ -866,8 +866,7 @@ html body .user-account-form {
   margin-top: 40px;
 }
 .order-review {
-  margin-top: 10px;
-  margin-bottom: 5px;
+  margin: 20px 0;
 }
 .order-review table {
   margin-bottom: 10px;
@@ -900,6 +899,9 @@ html body .user-account-form {
 }
 .transactions .table td {
   font-size: 8px;
+}
+.exchange-buy-sell-interface {
+  margin: 20px 0;
 }
 .verify-phone-info {
   margin-bottom: 20px;
