@@ -294,6 +294,7 @@
                   ? glideraFactory.sandboxAddress : request['address'];
       if (address) {
         var opts = {'priceUuid': Prices.buyUuid()};
+        Airbitz.ui.showAlert('Processing', 'Processing order...', {'showSpinner': true});
         glideraFactory.buy(TwoFactor.getCode(), address, qty, opts, function(e, r, b) {
           console.log(JSON.stringify(b));
           if (r == 200) {

@@ -183,6 +183,7 @@
 
     $scope.saveUserAccount = function() {
       Airbitz.ui.title('Saving...');
+      Airbitz.ui.showAlert('Saved', 'Saving information...', {'showSpinner': true});
       UserFactory.updateUserAccount($scope.account).then(function() {
         Airbitz.ui.showAlert('Saved', 'User information has been updated.');
         $state.go('dashboard');
