@@ -60,7 +60,7 @@
     } else if (1100 == code) {
       return "Missing required parameter";
     } else if (1101 == code) {
-      return "Invalid parameter value";
+      return "Error submitting transaction to the network";
     } else if (2001 == code) {
       return "Invalid or incorrect access_token";
     } else if (2002 == code) {
