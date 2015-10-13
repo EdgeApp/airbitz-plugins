@@ -17,6 +17,9 @@
         $location.path('/authorizeRedirect/');
         return;
       }
+      if (current.match(/\.html#\/verify\/twofa/)) {
+        return;
+      }
       if (!skip && !next.match(/Redirect/)) {
         history.push(current);
         Airbitz.ui.navStackPush(current);
