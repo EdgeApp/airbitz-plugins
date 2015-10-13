@@ -448,6 +448,7 @@ input[type=date]::-webkit-inner-spin-button {
 html {
   height: 100%;
   width: 100%;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 html body {
   min-height: 100%;
@@ -507,6 +508,7 @@ html body label {
 }
 html body .label {
   font-weight: 300;
+  border-radius: 0;
 }
 html body .label.label-outline {
   color: #333;
@@ -514,6 +516,9 @@ html body .label.label-outline {
 }
 html body .label.label-outline.label-success {
   color: white !important;
+}
+html body .label.label-outline.label-danger {
+  background: #ff5656;
 }
 html body .label.status {
   font-size: 10px;
@@ -539,7 +544,7 @@ html body .table thead th {
 }
 html body .list-group .list-group-item,
 html body .list-group a.list-group-item {
-  color: #0f5791;
+  color: #003e61;
   background: white;
   font-size: 20px;
   border: 0;
@@ -549,7 +554,7 @@ html body .list-group a.list-group-item {
 html body .list-group .list-group-item.header,
 html body .list-group a.list-group-item.header {
   background-color: white);
-  color: #0f5791;
+  color: #003e61;
 }
 html body .list-group .list-group-item.header:hover,
 html body .list-group a.list-group-item.header:hover,
@@ -719,11 +724,8 @@ html body hr.page {
   margin: 80px 0;
   border-color: #000;
 }
-html body .exchange-user-account {
-  margin-bottom: 50px;
-}
 html body .exchange-user-account .account-message {
-  margin-bottom: 20px;
+  margin-top: 20px;
 }
 html body .exchange-user-account .account-message h4 {
   margin-bottom: 20px;
@@ -890,6 +892,10 @@ html body .user-account-form {
   height: 32px;
   padding-bottom: 4px;
 }
+.transactions .transactions-header {
+  color: #003e61;
+  font-weight: 400;
+}
 .transactions .table {
   width: 100%;
 }
@@ -901,28 +907,44 @@ html body .user-account-form {
   text-transform: uppercase;
 }
 .transactions .table td {
-  font-size: 8px;
+  font-size: 10px;
+  padding: 10px 15px;
 }
 .transactions .table.table-striped tbody tr.processing td {
-  opacity: 0.4;
+  opacity: 0.6;
 }
-.transactions .table.table-striped tbody td.type.buy {
+.transactions .table.table-striped tbody td {
+  border: none;
+}
+.transactions .table.table-striped tbody td.type span {
+  padding: 3px 6px;
+}
+.transactions .table.table-striped tbody td.type .buy {
   background: #80c342;
   color: white;
 }
-.transactions .table.table-striped tbody td.type.sell {
+.transactions .table.table-striped tbody td.type .sell {
   background: #2291cf;
   color: white;
+}
+.transactions .table .table-mini {
+  width: 100%;
+}
+.transactions .table .table-mini tr td {
+  padding: 3px;
 }
 .exchange-buy-sell-interface {
   margin: 20px 0;
 }
 .exchange-transactions-summary {
-  margin-bottom: 50px;
+  margin-bottom: 66px;
 }
 .verify-phone-info {
   margin-bottom: 20px;
   text-align: center;
+}
+.verify-phone-form {
+  margin-top: 20px;
 }
 .verify-phone-form input[name="phone"] {
   text-align: center;
@@ -942,6 +964,11 @@ html body .user-account-form {
 }
 .dashboard-bottom-buttons {
   position: fixed;
-  bottom: 0;
+  bottom: 40px;
+  width: 100%;
+}
+.return-to-dashboard {
+  position: fixed;
+  bottom: 40px;
   width: 100%;
 }

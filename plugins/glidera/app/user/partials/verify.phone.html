@@ -12,7 +12,7 @@
                placeholder="Enter Your Phone #"
                autofocus="true"
                autocomplete="off"
-               
+
                phone-number-validator />
       </div>
 
@@ -36,22 +36,29 @@
       <p><label class="label label-warning">Note</label> Phone must be able to receive SMS text messages.</p>
     </div>
 
-    <div class="text-right row" style="margin-top: 40px;">
-      <div class="col-xs-12">
-        <button type="button" ng-click="cancelSignup()" class="btn btn-lg btn-link">Cancel</button>
-        <button type="submit"
-                ng-show="userStatus.userPhoneIsSetup"
-                ng-click="deletePhone()"
-                ng-disabled="form.$invalid"
-                class="buy-sell-next btn btn-lg btn-danger">Delete</button>
-        <button type="submit"
-                ng-show="!userStatus.userPhoneIsSetup"
-                ng-click="submitPhone()"
-                ng-disabled="form.$invalid"
-                class="buy-sell-next btn btn-lg btn-success">Verify</button>
-      </div>
-    </div>
-
   </form>
 
+</div>
+
+<div class="row" style="margin-top: 40px;">
+  <div class="col-xs-6 no-pad">
+    <button type="button" ng-click="cancelSignup()" class="btn btn-lg btn-block btn-link">Cancel</button>
+  </div>
+  <div class="col-xs-6 no-pad">
+    <button type="submit"
+            ng-show="userStatus.userPhoneIsSetup"
+            ng-click="deletePhone()"
+            ng-disabled="form.$invalid"
+            class="buy-sell-next btn btn-lg btn-block btn-danger">Delete</button>
+    <button type="submit"
+            ng-show="!userStatus.userPhoneIsSetup"
+            ng-click="submitPhone()"
+            ng-disabled="form.$invalid"
+            class="buy-sell-next btn btn-lg btn-block btn-success">Verify</button>
+  </div>
+</div>
+
+<div class="return-to-dashboard row">
+  <div class="col-xs-12 no-pad">
+    <button type="button" ui-sref="dashboard" class="btn btn-block btn-lg btn-info">Dashboard</button>
 </div>

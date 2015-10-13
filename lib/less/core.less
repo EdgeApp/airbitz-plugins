@@ -17,6 +17,7 @@
 html {
   height: 100%;
   width: 100%;
+  font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
 
   body {
     min-height: 100%;
@@ -91,6 +92,7 @@ html {
 
     .label {
       font-weight: 300;
+      border-radius: 0;
 
       &.label-outline {
         color: #333;
@@ -100,7 +102,7 @@ html {
           color: white !important;
         }
         &.label-danger {
-          // background: @ab-red;
+          background: @ab-red;
         }
       }
       &.status {
@@ -140,7 +142,7 @@ html {
 
       .list-group-item,
       a.list-group-item {
-        color: #0f5791;
+        color: @ab-blue-dark;
         background: white;
         font-size: 20px;
         // border-top: 1px solid rgba(0, 0, 0, 0.2);
@@ -151,7 +153,7 @@ html {
 
         &.header {
           background-color: white);
-          color: #0f5791;
+          color: @ab-blue-dark;
 
           &:hover,
           &:active,
@@ -308,9 +310,9 @@ html {
     }
 
     .exchange-user-account {
-      margin-bottom: 50px;
+
       .account-message {
-        margin-bottom: 20px;
+        margin-top: 20px;
 
         h4 {
           margin-bottom: 20px;
@@ -531,7 +533,10 @@ html {
 
 
 .transactions {
-
+  .transactions-header {
+    color: @ab-blue-dark;
+    font-weight: 400;
+  }
   .table {
     width: 100%;
 
@@ -543,7 +548,8 @@ html {
       text-transform: uppercase;
     }
     td {
-      font-size: 8px;
+      font-size: 10px;
+      padding: 10px 15px;
     }
 
     &.table-striped {
@@ -551,7 +557,7 @@ html {
         tr {
           &.processing {
             td {
-              opacity: .4
+              opacity: .6
             }
           }
           &.complete {
@@ -559,13 +565,18 @@ html {
           }
         }
         td {
+          border: none;
+
           &.date {}
           &.type {
-            &.buy {
+            span {
+              padding: 3px 6px;
+            }
+            .buy {
               background: @ab-green;
               color: white;
             }
-            &.sell {
+            .sell {
               background: @ab-blue;
               color: white;
             }
@@ -574,6 +585,14 @@ html {
           &.subtotal {}
           &.price-each {}
           &.status {}
+        }
+      }
+    }
+    .table-mini {
+      width: 100%;
+      tr {
+        td {
+          padding: 3px;
         }
       }
     }
@@ -586,18 +605,22 @@ html {
 }
 
 .exchange-transactions-summary {
-  margin-bottom: 50px;
+  margin-bottom: 66px;
 }
-
 
 
 .verify-phone-info {
   margin-bottom: 20px;
   text-align: center;
 }
-.verify-phone-form input[name="phone"] {
-  text-align: center;
+.verify-phone-form {
+  margin-top: 20px;
+
+  input[name="phone"] {
+    text-align: center;
+  }
 }
+
 .error-message-console {
   height: 20px;
   text-align: center;
@@ -614,6 +637,12 @@ html {
 
 .dashboard-bottom-buttons {
   position: fixed;
-  bottom: 0;
+  bottom: 40px;
+  width: 100%;
+}
+
+.return-to-dashboard {
+  position: fixed;
+  bottom: 40px;
   width: 100%;
 }

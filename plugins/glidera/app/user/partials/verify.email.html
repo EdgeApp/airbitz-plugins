@@ -7,13 +7,23 @@
   <p><label class="label label-warning">Note</label> Email will contain a link which must be clicked on phone to proceed past this screen.</p>
 </div>
 
-<div class="row text-right" style="margin-top: 40px;">
-  <div class="col-xs-12">
-    <button ng-click="resend()" 
-            ng-disabled="form.$invalid" 
-            class="btn btn-lg btn-success">Resend</button>
-    <button ng-click="next()" 
-            ng-disabled="form.$invalid" 
-            class="btn btn-lg btn-success">Continue</button>
+<div class="row" style="margin-top: 40px;">
+  <div class="col-xs-6 no-pad">
+    <button ng-click="resend()"
+            ng-disabled="form.$invalid"
+            class="btn btn-lg btn-block btn-success">Resend</button>
+  </div>
+  <div class="col-xs-6 no-pad">
+    <button ng-click="next()"
+            ng-disabled="form.$invalid"
+            class="btn btn-lg btn-block btn-primary">Continue</button>
+  </div>
+</div>
+
+
+<div class="return-to-dashboard ng-trans ng-trans-fade-up easeOutSine">
+  <div class="row">
+    <div class="col-xs-12 no-pad">
+      <button type="button" ui-sref="dashboard" class="btn btn-block btn-lg btn-info">Dashboard</button>
   </div>
 </div>
