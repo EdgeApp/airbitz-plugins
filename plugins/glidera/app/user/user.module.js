@@ -103,10 +103,10 @@
         $scope.bankMessage = msg;
         Airbitz.ui.showAlert('Verify', msg);
       }
-    });
-
-    DataFactory.getTransactions().then(function(transactions) {
-      $scope.transactions = transactions;
+    }).then(function(){
+      DataFactory.getTransactions().then(function(transactions) {
+        $scope.transactions = transactions;
+      });
     });
 
     $scope.regMessage = function() {
