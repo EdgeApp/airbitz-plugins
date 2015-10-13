@@ -892,6 +892,9 @@ html body .user-account-form {
   height: 32px;
   padding-bottom: 4px;
 }
+.transactions {
+  margin-bottom: 26px;
+}
 .transactions .transactions-header {
   color: #003e61;
   font-weight: 400;
@@ -969,6 +972,6 @@ html body .user-account-form {
 }
 .return-to-dashboard {
   position: fixed;
-  bottom: 40px;
+  bottom: 0;
   width: 100%;
 }

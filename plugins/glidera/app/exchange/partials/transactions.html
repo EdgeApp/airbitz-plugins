@@ -6,7 +6,7 @@
         <td>
           <table class="table-mini">
             <tr>
-              <td class="date text-left">{{ t.estimatedDeliveryDate || 'date' }}</td></td>
+              <td class="date text-left">{{ t.estimatedDeliveryDate || '&nbsp;' }}</td></td>
             </tr>
             <tr>
               <td class="type text-left"><span ng-class="{ 'buy': t.type=='BUY', 'sell': t.type=='SELL' }">{{ t.type || 'type' }}</span></td>
@@ -32,12 +32,6 @@
         </td>
       </tr>
     </table>
-  </div>
-</div>
-
-<div class="row">
-  <div class="col-xs-12 no-pad">
-    <button type="button" ng-click="logout()" class="btn btn-block btn-lg btn-danger">Logout</button>
   </div>
 </div>
 
