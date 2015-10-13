@@ -42,13 +42,13 @@
           $state.go('dashboard');
           Airbitz.ui.showAlert('Error', 'Please verify your email address before continuing.');
         } else {
-          Airbitz.ui.showAlert('Error', errorMap(res.code));
+          Airbitz.ui.showAlert('Error', errorMap(res.code, res.message));
         }
       }
     }
   }
 
-  function errorMap(code) {
+  function errorMap(code, message) {
     if (415 == code) {
       return "Unsupported media type";
     } else if (400 == code) {
@@ -113,6 +113,8 @@
       return "Transaction cannot be processed because daily limit would be exceeded";
     } else if (3125 == code) {
       return "Cannot update because no information has changed";
+    } else if (9999 == code) {
+      return message;
     } else {
       return "An error occurred";
     }

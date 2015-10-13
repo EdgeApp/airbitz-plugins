@@ -360,12 +360,12 @@
               d.reject({"code": "IgnoreAction"});
             } else {
               d.resolve({'sellAddress': data.sellAddress,
-                        'refundAddress': data.refundAddress,
-                        'signedTx': res});
+                         'refundAddress': data.refundAddress,
+                         'signedTx': res});
             }
           },
           error: function() {
-            d.reject();
+            d.reject({"code": "9999", "message": "Error during send"});
           }
         });
         return d.promise;
