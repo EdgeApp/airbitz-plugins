@@ -20,16 +20,16 @@
         return false;
       }
       var fiat = parseFloat(btc) * parseFloat(Prices.currentBuy.price);
-      return fiat < limits.dailyBuyRemaining
-          && fiat < limits.monthlyBuyRemaining;
+      return fiat <= limits.dailyBuyRemaining
+          && fiat <= limits.monthlyBuyRemaining;
     },
     factory.isSellAllowed = function(btc) {
       if (!limits.dailySellRemaining || !limits.monthlySellRemaining) {
         return false;
       }
       var fiat = parseFloat(btc) * parseFloat(Prices.currentSell.price);
-      return fiat < limits.dailySellRemaining
-          && fiat < limits.monthlySellRemaining;
+      return fiat <= limits.dailySellRemaining
+          && fiat <= limits.monthlySellRemaining;
     },
     factory.fetchLimits = function() {
       var deferred = $q.defer();
