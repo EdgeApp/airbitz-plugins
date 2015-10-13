@@ -25,9 +25,9 @@
 
 <div account-summary></div>
 
-<div ng-if="userStatus.userCanTransact && transactions" class="exchange-transactions-summary ng-trans ng-trans-fade-up easeOutSine">
+<div ng-if="userStatus.userCanTransact && transactions.length" class="exchange-transactions-summary ng-trans ng-trans-fade-up easeOutSine">
 
-  <div ng-if="transactions" class="transactions row">
+  <div class="transactions row">
 
     <h4 class="transactions-header col-xs-12">Recent Transactions</h4>
 
@@ -64,7 +64,6 @@
         </tr>
       </table>
     </div>
-
   </div>
 </div>
 

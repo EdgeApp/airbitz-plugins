@@ -105,6 +105,9 @@
       }
     });
 
+    DataFactory.getTransactions().then(function(transactions) {
+      $scope.transactions = transactions;
+    });
 
     $scope.regMessage = function() {
       var msg = '';
