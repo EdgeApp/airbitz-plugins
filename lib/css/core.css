@@ -937,7 +937,7 @@ html body .user-account-form {
   margin: 20px 0;
 }
 .exchange-transactions-summary {
-  margin-bottom: 66px;
+  margin-bottom: 26px;
 }
 .verify-phone-info {
   margin-bottom: 20px;
@@ -964,7 +964,7 @@ html body .user-account-form {
 }
 .dashboard-bottom-buttons {
   position: fixed;
-  bottom: 40px;
+  bottom: 0;
   width: 100%;
 }
 .return-to-dashboard {
