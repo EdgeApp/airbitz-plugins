@@ -6,6 +6,7 @@
     .controller('homeController', ['$scope', '$state', '$location', 'UserFactory', homeController])
     .controller('dashboardController', ['$scope', '$sce', '$state', 'Error', 'DataFactory', 'UserFactory', 'Limits', dashboardController])
     .controller('userAccountController', ['$scope', '$state', 'Error', 'States', 'UserFactory', userAccountController])
+    .controller('bankAccountController', ['$scope', '$state', 'UserFactory', bankAccountController])
     .controller('disclaimerController', ['$scope', '$state', 'Error', 'States', 'UserFactory', disclaimerController])
     .controller('authController', ['$scope', '$state', '$location', 'UserFactory', authController])
     .controller('verifyEmailController', ['$scope', '$state', 'Error', 'UserFactory', verifyEmailController])
@@ -153,20 +154,21 @@
         Airbitz.ui.title('Additional User Info');
         window.location = UserFactory.userSetupRedirect();
     };
+  }
 
-    $scope.routeBankAccount = function() {
-      var url = '';
-      if ($scope.userStatus.userBankAccountIsSetup) {
-        Airbitz.ui.title('Add Bank Account');
-        console.log(UserFactory.editBankAccountUrl());
-        url = UserFactory.editBankAccountUrl();
-      } else {
-        Airbitz.ui.title('Edit Bank Account');
-        console.log(UserFactory.createBankAccountUrl());
-        url = UserFactory.createBankAccountUrl();
-      }
-      window.location = url;
-    };
+  function bankAccountController($scope, $state, UserFactory) {
+    $scope.userStatus = UserFactory.getUserAccountStatus();
+    var url = '';
+    if ($scope.userStatus.userBankAccountIsSetup) {
+      Airbitz.ui.title('Add Bank Account');
+      console.log(UserFactory.editBankAccountUrl());
+      url = UserFactory.editBankAccountUrl();
+    } else {
+      Airbitz.ui.title('Edit Bank Account');
+      console.log(UserFactory.createBankAccountUrl());
+      url = UserFactory.createBankAccountUrl();
+    }
+    $scope.iframeUrl = url;
   }
 
   function userAccountController($scope, $state, Error, States, UserFactory) {

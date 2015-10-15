@@ -86,6 +86,12 @@ app.config(['$stateProvider', '$urlRouterProvider', '$sceDelegateProvider', func
       templateUrl: "app/user/partials/userAccount.html",
       controller: "userAccountController",
     })
+    // route for glidera bank account access
+    .state("bankAccount", {
+      url: "/bankAccount/",
+      templateUrl: "app/user/partials/bankAccount.html",
+      controller: "bankAccountController",
+    })
     // route for errors
     .state("error", {
       url: "/error/",

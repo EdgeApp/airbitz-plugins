@@ -28,7 +28,7 @@
         <label class="status label pull-right"
                ng-class="(userStatus.personalInfoState == 'VERIFIED') ? 'label-success' : 'label-danger'">{{ userStatus.personalInfoState | statusFilter }}</label>
       </li>
-      <li ng-if="showOptions" ng-click="routeBankAccount()" class="ng-trans ng-trans-scale-up easeOutBack list-group-item">
+      <li ng-if="showOptions" ui-sref="bankAccount" class="ng-trans ng-trans-scale-up easeOutBack list-group-item">
         <span class="list-group-item-heading">Bank Account</span>
         <p class="list-group-item-text">{{ bankMessage }}</p>
         <label class="status label pull-right"
@@ -38,7 +38,7 @@
         <span class="list-group-item-heading">Increase Spending Limits</span>
         <p class="list-group-item-text">Tap to edit</p>
         <label class="status label pull-right"
-               ng-class="(userStatus.extraComplete) ? 'label-success' : 'label-danger'">{{ extraComplete | statusFilter }}</label>
+               ng-class="(extraComplete) ? 'label-success' : 'label-danger'">{{ extraComplete | statusFilter }}</label>
       </li>
     </ul>
   </div>

@@ -467,7 +467,16 @@ html body {
   background-size: cover;
   background-attachment: fixed;
 }
+html body iframe {
+  height: 100%;
+  width: 100%;
+  padding: 0 10px;
+}
+html body iframe table.table {
+  background: blue !important;
+}
 html body #main-content {
+  height: 100%;
   padding-right: 0;
   padding-left: 0;
 }
@@ -913,20 +922,31 @@ html body .user-account-form {
   font-size: 10px;
   padding: 10px 15px;
 }
-.transactions .table.table-striped tbody tr.processing td {
-  opacity: 0.6;
+.transactions .table.table-striped tbody tr.processing td.total,
+.transactions .table.table-striped tbody tr.processing td.qty,
+.transactions .table.table-striped tbody tr.processing td.price-each,
+.transactions .table.table-striped tbody tr.processing td.status {
+  opacity: .4;
+}
+.transactions .table.table-striped tbody tr.type-sell td.qty {
+  color: #ff5656;
 }
 .transactions .table.table-striped tbody td {
   border: none;
 }
-.transactions .table.table-striped tbody td.date {
+.transactions .table.table-striped tbody td.datetime .date {
   color: #003e61;
+  font-weight: 700;
 }
-.transactions .table.table-striped tbody td.date .seperator {
+.transactions .table.table-striped tbody td.datetime .date .est-label {
+  color: #80c342;
+}
+.transactions .table.table-striped tbody td.datetime .seperator {
   color: #ccc;
 }
-.transactions .table.table-striped tbody td.date .time {
+.transactions .table.table-striped tbody td.datetime .time {
   color: #999;
+  font-weight: 200;
 }
 .transactions .table.table-striped tbody td.type span {
   padding: 3px 6px;
@@ -938,6 +958,9 @@ html body .user-account-form {
 .transactions .table.table-striped tbody td.type .sell {
   background: #2291cf;
   color: white;
+}
+.transactions .table.table-striped tbody td.qty {
+  color: #55af00;
 }
 .transactions .table .table-mini {
   width: 100%;
