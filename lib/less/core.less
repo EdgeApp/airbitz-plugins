@@ -559,17 +559,49 @@ html {
         tr {
           &.processing {
             td {
-              opacity: .6
+              &.total,
+              &.qty,
+              &.price-each,
+              &.status {
+                opacity: .4;
+              }
             }
           }
           &.complete {
             td {}
           }
+          &.type-buy {
+
+          }
+          &.type-sell {
+            td {
+              &.qty {
+                color: @ab-red;
+              }
+            }
+          }
         }
         td {
           border: none;
 
-          &.date {}
+          &.datetime {
+
+            .date {
+              color: @ab-blue-dark;
+              font-weight: 700;
+
+              .est-label {
+                color: @ab-green;
+              }
+            }
+            .seperator {
+              color: #ccc;
+            }
+            .time {
+              color: #999;
+              font-weight: 200;
+            }
+          }
           &.type {
             span {
               padding: 3px 6px;
@@ -584,7 +616,9 @@ html {
             }
           }
           &.total {}
-          &.subtotal {}
+          &.qty {
+            color: @ab-green-dark;
+          }
           &.price-each {}
           &.status {}
         }

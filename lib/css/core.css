@@ -919,6 +919,15 @@ html body .user-account-form {
 .transactions .table.table-striped tbody td {
   border: none;
 }
+.transactions .table.table-striped tbody td.date {
+  color: #003e61;
+}
+.transactions .table.table-striped tbody td.date .seperator {
+  color: #ccc;
+}
+.transactions .table.table-striped tbody td.date .time {
+  color: #999;
+}
 .transactions .table.table-striped tbody td.type span {
   padding: 3px 6px;
 }
