@@ -34,7 +34,7 @@
         <label class="status label pull-right"
                ng-class="(userStatus.userBankAccountIsSetup) ? 'label-success' : 'label-danger'">{{ userStatus.userBankAccountIsSetup | statusFilter }}</label>
       </li>
-      <li ng-if="showOptions" ng-click="increaseSpendingLimits()" class="ng-trans ng-trans-scale-up easeOutBack list-group-item">
+      <li ng-if="showOptions" ui-sref="increaseLimits" class="ng-trans ng-trans-scale-up easeOutBack list-group-item">
         <span class="list-group-item-heading">Increase Spending Limits</span>
         <p class="list-group-item-text">Tap to edit</p>
         <label class="status label pull-right"

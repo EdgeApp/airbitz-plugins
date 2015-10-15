@@ -58,7 +58,7 @@
           account.secret = glideraFactory.secret;
           Airbitz.core.writeData('account', account);
         }
-        cb(success, results); 
+        cb(success, results);
       });
     };
     factory.registrationMode = function() {
@@ -344,7 +344,7 @@
       }).then(function(data) {
         var sellAddress = data["sellAddress"];
         var d = $q.defer();
-        createAddress(wallet, 'Glidera Refund', btcToSatoshi(qty), 
+        createAddress(wallet, 'Glidera Refund', btcToSatoshi(qty),
                       amountFiat, 'Exchange:Refund Bitcoin', notes, function(req) {
           d.resolve({'sellAddress': sellAddress, 'refundAddress': req['address']});
         }, d.reject);
@@ -400,7 +400,8 @@
       'depositTimeout': '3600',
       'countryCode': Airbitz.config.get("COUNTRY_CODE"),
       'currencyNum': Airbitz.config.get("CURRENCY_CODE"),
-      'currency': Airbitz.config.get("CURRENCY_ABBREV")
+      'currency': Airbitz.config.get("CURRENCY_ABBREV"),
+      'currencySymbol': '$'
     };
   }
   function States() {

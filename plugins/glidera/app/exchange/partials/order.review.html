@@ -24,20 +24,20 @@
           <td>{{ currentWallet.name || "" }}</td>
         </tr>
         <tr>
-          <td>{{ exchange.order.currency }} Amount</td>
-          <td>{{ order.orderBtcInput || "3.14" | roundBtc }} {{ exchange.order.currency || "BTC" }}</td>
+          <td>Amount</td>
+          <td>{{ order.orderBtcInput || "0" | roundBtc }} {{ exchange.cryptoDenom }}</td>
         </tr>
         <tr>
           <td>Subtotal</td>
-          <td>{{ exchange.order.currencySymbol || "$" }}{{ priceObj.subtotal || "priceSubtotal" | roundFiat }} {{ exchange.currency || "USD" }}</td>
+          <td>{{ exchange.currencySymbol }}{{ priceObj.subtotal || "priceSubtotal" | roundFiat }} {{ exchange.currency }}</td>
         </tr>
         <tr>
           <td>Fees</td>
-          <td>{{ exchange.order.currencySymbol || "$" }}{{ priceObj.fees || "priceFees" | roundFiat }} {{ exchange.currency || "USD" }}</td>
+          <td>{{ exchange.currencySymbol }}{{ priceObj.fees || "0" | roundFiat }} {{ exchange.currency }}</td>
         </tr>
         <tr>
           <td>Total</td>
-          <td>{{ exchange.order.currencySymbol || "$" }}{{ priceObj.total || "priceTotal" | roundFiat }} {{ exchange.currency || "USD" }}</td>
+          <td>{{ exchange.currencySymbol }}{{ priceObj.total || "0" | roundFiat }} {{ exchange.currency }}</td>
         </tr>
       </tbody>
     </table>
