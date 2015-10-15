@@ -1,4 +1,12 @@
-<div class="exchange-limits row">
+<div ng-if="limits.transactDisabledPendingFirstTransaction" class="exchange-limits row">
+  <div class="col-xs-12 no-pad-left">
+    <label class="limit-header-buy">Notice</label>
+    <div class="buy-limits">
+      Buys and sells are disabled until your first transaction completes.
+    </div>
+  </div>
+</div>
+<div ng-if="!limits.transactDisabledPendingFirstTransaction" class="exchange-limits row">
   <div class="col-xs-6 no-pad-left">
     <label class="limit-header-buy">Buy Limits</label>
     <div class="buy-limits">

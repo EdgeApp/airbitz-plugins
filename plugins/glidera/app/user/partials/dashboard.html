@@ -15,10 +15,14 @@
     </ul>
 
     <div class="col-xs-6 no-pad">
-        <button ng-click="buy()" class="buy-button btn-success btn-lg btn-block btn">BUY</button>
+      <button ng-click="buy()" 
+        ng-disabled="limits && limits.transactDisabledPendingFirstTransaction"
+        class="buy-button btn-success btn-lg btn-block btn">BUY</button>
     </div>
     <div class="col-xs-6 no-pad">
-        <button ng-click="sell()" class="sell-button btn-primary btn-lg btn-block btn">SELL</button>
+      <button ng-click="sell()"
+        ng-disabled="limits && limits.transactDisabledPendingFirstTransaction"
+        class="sell-button btn-primary btn-lg btn-block btn">SELL</button>
     </div>
   </div>
 </div>
