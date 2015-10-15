@@ -68,8 +68,14 @@
     Airbitz.ui.title('Confirm Order');
     $scope.order = order;
     $scope.account = UserFactory.getUserAccount();
-    $scope.priceObj = ($scope.order.orderAction == 'buy')
-                    ? Prices.currentBuy : Prices.currentSell;
+    var update = function() {
+      $scope.priceObj = ($scope.order.orderAction == 'buy')
+                      ? Prices.currentBuy : Prices.currentSell;
+    };
+    update();
+    $scope.$on('PriceUpdate', function(events, args){
+      update();
+    })
     if (!order.orderAction) {
       $state.go('dashboard');
     }
