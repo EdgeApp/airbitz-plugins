@@ -92,6 +92,12 @@ app.config(['$stateProvider', '$urlRouterProvider', '$sceDelegateProvider', func
       templateUrl: "app/user/partials/bankAccount.html",
       controller: "bankAccountController",
     })
+    // route for glidera increased limits access
+    .state("increaseLimits", {
+      url: "/increaseLimits/",
+      templateUrl: "app/user/partials/increaseLimits.html",
+      controller: "increaseLimitsController",
+    })
     // route for errors
     .state("error", {
       url: "/error/",

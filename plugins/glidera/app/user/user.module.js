@@ -7,6 +7,7 @@
     .controller('dashboardController', ['$scope', '$sce', '$state', 'Error', 'DataFactory', 'UserFactory', 'Limits', dashboardController])
     .controller('userAccountController', ['$scope', '$state', 'Error', 'States', 'UserFactory', userAccountController])
     .controller('bankAccountController', ['$scope', '$sce', '$state', 'UserFactory', bankAccountController])
+    .controller('increaseLimitsController', ['$scope', '$sce', '$state', 'UserFactory', increaseLimitsController])
     .controller('disclaimerController', ['$scope', '$state', 'Error', 'States', 'UserFactory', disclaimerController])
     .controller('authController', ['$scope', '$state', '$location', 'UserFactory', authController])
     .controller('verifyEmailController', ['$scope', '$state', 'Error', 'UserFactory', verifyEmailController])
@@ -169,7 +170,16 @@
       url = UserFactory.createBankAccountUrl();
     }
     $scope.iframeUrl = $sce.trustAsResourceUrl(url);
+  }
 
+  function increaseLimitsController($scope, $sce, $state, UserFactory) {
+    $scope.userStatus = UserFactory.getUserAccountStatus();
+    var url = '';
+
+    Airbitz.ui.title('Additional User Info');
+    url = UserFactory.userSetupRedirect();
+
+    $scope.iframeUrl = $sce.trustAsResourceUrl(url);
   }
 
   function userAccountController($scope, $state, Error, States, UserFactory) {

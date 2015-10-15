@@ -1007,3 +1007,7 @@ html body .user-account-form {
   bottom: 0;
   width: 100%;
 }
+.return-to-dashboard.relative {
+  position: relative;
+  bottom: auto;
+}
