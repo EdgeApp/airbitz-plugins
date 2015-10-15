@@ -562,16 +562,10 @@ html body .list-group a.list-group-item {
 }
 html body .list-group .list-group-item.header,
 html body .list-group a.list-group-item.header {
-  background-color: white);
+  margin-bottom: 0;
   color: #003e61;
-}
-html body .list-group .list-group-item.header:hover,
-html body .list-group a.list-group-item.header:hover,
-html body .list-group .list-group-item.header:active,
-html body .list-group a.list-group-item.header:active,
-html body .list-group .list-group-item.header:focus,
-html body .list-group a.list-group-item.header:focus {
-  background-color: white;
+  border-bottom: 1px solid #ddd;
+  background: #f9f9f9;
 }
 html body .list-group .list-group-item.header:hover,
 html body .list-group a.list-group-item.header:hover,
@@ -585,8 +579,11 @@ html body .list-group a.list-group-item.header:visited {
 }
 html body .list-group .list-group-item .list-group-item-text,
 html body .list-group a.list-group-item .list-group-item-text {
-  color: #333333;
-  font-size: 10px !important;
+  font-size: 12px !important;
+}
+html body .list-group .list-group-item:last-child,
+html body .list-group a.list-group-item:last-child {
+  border-bottom: 1px solid #ddd;
 }
 html body input::-webkit-input-placeholder {
   color: #777;
@@ -779,9 +776,17 @@ html body .user-account-form {
 }
 .exchange-ticker .live-ticker .live-price-rate .price-rate-label {
   color: #fff;
+  font-size: 10px;
+  font-weight: 700;
 }
 .exchange-ticker .live-ticker .live-price-rate .price-rate-data {
   color: #80c342;
+}
+.exchange-ticker .live-price-expiration {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 1px 3px;
+  font-size: 12px;
 }
 .exchange-ticker .live-price-expiration .expiration-label {
   color: #ff5656;

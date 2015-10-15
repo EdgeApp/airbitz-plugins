@@ -76,13 +76,31 @@
     $scope.account = UserFactory.getUserAccount();
     $scope.userStatus = UserFactory.getUserAccountStatus();
     $scope.limits = Limits.getLimits();
-    $scope.showOptions = !$scope.userStatus.userCanTransact;
     $scope.debugClicks = 0;
     $scope.bankMessage = 'Tap to edit';
+    $scope.viewAccountBtn = $sce.trustAsHtml('<button class="btn btn-primary btn-xs">+ View Account</button>');
+    $scope.hideAccountBtn = $sce.trustAsHtml('<button class="btn btn-default btn-xs">- Hide Account</button>')
+    $scope.accountButton = $scope.viewAccountBtn;
+
+    function showOptionStatus() {
+      if ($scope.userStatus.userCanTransact) {
+        $scope.showOptions = Airbitz.core.readData('showOptions');
+      } else {
+        $scope.showOptions = true;
+      }
+      console.log("SHOW OPTIONS:" + $scope.showOptions);
+
+      if ($scope.showOptions) {
+        $scope.accountButton = $scope.hideAccountBtn;
+      } else {
+        $scope.accountButton = $scope.viewAccountBtn;
+      }
+    }
+    showOptionStatus();
 
     UserFactory.fetchUserAccountStatus().then(function(b) {
+      showOptionStatus();
       $scope.userStatus = b;
-      $scope.showOptions = !$scope.userStatus.userCanTransact;
       $scope.extraComplete = b.userSsnIsSetup && b.userOowIsSetup;
     }).then(function() {
       return UserFactory.getEmailAddress();
@@ -148,12 +166,18 @@
     };
 
     $scope.showAccountOptions = function() {
-      $scope.showOptions = !$scope.showOptions;
-    };
+      if($scope.userStatus.userCanTransact) {
 
-    $scope.increaseSpendingLimits = function() {
-        Airbitz.ui.title('Additional User Info');
-        window.location = UserFactory.userSetupRedirect();
+        if ($scope.showOptions) {
+          $scope.showOptions = !$scope.showOptions;
+          $scope.accountButton = $scope.viewAccountBtn;
+        } else {
+          $scope.showOptions = !$scope.showOptions;
+          $scope.accountButton = $scope.hideAccountBtn
+        }
+        Airbitz.core.writeData('showOptions', $scope.showOptions);
+        console.log(Airbitz.core.readData('showOptions'));
+      };
     };
   }
 

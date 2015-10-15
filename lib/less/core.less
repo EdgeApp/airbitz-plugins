@@ -163,14 +163,11 @@ html {
         cursor: pointer;
 
         &.header {
-          background-color: white);
+          margin-bottom: 0;
           color: @ab-blue-dark;
+          border-bottom: 1px solid #ddd;
+          background: #f9f9f9;
 
-          &:hover,
-          &:active,
-          &:focus {
-            background-color: white;
-          }
           &:hover,
           &:active,
           &:focus,
@@ -180,8 +177,11 @@ html {
 
         }
         .list-group-item-text {
-          color: #333333;
-          font-size: 10px !important;
+          // color: #333333;
+          font-size: 12px !important;
+        }
+        &:last-child {
+          border-bottom: 1px solid #ddd;
         }
       }
     }
