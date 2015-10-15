@@ -7,7 +7,7 @@
     .directive('sellLimits', sellLimits);
 
   function limitsFactory($q, glideraFactory, Prices) {
-    var limits = {};
+    var limits = Airbitz.core.readData('limits', limits) || {};
     var factory = {};
     factory.reset = function() {
         limits = {}; 
@@ -39,6 +39,7 @@
         glideraFactory.userLimits(function(e, r, b) {
           if (r == 200) {
             limits = b;
+            Airbitz.core.writeData('limits', limits);
             deferred.resolve(b);
           } else {
             deferred.reject();
