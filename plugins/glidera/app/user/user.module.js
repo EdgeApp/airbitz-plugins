@@ -6,7 +6,7 @@
     .controller('homeController', ['$scope', '$state', '$location', 'UserFactory', homeController])
     .controller('dashboardController', ['$scope', '$sce', '$state', 'Error', 'DataFactory', 'UserFactory', 'Limits', dashboardController])
     .controller('userAccountController', ['$scope', '$state', 'Error', 'States', 'UserFactory', userAccountController])
-    .controller('bankAccountController', ['$scope', '$state', 'UserFactory', bankAccountController])
+    .controller('bankAccountController', ['$scope', '$sce', '$state', 'UserFactory', bankAccountController])
     .controller('disclaimerController', ['$scope', '$state', 'Error', 'States', 'UserFactory', disclaimerController])
     .controller('authController', ['$scope', '$state', '$location', 'UserFactory', authController])
     .controller('verifyEmailController', ['$scope', '$state', 'Error', 'UserFactory', verifyEmailController])
@@ -156,7 +156,7 @@
     };
   }
 
-  function bankAccountController($scope, $state, UserFactory) {
+  function bankAccountController($scope, $sce, $state, UserFactory) {
     $scope.userStatus = UserFactory.getUserAccountStatus();
     var url = '';
     if ($scope.userStatus.userBankAccountIsSetup) {
@@ -168,7 +168,8 @@
       console.log(UserFactory.createBankAccountUrl());
       url = UserFactory.createBankAccountUrl();
     }
-    $scope.iframeUrl = url;
+    $scope.iframeUrl = $sce.trustAsResourceUrl(url);
+
   }
 
   function userAccountController($scope, $state, Error, States, UserFactory) {
