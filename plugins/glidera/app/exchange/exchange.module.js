@@ -30,12 +30,21 @@
       });
     });
 
+    $scope.$on('DenominationChange', function(events, args){
+      var val = $filter('satoshiToDenom')($scope.order.orderValueSatoshi);
+      $scope.$apply(function() {
+        $scope.order.orderValueInput = val;
+        $scope.convertBtcValue(val);
+      });
+    });
+
     $scope.convertFiatValue = function(input) {
       if (typeof(input)==='undefined') input = 0;
 
       var price = ($scope.order.orderAction == 'buy')
                 ? Prices.currentBuy.price : Prices.currentSell.price;
       var btcValue = input / parseFloat(price);
+      $scope.order.orderValueSatoshi = btcValue * 100000000;
       $scope.order.orderBtcInput = parseFloat($filter('roundBtc')(btcValue));
     };
 
@@ -44,7 +53,10 @@
 
       var price = ($scope.order.orderAction == 'buy')
           ? Prices.currentBuy.price : Prices.currentSell.price;
-      var output = input * price;
+      var btc = $filter('valToBtc')(input);
+      var output = btc * price;
+      $scope.order.orderBtcInput = btc;
+      $scope.order.orderValueSatoshi = btc * 100000000;
       $scope.order.orderFiatInput = parseFloat($filter('roundFiat')(parseFloat(output)));
     };
     $scope.next = function() {

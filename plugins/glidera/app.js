@@ -116,8 +116,16 @@ run(['$rootScope', 'DataFactory', function ($rootScope, DataFactory) {
       $rootScope.currentWallet = newWallet;
     });
   });
+  Airbitz.cryptoDenom = Airbitz.core.getBtcDenomination();
+  $rootScope.cryptoDenom = Airbitz.core.getBtcDenomination();
+  Airbitz.core.setDenominationChangeListener(function(newDenom) {
+    $rootScope.$apply(function() {
+      Airbitz.cryptoDenom = newDenom;
+      $rootScope.cryptoDenom = newDenom;
+    });
+    $rootScope.$broadcast('DenominationChange', newDenom);
+  });
   $rootScope.exchange = DataFactory.getExchange();
   $rootScope.countryCode = Airbitz.config.get('COUNTRY_CODE');
   $rootScope.countryName = Airbitz.config.get('COUNTRY_NAME');
-  $rootScope.cryptoDenom = 'BTC';
 }]);

@@ -3,7 +3,9 @@
     .filter('statusFilter', statusFilter)
     .filter('titlecase', titleCase)
     .filter('roundFiat', roundFiat)
-    .filter('roundBtc', roundBtc);
+    .filter('roundBtc', roundBtc)
+    .filter('valToBtc', valToBtc)
+    .filter('satoshiToDenom', satoshiToDenom);
 
   function statusFilter() {
     return function(status) {
@@ -50,14 +52,44 @@
   }
 
   function roundFiat(){
-    return function(val,to){
+    return function(val, to){
         return val.toFixed(to || 2);
     }
   }
 
   function roundBtc(){
-    return function(val,to){
-        return val.toFixed(to || 5);
+    return function(val, to){
+      var d = Airbitz.cryptoDenom;
+      if (d == "mBTC") {
+        return (val * 100).toFixed(to || 3);
+      } else if (d == "bits") {
+        return (val * 1000000).toFixed(to || 2);
+      }
+      return val.toFixed(to || 5);
+    }
+  }
+
+  function valToBtc() {
+    return function(val){
+      var d = Airbitz.cryptoDenom;
+      if (d == "mBTC") {
+        return val / 1000;
+      } else if (d == "bits") {
+        return val / 1000000;
+      }
+      return val;
+    }
+  }
+
+  function satoshiToDenom() {
+    return function(val) {
+      if ("bits" == Airbitz.cryptoDenom) {
+        return val / 100;
+      } else if ("mBTC" == Airbitz.cryptoDenom) {
+        return val / 100000;
+      } else {
+        return val / 100000000;
+      }
     }
   }
 
