@@ -45,7 +45,8 @@
                 ? Prices.currentBuy.price : Prices.currentSell.price;
       var btcValue = input / parseFloat(price);
       $scope.order.orderValueSatoshi = btcValue * 100000000;
-      $scope.order.orderBtcInput = parseFloat($filter('roundBtc')(btcValue));
+      $scope.order.orderValueInput = parseFloat($filter('roundBtc')(btcValue));
+      $scope.order.orderBtcInput = btcValue;
     };
 
     $scope.convertBtcValue = function(input) {
