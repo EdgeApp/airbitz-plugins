@@ -729,6 +729,12 @@ html body hr.page {
   margin: 80px 0;
   border-color: #000;
 }
+html body .exchange-user-account {
+  margin-bottom: 46px;
+}
+html body .exchange-user-account .list-group {
+  margin-bottom: 0px;
+}
 html body .exchange-user-account .account-message {
   margin-top: 20px;
 }
@@ -906,7 +912,7 @@ html body .user-account-form {
   padding-bottom: 4px;
 }
 .transactions {
-  margin-bottom: 26px;
+  margin-bottom: 46px;
 }
 .transactions .transactions-header {
   color: #003e61;
@@ -914,6 +920,7 @@ html body .user-account-form {
 }
 .transactions .table {
   width: 100%;
+  margin-bottom: 0;
 }
 .transactions .table thead {
   background: #fff;
