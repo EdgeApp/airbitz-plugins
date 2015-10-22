@@ -21,7 +21,7 @@
       <td>
         <table class="table-mini">
           <tr>
-            <td class="qty text-right">{{ t.qty || 0 | roundBtc }} <strong>{{ cryptoDenom }}</strong></td>
+            <td class="qty text-right">{{ t.qty || 0 | formatBtc:cryptoDenom }} </td>
           </tr>
           <tr>
             <td class="total text-right"><strong>Total:</strong> ${{ t.total || 'total' }}</td>

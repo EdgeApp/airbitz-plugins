@@ -3,6 +3,7 @@
     .filter('statusFilter', statusFilter)
     .filter('titlecase', titleCase)
     .filter('roundFiat', roundFiat)
+    .filter('formatBtc', ['$filter', formatBtc])
     .filter('roundBtc', roundBtc)
     .filter('valToBtc', valToBtc)
     .filter('satoshiToDenom', satoshiToDenom);
@@ -53,12 +54,21 @@
 
   function roundFiat(){
     return function(val, to){
-        return val.toFixed(to || 2);
+        return (val || 0).toFixed(to || 2);
+    }
+  }
+
+  function formatBtc($filter) {
+    return function(val, denom) {
+      return $filter('roundBtc')(val) + ' ' + denom;
     }
   }
 
   function roundBtc(){
     return function(val, to){
+      if (!val) {
+        return 0;
+      }
       var d = Airbitz.cryptoDenom;
       if (d == "mBTC") {
         return (val * 100).toFixed(to || 3);

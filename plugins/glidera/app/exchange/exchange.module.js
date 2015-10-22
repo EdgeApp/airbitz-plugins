@@ -31,9 +31,9 @@
     });
 
     $scope.$on('DenominationChange', function(events, args){
-      var val = $filter('satoshiToDenom')($scope.order.orderValueSatoshi);
+      var btcValue = $scope.order.orderValueSatoshi / 100000000;
       $scope.$apply(function() {
-        $scope.order.orderValueInput = val;
+        $scope.order.orderValueInput = parseFloat($filter('roundBtc')(btcValue));
         $scope.convertBtcValue(val);
       });
     });
@@ -68,6 +68,8 @@
         Airbitz.ui.showAlert('Error', 'The sell limit will be exceeded. Please reduce your sell amount.');
         return;
       }
+      // Trim extra decimals off BTC amount
+      $scope.order.orderBtcInput = $scope.order.orderBtcInput.toFixed(8);
       var d = $scope.order.orderAction == 'buy' ? Prices.setBuyQty($scope.order.orderBtcInput) : Prices.setSellQty($scope.order.orderBtcInput);
       d.then(function() {
         TwoFactor.showTwoFactor(function() {

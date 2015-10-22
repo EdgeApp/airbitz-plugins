@@ -106,7 +106,7 @@
     } else if (3109 == code) {
       return "User's first transaction must clear before transacting again";
     } else if (3110 == code) {
-      return "Invalid priceUuid";
+      return "Invalid Buy or Sell price. Please try again later.";
     } else if (3111 == code) {
       return "Transaction amount is below minimum threshold";
     } else if (3112 == code) {
