@@ -731,6 +731,7 @@ html body hr.page {
 }
 html body .exchange-user-account {
   margin-bottom: 46px;
+  padding-bottom: 1px;
 }
 html body .exchange-user-account .list-group {
   margin-bottom: 0px;
@@ -913,6 +914,7 @@ html body .user-account-form {
 }
 .transactions {
   margin-bottom: 46px;
+  padding-bottom: 0px;
 }
 .transactions .transactions-header {
   color: #003e61;
