@@ -3,17 +3,21 @@
 
   angular
     .module('app.dataFactory', ['app.glidera', 'app.2fa', 'app.constants', 'app.limits'])
-    .factory('UserFactory', [ '$q', '$filter', 'States', 'ExchangeFactory', 'glideraFactory', 'TwoFactor', UserFactory])
+    .factory('UserFactory', [ '$q', '$filter', 'States', 'Occupations', 'ExchangeFactory', 'glideraFactory', 'TwoFactor', UserFactory])
     .factory('DataFactory', [ '$q', '$filter', 'States', 'ExchangeFactory', 'glideraFactory', 'TwoFactor', 'Prices', DataFactory]);
 
   angular
     .module('app.constants', [])
     .factory('ExchangeFactory', [ExchangeFactory])
-    .factory('States', [States]);
+    .factory('States', ['ExchangeFactory', States])
+    .factory('Occupations', [Occupations]);
 
-  function UserFactory($q, $filter, States, ExchangeFactory, glideraFactory, TwoFactor) {
+  function UserFactory($q, $filter, States, Occupations, ExchangeFactory, glideraFactory, TwoFactor) {
     var factory = {};
     var account = Airbitz.core.readData('account') || {};
+    if (account && account.country) {
+      ExchangeFactory.updateCurrency(account.country);
+    }
 
     factory.isAuthorized = function() {
       return glideraFactory.isAuthorized();
@@ -128,6 +132,10 @@
             account.zipCode = b.zipCode;
             account.state = States.findState(b.state);
             account.country = b.countryCode;
+            account.occupation = Occupations.find(b.occupation);
+            account.employerName = b.employerName;
+            account.employerDescription = b.employerDescription;
+            ExchangeFactory.updateCurrency(b.country);
 
             if (b.birthDate) {
               // XXX: This is kind of hacky
@@ -159,6 +167,9 @@
           'city': account.city,
           'state': account.state ? account.state.id : null,
           'zipCode': account.zipCode,
+          'occupation': account.occupation ? account.occupation.id : null,
+          'employerName': account.employerName,
+          'employerDescription': account.employerDescription,
           'ip': '127.0.0.1'
         };
         console.log(d);
@@ -392,20 +403,26 @@
 
   function ExchangeFactory() {
     // default exchange data
-    return {
-      'name': 'Glidera',
-      'emailVerificationAddress': 'admin@glidera.com',
-      'depositId':  'Glidera Inc',
-      'orderTimeout': '60',
-      'depositTimeout': '3600',
-      'countryCode': Airbitz.config.get("COUNTRY_CODE"),
-      'currencyNum': Airbitz.config.get("CURRENCY_CODE"),
-      'currency': Airbitz.config.get("CURRENCY_ABBREV"),
-      'currencySymbol': '$'
+    var factory = {};
+    factory.name = 'Glidera';
+    factory.emailVerificationAddress = 'admin@glidera.com';
+    factory.depositId = 'Glidera Inc';
+    factory.orderTimeout = '60';
+    factory.depositTimeout = '3600';
+    factory.updateCurrency = function(countryCode) {
+      if (!countryCode) {
+        return;
+      }
+      factory.countryCode = countryCode;
+      factory.currencyNum = countryCode === 'US' ? 840 : 127;
+      factory.currency = countryCode === 'US' ? "USD" : "CAD";
+      factory.currencySymbol = '$';
     };
+    factory.updateCurrency('US');
+    return factory;
   }
-  function States() {
-    var states = [
+  function States(ExchangeFactory) {
+    var usStates = [
       {"id": "AL", "name": "Alabama"},
       {"id": "AK", "name": "Alaska"},
       {"id": "AZ", "name": "Arizona"},
@@ -458,13 +475,114 @@
       {"id": "WI", "name": "Wisconsin"},
       {"id": "WY", "name": "Wyoming"}
     ];
+    var caProvinces = [
+      {"id": "ON", "name": "Ontario"},
+      {"id": "QC", "name": "Quebec"},
+      {"id": "NS", "name": "Nova Scotia"},
+      {"id": "NB", "name": "New Brunswick"},
+      {"id": "MB", "name": "Manitoba"},
+      {"id": "BC", "name": "British Columbia"},
+      {"id": "PE", "name": "Prince Edward Island"},
+      {"id": "SK", "name": "Saskatchewan"},
+      {"id": "AB", "name": "Alberta"},
+      {"id": "NL", "name": "Newfoundland and Labrador"}
+    ];
+    var factory = {};
+    factory.getStates = function() {
+      return ExchangeFactory.countryCode === "US" ? usStates : caProvinces;
+    };
+    factory.findState = function(code) {
+      var l = factory.getStates().filter(function(s) {
+        return s.id === code;
+      });
+      return l.length >= 1 ? l[0] : null;
+    };
+    return factory;
+  }
+  function Occupations() {
+    var occupations = [
+      {"id": "1", "name": "Accounting"},
+      {"id": "2", "name": "Administration"},
+      {"id": "3", "name": "Arts, Culture"},
+      {"id": "4", "name": "Business"},
+      {"id": "5", "name": "Communications"},
+      {"id": "6", "name": "Customer Service"},
+      {"id": "7", "name": "Education"},
+      {"id": "8", "name": "Energy, Utilities"},
+      {"id": "9", "name": "Engineering"},
+      {"id": "10", "name": "Finance"},
+      {"id": "11", "name": "Financial Services"},
+      {"id": "12", "name": "Government"},
+      {"id": "13", "name": "Health"},
+      {"id": "14", "name": "Hospitality"},
+      {"id": "15", "name": "Human Resources"},
+      {"id": "16", "name": "Internet"},
+      {"id": "17", "name": "Legal"},
+      {"id": "18", "name": "Manufacturing"},
+      {"id": "19", "name": "Marketing"},
+      {"id": "20", "name": "Non profit"},
+      {"id": "21", "name": "Recreation"},
+      {"id": "22", "name": "Religion"},
+      {"id": "23", "name": "Research"},
+      {"id": "24", "name": "Sales"},
+      {"id": "25", "name": "Sports, Fitness"},
+      {"id": "26", "name": "Student"},
+      {"id": "27", "name": "Crypto Exchange"},
+      {"id": "28", "name": "Crypto Merchant"},
+      {"id": "29", "name": "Other"},
+      {"id": "30", "name": "Advertising"},
+      {"id": "31", "name": "Agent (Tranvel Etc.)"},
+      {"id": "32", "name": "Architect"},
+      {"id": "33", "name": "Aviation"},
+      {"id": "34", "name": "Banking"},
+      {"id": "35", "name": "Brokerage"},
+      {"id": "36", "name": "Chiropractor"},
+      {"id": "37", "name": "Computers"},
+      {"id": "38", "name": "Controller"},
+      {"id": "39", "name": "Dean"},
+      {"id": "40", "name": "Dental"},
+      {"id": "41", "name": "Doctor"},
+      {"id": "42", "name": "Driver (Truck, Bus)"},
+      {"id": "43", "name": "Farmer"},
+      {"id": "44", "name": "Film"},
+      {"id": "45", "name": "Fireman"},
+      {"id": "46", "name": "Fisheries"},
+      {"id": "47", "name": "Flight Attendant"},
+      {"id": "48", "name": "Forestry"},
+      {"id": "49", "name": "Homemaker"},
+      {"id": "50", "name": "Insurance"},
+      {"id": "51", "name": "Journalism"},
+      {"id": "52", "name": "Judge"},
+      {"id": "53", "name": "Landscaper, Gardener"},
+      {"id": "54", "name": "Lawyer"},
+      {"id": "55", "name": "Medical"},
+      {"id": "56", "name": "Military"},
+      {"id": "57", "name": "Music"},
+      {"id": "58", "name": "Non Profit"},
+      {"id": "59", "name": "Nursing"},
+      {"id": "60", "name": "Paramedic"},
+      {"id": "61", "name": "Pilot"},
+      {"id": "62", "name": "Police"},
+      {"id": "63", "name": "Principal"},
+      {"id": "64", "name": "Professor"},
+      {"id": "65", "name": "Psychiatric"},
+      {"id": "66", "name": "Radiology"},
+      {"id": "67", "name": "Restaurant"},
+      {"id": "68", "name": "Retail"},
+      {"id": "69", "name": "Social Worker"},
+      {"id": "70", "name": "Teacher"},
+      {"id": "71", "name": "Technician"},
+      {"id": "72", "name": "Therapist"},
+      {"id": "73", "name": "Veterinarian"}
+    ];
     return {
-      getStates: function() {
-        return states;
+      OTHER: 29,
+      getOccupations: function() {
+        return occupations;
       },
-      findState: function(code) {
-        var l = states.filter(function(s) {
-          return s.id === code;
+      find: function(code) {
+        var l = occupations.filter(function(s) {
+          return code && s.id === code.toString();
         });
         return l.length >= 1 ? l[0] : null;
       }

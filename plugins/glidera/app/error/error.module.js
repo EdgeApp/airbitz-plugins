@@ -42,13 +42,13 @@
           $state.go('dashboard');
           Airbitz.ui.showAlert('Error', 'Please verify your email address before continuing.');
         } else {
-          Airbitz.ui.showAlert('Error', errorMap(res.code, res.message));
+          Airbitz.ui.showAlert('Error', errorMap(res.code, res.message, res.details));
         }
       }
     }
   }
 
-  function errorMap(code, message) {
+  function errorMap(code, message, details) {
     if (415 == code) {
       return "Unsupported media type";
     } else if (400 == code) {
@@ -111,6 +111,8 @@
       return "Transaction amount is below minimum threshold";
     } else if (3112 == code) {
       return "Transaction cannot be processed because daily limit would be exceeded";
+    } else if (3116 == code) {
+      return details;
     } else if (3125 == code) {
       return "Cannot update because no information has changed";
     } else if (9999 == code) {

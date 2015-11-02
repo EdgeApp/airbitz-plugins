@@ -126,6 +126,4 @@ run(['$rootScope', 'DataFactory', function ($rootScope, DataFactory) {
     $rootScope.$broadcast('DenominationChange', newDenom);
   });
   $rootScope.exchange = DataFactory.getExchange();
-  $rootScope.countryCode = Airbitz.config.get('COUNTRY_CODE');
-  $rootScope.countryName = Airbitz.config.get('COUNTRY_NAME');
 }]);

@@ -5,7 +5,7 @@
     .module('app.user', ['app.dataFactory', 'app.constants'])
     .controller('homeController', ['$scope', '$state', '$location', 'UserFactory', homeController])
     .controller('dashboardController', ['$scope', '$sce', '$state', 'Error', 'DataFactory', 'UserFactory', 'Limits', dashboardController])
-    .controller('userAccountController', ['$scope', '$state', 'Error', 'States', 'UserFactory', userAccountController])
+    .controller('userAccountController', ['$scope', '$state', 'Error', 'States', 'Occupations', 'UserFactory', userAccountController])
     .controller('bankAccountController', ['$scope', '$sce', '$state', 'UserFactory', bankAccountController])
     .controller('increaseLimitsController', ['$scope', '$sce', '$state', 'UserFactory', increaseLimitsController])
     .controller('disclaimerController', ['$scope', '$state', 'Error', 'States', 'UserFactory', disclaimerController])
@@ -206,10 +206,12 @@
     $scope.iframeUrl = $sce.trustAsResourceUrl(url);
   }
 
-  function userAccountController($scope, $state, Error, States, UserFactory) {
+  function userAccountController($scope, $state, Error, States, Occupations, UserFactory) {
     var title = 'User Information';
     Airbitz.ui.title(title);
     $scope.states = States.getStates();
+    $scope.occupations = Occupations.getOccupations();
+    $scope.OTHER = Occupations.OTHER;
     $scope.account = UserFactory.getUserAccount();
     UserFactory.getFullUserAccount().then(function(account) {
       $scope.account = account;

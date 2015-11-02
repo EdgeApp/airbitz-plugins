@@ -71,42 +71,66 @@
       </div>
       <div class="no-pad-right form-group col-xs-6">
         <select ng-options="o.name for o in states" ng-model="account.state" class="form-control"
-        name="state"
-        required="" />
-        <option value="" ng-if="countryCode == 'US'">Select a State</option>
-        <option value="" ng-if="countryCode == 'CA'">Select a Province</option>
-      </select>
-      <div class="input-error" ng-show="form.$submitted || form.state.$touched">
-        <span ng-show="form.state.$error.required" class="label label-danger">Required</span>
+          name="state" required="" />
+          <option value="" ng-if="exchange.countryCode == 'US'">Select a State</option>
+          <option value="" ng-if="exchange.countryCode == 'CA'">Select a Province</option>
+        </select>
+        <div class="input-error" ng-show="form.$submitted || form.state.$touched">
+          <span ng-show="form.state.$error.required" class="label label-danger">Required</span>
+        </div>
       </div>
     </div>
-  </div>
 
-  <div class="form-group" ng-show="countryCode == 'CA'">
-    <label for="inputOccupation" class="">Occupation</label>
-    <select ng-options="o.name for o in occupations" ng-model="account.occupation" class="form-control"
-    name="occupation"
-    required="" />
-      <option value="">Select an Occupation</option>
-    </select>
-  <div class="input-error" ng-show="form.$submitted || form.occupation.$touched">
-    <span ng-show="form.occupation.$error.required" class="label label-danger">Required</span>
-    <span ng-show="form.occupation.$error.occupation" class="label label-danger">Occupation Required</span>
-  </div>
-</div>
-
-  <div class="form-group">
-    <label for="inputDob" class="">Date of Birth</label>
-    <input ng-model="account.birthDate"
-    type="date" id="inputDob" class="form-control" placeholder="YYYY-MM-DD" autofocus=""
-    autocomplete="off"
-    name="dob"
-    required="" />
-    <div class="input-error" ng-show="form.$submitted || form.dob.$touched">
-      <span ng-show="form.dob.$error.required" class="label label-danger">Required</span>
-      <span ng-show="form.dob.$error.date" class="label label-danger">Date Required</span>
+    <div class="form-group">
+      <label for="inputDob" class="">Date of Birth</label>
+      <input ng-model="account.birthDate"
+        type="date" id="inputDob" class="form-control" placeholder="YYYY-MM-DD" autofocus=""
+        autocomplete="off"
+        name="dob"
+        required="" />
+      <div class="input-error" ng-show="form.$submitted || form.dob.$touched">
+        <span ng-show="form.dob.$error.required" class="label label-danger">Required</span>
+        <span ng-show="form.dob.$error.date" class="label label-danger">Date Required</span>
+      </div>
     </div>
-  </div>
+
+    <div class="form-group" ng-show="exchange.countryCode == 'CA'">
+        <label for="inputOccupation" class="">Occupation</label>
+        <select ng-options="o.name for o in occupations" ng-model="account.occupation" class="form-control"
+                name="occupation"
+                required="" />
+            <option value="">Select an Occupation</option>
+        </select>
+      <div class="input-error" ng-show="form.$submitted || form.occupation.$touched">
+        <span ng-show="form.occupation.$error.required" class="label label-danger">Required</span>
+        <span ng-show="form.occupation.$error.occupation" class="label label-danger">Occupation Required</span>
+      </div>
+    </div>
+
+    <div class="form-group" ng-show="exchange.countryCode == 'CA' && account.occupation.id == OTHER">
+      <label for="inputEmployerName" class="">Employer Name</label>
+      <input ng-model="account.employerName" ng-required="true"
+             type="text" id="inputEmployerName" class="form-control"
+             placeholder="Employer name" autofocus="true" autocomplete="off" autocorrect="off"
+             name="employerName" 
+             ng-required="account.occupation.id == OTHER"/>
+      <div class="input-error" ng-show="form.$submitted || form.employerName.$touched">
+        <span ng-show="form.employerName.$error.required" class="label label-danger">Required</span>
+      </div>
+    </div>
+
+    <div class="form-group" ng-show="exchange.countryCode == 'CA' && account.occupation.id == OTHER">
+      <label for="inputEmployerDescription" class="">Employer Description</label>
+      <input ng-model="account.employerDescription" ng-required="true"
+             type="text" id="inputEmployerDescription" class="form-control"
+             placeholder="Employer Description" autocomplete="off" autocorrect="off"
+             name="employerDescription"
+             ng-required="account.occupation.id == OTHER" />
+      <div class="input-error" ng-show="form.$submitted || form.employerDescription.$touched">
+        <span ng-show="form.employerDescription.$error.required" class="label label-danger">Required</span>
+      </div>
+    </div>
+
 </form>
 </div>
 
