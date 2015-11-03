@@ -553,7 +553,7 @@ html body .table thead th {
 }
 html body .list-group .list-group-item,
 html body .list-group a.list-group-item {
-  color: #003e61;
+  color: #003E61;
   background: white;
   font-size: 20px;
   border-radius: 0px;
@@ -562,7 +562,7 @@ html body .list-group a.list-group-item {
 html body .list-group .list-group-item.header,
 html body .list-group a.list-group-item.header {
   margin-bottom: 0;
-  color: #003e61;
+  color: #003E61;
   border-bottom: 1px solid #ddd;
   background: #f9f9f9;
 }
@@ -775,7 +775,7 @@ html body .user-account-form {
   position: relative;
   width: 100%;
   padding: 5px 15px;
-  background: #003e61;
+  background: #003E61;
 }
 .exchange-ticker .live-ticker .live-price-rate {
   font-size: 16px;
@@ -912,12 +912,15 @@ html body .user-account-form {
   height: 32px;
   padding-bottom: 4px;
 }
+.exchange-transactions-summary {
+  padding-bottom: 1px;
+}
 .transactions {
   margin-bottom: 46px;
-  padding-bottom: 0px;
+  padding-bottom: 1px;
 }
 .transactions .transactions-header {
-  color: #003e61;
+  color: #003E61;
   font-weight: 400;
 }
 .transactions .table {
@@ -948,7 +951,7 @@ html body .user-account-form {
   border: none;
 }
 .transactions .table.table-striped tbody td.datetime .date {
-  color: #003e61;
+  color: #003E61;
   font-weight: 700;
 }
 .transactions .table.table-striped tbody td.datetime .date .est-label {
