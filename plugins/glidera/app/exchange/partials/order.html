@@ -28,13 +28,13 @@
             ng-change="convertBtcValue(order.orderValueInput)"
             type="number"
             name="orderValueInput"
-            class="right-square"
+            class="right-square input-lg"
             id="inputBtcAmount"
             placeholder="Enter Amount"
             step="any"
             autocorrect="off"
             required="" />
-          <span class="input-group-addon">{{ cryptoDenom }}</span>
+          <span style="min-width: 75px" class="input-group-addon">{{ cryptoDenom }}</span>
         </div>
         <div class="input-error"
              ng-show="form.$submitted || form.orderValueInput.$touched">
@@ -49,14 +49,14 @@
             ng-change="convertFiatValue(order.orderFiatInput)"
             type="number"
             name="orderFiatInput"
-            class="right-square"
+            class="right-square input-lg"
             id="inputFiatAmount"
             placeholder="Enter Amount"
             autocorrect="off"
             tabindex="1"
             step="any"
             required="" />
-            <span class="input-group-addon">{{ exchange.currency }}</span>
+            <span style="min-width: 75px" class="input-group-addon">{{ exchange.currency }}</span>
         </div>
         <div class="input-error"
              ng-show="form.$submitted || form.orderFiatInput.$touched">
