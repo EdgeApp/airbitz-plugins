@@ -34,7 +34,8 @@
 
     var redirectUri = Airbitz.config.get('REDIRECT_URI');
     var domainUri = Airbitz.config.get('SANDBOX') == 'true'
-      ? 'bitid:sandbox.glidera.io/api/v1/authentication/bitid' : 'bitid:www.glidera.io/api/v1/authentication/bitid';
+      ? 'bitid:sandbox.glidera.io/api/v1/authentication/bitid'
+      : 'bitid:www.glidera.io/api/v1/authentication/bitid';
     factory.authorizeUrl = function() {
       var message = glideraFactory.bitidAuthUri();
       console.log(message);
@@ -135,7 +136,7 @@
             account.occupation = Occupations.find(b.occupation);
             account.employerName = b.employerName;
             account.employerDescription = b.employerDescription;
-            ExchangeFactory.updateCurrency(b.country);
+            ExchangeFactory.updateCurrency(account.country);
 
             if (b.birthDate) {
               // XXX: This is kind of hacky
@@ -578,7 +579,11 @@
     return {
       OTHER: 29,
       getOccupations: function() {
-        return occupations;
+        return occupations.sort(function(a, b) {
+          if (a.name < b.name) return -1;
+          if (b.name < a.name) return 1;
+          return 0;
+        });
       },
       find: function(code) {
         var l = occupations.filter(function(s) {

@@ -5,7 +5,7 @@
     .module('app.user', ['app.dataFactory', 'app.constants'])
     .controller('homeController', ['$scope', '$state', '$location', 'UserFactory', homeController])
     .controller('dashboardController', ['$scope', '$sce', '$state', 'Error', 'DataFactory', 'UserFactory', 'Limits', dashboardController])
-    .controller('userAccountController', ['$scope', '$state', 'Error', 'States', 'Occupations', 'UserFactory', userAccountController])
+    .controller('userAccountController', ['$scope', '$state', 'Error', 'States', 'Occupations', 'UserFactory', 'ExchangeFactory', userAccountController])
     .controller('bankAccountController', ['$scope', '$sce', '$state', 'UserFactory', bankAccountController])
     .controller('increaseLimitsController', ['$scope', '$sce', '$state', 'UserFactory', increaseLimitsController])
     .controller('disclaimerController', ['$scope', '$state', 'Error', 'States', 'UserFactory', disclaimerController])
@@ -71,7 +71,10 @@
   }
 
   function dashboardController($scope, $sce, $state, Error, DataFactory, UserFactory, Limits) {
-    Airbitz.ui.title('Glidera ' + $scope.countryName);
+    Airbitz.ui.title('Glidera');
+    if (DataFactory.getExchange().countryName) {
+      Airbitz.ui.title('Glidera ' + DataFactory.getExchange().countryName);
+    }
     // set variables that might be cached locally to make sure they load faster if available
     $scope.account = UserFactory.getUserAccount();
     $scope.userStatus = UserFactory.getUserAccountStatus();
@@ -206,13 +209,14 @@
     $scope.iframeUrl = $sce.trustAsResourceUrl(url);
   }
 
-  function userAccountController($scope, $state, Error, States, Occupations, UserFactory) {
+  function userAccountController($scope, $state, Error, States, Occupations, UserFactory, ExchangeFactory) {
     var title = 'User Information';
     Airbitz.ui.title(title);
     $scope.states = States.getStates();
     $scope.occupations = Occupations.getOccupations();
     $scope.OTHER = Occupations.OTHER;
     $scope.account = UserFactory.getUserAccount();
+    $scope.countryStateText = ExchangeFactory.countryCode === 'US' ? 'State' : 'Province';
     UserFactory.getFullUserAccount().then(function(account) {
       $scope.account = account;
     }, function() {
