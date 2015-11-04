@@ -2,9 +2,10 @@
   'use strict';
 
   angular
-    .module('app.dataFactory', ['app.glidera', 'app.2fa', 'app.constants', 'app.limits'])
+    .module('app.dataFactory', ['app.glidera', 'app.2fa', 'app.constants', 'app.limits', 'app.constants'])
+    .factory('StatsFactory', [ '$http', 'ExchangeFactory', StatsFactory])
     .factory('UserFactory', [ '$q', '$filter', 'States', 'Occupations', 'ExchangeFactory', 'glideraFactory', 'TwoFactor', UserFactory])
-    .factory('DataFactory', [ '$q', '$filter', 'States', 'ExchangeFactory', 'glideraFactory', 'TwoFactor', 'Prices', DataFactory]);
+    .factory('DataFactory', [ '$q', '$filter', 'States', 'ExchangeFactory', 'glideraFactory', 'TwoFactor', 'Prices', 'StatsFactory', DataFactory]);
 
   angular
     .module('app.constants', [])
@@ -186,7 +187,7 @@
     };
     return factory;
   }
-  function DataFactory($q, $filter, States, ExchangeFactory, glideraFactory, TwoFactor, Prices) {
+  function DataFactory($q, $filter, States, ExchangeFactory, glideraFactory, TwoFactor, Prices, StatsFactory) {
     var factory = {};
 
     // transactions
@@ -314,6 +315,7 @@
           console.log(JSON.stringify(b));
           if (r == 200) {
             factory.getOrder(false).details = b;
+            StatsFactory.recordEvent('buy', b, qty);
             Airbitz.core.finalizeRequest(wallet, requestId);
             deferred.resolve(b);
           } else {
@@ -387,6 +389,7 @@
         glideraFactory.sell(TwoFactor.getCode(), data.refundAddress, data.signedTx, opts, function(e, r, b) {
           if (r == 200) {
             factory.getOrder(false).details = b;
+            StatsFactory.recordEvent('sell', b, qty);
             d.resolve(b);
           } else {
             d.reject(b);
@@ -397,6 +400,35 @@
         return $q(function(resolve, reject) {
           reject(data);
         });
+      });
+    };
+    return factory;
+  }
+  function StatsFactory($http, ExchangeFactory) {
+    var factory = {};
+    factory.recordEvent = function(eventType, eventDictionary, btcAmount) {
+      var statsKey = Airbitz.config.get('AIRBITZ_STATS_KEY');
+      var network = Airbitz.config.get('SANDBOX') == 'true' ? 'testnet' : 'mainnet';
+      var s = angular.copy(eventDictionary);
+      s['btc'] = btcAmount;
+      s['partner'] = 'Glidera ' + ExchangeFactory.countryCode;
+      s['country'] = ExchangeFactory.countryCode;
+      $http({
+        method: 'POST',
+        url: 'https://airbitz.co/api/v1/events',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Token ' + statsKey
+        },
+        data: {
+          'event_type': eventType,
+          'event_network': network,
+          'event_text': JSON.stringify(s),
+        }
+      }).then(function successCallback(response) {
+        console.log(respone);
+      }, function errorCallback(response) {
+        console.log(respone);
       });
     };
     return factory;
