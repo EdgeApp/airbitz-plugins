@@ -69,7 +69,12 @@
         return;
       }
       // Trim extra decimals off BTC amount
-      $scope.order.orderBtcInput = $scope.order.orderBtcInput.toFixed(8);
+      try {
+        $scope.order.orderBtcInput = parseFloat($scope.order.orderBtcInput).toFixed(8);
+      } catch (e) {
+        console.log('Unable to round btc input');
+        console.log(JSON.stringify($scope.order));
+      }
       var d = $scope.order.orderAction == 'buy' ? Prices.setBuyQty($scope.order.orderBtcInput) : Prices.setSellQty($scope.order.orderBtcInput);
       d.then(function() {
         TwoFactor.showTwoFactor(function() {

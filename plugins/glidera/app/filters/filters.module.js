@@ -60,7 +60,8 @@
 
   function formatBtc($filter) {
     return function(val, denom) {
-      return $filter('roundBtc')(val) + ' ' + denom;
+      var d = Airbitz.cryptoDenom;
+      return $filter('roundBtc')(val) + ' ' + d;
     }
   }
 
@@ -69,6 +70,7 @@
       if (!val) {
         return 0;
       }
+      val = parseFloat(val);
       var d = Airbitz.cryptoDenom;
       if (d == "mBTC") {
         return (val * 100).toFixed(to || 3);
