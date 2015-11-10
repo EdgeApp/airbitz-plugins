@@ -1,0 +1,45 @@
+<div class="exchange-user-account row">
+  <div class="account-message col-xs-12"
+       ng-if="!userStatus.userCanTransact" ng-bind-html="regMessage()">
+  </div>
+  <div class="col-xs-12 no-pad">
+    <ul class="list-group">
+      <li ng-if="userStatus.userCanTransact" ng-click="showAccountOptions()" class="header list-group-item">
+        <span class="list-group-item-heading">{{ account.firstName || 'first' | titlecase }} {{ account.lastName || 'last' | titlecase }}</span>
+        <div ng-bind-html="accountButton">{{ accountButton }}</div>
+        <label class="status label pull-right"
+               ng-class="{'label-success': userStatus.userCanTransact}">{{ userStatus.userCanTransact | statusFilter }}</label>
+      </li>
+      <li ng-if="showOptions" class="ng-trans ng-trans-scale-up easeOutBack list-group-item">
+        <span class="list-group-item-heading">Email</span>
+        <p class="list-group-item-text">{{account.email || 'email'}}</p>
+        <label class="status label pull-right"
+               ng-class="(userStatus.userEmailIsSetup) ? 'label-success' : 'label-danger'">{{ userStatus.userEmailIsSetup | statusFilter }}</label>
+      </li>
+      <li ng-if="showOptions" ui-sref="verifyPhone" class="ng-trans ng-trans-scale-up easeOutBack list-group-item">
+        <span class="list-group-item-heading">Mobile Phone</span>
+        <p class="list-group-item-text text-primary">Tap to edit</p>
+        <label class="status label pull-right"
+               ng-class="(userStatus.userPhoneIsSetup) ? 'label-success' : 'label-danger'">{{ userStatus.userPhoneIsSetup | statusFilter }}</label>
+      </li>
+      <li ng-if="showOptions" ui-sref="account" class="ng-trans ng-trans-scale-up easeOutBack list-group-item">
+        <span class="list-group-item-heading">Account Information</span>
+        <p class="list-group-item-text text-primary">Tap to edit</p>
+        <label class="status label pull-right"
+               ng-class="(userStatus.personalInfoState == 'VERIFIED') ? 'label-success' : 'label-danger'">{{ userStatus.personalInfoState == 'VERIFIED' | statusFilter }}</label>
+      </li>
+      <li ng-if="showOptions" ui-sref="bankAccount" class="ng-trans ng-trans-scale-up easeOutBack list-group-item">
+        <span class="list-group-item-heading">Bank Account</span>
+        <p class="list-group-item-text text-primary">{{ bankMessage }}</p>
+        <label class="status label pull-right"
+               ng-class="(userStatus.userBankAccountIsSetup) ? 'label-success' : 'label-danger'">{{ userStatus.userBankAccountIsSetup | statusFilter }}</label>
+      </li>
+      <li ng-if="showOptions" ui-sref="increaseLimits" class="ng-trans ng-trans-scale-up easeOutBack list-group-item">
+        <span class="list-group-item-heading">Increase Spending Limits</span>
+        <p class="list-group-item-text text-primary">Tap to edit</p>
+        <label class="status label pull-right"
+               ng-class="(extraComplete) ? 'label-success' : 'label-danger'">{{ extraComplete | statusFilter }}</label>
+      </li>
+    </ul>
+  </div>
+</div>

@@ -1,0 +1,593 @@
+@import "ng-trans.less";
+@import "ab-variables.less";
+@import "ab-mixins.less";
+// @import "ab-fixes.less";
+
+
+// setup main containers
+html {
+  // position: relative;
+  // top: 0;
+  // left: 0;
+  height: 100%;
+  width: 100%;
+
+  body {
+    // position: relative;
+    // top: 0;
+    // left: 0;
+    min-height: 100%;
+    width: 100%;
+
+    -webkit-animation: fadein 500ms; /* Safari, Chrome and Opera > 12.1 */
+       -moz-animation: fadein 500ms; /* Firefox < 16 */
+        -ms-animation: fadein 500ms; /* Internet Explorer */
+         -o-animation: fadein 500ms; /* Opera < 12.1 */
+            animation: fadein 500ms;
+
+    // background for app
+
+    /*
+    background: url('./img/bg_app.jpg');
+    background-repeat: no-repeat;
+    background-size: 100%;
+    background-position: top center;
+    background-attachment: fixed;
+    */
+    overflow-x: hidden;
+    overflow-y: auto;
+
+
+    #main-content {
+      position: absolute;
+      width: 100%;
+    }
+
+    #wrap {
+      position: absolute;
+      min-height: 100%;
+      width: 100%;
+      padding-top: 20px;
+
+      #footer {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        height: 40px;
+        background: #1e76a7;
+        .glass-border;
+        border-bottom: none;
+        border-left: none;
+        border-right: none;
+
+        .container {
+          margin-top: 0;
+          padding-bottom: 0;
+        }
+
+        p {
+          margin-bottom: 0;
+          padding: 10px 0;
+        }
+      }
+    }
+  }
+}
+
+
+
+
+
+body {
+  // margin: 20px 0 40px;
+  color: white;
+  // font-family: Lato, sans-serif;
+  background: transparent;
+
+
+  h1,h2,h3,h4,h5,h6 {
+    color: white;
+    .shadow-text;
+  }
+
+  hr {
+    margin: 20px 0;
+    .glass-border;
+    border-bottom: 0;
+
+    &.page {
+      margin: 80px 0;
+      border-color: white;
+    }
+  }
+
+  input[type='text'],
+  input[type='number'],
+  input[type='tel'],
+  input[type='email'] {
+    .glass-input;
+  }
+
+  .btn {
+    .shadow-box;
+
+    &.btn-link {
+      color: white;
+      .shadow-text;
+      box-shadow: none;
+    }
+
+    &:focus,
+    &:active:focus {
+      outline: none;
+    }
+  }
+
+  .help-block {
+    color: @ab-gray;
+  }
+
+  .well {
+    background: none;
+    .glass-border;
+  }
+
+  .table {
+
+    thead {
+      th {
+        background: @ab-gray-light;
+        color: @ab-blue-dark;
+      }
+    }
+
+    &.table-no-border {
+
+      th,
+      td {
+        border-top: none;
+      }
+    }
+  }
+
+  .form-control {
+    &::-webkit-input-placeholder {
+      color: #aaa;
+    }
+  }
+
+  .form-group,
+  .input-group {
+    // substitute for form-control to prevent number fields from breaking due to height
+    input[type="text"],
+    input[type="number"],
+    input[type="tel"] {
+      display: block;
+      width: 100%;
+      // height: 34px; // do not put height on number field with font size increased
+      padding: 6px 12px;
+      border-radius: 4px;
+      -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+      box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+      -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+      -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+      transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="tel"] {
+
+      &.large {
+        height: auto;
+        padding: 4px 12px;
+        font-size: 175%;
+        border: none;
+      }
+      &.left-square {
+        border-left: none;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+      }
+      &.right-square {
+        border-right: none;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+      }
+      &:focus {
+        .noglow;
+      }
+    }
+    input[disabled] {
+      color: @ab-gray;
+    }
+
+    .input-group-addon {
+      .glass-input;
+
+      &.large {
+        font-size: 175%;
+        border: none;
+      }
+    }
+  }
+
+
+
+  .list-group {
+
+    .list-group-item,
+    a.list-group-item {
+      color: @ab-blue-dark;
+      background: rgba(255,255,255,.2);
+      font-size: 20px;
+      .glass-border;
+      cursor: pointer;
+      &.header {
+        background-color: rgba(255,255,255,.5);
+        color: @ab-blue-dark;
+
+        &:hover, &:active, &:focus {
+          background-color: rgba(255,255,255,.5);
+        }
+      }
+
+      &:hover, &:active, &:focus {
+        background-color: rgba(255,255,255,.5);
+      }
+
+      &:hover, &:active, &:focus, &:visited {
+        text-decoration: none;
+      }
+
+
+    }
+
+    .list-group-item-text {
+      color: @ab-gray-dark;
+      font-size: 10px !important;
+    }
+  }
+
+  label {
+    color: white;
+    font-weight: 300;
+    .shadow-text;
+  }
+
+  .label {
+    font-weight: 300;
+
+    &.label-outline {
+      .glass-border;
+    }
+
+    &.status {
+      font-size: 10px;
+      position: absolute;
+      right: -1px;
+      bottom: -6px;
+      .glass-border;
+      border-bottom-right-radius: 0;
+      border-top-right-radius: 0;
+      border-right: 0;
+      border-bottom: 0;
+    }
+  }
+
+  .exchange-ticker {
+    // .data-container;
+    position: relative;
+    width: 100%;
+    left: 15px;
+  }
+
+  .exchange-limits {
+
+    .limit-header-buy {
+      text-transform: uppercase;
+      color: @ab-green-dark;
+      text-shadow: none;
+    }
+    .limit-header-sell {
+      text-transform: uppercase;
+      color: @ab-blue-dark;
+      text-shadow: none;
+    }
+    .buy-limits {}
+    .sell-limits {}
+  }
+
+  .limit-label {
+    text-transform: uppercase;
+    letter-spacing: -1px;
+    color: white;
+    .shadow-text;
+  }
+
+  .buy-limits {
+    float: left;
+    width: 100%;
+    font-size: 12px;
+
+    .limit-label {
+      display: inline-block;
+      float: left;
+    }
+    .limit-data {
+      display: inline-block;
+      float: right;
+      color: @ab-green-dark;
+    }
+    .limit-buy-daily,
+    .limit-buy-monthly {
+      clear: both;
+    }
+  }
+
+  .sell-limits {
+    float: left;
+    width: 100%;
+    font-size: 12px;
+
+    .limit-label {
+      display: inline-block;
+      float: left;
+    }
+    .limit-data {
+      display: inline-block;
+      float: right;
+      color: @ab-blue-dark;
+    }
+    .limit-sell-daily,
+    .limit-sell-monthly {
+      clear: both;
+    }
+  }
+
+
+  // exchange options list
+  .exchange-options {
+    margin: 40px 0;
+
+    .list-group-item i {
+      width: 24px;
+      margin-right: 10px;
+    }
+  }
+
+
+  // exchange signup
+  .disclaimer {
+    p {
+      .shadow-text;
+    }
+  }
+  .exchange-sign-up {
+
+    h2 {
+      margin-bottom: 20px;
+    }
+  }
+
+
+  // exchange
+  .exchange-email-edit {
+    margin: 60px 0;
+  }
+
+  // exchange functions
+  .exchange-buy-sell {
+    margin-top: 30px;
+    margin-bottom: 30px;
+  }
+
+  .buy-sell-header {
+    margin-bottom: 10px;
+
+    .btn-group {
+
+      .btn.active {
+        background: none;
+        .glass-border;
+      }
+    }
+  }
+
+  .exchange-balances {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+
+  // .exchange-user-account {
+  //   margin-top: 30px;
+
+  //   .account-message {
+  //     margin-bottom: 20px;
+  //   }
+  //   .list-group-item {
+  //     small {
+  //       margin-left: 12px;
+  //       font-size: 65%;
+  //     }
+  //     i {
+  //       width: 24px;
+  //       margin-right: 10px;
+  //     }
+  //   }
+  // }
+
+  // .exchange-payment-list {
+  //   margin-top: 20px;
+  //   margin-bottom: 20px;
+
+  //   .list-group-item i {
+  //     width: 24px;
+  //     margin-right: 10px;
+  //   }
+
+  //   .ending {
+  //     color: @ab-blue-light;
+  //     font-weight: 300;
+  //   }
+  // }
+
+
+  .row.next-cancel {
+    margin-top: 40px;
+  }
+
+
+  // exchange add bank account
+
+
+
+
+  // exchange add credit card
+
+
+
+  // exchange buy sell interface
+  .exchange-buy-sell-interface {
+
+  }
+
+  .order-limits {
+    .data-container;
+    float: left;
+    width: 100%;
+  }
+
+  .order-review {
+    margin-top: 5px;
+    margin-bottom: 5px;
+
+    table {
+      margin-bottom: 10px;
+      .data-container;
+      color: @ab-blue-dark;
+
+      td {
+        &:first-child {
+          width: 150px;
+          text-align: right;
+          font-weight: 300;
+          background: rgba(255,255,255,.5);
+        }
+      }
+    }
+  }
+
+  .order-receipt-heading {
+    font-weight: 300;
+    margin-top: 0;
+
+    .bitcoin-logo {
+      height: 32px;
+      padding-bottom: 4px;
+    }
+  }
+
+
+  .twofa {
+    margin-top: 0;
+
+    input[type="number"] {
+      margin-bottom: 10px;
+    }
+  }
+
+
+  .transactions {
+
+    .table {
+      width: 100%;
+
+      thead {
+        background: rgba(0,0,0,.7);
+        color: white;
+      }
+      td {
+        background: rgba(0,0,0,.2);
+        font-size: 8px;
+      }
+    }
+  }
+
+  .live-ticker {
+
+    .live-price-rate {
+      font-size: 17px;
+
+      .price-rate-label {
+        .shadow-text;
+      }
+      .price-rate-data {
+        font-weight: bold;
+        color: @ab-green-light;
+        .shadow-text;
+      }
+    }
+
+    .live-price-expiration {
+      .expiration-label {}
+      .expiration-data {
+        font-weight: bold;
+        color: @ab-gray-dark;
+      }
+    }
+  }
+
+
+  .verify-phone-info {
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  .verify-phone-form {
+
+    input[name="phone"] {
+      text-align: center;
+    }
+
+  }
+
+  .error-message-console {
+    height: 20px;
+    text-align: center;
+    color: @ab-red
+  }
+
+  .error-screen {
+    margin-top: 20px;
+  }
+
+  .input-error {
+    position: absolute;
+    right: 14px;
+    margin-top: -11px;
+  }
+
+  .user-account-form {}
+
+
+
+} // body
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

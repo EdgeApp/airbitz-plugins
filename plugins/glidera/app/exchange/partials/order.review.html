@@ -1,0 +1,61 @@
+<div class="exchange-ticker row">
+  <div class="col-xs-6 no-pad">
+    <div price-expires price-type="{{ order.orderAction }}"></div>
+  </div>
+  <div class="col-xs-6 live-ticker text-right no-pad">
+    <div price-update price-type="{{ order.orderAction }}"></div>
+  </div>
+</div>
+
+<div class="order-review row">
+  <div class="col-xs-12">
+    <table class="table table-bordered">
+      <colgroup>
+        <col class="header">
+        <col>
+      </colgroup>
+      <tbody>
+        <tr ng-show="{{ order.orderAction === 'buy' }}">
+          <td>Destination Wallet</td>
+          <td>{{ currentWallet.name || "" }}</td>
+        </tr>
+        <tr ng-show="{{ order.orderAction === 'sell' }}">
+          <td>Sell From</td>
+          <td>{{ currentWallet.name || "" }}</td>
+        </tr>
+        <tr>
+          <td>Amount</td>
+          <td>{{ order.orderBtcInput || 0 | formatBtc:cryptoDenom }}</td>
+        </tr>
+        <tr>
+          <td>Subtotal</td>
+          <td>{{ exchange.currencySymbol }}{{ priceObj.subtotal || 0 | roundFiat }} {{ exchange.currency }}</td>
+        </tr>
+        <tr>
+          <td>Fees</td>
+          <td>{{ exchange.currencySymbol }}{{ priceObj.fees || 0 | roundFiat }} {{ exchange.currency }}</td>
+        </tr>
+        <tr>
+          <td>Total</td>
+          <td>{{ exchange.currencySymbol }}{{ priceObj.total || 0 | roundFiat }} {{ exchange.currency }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="row">
+  <!-- <div class="text-center col-xs-12" style="margin: 10px 0 20px 0;">
+    <label class="label label-outline" style="border-radius: 100px; font-size: 14px;">{{exchange.orderTimeout||"60"}} seconds to complete</label>
+  </div> -->
+
+  <div class="col-xs-6 no-pad">
+    <button ng-click="editOrder()" class="btn btn-lg btn-block btn-danger">Edit</button>
+  </div>
+  <div ng-show="{{ order.orderAction == 'buy' }}" class="col-xs-6 no-pad">
+    <button ng-show="{{ order.orderAction == 'buy' }}" ng-click="executeOrder()" class="btn btn-lg btn-block btn-success"><i class="fa fa-checkmark"></i> Confirm {{ order.orderAction | titlecase }}</button>
+  </div>
+  <div ng-show="{{ order.orderAction == 'sell' }}" class="col-xs-6 no-pad">
+    <button ng-show="{{ order.orderAction == 'sell' }}" ng-click="executeOrder()" class="btn btn-lg btn-block btn-primary"><i class="fa fa-checkmark"></i> Authorize {{ order.orderAction | titlecase }}</button>
+  </div>
+</div>

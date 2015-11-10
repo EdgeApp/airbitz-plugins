@@ -1,0 +1,76 @@
+<div class="exchange-ticker row">
+  <div class="live-ticker text-right">
+    <div price-update price-type="{{ order.orderAction }}"></div>
+  </div>
+</div>
+
+<div ng-if="userStatus.userCanTransact" class="exchange-buy-sell row">
+  <div class="col-xs-12 no-pad">
+    <ul class="list-group" style="margin-bottom: 0;">
+      <li ng-if="userStatus.userCanTransact" class="ng-trans ng-trans-scale-up easeOutBack list-group-item">
+        <div exchange-limits></div>
+      </li>
+    </ul>
+
+    <div class="col-xs-6 no-pad">
+      <button ng-click="buy()" 
+        ng-disabled="!userStatus.userCanBuy || limits.transactDisabledPendingFirstTransaction"
+        class="buy-button btn-success btn-lg btn-block btn">BUY</button>
+    </div>
+    <div class="col-xs-6 no-pad">
+      <button ng-click="sell()"
+        ng-disabled="!userStatus.userCanSell || limits.transactDisabledPendingFirstTransaction"
+        class="sell-button btn-primary btn-lg btn-block btn">SELL</button>
+    </div>
+  </div>
+</div>
+
+<div account-summary></div>
+
+<div ng-if="userStatus.userCanTransact && transactions.length" class="exchange-transactions-summary ng-trans ng-trans-fade-up easeOutSine">
+  <div class="transactions row">
+    <h4 class="transactions-header col-xs-12">Recent Transactions</h4>
+    <table ng-model="transactions" class="table table-bordered table-striped col-xs-12 no-pad">
+      <tr ng-repeat="t in transactions | limitTo:5" ng-class="{ 'processing': t.status=='PROCESSING', 'complete': t.status=='COMPLETE', 'type-buy': t.type == 'BUY', 'type-sell': t.type == 'SELL' }">
+        <td>
+          <table class="table-mini">
+            <tr>
+              <td class="datetime text-left">
+                <span ng-if="t.estimatedDeliveryDate" class="date"><span class="est-label">Est. Delivery</span> {{ t.estimatedDeliveryDate }}</span>
+                <span ng-if="!t.estimatedDeliveryDate && t.transactionDate" class="date">{{ (t.transactionDate | date:'yyyy-MM-dd') }} <span class="seperator">|<span> <span class="time">{{ t.transactionDate | date:'h:m a' }}</span></span>
+              </td>
+            </tr>
+            <tr>
+              <td class="type text-left"><span ng-class="{ 'buy': t.type=='BUY', 'sell': t.type=='SELL' }">{{ t.type || 'type' }}</span></td>
+            </tr>
+            <tr>
+              <td class="status text-left">{{ t.status || 'status' }}</td>
+            </tr>
+          </table>
+        </td>
+
+        <td>
+          <table class="table-mini">
+            <tr>
+              <td class="qty text-right">{{ t.qty || 0 | formatBtc:cryptoDenom }} </td>
+            </tr>
+            <tr>
+              <td class="total text-right"><strong>Total:</strong> ${{ t.total || 'total' }}</td>
+            </tr>
+            <tr>
+              <td class="price-each text-right"><strong>Price:</strong> ${{ t.price || 'price each' }}</td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<div ng-if="userStatus.userCanTransact" class="dashboard-bottom-buttons ng-trans ng-trans-fade-up easeOutSine">
+  <div class="row">
+    <div class="col-xs-12 no-pad">
+      <button type="button" ui-sref="exchangeTransactions" class="btn btn-block btn-lg btn-info">Transaction Log</button>
+  </div>
+</div>
+

@@ -1,0 +1,64 @@
+
+<div class="verify-phone-form text-center row">
+  <form name="form" class="form col-xs-12" novalidate>
+
+    <div class="row" ng-if="!userStatus.userPhoneIsSetup">
+      <div class="form-group col-xs-12">
+        <p>Please enter your phone number.</p>
+      </div>
+      <div class="form-group col-xs-12">
+        <input ng-model="account.phone" name="phone" type="tel" id="inputPhone"
+               class="large glass-input form-control"
+               placeholder="Enter Your Phone #"
+               autofocus="true"
+               autocomplete="off"
+
+               phone-number-validator />
+      </div>
+
+      <div class="error-message-console col-xs-12" ng-show="form.$submitted || form.phone.$touched">
+        <span ng-show="form.phone.$error.required">Required.</span>
+        <span ng-show="form.phone.$error.tel">Not a valid phone number.</span>
+      </div>
+
+    </div>
+
+    <div class="row" ng-if="userStatus.userPhoneIsSetup">
+      <div class="form-group col-xs-12">
+        <p>To change your phone number, first delete your existing phone number.</p>
+      </div>
+      <div class="form-group col-xs-12">
+        <h3 >{{ account.phone }} </h3>
+      </div>
+    </div>
+
+    <div class="row" style="margin: 20px 0">
+      <p><label class="label label-warning">Note</label> Phone must be able to receive SMS text messages.</p>
+    </div>
+
+  </form>
+
+</div>
+
+<div class="row" style="margin-top: 40px;">
+  <div class="col-xs-6 no-pad">
+    <button type="button" ng-click="cancelSignup()" class="btn btn-lg btn-block btn-link">Cancel</button>
+  </div>
+  <div class="col-xs-6 no-pad">
+    <button type="submit"
+            ng-show="userStatus.userPhoneIsSetup"
+            ng-click="deletePhone()"
+            ng-disabled="form.$invalid"
+            class="buy-sell-next btn btn-lg btn-block btn-danger">Delete</button>
+    <button type="submit"
+            ng-show="!userStatus.userPhoneIsSetup"
+            ng-click="submitPhone()"
+            ng-disabled="form.$invalid"
+            class="buy-sell-next btn btn-lg btn-block btn-success">Verify</button>
+  </div>
+</div>
+
+<div class="return-to-dashboard row">
+  <div class="col-xs-12 no-pad">
+    <button type="button" ui-sref="dashboard" class="btn btn-block btn-lg btn-info">Dashboard</button>
+</div>

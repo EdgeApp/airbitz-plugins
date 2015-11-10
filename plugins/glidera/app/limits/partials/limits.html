@@ -1,0 +1,33 @@
+<div ng-if="limits.transactDisabledPendingFirstTransaction" class="exchange-limits row">
+  <div class="col-xs-12 no-pad-left">
+    <label class="limit-header-buy">Notice</label>
+    <div class="buy-limits">
+      Buys and sells are disabled until your first transaction completes.
+    </div>
+  </div>
+</div>
+<div ng-if="!limits.transactDisabledPendingFirstTransaction" class="exchange-limits row">
+  <div class="col-xs-6 no-pad-left">
+    <label class="limit-header-buy">Buy Limits</label>
+    <div class="buy-limits">
+      <div class="limit-buy-daily">
+        <span class="limit-label">Daily: </span><span class="limit-data">{{ limits.dailyBuyRemaining | currency:"$"}}</span>
+      </div>
+      <div class="limit-buy-monthly">
+        <span class="limit-label">Monthly: </span><span class="limit-data">{{ limits.monthlyBuyRemaining | currency:"$"}}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xs-6 no-pad">
+    <label class="limit-header-sell">Sell Limits</label>
+    <div class="sell-limits">
+      <div class="limit-sell-daily">
+        <span class="limit-label">Daily: </span><span class="limit-data">{{ limits.dailySellRemaining | currency:"$"}}</span>
+      </div>
+      <div class="limit-sell-monthly">
+        <span class="limit-label">Monthly: </span><span class="limit-data">{{ limits.monthlySellRemaining | currency:"$"}}</span>
+      </div>
+    </div>
+  </div>
+</div>
