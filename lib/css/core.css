@@ -1022,3 +1022,14 @@ html body .user-account-form {
   position: relative;
   bottom: auto;
 }
+button.btn-add.btn {
+  width: 100px;
+  height: 100px;
+  font-weight: bold;
+  font-size: 30px;
+  border-radius: 50px;
+  margin: 10%;
+}
+.add-second {
+  border-radius: 50px;
+}
