@@ -1028,7 +1028,8 @@ button.btn-add.btn {
   font-weight: bold;
   font-size: 30px;
   border-radius: 50px;
-  margin: 10%;
+  margin: 20px;
+  background-color: #2291CF;
 }
 .add-second {
   border-radius: 50px;
