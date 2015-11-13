@@ -12,25 +12,24 @@
   <div class="container-fluid">
   	<center>
 	  	<h2 class="balance">Total Balance: <span class="balance-amt">$0.00</span></h1>
-	  	<h3 class="add-funds">Add Funds</h3>
-
 	  	<div class="row">
 	  		<div class="col-md-12">
 	  			<div class="card-barcode"></div>
 	  		</div>
 	  	</div>
+	  	<h3 class="add-funds">Add Funds</h3>
 
 	  	<div class="row">
 	  		<div class="col-md-12">
-		  		<button type="button" class="btn btn-info btn-lg btn-add">$5</button> <!-- First button -->
-		  		<button type="button" class="btn btn-info btn-lg btn-add add-second">$10</button> <!-- Second button -->
+		  		<button type="button" value="5" class="btn btn-info btn-lg btn-add add-first">$5</button> <!-- First button -->
+		  		<button type="button" value="10" class="btn btn-info btn-lg btn-add add-second">$10</button> <!-- Second button -->
 		  	</div>
 		</div>
 
 		<!-- Thrid button -->
 		<div class="row">
 			<div class="col-md-12">
-		  		<button type="button" class="btn btn-info btn-lg btn-add add-third">$25</button>
+		  		<button type="button" value="25" class="btn btn-info btn-lg btn-add add-third">$25</button>
 		  	</div>
 		</div>
 
@@ -85,40 +84,66 @@
   		url = fold_api + "my/session";
   		console.log(Account.creds);
   		sRequest(url, Account.creds, function(r) { 
-  			console.log(r);
+  			console.log(JSON.stringify(r));
   			Account.logged_in.resolve(r);
   		});
   	},
-  	getProfile: function(handleReponse) {
-  		$.get( (fold_api + "my/profile") ).done(function(response) {
+  	updateBalance: function() {
+  		this.getInfo("balances?currency=USD", function(balances) {
+  			console.log(balances);
+  			console.log("Balance: " + JSON.stringify(balances["balances"][0]["amount"]));
+  			$(".balance-amt").text("$" + balances["balances"][0]["amount"]);
+  		});
+  	},
+  	getInfo: function(info, handleReponse, root="my/") {
+  		root = typeof a !== 'undefined' ? a : "my/";
+  		$.get(fold_api + root + info).done(function(response) {
   			handleReponse(response);
   		});
   	},
-  	getBrands: function(handleReponse) {
-  		url = fold_api + "brands"
-  		$.get(url).done(function(response) {
-  			handleReponse(response);
-  		});
-  	},
-  	purchaseSb: function(amt) {
+  	purchaseCard: function(denomination, brand_id="Starbucks") {
   		newOrder = { "orders": [{
-		    "brand_id": "Starbucks",
-		    "value": { "amount": amt, "currency": "USD" },
-		    "price": { "currency": "BTC" }
+		    "brand_id": String(brand_id),
+		    "value": { "amount": String(denomination), "currency": "USD" },
+		    "price": { "currency": "BTC" },
+		    "approved": true
 		  }],
 		  "cancel_all_others": true
 		}
   		url = fold_api + "my/orders";
   		console.log("Getting new order");
   		sRequest(url, newOrder, function(r) {
-  			Airbitz.ui.showAlert("", "Order" + JSON.stringify(r), "");
 			console.log("Order: " + JSON.stringify(r));
+			amt = (r["orders"][0]["price"]["amount"] / 100000000);
+			toAddr = r["orders"][0]["payment"]["address"];
+			Airbitz.core.requestSpend(Airbitz.core.selectedWallet(),
+				toAddr, amt, denomination, {
+	        	label: 'FoldApp',
+	        	category: 'Expense:Coffee',
+	        	notes: "Purchased a $" + String(denomination) + " " 
+	        	+ String(brand_id) + " gift card."
+	        });
+  		});
+  	},
+  	approveOrder: function(order_id) { // Manually Approve an order
+  		cOrder = {"orders": [{
+		  "id": String(order_id),
+		  "approved": true
+		}]}
+  		sRequest(fold_api + "my/orders", cOrder, function(r) {
+  			console.log("Approving order");
+  			console.log(r);
   		});
   	}
   }
   // Main
   var user = Object.create(Account);
-  existingAcc = false;
+  existingAcc = true;
+
+  Account.creds = {"users": [{
+			  "username": "fold-2015-11-13-ErAY3sIrMnclQn",
+			  "password": "5c7ae05c-abe4-4e81-a16f-128cbacde649"
+			}]};
 
   if(!existingAcc) {
   	user.create();
@@ -129,21 +154,28 @@
   	user.login();
   });
   $.when(user.logged_in).done(function(data) {
-  	user.getProfile(function(response) {
+  	user.updateBalance();
+  	user.getInfo("cards", function(response) {
+  		id = response["cards"][0]["id"];
+  		console.log(id);
+		$(".card-barcode").prepend('<img class="barcode" src="' + fold_api + "my/cards/" + id + "/barcode/png" + '"/>');
+  	});
+  	user.getInfo("profile", function(response) {
   		console.log(response["logged_in"]);
-  		user.purchaseSb(5);
+  		user.getInfo("orders", function(response) {
+  			console.log(response);
+  		});
+  		// Done loading.
   	});
   });
+
+  $(".btn-add").click(function() {
+  	user.purchaseCard($(this).attr("value"));
+  });
+
+
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
 
 

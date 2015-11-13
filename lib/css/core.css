@@ -1034,3 +1034,8 @@ button.btn-add.btn {
 .add-second {
   border-radius: 50px;
 }
+.barcode {
+  width: 300px;
+  height: 98px;
+  margin-top: 30px;
+}
