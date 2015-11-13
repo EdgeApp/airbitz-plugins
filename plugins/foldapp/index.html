@@ -44,23 +44,96 @@
   <script type="text/javascript">
   fold_api = "https://api.foldapp.com/v1/";
 
-  var account = {
-  	username: "",
-  	password: "",
+  function sRequest(url, json, handleReponse) {
+  	$.ajax({
+	    headers: {
+	        'Accept' : 'application/json',
+	        'Content-Type' : 'application/json'
+	    },
+	    'type' : 'POST',
+	    'url' : url,
+	    'data' : JSON.stringify(json),
+	    'dataType': 'json',
+	    success : function(response) {
+	    	handleReponse(response);
+	    }
+	}).fail(function(xhr, textStatus, error) {
+		console.log("There was an error. Status: " + xhr.status);
+		console.log(xhr.Message);
+	});
+  }
+
+  var Account = {
+  	exists: $.Deferred(),
+  	logged_in: $.Deferred(),
   	create: function() {
-  		url = fold_api + "users"
+  		url = fold_api + "users";
 	  	newAcc = {"users": [{
 	  	  "random_username": true,
 	  	  "random_password": true
 	  	}]}
-		Airbitz.ui.showAlert("", "Creating Account", "");
-	  	$.post(url, newAcc).done(function(data) {
-	  		Airbitz.ui.showAlert("Account created", ("Account creation" + data) , "");
-	  	});
+		sRequest(url, newAcc, function(r) {
+			console.log(r);
+			Account.creds = {"users": [{
+			  "username": r['users'][0]['username'],
+			  "password": r['users'][0]['password']
+			}]};
+			Account.exists.resolve();
+		});
+  	},
+  	login: function() {
+  		url = fold_api + "my/session";
+  		console.log(Account.creds);
+  		sRequest(url, Account.creds, function(r) { 
+  			console.log(r);
+  			Account.logged_in.resolve(r);
+  		});
+  	},
+  	getProfile: function(handleReponse) {
+  		$.get( (fold_api + "my/profile") ).done(function(response) {
+  			handleReponse(response);
+  		});
+  	},
+  	getBrands: function(handleReponse) {
+  		url = fold_api + "brands"
+  		$.get(url).done(function(response) {
+  			handleReponse(response);
+  		});
+  	},
+  	purchaseSb: function(amt) {
+  		newOrder = { "orders": [{
+		    "brand_id": "Starbucks",
+		    "value": { "amount": amt, "currency": "USD" },
+		    "price": { "currency": "BTC" }
+		  }],
+		  "cancel_all_others": true
+		}
+  		url = fold_api + "my/orders";
+  		console.log("Getting new order");
+  		sRequest(url, newOrder, function(r) {
+  			Airbitz.ui.showAlert("", "Order" + JSON.stringify(r), "");
+			console.log("Order: " + JSON.stringify(r));
+  		});
   	}
   }
+  // Main
+  var user = Object.create(Account);
+  existingAcc = false;
 
-  account.create();
+  if(!existingAcc) {
+  	user.create();
+  } else {
+  	user.exists.resolve();
+  }
+  $.when(user.exists).done(function(data) {
+  	user.login();
+  });
+  $.when(user.logged_in).done(function(data) {
+  	user.getProfile(function(response) {
+  		console.log(response["logged_in"]);
+  		user.purchaseSb(5);
+  	});
+  });
   </script>
 </body>
 </html>
