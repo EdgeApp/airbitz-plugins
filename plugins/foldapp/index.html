@@ -43,6 +43,11 @@
   <script type="text/javascript">
   fold_api = "https://api.foldapp.com/v1/";
 
+  function updateWallet(wallet) {
+  	//console.log("Wallet changed to: " + JSON.stringify(wallet));
+  	Account.abWallet = wallet;
+  }
+
   function sRequest(url, json, handleReponse) {
   	$.ajax({
 	    headers: {
@@ -66,6 +71,7 @@
   	exists: $.Deferred(),
   	logged_in: $.Deferred(),
   	create: function() {
+  		console.log("Creating user.");
   		url = fold_api + "users";
 	  	newAcc = {"users": [{
 	  	  "random_username": true,
@@ -73,35 +79,39 @@
 	  	}]}
 		sRequest(url, newAcc, function(r) {
 			console.log(r);
+			Account.username = r['users'][0]['username'];
+			Account.pass = r['users'][0]['password'];
 			Account.creds = {"users": [{
-			  "username": r['users'][0]['username'],
-			  "password": r['users'][0]['password']
+			  "username": Account.username,
+			  "password": Account.pass
 			}]};
+			Airbitz.core.writeData("fold-username", Account.username);
+			Airbitz.core.writeData("fold-pass", Account.pass);
 			Account.exists.resolve();
 		});
   	},
   	login: function() {
   		url = fold_api + "my/session";
   		console.log(Account.creds);
-  		sRequest(url, Account.creds, function(r) { 
-  			console.log(JSON.stringify(r));
+  		sRequest(url, Account.creds, function(r) {
+  			//console.log("Logging in" + JSON.stringify(r));
   			Account.logged_in.resolve(r);
   		});
   	},
   	updateBalance: function() {
   		this.getInfo("balances?currency=USD", function(balances) {
-  			console.log(balances);
   			console.log("Balance: " + JSON.stringify(balances["balances"][0]["amount"]));
   			$(".balance-amt").text("$" + balances["balances"][0]["amount"]);
   		});
   	},
-  	getInfo: function(info, handleReponse, root="my/") {
+  	getInfo: function(info, handleReponse, root) {
   		root = typeof a !== 'undefined' ? a : "my/";
   		$.get(fold_api + root + info).done(function(response) {
   			handleReponse(response);
   		});
   	},
-  	purchaseCard: function(denomination, brand_id="Starbucks") {
+  	purchaseCard: function(denomination, brand_id) {
+  		brand_id = typeof a !== 'undefined' ? a : "Starbucks";
   		newOrder = { "orders": [{
 		    "brand_id": String(brand_id),
 		    "value": { "amount": String(denomination), "currency": "USD" },
@@ -114,13 +124,15 @@
   		console.log("Getting new order");
   		sRequest(url, newOrder, function(r) {
 			console.log("Order: " + JSON.stringify(r));
-			amt = (r["orders"][0]["price"]["amount"] / 100000000);
-			toAddr = r["orders"][0]["payment"]["address"];
-			Airbitz.core.requestSpend(Airbitz.core.selectedWallet(),
+			amt = (r["orders"][0]["price"]["amount"] * 100000000);
+			toAddr = r["orders"][0]["payment"][0]["address"];
+			console.log("Spending " + amt + " from wallet: " + user.abWallet + " to: " + toAddr);
+			console.log("Fiat amt: " + denomination)
+			Airbitz.core.requestSpend(Account.abWallet,
 				toAddr, amt, denomination, {
 	        	label: 'FoldApp',
 	        	category: 'Expense:Coffee',
-	        	notes: "Purchased a $" + String(denomination) + " " 
+	        	notes: "Purchased a $" + String(denomination) + " "
 	        	+ String(brand_id) + " gift card."
 	        });
   		});
@@ -138,18 +150,29 @@
   }
   // Main
   var user = Object.create(Account);
-  existingAcc = true;
 
-  Account.creds = {"users": [{
-			  "username": "fold-2015-11-13-ErAY3sIrMnclQn",
-			  "password": "5c7ae05c-abe4-4e81-a16f-128cbacde649"
+  Airbitz.core.selectedWallet({
+          success: updateWallet,
+          error: function() {
+          	console.log("Could not get selected wallet");
+          }
+        });
+  Airbitz.core.setWalletChangeListener(updateWallet);
+  //Airbitz.core.clearData(); fold-2015-11-18-JszcOVECE0iHn5
+  Account.username = Airbitz.core.readData("fold-username");
+  Account.pass = Airbitz.core.readData("fold-pass");
+
+  if(!(typeof Account.username === 'undefined')) {
+  	Account.creds = {"users": [{
+			  "username": Account.username,
+			  "password": Account.pass
 			}]};
-
-  if(!existingAcc) {
-  	user.create();
+	console.log("User pulled from memory.");
+	user.exists.resolve();
   } else {
-  	user.exists.resolve();
+  	user.create();
   }
+
   $.when(user.exists).done(function(data) {
   	user.login();
   });
