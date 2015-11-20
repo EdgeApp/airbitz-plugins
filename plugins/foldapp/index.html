@@ -4,200 +4,311 @@
   <meta name=viewport content="initial-scale=1, maximum-scale=1.0, user-scalable=no">
   <meta name="description" content="FoldApp Interface for Airbitz" />
   <meta charset=utf-8 />
-  <title>FoldApp</title>
   <link rel="stylesheet" href="css/core.css">
-</head>
+  <!-- Basic stylesheet -->
+<link rel="stylesheet" href="vendors/owl-carousel/owl.carousel.css">
+ <!-- Default Theme -->
+<link rel="stylesheet" href="vendors/owl-carousel/owl.theme.css">
 
-<body>
-  <div class="container-fluid">
-  	<center>
-	  	<h2 class="balance">Total Balance: <span class="balance-amt">$0.00</span></h1>
+<link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+<template id="card-template">
+	<div class="item card">
+		<div class="row">
+	  		<div class="col-md-12">
+	  			<div class="card-balance">
+	  				<h4>Card Balance: <span class="card-balance-amt"></span></h4>
+	  			</div>
+	  		</div>
+	  	</div>
 	  	<div class="row">
 	  		<div class="col-md-12">
 	  			<div class="card-barcode"></div>
 	  		</div>
 	  	</div>
-	  	<h3 class="add-funds">Add Funds</h3>
-
 	  	<div class="row">
 	  		<div class="col-md-12">
-		  		<button type="button" value="5" class="btn btn-info btn-lg btn-add add-first">$5</button> <!-- First button -->
-		  		<button type="button" value="10" class="btn btn-info btn-lg btn-add add-second">$10</button> <!-- Second button -->
+	  			<h4><div class="card-number"></div></h4>
+	  		</div>
+	  	</div>
+	</div>
+</template>
+</head>
+<body>
+	<div class="container-fluid">
+		<h1 class="text-center fold-loading">
+	    	<i class="fa fa-spinner fa-spin"></i> Loading
+	    	<div class="fold-loading-spin">
+		    	<div class="preloader-wrapper big active">
+			        <div class="spinner-layer spinner-blue-only">
+			          <div class="circle-clipper left">
+			            <div class="circle"></div>
+			          </div><div class="gap-patch">
+			            <div class="circle"></div>
+			          </div><div class="circle-clipper right">
+			            <div class="circle"></div>
+			          </div>
+			        </div>
+		    	</div>
+			</div>
+	    </h1>
+	  	<center class="main">
+		  	<h3 class="balance">Total Balance: <span class="balance-amt">$0.00</span></h3>
+		  	<div id="user-cards" class="owl-carousel owl-theme">
+		  		
 		  	</div>
-		</div>
-
-		<!-- Thrid button -->
-		<div class="row">
-			<div class="col-md-12">
-		  		<button type="button" value="25" class="btn btn-info btn-lg btn-add add-third">$25</button>
-		  	</div>
-		</div>
-
-		<h4 class="dashboard-bottom-buttons">Powered by <a href="https://foldapp.com">FoldApp</a></div>
-
-  	</center>
-  </div>
+		  	<div class="add-funds">
+			  	<h4 class="add-funds-header">Add Funds</h4>
+			  	<div class="add-buttons">
+				  	<!-- <div class="row">
+				  		<div class="col-md-12">
+					  		<button type="button" value="5" class="btn btn-info btn-lg btn-add add-first">$5</button> 
+					  		<button type="button" value="10" class="btn btn-info btn-lg btn-add add-second">$10</button> 
+					  	</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+					  		<button type="button" value="25" class="btn btn-info btn-lg btn-add add-third">$25</button>
+					  	</div>
+					</div> -->
+				</div>
+			</div>
+			<footer>
+				<h5 class="dashboard-bottom-buttons">Powered by <a href="https://foldapp.com">FoldApp</a></h5>
+			</footer>
+	  	</center>
+	</div>
 
   <script src="js/abc.js" type="text/javascript"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-  <script type="text/javascript">
-  fold_api = "https://api.foldapp.com/v1/";
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js" type="text/javascript"></script>
+  <script type="text/javascript" src="js/materialize.min.js"></script>
+  <script src="vendors/owl-carousel/owl.carousel.js" type="text/javascript"></script>
+<script type="text/javascript">
+var fold_api = "https://api.foldapp.com/v1/";
+var brand = Airbitz.config.get("BRAND");
 
-  function updateWallet(wallet) {
-  	//console.log("Wallet changed to: " + JSON.stringify(wallet));
-  	Account.abWallet = wallet;
-  }
+document.title = brand;
 
-  function sRequest(url, json, handleReponse) {
-  	$.ajax({
-	    headers: {
-	        'Accept' : 'application/json',
-	        'Content-Type' : 'application/json'
-	    },
-	    'type' : 'POST',
-	    'url' : url,
-	    'data' : JSON.stringify(json),
-	    'dataType': 'json',
-	    success : function(response) {
-	    	handleReponse(response);
-	    }
-	}).fail(function(xhr, textStatus, error) {
-		console.log("There was an error. Status: " + xhr.status);
-		console.log(xhr.Message);
+function toggleUi() {
+	$(".fold-loading").css("display", "none");
+	$(".main").css("display", "inline");
+}
+
+function supportsTemplate() {
+  return 'content' in document.createElement('template');
+}
+
+function supportsImports() {
+  return 'import' in document.createElement('link');
+}
+if (supportsTemplate()) {
+  console.log("Does support templates!");
+} else {
+  // Use old templating techniques or libraries.
+  console.log("Does not support templates.");
+}
+if (supportsImports()) {
+  // Good to go!
+  console.log("Supports imports!");
+} else {
+  // Use other libraries/require systems to load files.
+  console.log("Does not support imports.");
+}
+
+function updateWallet(wallet) {
+	//console.log("Wallet changed to: " + JSON.stringify(wallet));
+	Account.abWallet = wallet;
+}
+
+function sRequest(url, json, handleReponse) {
+	$.ajax({
+    headers: {
+        'Accept' : 'application/json',
+        'Content-Type' : 'application/json'
+    },
+    'type' : 'POST',
+    'url' : url,
+    'data' : JSON.stringify(json),
+    'dataType': 'json',
+    success : function(response) {
+    	handleReponse(response);
+    }
+}).fail(function(xhr, textStatus, error) {
+	console.log("There was an error. Status: " + xhr.status);
+	console.log(xhr.Message);
+});
+}
+
+var Account = {
+	exists: $.Deferred(),
+	logged_in: $.Deferred(),
+	create: function() {
+		console.log("Creating user.");
+		url = fold_api + "users";
+  	newAcc = {"users": [{
+  	  "random_username": true,
+  	  "random_password": true
+  	}]}
+	sRequest(url, newAcc, function(r) {
+		//console.log(r);
+		Account.username = r['users'][0]['username'];
+		Account.pass = r['users'][0]['password'];
+		Account.creds = {"users": [{
+		  "username": Account.username,
+		  "password": Account.pass
+		}]};
+		Airbitz.core.writeData("fold-username", Account.username);
+		Airbitz.core.writeData("fold-pass", Account.pass);
+		Account.exists.resolve();
 	});
-  }
-
-  var Account = {
-  	exists: $.Deferred(),
-  	logged_in: $.Deferred(),
-  	create: function() {
-  		console.log("Creating user.");
-  		url = fold_api + "users";
-	  	newAcc = {"users": [{
-	  	  "random_username": true,
-	  	  "random_password": true
-	  	}]}
-		sRequest(url, newAcc, function(r) {
-			console.log(r);
-			Account.username = r['users'][0]['username'];
-			Account.pass = r['users'][0]['password'];
-			Account.creds = {"users": [{
-			  "username": Account.username,
-			  "password": Account.pass
-			}]};
-			Airbitz.core.writeData("fold-username", Account.username);
-			Airbitz.core.writeData("fold-pass", Account.pass);
-			Account.exists.resolve();
+	},
+	login: function() {
+		url = fold_api + "my/session";
+		console.log(Account.creds);
+		sRequest(url, Account.creds, function(r) {
+			//console.log("Logging in" + JSON.stringify(r));
+			Account.logged_in.resolve(r);
 		});
-  	},
-  	login: function() {
-  		url = fold_api + "my/session";
-  		console.log(Account.creds);
-  		sRequest(url, Account.creds, function(r) {
-  			//console.log("Logging in" + JSON.stringify(r));
-  			Account.logged_in.resolve(r);
-  		});
-  	},
-  	updateBalance: function() {
-  		this.getInfo("balances?currency=USD", function(balances) {
-  			console.log("Balance: " + JSON.stringify(balances["balances"][0]["amount"]));
-  			$(".balance-amt").text("$" + balances["balances"][0]["amount"]);
-  		});
-  	},
-  	getInfo: function(info, handleReponse, root) {
-  		root = typeof a !== 'undefined' ? a : "my/";
-  		$.get(fold_api + root + info).done(function(response) {
-  			handleReponse(response);
-  		});
-  	},
-  	purchaseCard: function(denomination, brand_id) {
-  		brand_id = typeof a !== 'undefined' ? a : "Starbucks";
-  		newOrder = { "orders": [{
-		    "brand_id": String(brand_id),
-		    "value": { "amount": String(denomination), "currency": "USD" },
-		    "price": { "currency": "BTC" },
-		    "approved": true
-		  }],
-		  "cancel_all_others": true
+	},
+	updateBalance: function() {
+		this.getInfo("balances?currency=USD", function(balances) {
+			console.log("Balance: " + JSON.stringify(balances["balances"][0]["amount"]));
+			$(".balance-amt").text("$" + balances["balances"][0]["amount"]);
+		});
+	},
+	updateCards: function(all_card_info) {
+		console.log("User's cards: " + JSON.stringify(all_card_info));
+		cards = all_card_info["cards"];
+		for(numOfCards in cards) {
+			console.log("Number of cards: " + numOfCards);
+			
+			id = cards[numOfCards]["id"];
+			card_num = cards[numOfCards]["code"][0];
+			bal = cards[numOfCards]["balance"][0]["formatted"]["fewer_trailing_zeros"]; // e.g. $5
+			console.log("Card " + id + " has card num, " + card_num);
+			
+			var card_html = document.querySelector('#card-template').content;
+			
+			card_html.querySelector(".card-barcode").innerHTML = '<img class="barcode" src="' + fold_api + "my/cards/" + id + "/barcode/png" + '"/>';
+			card_html.querySelector(".card-balance-amt").innerText = bal;
+			card_html.querySelector(".card-number").innerText = card_num;
+
+			document.querySelector("#user-cards").appendChild( document.importNode(card_html, true) );
 		}
-  		url = fold_api + "my/orders";
-  		console.log("Getting new order");
-  		sRequest(url, newOrder, function(r) {
-			console.log("Order: " + JSON.stringify(r));
-			amt = (r["orders"][0]["price"]["amount"] * 100000000);
-			toAddr = r["orders"][0]["payment"][0]["address"];
-			console.log("Spending " + amt + " from wallet: " + user.abWallet + " to: " + toAddr);
-			console.log("Fiat amt: " + denomination)
-			Airbitz.core.requestSpend(Account.abWallet,
-				toAddr, amt, denomination, {
-	        	label: 'FoldApp',
-	        	category: 'Expense:Coffee',
-	        	notes: "Purchased a $" + String(denomination) + " "
-	        	+ String(brand_id) + " gift card."
-	        });
-  		});
-  	},
-  	approveOrder: function(order_id) { // Manually Approve an order
-  		cOrder = {"orders": [{
-		  "id": String(order_id),
-		  "approved": true
-		}]}
-  		sRequest(fold_api + "my/orders", cOrder, function(r) {
-  			console.log("Approving order");
-  			console.log(r);
-  		});
-  	}
-  }
-  // Main
-  var user = Object.create(Account);
-
-  Airbitz.core.selectedWallet({
-          success: updateWallet,
-          error: function() {
-          	console.log("Could not get selected wallet");
-          }
+		$("#user-cards").owlCarousel({ // Activate owl Carousel for cards.
+		    //navigation : true, // Show next and prev buttons
+		    slideSpeed : 300,
+		    paginationSpeed : 400,
+		    singleItem:true
+		
+		    // "singleItem:true" is a shortcut for:
+		    // items : 1,
+		    // itemsDesktop : false,
+		    // itemsDesktopSmall : false,
+		    // itemsTablet: false,
+		    // itemsMobile : false
+		});
+	},
+	getInfo: function(info, handleReponse, root) {
+		root = typeof a !== 'undefined' ? a : "my/";
+		$.get(fold_api + root + info).done(function(response) {
+			handleReponse(response);
+		});
+	},
+	purchaseCard: function(denomination, brand_id) {
+		brand_id = typeof a !== 'undefined' ? a : brand;
+		newOrder = { "orders": [{
+	    "brand_id": String(brand_id),
+	    "value": { "amount": String(denomination), "currency": "USD" },
+	    "price": { "currency": "BTC" },
+	    "approved": true
+	  }],
+	  "cancel_all_others": true
+	}
+		url = fold_api + "my/orders";
+		console.log("Getting new order");
+		sRequest(url, newOrder, function(r) {
+		console.log("Order: " + JSON.stringify(r));
+		amt = (r["orders"][0]["price"]["amount"] * 100000000);
+		toAddr = r["orders"][0]["payment"][0]["address"];
+		console.log("Spending " + amt + " from wallet: " + user.abWallet + " to: " + toAddr);
+		console.log("Fiat amt: " + denomination)
+		Airbitz.core.requestSpend(Account.abWallet,
+			toAddr, amt, denomination, {
+        	label: 'Fold',
+        	category: 'Expense:Coffee Shops',
+        	notes: brand + " $" + String(denomination) + " gift card.",
+        	success: function(rawtx) {
+        		console.log("Funds were sent.");
+        		$(".balance-amt").prepend("Loading...");
+        		setTimeout(function() { 
+        			user.updateBalance();
+        		}, 5000);
+        	},
+        	error: function() {
+        		console.log("Funds were not sent.");
+        	}
         });
-  Airbitz.core.setWalletChangeListener(updateWallet);
-  //Airbitz.core.clearData(); fold-2015-11-18-JszcOVECE0iHn5
-  Account.username = Airbitz.core.readData("fold-username");
-  Account.pass = Airbitz.core.readData("fold-pass");
+		});
+	},
+	approveOrder: function(order_id) { // Manually Approve an order
+		cOrder = {"orders": [{
+	  "id": String(order_id),
+	  "approved": true
+	}]}
+		sRequest(fold_api + "my/orders", cOrder, function(r) {
+			console.log("Approving order");
+			console.log(r);
+		});
+	}
+}
+// Main
+var user = Object.create(Account);
 
-  if(!(typeof Account.username === 'undefined')) {
-  	Account.creds = {"users": [{
-			  "username": Account.username,
-			  "password": Account.pass
-			}]};
-	console.log("User pulled from memory.");
-	user.exists.resolve();
-  } else {
-  	user.create();
-  }
+Airbitz.core.selectedWallet({
+      success: updateWallet,
+      error: function() {
+      	console.log("Could not get selected wallet");
+      }
+    });
+Airbitz.core.setWalletChangeListener(updateWallet);
+//Airbitz.core.clearData(); fold-2015-11-18-JszcOVECE0iHn5
+Account.username = Airbitz.core.readData("fold-username");
+Account.pass = Airbitz.core.readData("fold-pass");
 
-  $.when(user.exists).done(function(data) {
-  	user.login();
-  });
-  $.when(user.logged_in).done(function(data) {
-  	user.updateBalance();
-  	user.getInfo("cards", function(response) {
-  		id = response["cards"][0]["id"];
-  		console.log(id);
-		$(".card-barcode").prepend('<img class="barcode" src="' + fold_api + "my/cards/" + id + "/barcode/png" + '"/>');
-  	});
-  	user.getInfo("profile", function(response) {
-  		console.log(response["logged_in"]);
-  		user.getInfo("orders", function(response) {
-  			console.log(response);
-  		});
-  		// Done loading.
-  	});
-  });
+if(!(typeof Account.username === 'undefined' || Account.username == null)) {
+	Account.creds = {"users": [{
+		  "username": Account.username,
+		  "password": Account.pass
+		}]};
+console.log("User pulled from memory.");
+user.exists.resolve();
+} else {
+	user.create();
+}
 
+$.when(user.exists).done(function(data) {
+	user.login();
+});
+$(document).ready(function() {
   $(".btn-add").click(function() {
   	user.purchaseCard($(this).attr("value"));
   });
+  $.when(user.logged_in).done(function(data) {
+	user.updateBalance();
+	user.getInfo("cards", user.updateCards);
+	user.getInfo("profile", function(response) {
+		console.log(response["logged_in"]);
+		user.getInfo("orders", function(response) {
+			console.log(response);
+		});
+		// Done loading.
+		toggleUi();
+	});
+});
+});
 
-
-  </script>
+</script>
 </body>
 </html>
 

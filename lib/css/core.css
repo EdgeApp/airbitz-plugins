@@ -1031,11 +1031,27 @@ button.btn-add.btn {
   margin: 20px;
   background-color: #2291CF;
 }
+.fold-loading-spin {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  /* bring your own prefixes */
+  transform: translate(-50%, -50%);
+}
+.main {
+  display: none;
+}
+.card-number {
+}
 .add-second {
   border-radius: 50px;
 }
 .barcode {
   width: 300px;
   height: 98px;
-  margin-top: 30px;
+}
+#user-cards .item {
+    display: block;
+    width: 100%;
+    height: auto;
 }
