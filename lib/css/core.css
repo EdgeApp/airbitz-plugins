@@ -1041,11 +1041,6 @@ button.btn-add.btn {
 .main {
   display: none;
 }
-.card-number {
-}
-.add-second {
-  border-radius: 50px;
-}
 .barcode {
   width: 300px;
   height: 98px;
@@ -1054,4 +1049,10 @@ button.btn-add.btn {
     display: block;
     width: 100%;
     height: auto;
+}
+.add-buttons {
+  text-align: left;
+}
+.collection .collection-item.avatar.card-list {
+  padding: 10px 20px;
 }
