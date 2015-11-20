@@ -9,16 +9,23 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
       templateUrl: "app/user/partials/redirect.html",
       controller: "homeController",
     })
-    .state("disclaimer", {
-      url: "/",
-      templateUrl: "app/user/partials/disclaimer.html",
-      controller: "disclaimerController",
-    })
     // route for signup
     .state("signup", {
       url: "/signup/",
       templateUrl: "app/user/partials/signup.html",
       controller: "signupController",
+    })
+    // route for signup
+    .state("pendingActivation", {
+      url: "/pendingActivation/",
+      templateUrl: "app/user/partials/pendingActivation.html",
+      controller: "pendingActivationController",
+    })
+    // route for signup
+    .state("activate", {
+      url: "/activate/:token",
+      templateUrl: "app/user/partials/activating.html",
+      controller: "activateController",
     })
     // route for dashboard
     .state("dashboard", {

@@ -9,7 +9,7 @@
     var history = [];
     var skip = false;
     $rootScope.$on('$locationChangeStart', function(event, next, current) {
-      if (!UserFactory.isAuthorized() && !next.match(/signup.html/)) {
+      if (!UserFactory.isSignedIn() && !next.match(/signup.html/)) {
         console.log('Not registered. Redirecting to registration form.');
         $location.path('/');
         return;

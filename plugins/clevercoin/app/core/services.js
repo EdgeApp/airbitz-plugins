@@ -12,26 +12,61 @@
 
   function UserFactory($q, $filter, ExchangeFactory, CcFactory) {
     var factory = {};
-    var account = Airbitz.core.readData('account') || {};
+    var account = Airbitz.core.readData('account') || {
+      isSignedIn: false,
+      isActivated: false
+    };
 
-    factory.isAuthorized = function() {
-      return CcFactory.isAuthorized();
+    factory.isSignedIn = function() {
+      return account.isSignedIn;
+    };
+    factory.isActivated = function() {
+      return account.isActivated;
     };
     factory.getUserAccount = function() {
       return account;
     };
     factory.clearUser = function() {
-      account = {};
-      Airbitz.core.writeData('account', {});
+      account = { isSignedIn: false };
+      Airbitz.core.writeData('account', account);
     };
+    var redirectUri = Airbitz.config.get('REDIRECT_URI');
     factory.registerUser = function(name, email, password) {
       var d = $q.defer();
-      CcFactory.register(name, email, password, 'http://localhost:8080/', function(success, b) {
-        var account = factory.getUserAccount();
-        account.name = name;
-        account.email = email;
-        if (success) {
+      CcFactory.register(name, email, password, redirectUri, function(_, c, b) {
+        if (c >= 200 && c <= 300) {
+          var account = factory.getUserAccount();
+          account.name = name;
+          account.email = email;
+          account.isSignedIn = true;
+          account.key = b.key;
+          account.secret = b.secret;
+          account.label = '';
+          CcFactory.apiKey = account.key;
+          CcFactory.apiSecret = account.secret;
+          CcFactory.apiLabel = account.label;
           Airbitz.core.writeData('account', account);
+          d.resolve(b);
+        } else {
+          d.reject(b);
+        }
+      });
+      return d.promise;
+    };
+    factory.requestLink = function() {
+      var d = $q.defer();
+      CcFactory.requestLink(account.email, redirectUri, function(_, c, b) {
+        (c >= 200 && c <= 300) ? d.resolve(b) : d.reject(b);
+      });
+      return d.promise;
+    };
+
+    factory.activate = function(token) {
+      var d = $q.defer();
+      CcFactory.activate(account.email, token, function(_, c, b) {
+        if (c >= 200 && c <= 300) {
+          account.isActivated = true;
+          Airbitz.core.writeData('account', account); 
           d.resolve(b);
         } else {
           d.reject(b);
@@ -51,9 +86,9 @@
       var d = $q.defer();
       CcFactory.verificationStatus(function(e,s,b) {
         if (s == 200) {
-          // TODO: make this cleaner
-          userStatus['userIdentitySetup'] = b['identity']['passport']['progressState'] == 'Verified';
-          userStatus['userAddressSetup'] = b['address']['proof']['progressState'] == 'Verified';
+          userStatus.userIdentitySetup = b['identity']['passport']['progressState'] == 'Verified';
+          userStatus.userAddressSetup = b['address']['proof']['progressState'] == 'Verified';
+          userStatus.userCanTransact = userStatus.userIdentitySetup && userStatus.userAddressSetup;
 
           Airbitz.core.writeData('userStatus', userStatus);
           d.resolve(userStatus);

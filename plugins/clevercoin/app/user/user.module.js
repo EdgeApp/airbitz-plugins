@@ -3,9 +3,10 @@
 
   angular
     .module('app.user', ['app.dataFactory', 'app.constants'])
-    .controller('homeController', ['$scope', '$state', 'UserFactory', homeController])
+    .controller('homeController', ['$scope', '$state', '$location', 'UserFactory', homeController])
+    .controller('pendingActivationController', ['$scope', '$state', 'Error', 'UserFactory', pendingActivationController])
+    .controller('activateController', ['$scope', '$state', '$stateParams', 'Error', 'UserFactory', activateController])
     .controller('dashboardController', ['$scope', '$sce', '$state', 'Error', 'DataFactory', 'UserFactory', dashboardController])
-    .controller('disclaimerController', ['$scope', '$state', 'Error', 'UserFactory', disclaimerController])
     .controller('signupController', ['$scope', '$state', 'Error', 'UserFactory', signupController])
     .controller('addressVerificationController', ['$scope', '$state', 'Error', 'UserFactory', addressVerificationController])
     .controller('identityVerificationController', ['$scope', '$state', 'Error', 'UserFactory', identityVerificationController])
@@ -13,59 +14,90 @@
     .controller('fundsController', ['$scope', '$state', 'DataFactory', fundsController])
     .directive('accountSummary', accountSummary);
 
-  function homeController($scope, $state, UserFactory) {
-    if (UserFactory.isAuthorized()) {
-      $state.go("dashboard");
+  function homeController($scope, $state, $location, UserFactory) {
+    var d = parseParameters($location);
+    if (d.token) {
+      $state.go('activate', {'token': d.token});
     } else {
-      if (Airbitz.core.readData('disclaimer')) {
-        $state.go("signup");
+      if (UserFactory.isSignedIn()) {
+        if (UserFactory.isActivated()) {
+          $state.go("dashboard");
+        } else {
+          $state.go("pendingActivation");
+        }
       } else {
-        Airbitz.core.writeData('disclaimer', false);
-        $state.go("disclaimer");
+        $state.go("signup");
       }
     }
   }
-  function disclaimerController($scope, $state, Error, UserFactory) {
-    Airbitz.ui.title('Disclaimer');
-    $scope.showDisclaimer = true;
 
-    $scope.cancelSignup = function(){
-      Airbitz.ui.exit();
-    };
-
-    $scope.continueSignup = function(form) {
-      $state.go('signup');
-      Airbitz.core.writeData('disclaimer', true);
-    };
+  function parseParameters($location) {
+    var d = $location.search();
+    if (!d.state) {
+      var url = window.location.href;
+      url = url.replace(/\#.*/, ''); // strip hash
+      url = url.replace(/.*\?/, ''); // strip up to ?
+      var params = url.split("&");
+      params.forEach(function(e) {
+        var pair = e.split("=");
+        d[pair[0]] = pair[1];
+      });
+    }
+    return d;
   }
-  function signupController($scope, $state, Error, UserFactory) {
-    Airbitz.ui.title('CleverCoin - ' + $scope.countryName);
-    $scope.account = UserFactory.getUserAccount();
-    $scope.registrationCode = '';
-    $scope.regCodeRequired = false;
-    $scope.showDisclaimer = true;
 
-    UserFactory.fetchUserAccountStatus().then(function(b) {
-      console.log(b);
-    });
-    $scope.cancelSignup = function(){
-      $state.go('disclaimer');
+  function signupController($scope, $state, Error, UserFactory) {
+    Airbitz.ui.title('CleverCoin');
+    $scope.account = UserFactory.getUserAccount();
+
+    $scope.cancelSignup = function() {
+      Airbitz.ui.exit();
     };
 
     $scope.submitSignUp = function(form) {
       Airbitz.ui.title('Saving...');
       UserFactory.registerUser($scope.account.firstName, $scope.account.email, $scope.account.password).then(function() {
-        $state.go('dashboard');
+        $state.go('pendingActivation');
       }, function(e) {
+        Airbitz.ui.showAlert('Error', 'Error signing up');
       });
     };
   }
+
+  function pendingActivationController($scope, $state, Error, UserFactory) {
+    Airbitz.ui.title('Activate account');
+    $scope.account = UserFactory.getUserAccount();
+    $scope.resendEmail = function() {
+      Airbitz.ui.showAlert('', 'Resending activation link.', {
+        'showSpinner': true
+      });
+      UserFactory.requestLink().then(function() {
+        Airbitz.ui.showAlert('', 'Activation email resent. Please check your inbox.');
+      }, function() {
+        Airbitz.ui.showAlert('', 'Unable to resend activation email at this time.');
+      });
+    };
+  }
+
+  function activateController($scope, $state, $stateParams, Error, UserFactory) {
+    Airbitz.ui.title('Activating your account');
+    Airbitz.ui.showAlert('', 'Activating account.', {
+      'showSpinner': true
+    });
+    UserFactory.activate($stateParams.token).then(function(b) {
+      Airbitz.ui.showAlert('', 'Account activated');
+      $state.go("dashboard");
+    }, function(b) {
+      Airbitz.ui.showAlert('', 'Unable to activate account.');
+      $state.go("pendingActivation");
+    });
+  }
+
   function dashboardController($scope, $sce, $state, Error, DataFactory, UserFactory) {
     Airbitz.ui.title('CleverCoin');
     // set variables that might be cached locally to make sure they load faster if available
     $scope.account = UserFactory.getUserAccount();
     $scope.userStatus = UserFactory.getUserAccountStatus();
-    $scope.showOptions = !($scope.account && $scope.account.verificationState === 'Verified');
 
     UserFactory.fetchAccount().then(function(account) {
       $scope.account = account;
@@ -74,6 +106,7 @@
       // Error, error
     }).then(function() {
       UserFactory.fetchUserAccountStatus().then(function(b) {
+console.log(b);
         $scope.userStatus = b;
       });
     });

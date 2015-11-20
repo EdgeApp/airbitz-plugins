@@ -79,9 +79,6 @@ var CleverCoin = (function () {
     if (!o.apiKey) {
       error('Missing apiKey');
     }
-    if (!o.apiLabel) {
-      error('Missing apiLabel');
-    }
     if (!o.apiSecret) {
       error('Missing apiSecret');
     }
@@ -89,7 +86,7 @@ var CleverCoin = (function () {
     this.apiLabel = o.apiLabel;
     this.apiSecret = o.apiSecret;
     this.CLEVERCOIN_URL = o.sandbox == true
-        ? 'https://api.clevercoin.com'
+        ? 'https://sandboxapi.cleverco.in'
         : 'https://api.clevercoin.com';
   }
 
@@ -165,8 +162,28 @@ var CleverCoin = (function () {
       });
     },
 
-    isAuthorized: function() {
-      return true;
+    requestLink: function(email, activateLink, callback) {
+      var data = {
+        'email': email,
+        'redirect': activateLink,
+      };
+      return this._request(true, '/account/link', {
+        'method': 'POST',
+        'data': data,
+        'callback': callback
+      });
+    },
+
+    activate: function(email, token, callback) {
+      var data = {
+        'email': email,
+        'token': token,
+      };
+      return this._request(true, '/account/activate', {
+        'method': 'POST',
+        'data': data,
+        'callback': callback
+      });
     },
 
     getAccount: function(callback) {
