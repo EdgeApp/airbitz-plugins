@@ -12,12 +12,15 @@
 
 <style type="text/css">
 	<!--
-	.add-funds-header {font-family: Lato, Verdana, Arial, Helvetica, sans-serif; font-size:16pt; color: #007aFF}
-	.title-header     {font-family: Lato, Verdana, Arial, Helvetica, sans-serif; font-size:16pt; color: #555555}
+	body {margin:10px}
+	.add-funds-header {font-family: Lato, Verdana, Arial, Helvetica, sans-serif; font-size:16pt; color: #007aFF; height: 70px}
+	.title-header     {font-family: Lato, Verdana, Arial, Helvetica, sans-serif; font-size:16pt; color: #555555; padding-top: 10px; padding-bottom: 0px}
+	.title-header-2   {font-family: Lato, Verdana, Arial, Helvetica, sans-serif; font-size:16pt; color: #555555; padding-bottom: 5px}
 	.card-number      {font-family: Courier, serif; font-size:11pt; color: #555555}
-	.card-balance     {font-family: Lato, Verdana, Arial, Helvetica, sans-serif; font-size:11pt; color: #555555}
-	.card-balance-amt {font-family: Lato, Verdana, Arial, Helvetica, sans-serif; font-size:20pt; color: #555555}
-	.card-value       {font-family: Lato, Verdana, Arial, Helvetica, sans-serif; font-size:18pt; color: #555555}
+	.card-balance     {font-family: Lato, Verdana, Arial, Helvetica, sans-serif; font-size:11pt; color: #555555; padding-top: 5px}
+	.card-balance-amt {font-family: Lato, Verdana, Arial, Helvetica, sans-serif; font-size:20pt; color: #555555; padding-bottom: 10px}
+	.card-value       {font-family: Lato, Verdana, Arial, Helvetica, sans-serif; font-size:18pt; color: #555555; height: 50px}
+	.collapsible-header {vert-align: middle}
 	-->
 </style>
 
@@ -27,25 +30,21 @@
 	<div class="item card">
 	  	<div class="row">
 	  		<div class="col-md-12">
-				<br>
-				<div class="title-header">Spend Bitcoin at Starbucks<br>& Save 20%</div><br>
-	  			<div class="card-image">
-	  				<div class="card-barcode"></div>
-					<div class="card-number"></div><br>
-					<div class="card-balance">
-						Current Balance<br>
-						<span class="card-balance-amt"></span><br><br>
-						<!--<h5></h5>-->
-						<!--<i class="material-icons right">more_vert</i></h5>-->
-					</div>
-	  			</div>
+				<div class="title-header">Spend Bitcoin at Starbucks</div>
+				<div class="title-header-2">& Save 20%</div>
+				<div class="card-image">
+					<div class="card-barcode"></div>
+					<div class="card-number"></div>
+					<div class="card-balance">Current Balance</div>
+					<div class="card-balance-amt"></div>
+				</div>
 	  		</div>
 	  	</div>
 	</div>
 </template>
 <template id="add-template">
 	<li class="collection-item avatar card-list">
-		<span class="title"><div class="card-value" value=""></div></span>
+		<span class="card-value" value=""></span>
 		<div class="secondary-content ">
 			<button type="button" class="buy-card btn-floating btn-large waves-effect waves-light green"><i class="material-icons medium">add</i></button>
 		</div>
@@ -72,8 +71,6 @@
 	    </h3>
 	  	<center class="main">
 	  		<header>
-				<br>
-		  		<!-- <h3 class="balance">Total Balance: <span class="balance-amt">$0.00</span></h3> -->
 			</header>
 			<main>
 			  	<div id="user-cards" class="owl-carousel owl-theme">
