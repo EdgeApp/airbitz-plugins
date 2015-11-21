@@ -10,29 +10,42 @@
  <!-- Default Theme -->
 <link rel="stylesheet" href="vendors/owl-carousel/owl.theme.css">
 
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+<style type="text/css">
+	<!--
+	.add-funds-header {font-family: Lato, Verdana, Arial, Helvetica, sans-serif; font-size:16pt; color: #007aFF}
+	.title-header     {font-family: Lato, Verdana, Arial, Helvetica, sans-serif; font-size:16pt; color: #555555}
+	.card-number      {font-family: Courier, serif; font-size:11pt; color: #555555}
+	.card-balance     {font-family: Lato, Verdana, Arial, Helvetica, sans-serif; font-size:11pt; color: #555555}
+	.card-balance-amt {font-family: Lato, Verdana, Arial, Helvetica, sans-serif; font-size:20pt; color: #555555}
+	.card-value       {font-family: Lato, Verdana, Arial, Helvetica, sans-serif; font-size:18pt; color: #555555}
+	-->
+</style>
+
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link type="text/css" rel="stylesheet" href="css/materialize.css"  media="screen,projection"/>
 <template id="card-template">
 	<div class="item card">
 	  	<div class="row">
 	  		<div class="col-md-12">
+				<br>
+				<div class="title-header">Spend Bitcoin at Starbucks<br>& Save 20%</div><br>
 	  			<div class="card-image">
 	  				<div class="card-barcode"></div>
+					<div class="card-number"></div><br>
+					<div class="card-balance">
+						Current Balance<br>
+						<span class="card-balance-amt"></span><br><br>
+						<!--<h5></h5>-->
+						<!--<i class="material-icons right">more_vert</i></h5>-->
+					</div>
 	  			</div>
 	  		</div>
 	  	</div>
-	  	<div class="card-content card-info-main">
-  			<h4><div class="card-number"></div></h4>
-  			<div class="card-balance">
-  				<h4>Card Balance: <span class="card-balance-amt"></span>
-  				<i class="material-icons right">more_vert</i></h4>
-  			</div>
-		</div>
 	</div>
 </template>
 <template id="add-template">
 	<li class="collection-item avatar card-list">
-		<span class="title"><h4 class="card-value" value=""></h4></span>
+		<span class="title"><div class="card-value" value=""></div></span>
 		<div class="secondary-content ">
 			<button type="button" class="buy-card btn-floating btn-large waves-effect waves-light green"><i class="material-icons medium">add</i></button>
 		</div>
@@ -41,7 +54,7 @@
 </head>
 <body>
 	<div class="container-fluid">
-		<h1 class="text-center fold-loading">
+		<h3 class="text-center fold-loading">
 	    	<i class="fa fa-spinner fa-spin"></i> Loading
 	    	<div class="fold-loading-spin">
 		    	<div class="preloader-wrapper big active">
@@ -56,10 +69,10 @@
 			        </div>
 		    	</div>
 			</div>
-	    </h1>
+	    </h3>
 	  	<center class="main">
 	  		<header>
-	  			<h4>Spend ƀ at Starbucks & Save 20%</h4>
+				<br>
 		  		<!-- <h3 class="balance">Total Balance: <span class="balance-amt">$0.00</span></h3> -->
 			</header>
 			<main>
@@ -70,7 +83,7 @@
 	  			<ul class="collapsible" data-collapsible="accordion">
 	  				<li>
 	  		  			<div class="collapsible-header active">
-	  				        <h4 class="add-funds-header">Add Funds</h4>
+	  				        <div class="add-funds-header">Add Funds</div>
 	  				    </div>
 	  				    <div class="collapsible-body">
 	  				    	<ul class="collection add-buttons">
@@ -96,7 +109,7 @@
 				<div class="container">
 					<div class="row">
 						<div class="col l6 s12">
-							<h5>Powered by <a href="#">FoldApp</a></h5>
+							<h6>Powered by Fold</h6>
 						</div>
 					</div>
 				</div>

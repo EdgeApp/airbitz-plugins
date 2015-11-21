@@ -1588,10 +1588,10 @@
   color: #212121 !important; }
 
 .shades.black {
-  background-color: #000000 !important; }
+  background-color: #555555 !important; }
 
 .shades-text.text-black {
-  color: #000000 !important; }
+  color: #555555 !important; }
 
 .shades.white {
   background-color: #FFFFFF !important; }
@@ -1606,10 +1606,10 @@
   color: transparent !important; }
 
 .black {
-  background-color: #000000 !important; }
+  background-color: #555555 !important; }
 
 .black-text {
-  color: #000000 !important; }
+  color: #555555 !important; }
 
 .white {
   background-color: #FFFFFF !important; }
@@ -5591,6 +5591,7 @@ html {
 
 h1, h2, h3, h4, h5, h6 {
   font-weight: 400;
+  color: #444444;
   line-height: 1.1; }
 
 h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
