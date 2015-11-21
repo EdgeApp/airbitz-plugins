@@ -22,19 +22,11 @@
 	  		</div>
 	  	</div>
 	  	<div class="card-content card-info-main">
-		  	<div class="row">
-		  		<div class="col-md-12">
-		  			<h4><div class="card-number"></div></h4>
-		  		</div>
-		  	</div>
-		  	<div class="row">
-		  		<div class="col-md-12">
-		  			<div class="card-balance">
-		  				<h4>Card Balance: <span class="card-balance-amt"></span>
-		  				<i class="material-icons right">more_vert</i></h4>
-		  			</div>
-		  		</div>
-		  	</div>
+  			<h4><div class="card-number"></div></h4>
+  			<div class="card-balance">
+  				<h4>Card Balance: <span class="card-balance-amt"></span>
+  				<i class="material-icons right">more_vert</i></h4>
+  			</div>
 		</div>
 	</div>
 </template>
@@ -285,7 +277,13 @@ var Account = {
 	},
 	getBal: function(handleResponse) {
 		this.getInfo("balances?currency=USD", function(balances) {
-			handleResponse(balances["balances"][0]["amount"]);
+			console.log(balances);
+			try {
+				handleResponse(balances["balances"][0]["amount"]);	
+			}
+			catch(err) {
+				handleResponse(0);
+			}
 		});
 	},
 	purchaseCard: function(denomination, brand_id) {
@@ -355,8 +353,8 @@ if(!(typeof Account.username === 'undefined' || Account.username == null)) {
 		  "username": Account.username,
 		  "password": Account.pass
 		}]};
-console.log("User pulled from memory.");
-user.exists.resolve();
+	console.log("User pulled from memory.");
+	user.exists.resolve();
 } else {
 	user.create();
 }
