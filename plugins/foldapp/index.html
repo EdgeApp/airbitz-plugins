@@ -14,13 +14,6 @@
 <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
 <template id="card-template">
 	<div class="item card">
-		<div class="row">
-	  		<div class="col-md-12">
-	  			<div class="card-balance">
-	  				<h4>Card Balance: <span class="card-balance-amt"></span></h4>
-	  			</div>
-	  		</div>
-	  	</div>
 	  	<div class="row">
 	  		<div class="col-md-12">
 	  			<div class="card-image">
@@ -28,11 +21,21 @@
 	  			</div>
 	  		</div>
 	  	</div>
-	  	<div class="row">
-	  		<div class="col-md-12">
-	  			<h4><div class="card-number"></div></h4>
-	  		</div>
-	  	</div>
+	  	<div class="card-content card-info-main">
+		  	<div class="row">
+		  		<div class="col-md-12">
+		  			<h4><div class="card-number"></div></h4>
+		  		</div>
+		  	</div>
+		  	<div class="row">
+		  		<div class="col-md-12">
+		  			<div class="card-balance">
+		  				<h4>Card Balance: <span class="card-balance-amt"></span>
+		  				<i class="material-icons right">more_vert</i></h4>
+		  			</div>
+		  		</div>
+		  	</div>
+		</div>
 	</div>
 </template>
 <template id="add-template">
@@ -64,7 +67,8 @@
 	    </h1>
 	  	<center class="main">
 	  		<header>
-		  		<h3 class="balance">Total Balance: <span class="balance-amt">$0.00</span></h3>
+	  			<h4>Spend ƀ at Starbucks & Save 20%</h4>
+		  		<!-- <h3 class="balance">Total Balance: <span class="balance-amt">$0.00</span></h3> -->
 			</header>
 			<main>
 			  	<div id="user-cards" class="owl-carousel owl-theme">
@@ -100,7 +104,7 @@
 				<div class="container">
 					<div class="row">
 						<div class="col l6 s12">
-							<h5>Powered by <a href="https://foldapp.com">FoldApp</a></h5>
+							<h5>Powered by <a href="#">FoldApp</a></h5>
 						</div>
 					</div>
 				</div>
@@ -207,20 +211,20 @@ var Account = {
 	},
 	updateCards: function() { // Updates the UI with cards the user has purchased.
 		user.getInfo("cards", function(all_card_info) {
-			console.log("User's cards: " + JSON.stringify(all_card_info));
+			//console.log("User's cards: " + JSON.stringify(all_card_info));
 			cards = all_card_info["cards"];
 			document.querySelector("#user-cards").innerHTML = "";
 			for(numOfCards in cards) {
-				console.log("Number of cards: " + numOfCards);
+				//console.log("Number of cards: " + numOfCards);
 				
 				id = cards[numOfCards]["id"];
 				card_num = cards[numOfCards]["code"][0];
 				bal = cards[numOfCards]["balance"][0]["formatted"]["fewer_trailing_zeros"]; // e.g. $5
-				console.log("Card " + id + " has card num, " + card_num);
+				//console.log("Card " + id + " has card num, " + card_num);
 				
 				var card_html = document.querySelector('#card-template').content;
 				
-				card_html.querySelector(".card-barcode").innerHTML = '<img class="barcode materialboxed" src="' + fold_api + "my/cards/" + id + "/barcode/png" + '">';
+				card_html.querySelector(".card-barcode").innerHTML = "<img class=\"barcode materialboxed\" src=\"" + fold_api + "my/cards/" + id + "/barcode/png" + "\">";
 				card_html.querySelector(".card-balance-amt").innerText = bal;
 				card_html.querySelector(".card-number").innerText = card_num;
 				document.querySelector("#user-cards").appendChild( document.importNode(card_html, true) );
@@ -251,31 +255,37 @@ var Account = {
 					break;
 				}
 			}
-			console.log(brands_cards["card_values"]);
-			if(brands_cards["soft_max_total"][0]["amount"] >= user.getBal()) {
-				var card_vals = brands_cards["card_values"];
-				document.querySelector(".add-buttons").innerHTML = "";
-				for(numOfVals in card_vals) {
-					var add_html = document.querySelector('#add-template').content;
-					add_html.querySelector(".card-value").setAttribute("value", card_vals[numOfVals]["amount"]);
-					add_html.querySelector(".card-value").innerText = card_vals[numOfVals]["formatted"]["all_decimal_places"];
-					document.querySelector(".add-buttons").appendChild(document.importNode(add_html,true));
+			console.log(JSON.stringify(brands_cards["card_values"]));
+			user.getBal(function(total_bal) {
+				user.total_bal = total_bal;
+				console.log("User bal: " + user.total_bal);
+				console.log("Max: " + JSON.stringify(brands_cards["soft_max_total"][0]["amount"]));
+				if(brands_cards["soft_max_total"][0]["amount"] >= user.total_bal) {
+					var card_vals = brands_cards["card_values"];
+					document.querySelector(".add-buttons").innerHTML = "";
+					for(numOfVals in card_vals) {
+						console.log("Listing card " + numOfVals);
+						var add_html = document.querySelector('#add-template').content;
+						add_html.querySelector(".card-value").setAttribute("value", card_vals[numOfVals]["amount"]);
+						add_html.querySelector(".card-value").innerText = card_vals[numOfVals]["formatted"]["all_decimal_places"];
+						document.querySelector(".add-buttons").appendChild(document.importNode(add_html,true));
+					}
+					$(".buy-card").click(function() {
+				  		user.purchaseCard($(this).parent().parent().find(".card-value").attr("value"));
+					});
 				}
-				$(".buy-card").click(function() {
-			  		user.purchaseCard($(this).parent().parent().find(".card-value").attr("value"));
-				});
-			}
+			});
 		}, "");
 	},
-	getInfo: function(info, handleReponse, root) {
+	getInfo: function(info, handleResponse, root) {
 		root = typeof root !== 'undefined' ? root : "my/";
 		$.get(fold_api + root + info).done(function(response) {
-			handleReponse(response);
+			handleResponse(response);
 		});
 	},
-	getBal: function() {
+	getBal: function(handleResponse) {
 		this.getInfo("balances?currency=USD", function(balances) {
-			return balances["balances"][0]["amount"];
+			handleResponse(balances["balances"][0]["amount"]);
 		});
 	},
 	purchaseCard: function(denomination, brand_id) {
@@ -322,7 +332,7 @@ var Account = {
 				}]}
 		sRequest(fold_api + "my/orders", cOrder, function(r) {
 			console.log("Approving order");
-			console.log(r);
+			//console.log(r);
 		});
 	}
 }
@@ -350,20 +360,20 @@ user.exists.resolve();
 } else {
 	user.create();
 }
-
 $.when(user.exists).done(function(data) {
 	user.login();
 });
 $(function() {
-	user.listCards(); // Start getting avaliable cards for sale.
 	$.when(user.logged_in).done(function(data) {
+		console.log("Updating UI");
+		user.listCards(); // Start getting avaliable cards for sale.
 		user.updateCards();
-		user.updateBalance();
+		// user.updateBalance();
 		user.getInfo("profile", function(response) {
-			console.log(response);
-			console.log(response["logged_in"]);
+			//console.log(response);
+			//console.log(response["logged_in"]);
 			user.getInfo("orders", function(response) {
-				console.log(response);
+				//console.log(response);
 			});
 		// Done loading.
 		toggleUi();
