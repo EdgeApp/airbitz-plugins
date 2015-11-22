@@ -3,6 +3,7 @@ build
 *.swp
 config.js
 plugins/*/.idea/*
+.idea/*
 
 
 
