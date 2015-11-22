@@ -5,8 +5,8 @@
         <table class="table-mini">
           <tr>
             <td class="datetime text-left">
-              <span ng-if="t.estimatedDeliveryDate" class="date"><span class="est-label">Est. Delivery</span> {{ t.estimatedDeliveryDate }}</span>
-              <span ng-if="!t.estimatedDeliveryDate && t.transactionDate" class="date">{{ (t.transactionDate | date:'yyyy-MM-dd') }} <span class="seperator">|<span> <span class="time">{{ t.transactionDate | date:'h:m a' }}</span></span>
+              <span ng-if="t.estimatedDeliveryDate" class="date"><span class="est-label">Est. Delivery</span> {{ t.estimatedDeliveryDate | | date:'yyyy-MM-dd' }}</span>
+              <span ng-if="!t.estimatedDeliveryDate && t.transactionDate" class="date">{{ (t.transactionDate | date:'yyyy-MM-dd') }} <span class="seperator">|<span> <span class="time">{{ t.transactionDate | date:'h:mm a' }}</span></span>
             </td>
           </tr>
           <tr>
