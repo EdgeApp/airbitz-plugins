@@ -10,8 +10,34 @@
  <!-- Default Theme -->
 <link rel="stylesheet" href="vendors/owl-carousel/owl.theme.css">
 
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+<style type="text/css">
+	<!--
+	body {margin:10px}
+	.add-funds-header {font-family: Lato, Verdana, Arial, Helvetica, sans-serif; font-size:16pt; color: #007aFF; height: 70px}
+	.title-header     {font-family: Lato, Verdana, Arial, Helvetica, sans-serif; font-size:16pt; color: #555555; padding-top: 10px; padding-bottom: 0px}
+	.title-header-2   {font-family: Lato, Verdana, Arial, Helvetica, sans-serif; font-size:16pt; color: #555555; padding-bottom: 5px}
+	.card-number      {font-family: Courier, serif; font-size:11pt; color: #555555}
+	.card-balance     {font-family: Lato, Verdana, Arial, Helvetica, sans-serif; font-size:11pt; color: #555555; padding-top: 5px}
+	.card-balance-amt {font-family: Lato, Verdana, Arial, Helvetica, sans-serif; font-size:20pt; color: #555555; padding-bottom: 10px}
+	.card-value       {font-family: Lato, Verdana, Arial, Helvetica, sans-serif; font-size:18pt; color: #555555; height: 50px}
+	.collapsible-header {vert-align: middle}
+	.buy-card         {
+		background-color: #FFFFFF;
+		-moz-border-radius: 10px;
+		-webkit-border-radius: 10px;
+		border: 1px solid #007aFF;
+		color: #007aFF;
+		padding-top: 3.5px;
+		padding-bottom: 3.5px;
+		padding-left: 9px;
+		padding-right: 9px;
+		font-family: Lato, Verdana, Arial, Helvetica, sans-serif; font-size:12pt;
+	}
+	-->
+</style>
+
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link type="text/css" rel="stylesheet" href="css/materialize.css"  media="screen,projection"/>
 <template id="card-template">
 	<div class="row">
 		<div class="col s12 m7">
@@ -45,7 +71,7 @@
 </head>
 <body>
 	<div class="container-fluid">
-		<h1 class="text-center fold-loading">
+		<h3 class="text-center fold-loading">
 	    	<i class="fa fa-spinner fa-spin"></i> Loading
 	    	<div class="fold-loading-spin">
 		    	<div class="preloader-wrapper big active">
@@ -60,11 +86,10 @@
 			        </div>
 		    	</div>
 			</div>
-	    </h1>
+	    </h3>
 	  	<center class="main">
 	  		<header>
-	  			<h4>Spend ƀ at Starbucks & Save 20%</h4>
-		  		<!-- <h3 class="balance">Total Balance: <span class="balance-amt">$0.00</span></h3> -->
+				<img src="https://airbitz.co/go/wp-content/uploads/2015/11/starbucks-96.png">
 			</header>
 			<main>
 			  	<div id="user-cards" class="owl-carousel owl-theme">
@@ -74,7 +99,7 @@
 	  			<ul class="collapsible" data-collapsible="accordion">
 	  				<li>
 	  		  			<div class="collapsible-header active">
-	  				        <h4 class="add-funds-header">Add Funds</h4>
+	  				        <div class="add-funds-header">Add Funds</div>
 	  				    </div>
 	  				    <div class="collapsible-body">
 	  				    	<ul class="collection add-buttons">
@@ -100,7 +125,8 @@
 				<div class="container">
 					<div class="row">
 						<div class="col l6 s12">
-							<h5>Powered by <a href="#">FoldApp</a></h5>
+							<h6>Powered by Fold</h6>
+							<h6>This application is not affiliated with the Starbucks Corporation</h6>
 						</div>
 					</div>
 				</div>
