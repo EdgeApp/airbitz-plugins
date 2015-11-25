@@ -29,22 +29,29 @@
 
   <div class="row">
     <div class="form-group col-xs-12">
-      <button type="button" ng-click="loadIdentityFront()" class="btn btn-lg">Identity File Front</button>
+      <!-- button type="button" ng-click="loadIdentityFront()" class="btn btn-lg">Identity File Front</button -->
+      <input type="file" file-model="primaryFile" />
     </div>
   </div>
 
   <div class="row">
     <div class="form-group col-xs-12">
-      <button type="button" ng-click="loadIdentityBack()" class="btn btn-lg">Identity File Back</button>
+      <!-- button type="button" ng-click="loadIdentityBack()" class="btn btn-lg">Identity File Back</button -->
+      <input type="file" file-model="secondaryFile" />
     </div>
   </div>
 
   <div class="row no-pad">
     <div class="col-xs-6 no-pad">
-      <button type="button" ng-click="cancel()" class="btn btn-lg btn-block btn-danger">Cancel</button>
+      <button type="button"
+        ng-click="cancel()"
+        class="btn btn-lg btn-block btn-danger">Cancel</button>
     </div>
     <div class="col-xs-6 no-pad">
-      <button type="button" ng-click="save()" class="btn btn-lg btn-block btn-success">Save</button>
+      <button type="button"
+        ng-click="save()" 
+        ng-disabled="form.$invalid"
+        class="btn btn-lg btn-block btn-success">Save</button>
     </div>
   </div>
 </form>

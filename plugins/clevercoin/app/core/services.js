@@ -87,7 +87,9 @@
       CcFactory.verificationStatus(function(e,s,b) {
         if (s == 200 && b.identity && b.identity.passport && b.address && b.address.proof) {
           userStatus.userIdentitySetup = b.identity.passport.progressState == 'Verified';
+          userStatus.userIdentityState = b.identity.passport.progressState;
           userStatus.userAddressSetup = b.address.proof.progressState == 'Verified';
+          userStatus.userAddressState = b.address.proof.progressState;
           userStatus.userCanTransact = userStatus.userIdentitySetup && userStatus.userAddressSetup;
 
           Airbitz.core.writeData('userStatus', userStatus);
@@ -153,7 +155,7 @@
         CcFactory.verifyIdentity({
           'type': type,
           'nationality': country,
-          'ipaddress': "127.0.0.1",
+          'ipaddress': "24.152.187.171",
           'useragent': "Airbitz",
           'primaryFile': primaryFile,
           'secondaryFile': secondaryFile

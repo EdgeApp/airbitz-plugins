@@ -1,6 +1,7 @@
 (function() {
   angular.module('app.filters', [])
     .filter('statusFilter', statusFilter)
+    .filter('stateFilter', stateFilter)
     .filter('titlecase', titleCase)
     .filter('roundFiat', roundFiat)
     .filter('roundBtc', roundBtc);
@@ -8,6 +9,14 @@
   function statusFilter() {
     return function(status) {
       return (status) ? 'Verified' : 'Unverified';
+    };
+  }
+
+  function stateFilter() {
+    return function(status) {
+      return (status == 'Exported') 
+        ? 'Pending' : (status == 'Verified') 
+        ? 'Verified' : 'Unverified';
     };
   }
 

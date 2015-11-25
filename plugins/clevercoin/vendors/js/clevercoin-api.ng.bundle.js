@@ -23,16 +23,11 @@ function _http_build_query(formdata, numeric_prefix, arg_separator) {
     }
     if (val != null) {
       if (typeof val === 'object') {
-        for (k in val) {
-          if (val[k] != null) {
-            tmp.push(_http_build_query_helper(key + '[' + k + ']', val[k], arg_separator));
-          }
-        }
-        return tmp.join(arg_separator);
+        return '';
       } else if (typeof val !== 'function') {
         return _urlencode(key) + '=' + _urlencode(val);
       } else {
-        throw new Error('There was an error processing for http_build_query().');
+        return '';
       }
     } else {
       return '';

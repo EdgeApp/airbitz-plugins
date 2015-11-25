@@ -136,6 +136,21 @@
       return $sce.trustAsHtml(msg);
     };
 
+    $scope.identity = function() {
+      if (["Exported", "Verified"].indexOf($scope.userStatus.userIdentityState) > -1) {
+        Airbitz.ui.showAlert('', 'Verification documents have already been submitted. Please wait for them to be reviewed.');
+      } else {
+        $state.go("identityVerification");
+      }
+    };
+    $scope.address = function() {
+      if (["Exported", "Verified"].indexOf($scope.userStatus.userAddressState) > -1) {
+        Airbitz.ui.showAlert('', 'Address documents have already been submitted. Please wait for them to be reviewed.');
+      } else {
+        $state.go("addressVerification");
+      }
+    };
+
     $scope.buy = function(){
       DataFactory.getOrder(true);
       $state.go('exchangeOrder', {'orderAction': 'buy'});
@@ -212,7 +227,7 @@
       });
       // Update the address value
       $scope.account.birthcountry = $scope.account.nationalityObject.codeAlpha3;
-      UserFactory.verifyIdentity($scope.identityType, $scope.nationality, $scope.primaryFile, $scope.secondaryFile).then(function() {
+      UserFactory.verifyIdentity($scope.identityType, $scope.account.birthcountry, $scope.primaryFile, $scope.secondaryFile).then(function() {
         Airbitz.ui.showAlert('Saved', 'Identity information has been submitted.');
         $state.go('dashboard');
       }, function(e) {
@@ -244,10 +259,8 @@
       Airbitz.ui.showAlert('Saved', 'Submitting address information...', {
         'showSpinner': true
       });
-      // Update the address value
-      $scope.account.addresscountry = $scope.account.countryObject.codeAlpha3;
       UserFactory.verifyAddress($scope.addressType, $scope.account.address, $scope.account.city,
-                                $scope.account.zipcode, $scope.account.country, BASE_64_IMAGE).then(function() {
+                                $scope.account.zipcode, $scope.account.addresscountry, $scope.proofFile).then(function() {
         Airbitz.ui.showAlert('Saved', 'Address information has been submitted.');
         $state.go('dashboard');
       }, function(e) {

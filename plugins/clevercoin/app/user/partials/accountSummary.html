@@ -16,17 +16,17 @@
         <label class="status label label-outline pull-right"
                ng-class="{'label-success': account.termsAgreedVersion == 1}">{{ account.termsAgreedVersion == 1 | statusFilter }}</label>
       </li>
-      <li ng-if="showOptions" ui-sref="identityVerification" class="ng-trans ng-trans-scale-up easeOutBack list-group-item">
+      <li ng-if="showOptions" ng-click="identity()" class="ng-trans ng-trans-scale-up easeOutBack list-group-item">
         <span class="list-group-item-heading">Verify Identity</span>
         <p class="list-group-item-text">Tap to edit</p>
         <label class="status label label-outline pull-right"
-               ng-class="{'label-success': userStatus.userIdentitySetup}">{{ userStatus.userIdentitySetup | statusFilter }}</label>
+               ng-class="{'label-success': userStatus.userIdentitySetup}">{{ userStatus.userIdentityState | stateFilter }}</label>
       </li>
-      <li ng-if="showOptions" ui-sref="addressVerification" class="ng-trans ng-trans-scale-up easeOutBack list-group-item">
+      <li ng-if="showOptions" ng-click="address()" class="ng-trans ng-trans-scale-up easeOutBack list-group-item">
         <span class="list-group-item-heading">Verify Address</span>
         <p class="list-group-item-text">Tap to edit</p>
         <label class="status label label-outline pull-right"
-               ng-class="{'label-success': userStatus.userAddressSetup}">{{ userStatus.userAddressSetup | statusFilter }}</label>
+               ng-class="{'label-success': userStatus.userAddressSetup}">{{ userStatus.userAddressState | stateFilter }}</label>
       </li>
     </ul>
   </div>
