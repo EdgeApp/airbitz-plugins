@@ -85,6 +85,8 @@ var CleverCoin = (function () {
     this.apiKey = o.apiKey;
     this.apiLabel = o.apiLabel;
     this.apiSecret = o.apiSecret;
+    this.clientKey = o.clientKey;
+    this.clientSecret = o.clientSecret;
     this.CLEVERCOIN_URL = o.sandbox == true
         ? 'https://sandboxapi.cleverco.in'
         : 'https://api.clevercoin.com';
@@ -123,11 +125,17 @@ var CleverCoin = (function () {
           };
 
       if (authRequired) {
+        var key = this.clientKey;
+        var secret = this.clientSecret;
+        if (opts['auth_as_provider'] || !key || !secret) {
+          key = this.apiKey;
+          secret = this.apiSecret;
+        }
         var signatureParameters = {};
         var nonceArray = _microtime().split(' ');
         var nonce = nonceArray[1] + _pad(nonceArray[0].substring(2,6),6);
         
-        headers['X-CleverAPI-Key'] = signatureParameters['X-CleverAPI-Key'] = this.apiKey;
+        headers['X-CleverAPI-Key'] = signatureParameters['X-CleverAPI-Key'] = key;
         headers['X-CleverAPI-Nonce'] = signatureParameters['X-CleverAPI-Nonce'] = nonce;
         signatureParameters['X-CleverAPI-Request'] = method + ' ' + path;
         for (var p in opts.data) {
@@ -136,9 +144,12 @@ var CleverCoin = (function () {
         signatureParameters = this._sortObject(signatureParameters);
 
         headers['X-CleverAPI-Signature'] =
-          CleverCoin.hmacsha256(this.apiSecret, _http_build_query(signatureParameters));
+          CleverCoin.hmacsha256(secret, _http_build_query(signatureParameters));
       }
-      headers['Content-Type'] = 'application/x-www-form-urlencoded';
+      headers['Content-Type'] = opts['content-type'] || 'application/x-www-form-urlencoded';
+      if (opts['content-transfer-encoding']) {
+        headers['Content-Transfer-Encoding'] = opts['content-transfer-encoding'];
+      }
       headers['Accept'] = 'application/json';
 
       CleverCoin.prepareData(req, opts, null);
@@ -158,7 +169,8 @@ var CleverCoin = (function () {
       return this._request(true, '/account', {
         'method': 'POST',
         'data': data,
-        'callback': callback
+        'callback': callback,
+        'auth_as_provider': true
       });
     },
 
@@ -170,7 +182,8 @@ var CleverCoin = (function () {
       return this._request(true, '/account/link', {
         'method': 'POST',
         'data': data,
-        'callback': callback
+        'callback': callback,
+        'auth_as_provider': true
       });
     },
 
@@ -182,7 +195,8 @@ var CleverCoin = (function () {
       return this._request(true, '/account/activate', {
         'method': 'POST',
         'data': data,
-        'callback': callback
+        'callback': callback,
+        'auth_as_provider': true
       });
     },
 
@@ -203,6 +217,26 @@ var CleverCoin = (function () {
     verificationStatus: function(callback) {
       return this._request(true, '/verification', {
         'callback': callback
+      });
+    },
+
+    verifyIdentity: function(data, callback) {
+      return this._request(true, '/verification/identity', {
+        'method': 'POST',
+        'data': data,
+        'callback': callback,
+        'content-transfer-encoding': 'base64',
+        'content-type': 'multipart/form-data'
+      });
+    },
+
+    verifyAddress: function(data, callback) {
+      return this._request(true, '/verification/address', {
+        'method': 'POST',
+        'data': data,
+        'callback': callback,
+        'content-transfer-encoding': 'base64',
+        'content-type': 'multipart/form-data'
       });
     },
 

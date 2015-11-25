@@ -23,7 +23,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
     })
     // route for signup
     .state("activate", {
-      url: "/activate/:token",
+      url: "/activate/:email/:token",
       templateUrl: "app/user/partials/activating.html",
       controller: "activateController",
     })
@@ -68,13 +68,18 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
       templateUrl: "app/exchange/partials/order.execute.html",
       controller: "executeOrderController",
     })
+    .state("userInformation", {
+      url: "/account/information",
+      templateUrl: "app/user/partials/userInformation.html",
+      controller: "userInformationController",
+    })
     .state("addressVerification", {
-      url: "/account/",
+      url: "/account/verification/address",
       templateUrl: "app/user/partials/addressVerification.html",
       controller: "addressVerificationController",
     })
     .state("identityVerification", {
-      url: "/identity/",
+      url: "/account/verification/identity",
       templateUrl: "app/user/partials/identityVerification.html",
       controller: "identityVerificationController",
     })

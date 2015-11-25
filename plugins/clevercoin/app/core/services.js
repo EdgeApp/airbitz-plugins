@@ -34,6 +34,7 @@
     factory.registerUser = function(name, email, password) {
       var d = $q.defer();
       CcFactory.register(name, email, password, redirectUri, function(_, c, b) {
+        console.log(JSON.stringify(b));
         if (c >= 200 && c <= 300) {
           var account = factory.getUserAccount();
           account.name = name;
@@ -41,10 +42,8 @@
           account.isSignedIn = true;
           account.key = b.key;
           account.secret = b.secret;
-          account.label = '';
-          CcFactory.apiKey = account.key;
-          CcFactory.apiSecret = account.secret;
-          CcFactory.apiLabel = account.label;
+          CcFactory.clientKey = account.key;
+          CcFactory.clientSecret = account.secret;
           Airbitz.core.writeData('account', account);
           d.resolve(b);
         } else {
@@ -61,9 +60,9 @@
       return d.promise;
     };
 
-    factory.activate = function(token) {
+    factory.activate = function(email, token) {
       var d = $q.defer();
-      CcFactory.activate(account.email, token, function(_, c, b) {
+      CcFactory.activate(email, token, function(_, c, b) {
         if (c >= 200 && c <= 300) {
           account.isActivated = true;
           Airbitz.core.writeData('account', account); 
@@ -75,8 +74,9 @@
       return d.promise;
     };
     var userStatus = Airbitz.core.readData('userStatus') || {
-      'userIdentitySetup': false,
-      'userAddressSetup': false,
+      userCanTransact: false,
+      userIdentitySetup: false,
+      userAddressSetup: false
     };
     factory.getUserAccountStatus = function() {
       return userStatus;
@@ -85,9 +85,9 @@
     factory.fetchUserAccountStatus = function() {
       var d = $q.defer();
       CcFactory.verificationStatus(function(e,s,b) {
-        if (s == 200) {
-          userStatus.userIdentitySetup = b['identity']['passport']['progressState'] == 'Verified';
-          userStatus.userAddressSetup = b['address']['proof']['progressState'] == 'Verified';
+        if (s == 200 && b.identity && b.identity.passport && b.address && b.address.proof) {
+          userStatus.userIdentitySetup = b.identity.passport.progressState == 'Verified';
+          userStatus.userAddressSetup = b.address.proof.progressState == 'Verified';
           userStatus.userCanTransact = userStatus.userIdentitySetup && userStatus.userAddressSetup;
 
           Airbitz.core.writeData('userStatus', userStatus);
@@ -102,7 +102,21 @@
       return $q(function(resolve, reject) {
         CcFactory.getAccount(function(e, s, b) {
           if (200 === s) {
-            Airbitz.core.writeData('account', b);
+            account.firstname = b.firstname;
+            account.surname = b.surname;
+            account.email = b.email;
+            account.verificationState = b.verificationState;
+            account.gender = b.gender;
+            if (b.birthday) {
+              var arr = b.birthday.split("-");
+              account.birthday = new Date(arr[0], arr[1] - 1, arr[2]);
+            }
+            account.birthcountry = b.birthcountry;
+            account.birthcity = b.birthcity;
+            account.addresscountry = b.addresscountry;
+            account.phonenumber = b.phonenumber;
+            account.termsAgreedVersion = b.phonenumber;
+            Airbitz.core.writeData('account', account);
             resolve(b)
           } else {
             reject(b);
@@ -112,16 +126,54 @@
     }
     factory.updateUserAccount = function(account) {
       return $q(function(resolve, reject) {
-        CcFactory.updateBasicInfo({
-          'name': account.firstName,
-          'email': account.email,
+
+        CcFactory.updateAccount({
+          'firstname': account.firstname,
+          'surname': account.surname,
+          'gender': account.gender,
+          'birthday': account.birthday ? $filter('date')(account.birthday, 'yyyy-MM-dd') : null,
+          'birthcountry': account.birthcountry,
+          'birthcity': account.birthcity,
+          'addresscountry': account.addresscountry,
+          'phonenumber': account.phonenumber,
+          'agreeOnTerms': account.termsAgreedVersion
         }, function(e, s, b) {
           if (s === 200) {
-            Airbitz.core.writeData('account', account);
+            // Airbitz.core.writeData('account', account);
             resolve(b);
           } else {
             reject(b);
           }
+        });
+      });
+    };
+
+    factory.verifyIdentity = function(type, country, primaryFile, secondaryFile) {
+      return $q(function(resolve, reject) {
+        CcFactory.verifyIdentity({
+          'type': type,
+          'nationality': country,
+          'ipaddress': "127.0.0.1",
+          'useragent': "Airbitz",
+          'primaryFile': primaryFile,
+          'secondaryFile': secondaryFile
+        }, function(e, s, b) {
+          (s === 200) ?  resolve(b) : reject(b);
+        });
+      });
+    };
+
+    factory.verifyAddress = function(type, address, city, zipcode, country, proofFile) {
+      return $q(function(resolve, reject) {
+        CcFactory.verifyAddress({
+          'type': type,
+          'zipcode': zipcode,
+          'address': address,
+          'city': city,
+          'country': country,
+          'proofFile': proofFile
+        }, function(e, s, b) {
+          (s === 200) ?  resolve(b) : reject(b);
         });
       });
     };

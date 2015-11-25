@@ -1,6 +1,8 @@
 (function () {
   'use strict';
 
+  var BASE_64_IMAGE = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QA/wD/AP+gvaeTAAAAB3RJTUUH3woTCxIgaG9bcAAAAAxJREFUCNdjuHvzJgAFJgKQH8bAMAAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAxNS0xMS0yNFQxNjoyMDoxMS0wODowMJ/OiOMAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMTUtMTAtMTlUMTE6MTg6MzItMDc6MDC/SYTBAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAABJRU5ErkJggg==';
+
   angular
     .module('app.user', ['app.dataFactory', 'app.constants'])
     .controller('homeController', ['$scope', '$state', '$location', 'UserFactory', homeController])
@@ -8,8 +10,9 @@
     .controller('activateController', ['$scope', '$state', '$stateParams', 'Error', 'UserFactory', activateController])
     .controller('dashboardController', ['$scope', '$sce', '$state', 'Error', 'DataFactory', 'UserFactory', dashboardController])
     .controller('signupController', ['$scope', '$state', 'Error', 'UserFactory', signupController])
-    .controller('addressVerificationController', ['$scope', '$state', 'Error', 'UserFactory', addressVerificationController])
+    .controller('userInformationController', ['$scope', '$state', 'Error', 'UserFactory', userInformationController])
     .controller('identityVerificationController', ['$scope', '$state', 'Error', 'UserFactory', identityVerificationController])
+    .controller('addressVerificationController', ['$scope', '$state', 'Error', 'UserFactory', addressVerificationController])
     .controller('transactionsController', ['$scope', '$state', 'DataFactory', transactionsController])
     .controller('fundsController', ['$scope', '$state', 'DataFactory', fundsController])
     .directive('accountSummary', accountSummary);
@@ -17,7 +20,7 @@
   function homeController($scope, $state, $location, UserFactory) {
     var d = parseParameters($location);
     if (d.token) {
-      $state.go('activate', {'token': d.token});
+      $state.go('activate', {'token': d.token, 'email': d.email});
     } else {
       if (UserFactory.isSignedIn()) {
         if (UserFactory.isActivated()) {
@@ -55,7 +58,9 @@
     };
 
     $scope.submitSignUp = function(form) {
-      Airbitz.ui.title('Saving...');
+      Airbitz.ui.showAlert('', 'Creating account...', {
+        'showSpinner': true
+      });
       UserFactory.registerUser($scope.account.firstName, $scope.account.email, $scope.account.password).then(function() {
         $state.go('pendingActivation');
       }, function(e) {
@@ -67,16 +72,12 @@
   function pendingActivationController($scope, $state, Error, UserFactory) {
     Airbitz.ui.title('Activate account');
     $scope.account = UserFactory.getUserAccount();
-    $scope.resendEmail = function() {
-      Airbitz.ui.showAlert('', 'Resending activation link.', {
-        'showSpinner': true
-      });
-      UserFactory.requestLink().then(function() {
-        Airbitz.ui.showAlert('', 'Activation email resent. Please check your inbox.');
-      }, function() {
-        Airbitz.ui.showAlert('', 'Unable to resend activation email at this time.');
-      });
-    };
+    // If we can fetch the account, we know the user has been activated
+    UserFactory.fetchAccount().then(function(account) {
+      $scope.account.isActivated = true;
+      Airbitz.core.write('account', $scope.account);
+      $state.go("dashboard");
+    });
   }
 
   function activateController($scope, $state, $stateParams, Error, UserFactory) {
@@ -84,7 +85,7 @@
     Airbitz.ui.showAlert('', 'Activating account.', {
       'showSpinner': true
     });
-    UserFactory.activate($stateParams.token).then(function(b) {
+    UserFactory.activate($stateParams.email, $stateParams.token).then(function(b) {
       Airbitz.ui.showAlert('', 'Account activated');
       $state.go("dashboard");
     }, function(b) {
@@ -99,15 +100,19 @@
     $scope.account = UserFactory.getUserAccount();
     $scope.userStatus = UserFactory.getUserAccountStatus();
 
+    var showOpts = function(s) {
+      $scope.showOptions = !s.userCanTransact;
+    };
+    showOpts($scope.userStatus);
+
     UserFactory.fetchAccount().then(function(account) {
       $scope.account = account;
-      $scope.showOptions = !($scope.account && $scope.account.verificationState === 'Verified');
     }, function() {
       // Error, error
     }).then(function() {
       UserFactory.fetchUserAccountStatus().then(function(b) {
-console.log(b);
         $scope.userStatus = b;
+        showOpts($scope.userStatus);
       });
     });
 
@@ -117,11 +122,11 @@ console.log(b);
 
       if (!$scope.userStatus.userIdentitySetup) {
         counter++;
-        msg += '<h5><strong>' + counter + "</strong>. Please verify email</h5>";
+        msg += '<h5><strong>' + counter + "</strong>. Please verify your identity</h5>";
       }
       if (!$scope.userStatus.userAddressSetup) {
         counter++;
-        msg += '<h5><strong>' + counter + "</strong>. Please verify account info</h5>";
+        msg += '<h5><strong>' + counter + "</strong>. Please verify your address</h5>";
       }
       if (msg !== '') {
         msg = '<h4 style="margin-top: 0;">To Buy or Sell Bitcoin:</h4>' + msg;
@@ -144,51 +149,81 @@ console.log(b);
     };
   }
 
-  function addressVerificationController($scope, $state, Error, UserFactory) {
-    var title = 'User Information';
-    Airbitz.ui.title(title);
+  function userInformationController($scope, $state, Error, UserFactory) {
+    Airbitz.ui.title('User Information');
     $scope.account = UserFactory.getUserAccount();
-    UserFactory.fetchAccount().then(function(account) {
-      $scope.account = account;
-    }, function() {
-    });
-
-    $scope.cancelSignup = function(){
+    $scope.cancel = function() {
       $state.go('dashboard');
     };
 
-    $scope.saveUserAccount = function() {
-      Airbitz.ui.title('Saving...');
-      UserFactory.updateUserAccount($scope.account).then(function() {
-        Airbitz.ui.showAlert('Saved', 'User information has been updated.');
-        $state.go('exchange');
-      }, function(e) {
-        Error.reject(e);
-        Airbitz.ui.title(title);
-      });
-    };
-  }
-  function identityVerificationController($scope, $state, Error, UserFactory) {
-    var title = 'User Information';
-    Airbitz.ui.title(title);
-    $scope.account = UserFactory.getUserAccount();
-    UserFactory.fetchAccount().then(function(account) {
-      $scope.account = account;
-    }, function() {
-    });
-
-    $scope.cancelSignup = function(){
-      $state.go('dashboard');
-    };
-
-    $scope.saveUserAccount = function() {
-      Airbitz.ui.title('Saving...');
+    $scope.save = function() {
       UserFactory.updateUserAccount($scope.account).then(function() {
         Airbitz.ui.showAlert('Saved', 'User information has been updated.');
         $state.go('dashboard');
       }, function(e) {
-        Error.reject(e);
-        Airbitz.ui.title(title);
+        Airbitz.ui.showAlert('', 'Unable to save user data');
+      });
+    };
+  }
+
+  function identityVerificationController($scope, $state, Error, UserFactory) {
+    Airbitz.ui.title('Identity Verification');
+    $scope.account = UserFactory.getUserAccount();
+    $scope.loadIdentityFront = function() {
+      Airbitz.core.requestFile({
+        success: function() { },
+        error: function() { }
+      });
+    };
+
+    $scope.loadIdentityBack = function() {
+      Airbitz.core.requestFile({
+        success: function() { },
+        error: function() { }
+      });
+    };
+
+    $scope.cancel = function(){
+      $state.go('dashboard');
+    };
+
+    $scope.save = function() {
+      Airbitz.ui.showAlert('Saved', 'Submitting identity information...', {
+        'showSpinner': true
+      });
+      UserFactory.verifyIdentity($scope.identityType, $scope.nationality, BASE_64_IMAGE, BASE_64_IMAGE).then(function() {
+        Airbitz.ui.showAlert('Saved', 'Identity information has been submitted.');
+        $state.go('dashboard');
+      }, function(e) {
+        Airbitz.ui.showAlert('', 'Unable to submit identity information at this time.');
+      });
+    };
+  }
+
+  function addressVerificationController($scope, $state, Error, UserFactory) {
+    Airbitz.ui.title('Address Verification');
+    $scope.account = UserFactory.getUserAccount();
+    $scope.loadProofFile = function() {
+      Airbitz.core.requestFile({
+        success: function() { },
+        error: function() { }
+      });
+    };
+
+    $scope.cancel = function() {
+      $state.go('dashboard');
+    };
+
+    $scope.save = function() {
+      Airbitz.ui.showAlert('Saved', 'Submitting address information...', {
+        'showSpinner': true
+      });
+      UserFactory.verifyAddress($scope.addressType, $scope.account.address, $scope.account.city,
+                                $scope.account.zipcode, $scope.account.country, BASE_64_IMAGE).then(function() {
+        Airbitz.ui.showAlert('Saved', 'Address information has been submitted.');
+        $state.go('dashboard');
+      }, function(e) {
+        Airbitz.ui.showAlert('', 'Unable to submit address information');
       });
     };
   }
