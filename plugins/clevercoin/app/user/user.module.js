@@ -1,7 +1,8 @@
 (function () {
   'use strict';
 
-  var BASE_64_IMAGE = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QA/wD/AP+gvaeTAAAAB3RJTUUH3woTCxIgaG9bcAAAAAxJREFUCNdjuHvzJgAFJgKQH8bAMAAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAxNS0xMS0yNFQxNjoyMDoxMS0wODowMJ/OiOMAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMTUtMTAtMTlUMTE6MTg6MzItMDc6MDC/SYTBAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAABJRU5ErkJggg==';
+  // var BASE_64_IMAGE = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QA/wD/AP+gvaeTAAAAB3RJTUUH3woTCxIgaG9bcAAAAAxJREFUCNdjuHvzJgAFJgKQH8bAMAAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAxNS0xMS0yNFQxNjoyMDoxMS0wODowMJ/OiOMAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMTUtMTAtMTlUMTE6MTg6MzItMDc6MDC/SYTBAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAABJRU5ErkJggg==';
+  var BASE_64_IMAGE = '/tmp/resize.png';
 
   angular
     .module('app.user', ['app.dataFactory', 'app.constants'])
@@ -15,7 +16,8 @@
     .controller('addressVerificationController', ['$scope', '$state', 'Error', 'UserFactory', addressVerificationController])
     .controller('transactionsController', ['$scope', '$state', 'DataFactory', transactionsController])
     .controller('fundsController', ['$scope', '$state', 'DataFactory', fundsController])
-    .directive('accountSummary', accountSummary);
+    .directive('accountSummary', accountSummary)
+    .directive('fileModel', fileModel);
 
   function homeController($scope, $state, $location, UserFactory) {
     var d = parseParameters($location);
@@ -152,11 +154,23 @@
   function userInformationController($scope, $state, Error, UserFactory) {
     Airbitz.ui.title('User Information');
     $scope.account = UserFactory.getUserAccount();
+    $scope.countries = UserFactory.getCountries();
+    UserFactory.fetchCountries().then(function(b) {
+      $scope.countries = b;
+      $scope.account.birthcountryObject = UserFactory.findCountry($scope.account.birthcountry);
+      $scope.account.addresscountryObject = UserFactory.findCountry($scope.account.addresscountry);
+    });
+
     $scope.cancel = function() {
       $state.go('dashboard');
     };
 
     $scope.save = function() {
+      $scope.account.birthcountry = $scope.account.birthcountryObject.codeAlpha3;
+      $scope.account.addresscountry = $scope.account.addresscountryObject.codeAlpha3;
+      Airbitz.ui.showAlert('Saved', 'Submitting user information...', {
+        'showSpinner': true
+      });
       UserFactory.updateUserAccount($scope.account).then(function() {
         Airbitz.ui.showAlert('Saved', 'User information has been updated.');
         $state.go('dashboard');
@@ -169,6 +183,11 @@
   function identityVerificationController($scope, $state, Error, UserFactory) {
     Airbitz.ui.title('Identity Verification');
     $scope.account = UserFactory.getUserAccount();
+    UserFactory.fetchCountries().then(function(b) {
+      $scope.countries = b;
+      $scope.account.nationalityObject = UserFactory.findCountry($scope.account.birthcountry);
+    });
+
     $scope.loadIdentityFront = function() {
       Airbitz.core.requestFile({
         success: function() { },
@@ -191,7 +210,9 @@
       Airbitz.ui.showAlert('Saved', 'Submitting identity information...', {
         'showSpinner': true
       });
-      UserFactory.verifyIdentity($scope.identityType, $scope.nationality, BASE_64_IMAGE, BASE_64_IMAGE).then(function() {
+      // Update the address value
+      $scope.account.birthcountry = $scope.account.nationalityObject.codeAlpha3;
+      UserFactory.verifyIdentity($scope.identityType, $scope.nationality, $scope.primaryFile, $scope.secondaryFile).then(function() {
         Airbitz.ui.showAlert('Saved', 'Identity information has been submitted.');
         $state.go('dashboard');
       }, function(e) {
@@ -203,6 +224,10 @@
   function addressVerificationController($scope, $state, Error, UserFactory) {
     Airbitz.ui.title('Address Verification');
     $scope.account = UserFactory.getUserAccount();
+    UserFactory.fetchCountries().then(function(b) {
+      $scope.countries = b;
+      $scope.account.addresscountryObject = UserFactory.findCountry($scope.account.addresscountry);
+    });
     $scope.loadProofFile = function() {
       Airbitz.core.requestFile({
         success: function() { },
@@ -215,9 +240,12 @@
     };
 
     $scope.save = function() {
+      $scope.account.addresscountry = $scope.account.addresscountryObject.codeAlpha3;
       Airbitz.ui.showAlert('Saved', 'Submitting address information...', {
         'showSpinner': true
       });
+      // Update the address value
+      $scope.account.addresscountry = $scope.account.countryObject.codeAlpha3;
       UserFactory.verifyAddress($scope.addressType, $scope.account.address, $scope.account.city,
                                 $scope.account.zipcode, $scope.account.country, BASE_64_IMAGE).then(function() {
         Airbitz.ui.showAlert('Saved', 'Address information has been submitted.');
@@ -244,4 +272,20 @@
       templateUrl: 'app/user/partials/accountSummary.html'
     };
   }
+
+  function fileModel($parse) {
+    return {
+        restrict: 'A',
+        link: function(scope, element, attrs) {
+            var model = $parse(attrs.fileModel);
+            var modelSetter = model.assign;
+            
+            element.bind('change', function(){
+                scope.$apply(function(){
+                    modelSetter(scope, element[0].files[0]);
+                });
+            });
+        }
+    };
+  };
 })();

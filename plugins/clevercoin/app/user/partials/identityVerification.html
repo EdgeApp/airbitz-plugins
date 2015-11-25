@@ -15,10 +15,12 @@
   <div class="row">
     <div class="form-group col-xs-12">
       <label for="inputNationality" class="">Nationality</label>
-      <input ng-model="nationality"
-            type="text" id="inputNationality" class="form-control"
-            autofocus="" autocomplete="off" autocorrect="off"
-            name="nationality" required="" />
+      <select
+        ng-options="o.name for o in countries"
+        ng-model="account.nationalityObject" class="form-control"
+        id="inputNationality" name="nationality" required="" />
+        <option value="">Select a country</option>
+      </select>
       <div class="input-error" ng-show="form.$submitted || form.nationality.$touched">
         <span ng-show="form.nationality.$error.required" class="label label-danger">Required</span>
       </div>

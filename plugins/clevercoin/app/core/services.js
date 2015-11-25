@@ -115,7 +115,7 @@
             account.birthcity = b.birthcity;
             account.addresscountry = b.addresscountry;
             account.phonenumber = b.phonenumber;
-            account.termsAgreedVersion = b.phonenumber;
+            account.termsAgreedVersion = b.termsAgreedVersion;
             Airbitz.core.writeData('account', account);
             resolve(b)
           } else {
@@ -176,6 +176,37 @@
           (s === 200) ?  resolve(b) : reject(b);
         });
       });
+    };
+
+    var countryList = [];
+    factory.getCountries = function() {
+      return countryList;
+    };
+    factory.fetchCountries = function() {
+      if (countryList.length > 0) {
+        return $q(function(resolve, reject) {
+          resolve(countryList);
+        });
+      } else {
+        return $q(function(resolve, reject) {
+          CcFactory.supportedCountries(function(e, s, b) {
+            if (s === 200) {
+              countryList = b;
+              resolve(b)
+            } else {
+              reject(b);
+            } 
+          }); 
+        });
+      }
+    };
+    factory.findCountry = function(alpha3) {
+      for (var i = 0; i < countryList.length; ++i) {
+        if (countryList[i].codeAlpha3 == alpha3) {
+          return countryList[i];
+        }
+      }
+      return null;
     };
 
     // Fetch the user data if available

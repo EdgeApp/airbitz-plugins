@@ -153,6 +153,13 @@ var CleverCoin = (function () {
       headers['Accept'] = 'application/json';
 
       CleverCoin.prepareData(req, opts, null);
+      if (headers['Content-Type'] == 'multipart/form-data') {
+        var data = new FormData();
+        for (var k in opts.data) {
+          data.append(k, opts.data[k]);
+        }
+        req.fb = data;
+      }
       return CleverCoin.request(req, opts.callback);
     },
 
@@ -225,7 +232,7 @@ var CleverCoin = (function () {
         'method': 'POST',
         'data': data,
         'callback': callback,
-        'content-transfer-encoding': 'base64',
+        // 'content-transfer-encoding': 'base64',
         'content-type': 'multipart/form-data'
       });
     },
@@ -235,7 +242,7 @@ var CleverCoin = (function () {
         'method': 'POST',
         'data': data,
         'callback': callback,
-        'content-transfer-encoding': 'base64',
+        // 'content-transfer-encoding': 'base64',
         'content-type': 'multipart/form-data'
       });
     },
@@ -303,6 +310,12 @@ var CleverCoin = (function () {
       return this._request(true, '/funds/ledger', {
         'callback': callback
       });
+    },
+
+    supportedCountries: function(callback) {
+      return this._request(true, '/utility/countries', {
+        'callback': callback
+      });
     }
   };
   return CleverCoin;
@@ -328,6 +341,12 @@ var CleverCoin = (function () {
 
   function cleverCoinService($http) {
     CleverCoin.request = function(opts, callback) {
+      if (opts.headers['Content-Type'] == 'multipart/form-data') {
+        opts.headers['Content-Type'] = undefined;
+        opts.transformRequest = angular.identity;
+        opts.data = opts.fb;
+      }
+      opts.fb = null;
       return $http(opts).success(function(data, status, header, config) {
         callback(null, status, data);
       }).error(function(data, status, header, config) {

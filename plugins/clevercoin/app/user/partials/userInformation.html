@@ -61,12 +61,12 @@
   <div class="row">
     <div class="form-group col-xs-12">
       <label for="inputBirthCountry" class="">Birth Country</label>
-      <input ng-model="account.birthcountry" name="birthcountry" type="text" id="inputBirthCountry" class="form-control"
-            placeholder="Birth Country"
-            autofocus=""
-            autocorrect="off"
-            autocomplete="off"
-            required="" />
+      <select
+        ng-options="o.name for o in countries"
+        ng-model="account.birthcountryObject" class="form-control"
+        id="inputBirthCountry" name="birthcountry" required="" />
+        <option value="">Select a country</option>
+      </select>
       <div class="input-error" ng-show="form.$submitted || form.birthcountry.$touched">
         <span ng-show="form.birthcountry.$error.required" class="label label-danger">Required</span>
       </div>
@@ -91,12 +91,12 @@
   <div class="row">
     <div class="form-group col-xs-12">
       <label for="inputAddressCountry" class="">Address Country</label>
-      <input ng-model="account.addresscountry" name="addresscountry" type="text" id="inputAddressCountry" class="form-control"
-            placeholder="Address Country"
-            autofocus=""
-            autocorrect="off"
-            autocomplete="off"
-            required="" />
+      <select
+        ng-options="o.name for o in countries"
+        ng-model="account.addresscountryObject" class="form-control"
+        id="inputAddressCountry" name="addresscountry" required="" />
+        <option value="">Select a country</option>
+      </select>
       <div class="input-error" ng-show="form.$submitted || form.addresscountry.$touched">
         <span ng-show="form.addresscountry.$error.required" class="label label-danger">Required</span>
       </div>
