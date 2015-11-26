@@ -57,13 +57,17 @@
 	<div class="item card gift-card">
 	  	<div class="row">
 	  		<div class="col-md-12">
-				<div class="title-header">Spend Bitcoin at Starbucks</div>
+				<div class="title-header">Spend Ƀitcoin at Starbucks</div>
 				<div class="title-header-2">&amp; Save 20%</div>
 				<div class="card-image">
 					<div class="card-barcode"><div class="material-placeholder"><img class="barcode materialboxed" src=""></div></div>
-					<div class="card-number"></div>
+				</div>
+				<div class="card-info-main card-content">
+					<div class="card-number"><i class="material-icons right">more_vert</i></div>
 					<div class="card-balance">Current Balance</div>
 					<div class="card-balance-amt"></div>
+				</div>
+				<div class="card-reveal">
 				</div>
 	  		</div>
 	  	</div>
@@ -97,11 +101,9 @@
 			</div>
 	    </h3>
 	  	<center class="main">
+	  		<i class="fa fa-question-circle fa-2x fa-pull-right fold-help"></i>
 	  		<header>
-	  			<center>
-					<img src="https://airbitz.co/go/wp-content/uploads/2015/11/starbucks-96.png">
-				</center>
-				<i class="fa fa-question-circle right"></i>
+					<img src="https://airbitz.co/go/wp-content/uploads/2015/11/starbucks-96.png"/>
 			</header>
 			<main>
 			  	<div id="user-cards" class="owl-carousel owl-theme">
@@ -415,7 +417,7 @@ Card.prototype.update = function() { // Update UI with info Fold has about card.
 	console.log("id is: " + this.id);
 	$.get(fold_api + "my/cards/" + this.id).done(function(cardInfo) {
 		cardInfo = cardInfo["cards"][0];
-		$(cardSelector).children(".card-info-main").children(".card-balance").children(".card-balance-amt").text( cardInfo["balance"][0]["formatted"]["all_decimal_places"] );
+		$(cardSelector).children().children().children(".card-info-main").children(".card-balance-amt").text( cardInfo["balance"][0]["formatted"]["all_decimal_places"] );
 		$(cardSelector).find("card-number").text( cardInfo["code"] );
 	});
 }
