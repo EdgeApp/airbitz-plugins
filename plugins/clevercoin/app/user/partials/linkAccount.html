@@ -1,0 +1,25 @@
+<form name="form" novalidate style="margin: 20px 0">
+
+  <div class="row">
+    <div class="form-group col-xs-12">
+      <label for="inputEmail" class="">Email</label>
+      <input ng-model="email" name="email" type="email" id="inputEmail" class="form-control"
+              placeholder="user@email.com"
+              autocomplete="off"
+              required="" />
+      <div class="input-error" ng-show="form.$submitted || form.email.$touched">
+        <span ng-show="form.email.$error.required" class="label label-danger">Required</span>
+        <span ng-show="form.email.$error.email" class="label label-danger">Valid Email Required</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-12">
+      <button type="button"
+              ng-click="link()"
+              class="btn btn-block btn-info">Link Account</button>
+    </div>
+  </div>
+</form>
+

@@ -15,6 +15,11 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
       templateUrl: "app/user/partials/signup.html",
       controller: "signupController",
     })
+    .state("link", {
+      url: "/link/",
+      templateUrl: "app/user/partials/linkAccount.html",
+      controller: "linkController",
+    })
     // route for signup
     .state("pendingActivation", {
       url: "/pendingActivation/",

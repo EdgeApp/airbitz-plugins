@@ -52,9 +52,9 @@
       });
       return d.promise;
     };
-    factory.requestLink = function() {
+    factory.requestLink = function(email) {
       var d = $q.defer();
-      CcFactory.requestLink(account.email, redirectUri, function(_, c, b) {
+      CcFactory.requestLink(email, redirectUri, function(_, c, b) {
         (c >= 200 && c <= 300) ? d.resolve(b) : d.reject(b);
       });
       return d.promise;
@@ -212,7 +212,9 @@
     };
 
     // Fetch the user data if available
-    factory.fetchAccount();
+    if (factory.isSignedIn()) {
+      factory.fetchAccount();
+    }
     return factory;
   }
   function DataFactory($q, $filter, ExchangeFactory, CcFactory, Prices) {

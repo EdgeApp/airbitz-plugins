@@ -11,6 +11,7 @@
     .controller('activateController', ['$scope', '$state', '$stateParams', 'Error', 'UserFactory', activateController])
     .controller('dashboardController', ['$scope', '$sce', '$state', 'Error', 'DataFactory', 'UserFactory', dashboardController])
     .controller('signupController', ['$scope', '$state', 'Error', 'UserFactory', signupController])
+    .controller('linkController', ['$scope', '$state', 'Error', 'UserFactory', linkController])
     .controller('userInformationController', ['$scope', '$state', 'Error', 'UserFactory', userInformationController])
     .controller('identityVerificationController', ['$scope', '$state', 'Error', 'UserFactory', identityVerificationController])
     .controller('addressVerificationController', ['$scope', '$state', 'Error', 'UserFactory', addressVerificationController])
@@ -69,6 +70,14 @@
         Airbitz.ui.showAlert('Error', 'Error signing up');
       });
     };
+  }
+
+  function linkController($scope, $state, Error, UserFactory) {
+    Airbitz.ui.title('Link account');
+    $scope.link = function() {
+      UserFactory.requestLink($scope.email).then(function() {
+      });
+    }
   }
 
   function pendingActivationController($scope, $state, Error, UserFactory) {
