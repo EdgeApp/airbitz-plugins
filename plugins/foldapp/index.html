@@ -98,7 +98,9 @@
 	    </h3>
 	  	<center class="main">
 	  		<header>
-				<img src="https://airbitz.co/go/wp-content/uploads/2015/11/starbucks-96.png">
+	  			<center>
+					<img src="https://airbitz.co/go/wp-content/uploads/2015/11/starbucks-96.png">
+				</center>
 				<i class="fa fa-question-circle right"></i>
 			</header>
 			<main>
@@ -264,13 +266,15 @@ var Account = {
 				Account.all_cards[numOfCards] = card;
 				//console.log("Card " + card.id + " has card num, " + card.num);
 				var card_html = document.querySelector('#card-template').content;
-				
-				card_html.querySelector(".gift-card").setAttribute("card", card.id);
-				card_html.querySelector(".card-barcode").innerHTML = "<img class=\"barcode materialboxed\" src=\"" + fold_api + "my/cards/" + card.id + "/barcode/png" + "\">";
-				card_html.querySelector(".card-balance-amt").innerText = card.bal;
-				card_html.querySelector(".card-number").innerText = card.num;
-				document.querySelector("#user-cards").appendChild( document.importNode(card_html, true) );
-				$('.materialboxed').materialbox();
+
+				if(!card.bal == 0) {
+					card_html.querySelector(".gift-card").setAttribute("card", card.id);
+					card_html.querySelector(".card-barcode").innerHTML = "<img class=\"barcode materialboxed\" src=\"" + fold_api + "my/cards/" + card.id + "/barcode/png" + "\">";
+					card_html.querySelector(".card-balance-amt").innerText = card.bal;
+					card_html.querySelector(".card-number").innerText = card.num;
+					document.querySelector("#user-cards").appendChild( document.importNode(card_html, true) );
+					$('.materialboxed').materialbox();
+				}
 			}
 			Account.owl.owlCarousel({ // Activate owl Carousel for cards.
 			    //navigation : true, // Show next and prev buttons
