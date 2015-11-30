@@ -42,7 +42,7 @@
 <template id="how-it-works">
 	<div class="step-1">
 		<h5>Load</h5>
-		<p>Visit your local BRAND_NAME. Select the card amount you want and confirm your payment.</p>
+		<p>Visit your local <span class="brand-name">BRAND_NAME</span>. Select the card amount you want and confirm your payment.</p>
 	</div>
 	<div class="step-2">
 		<h5>Pay</h5>
@@ -152,7 +152,7 @@
 var fold_api = "https://api.foldapp.com/v1/";
 var brand = Airbitz.config.get("BRAND");
 
-document.title = brand;
+document.title = brand; // Set page's title to brand of gift card.
 
 function toggleUi() {
 	$(".fold-loading").css("display", "none");
@@ -409,11 +409,13 @@ Card.prototype.ping = function() { // Tell Fold we need to check this balance to
 Card.prototype.update = function() { // Update UI with info Fold has about card.
 	//cardSelector = ;
 	this.ping();
-	console.log("id is: " + this.id);
-	console.log($("[card=" + this.id + "]").text());
+	var thisCard = this;
 	$.get(fold_api + "my/cards/" + this.id).done(function(cardInfo) {
+		console.log("id is: " + thisCard.id);
+		console.log($("[card=" + thisCard.id + "]").text()); // Balance before.
 		cardInfo = cardInfo["cards"][0];
-		$("[card=" + this.id + "]").text(cardInfo["balance"][0]["formatted"]["all_decimal_places"]);
+		console.log("fold bal: " + cardInfo["balance"][0]["formatted"]["all_decimal_places"]);
+		$("[card=" + thisCard.id + "]").text(cardInfo["balance"][0]["formatted"]["all_decimal_places"]);
 		/*$(cardSelector).children(".card-info-main").children(".card-balance-amt").text( cardInfo["balance"][0]["formatted"]["all_decimal_places"] );
 		$(cardSelector).find("card-number").text( cardInfo["code"] );*/
 	});
@@ -422,6 +424,18 @@ Card.prototype.remove = function() { // Remove card from UI
 	if(this.bal == 0) {
 
 	}
+}
+Card.prototype.mockBal = function(bal) {
+	var url = fold_api + "my/mock/cards";
+	var thisCard = this;
+	$.post(url, 
+	{"cards": [{
+	  "id": thisCard.id.toString(),
+	  "balance_amount": bal.toString()
+	}]}
+	).done(function() {
+		console.log("Done mocking " + thisCard.id + "balance to: " + bal);
+	});
 }
 
 // Main
