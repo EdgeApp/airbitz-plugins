@@ -1022,3 +1022,41 @@ html body .user-account-form {
   position: relative;
   bottom: auto;
 }
+button.btn-add.btn {
+  width: 100px;
+  height: 100px;
+  font-weight: bold;
+  font-size: 30px;
+  border-radius: 50px;
+  margin: 20px;
+  background-color: #2291CF;
+}
+.fold-loading-spin {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  /* bring your own prefixes */
+  transform: translate(-50%, -50%);
+}
+.main {
+  display: none;
+}
+.barcode {
+  width: 200px;
+  height: 65px;
+}
+#user-cards .item {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+.add-buttons {
+  text-align: left;
+}
+.collection .collection-item.avatar.card-list {
+  padding: 10px 20px;
+}
+.card-content.card-info-main {
+  padding: 0;
+  margin: 0;
+}
