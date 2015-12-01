@@ -53,25 +53,13 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
     // route for creating an order
     .state("orderReceipt", {
       url: "/receipt/",
-      templateUrl: "app/receipt/partials/receipt.html",
+      templateUrl: "app/exchange/partials/receipt.html",
       controller: "receiptController",
-    })
-    // route for transactions
-    .state("userTransactions", {
-      url: "/user/transactions/",
-      templateUrl: "app/user/partials/transactions.html",
-      controller: "transactionsController",
     })
     .state("userFunds", {
       url: "/user/funds/",
       templateUrl: "app/user/partials/funds.html",
       controller: "fundsController",
-    })
-    // route for executing order
-    .state("executeOrder", {
-      url: "/exchange/order/execute/",
-      templateUrl: "app/exchange/partials/order.execute.html",
-      controller: "executeOrderController",
     })
     .state("userInformation", {
       url: "/account/information",
@@ -88,10 +76,42 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
       templateUrl: "app/user/partials/identityVerification.html",
       controller: "identityVerificationController",
     })
+    .state("editBank", {
+      url: "/account/bank/add",
+      templateUrl: "app/user/partials/bankVerification.html",
+      controller: "editBankController",
+    })
+    .state("sepaDeposit", {
+      url: "/account/bank/deposit",
+      templateUrl: "app/user/partials/bankDeposit.html",
+      controller: "sepaDepositBankController",
+    })
     // route for errors
     .state("error", {
       url: "/error/",
       templateUrl: "app/error/partials/error.html",
       controller: "errorController",
     });
+}]).
+run(['$rootScope', 'DataFactory', function ($rootScope, DataFactory) {
+  DataFactory.getSelectedWallet().then(function(newWallet) {
+    Airbitz.currentWallet = newWallet;
+    $rootScope.currentWallet = newWallet;
+  });
+  Airbitz.core.setWalletChangeListener(function(newWallet) {
+    $rootScope.$apply(function() {
+      Airbitz.currentWallet = newWallet;
+      $rootScope.currentWallet = newWallet;
+    });
+  });
+  Airbitz.cryptoDenom = Airbitz.core.getBtcDenomination();
+  $rootScope.cryptoDenom = Airbitz.core.getBtcDenomination();
+  Airbitz.core.setDenominationChangeListener(function(newDenom) {
+    $rootScope.$apply(function() {
+      Airbitz.cryptoDenom = newDenom;
+      $rootScope.cryptoDenom = newDenom;
+    });
+    $rootScope.$broadcast('DenominationChange', newDenom);
+  });
+  $rootScope.exchange = DataFactory.getExchange();
 }]);

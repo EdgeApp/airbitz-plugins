@@ -5,50 +5,49 @@
     .module('app.exchange', ['app.dataFactory', 'app.prices', 'app.core'])
     .controller('orderController', ['$scope', '$state', '$stateParams', '$filter', 'Error', 'DataFactory', 'UserFactory', 'Prices', orderController])
     .controller('reviewOrderController', ['$scope', '$state', 'Error', 'DataFactory', 'UserFactory', 'Prices', reviewOrderController])
-    .controller('executeOrderController', ['$scope', '$state', 'DataFactory', 'UserFactory', executeOrderController]);
+    .controller('executeOrderController', ['$scope', '$state', 'DataFactory', 'UserFactory', executeOrderController])
+    .controller('receiptController', ['$scope', '$state', 'DataFactory', 'UserFactory', receiptController]);
 
   function orderController($scope, $state, $stateParams, $filter, Error, DataFactory, UserFactory, Prices) {
     $scope.account = UserFactory.getUserAccount();
     $scope.order = DataFactory.getOrder(false); // initialize new order and clear existing order
     $scope.order.orderAction = $stateParams.orderAction; // set order action
-    DataFactory.paymentMethods().then(function(b) {
-      $scope.paymentMethods = b;
-    });
-
+    
     if ($scope.order.orderAction == 'buy') {
       Airbitz.ui.title('Buy Bitcoin');
+      $scope.order.paymentMethod = {"name":"Wallet","lockDuration":0,"type":"pull"};
     } else {
       Airbitz.ui.title('Sell Bitcoin');
+      // $scope.order.paymentMethod = {"name":"Wallet","lockDuration":1,"type":"pull"};
     }
 
     Prices.setBuyQty(1).then(function() {
       Prices.setSellQty(1);
-    }).then(function() {
-      return DataFactory.getUserWallets().then(function(userWallets) {
-        $scope.userWallets = userWallets;
-        $scope.order.transferToWallet = userWallets[0]
-      }, Error.reject);
     });
 
     $scope.convertFiatValue = function(input) {
-      if (typeof(input)==='undefined') input = 0;
-
-      var price = ($scope.order.orderAction == 'buy')
-                ? Prices.currentBuy.ask : Prices.currentSell.ask;
-      var btcValue = input / parseFloat(price);
-      $scope.order.orderBtcInput = parseFloat($filter('roundBtc')(btcValue));
+      var d = Prices.convertFiatValue($scope.order.orderAction, input); 
+      $scope.order.orderValueSatoshi = d.orderValueSatoshi;
+      $scope.order.orderValueInput = d.orderValueInput;
+      $scope.order.orderBtcInput = d.orderBtcInput;
     };
 
     $scope.convertBtcValue = function(input) {
-      if (typeof(input)==='undefined') input = 0;
-
-      var price = ($scope.order.orderAction == 'buy')
-          ? Prices.currentBuy.ask : Prices.currentSell.ask;
-      var output = input * price;
-      $scope.order.orderFiatInput = parseFloat($filter('roundFiat')(parseFloat(output)));
+      var d = Prices.convertBtcValue($scope.order.orderAction, input); 
+      $scope.order.orderBtcInput = d.orderBtcInput;
+      $scope.order.orderValueSatoshi = d.orderValueSatoshi;
+      $scope.order.orderFiatInput = d.orderFiatInput;
     };
     $scope.next = function() {
-      $state.go("reviewOrder");
+      Airbitz.ui.showAlert('', 'Requesting quote...', { 'showSpinner': true });
+      $scope.order.orderBtcInput = parseFloat($scope.order.orderBtcInput).toFixed(8);
+      DataFactory.requestBuy($scope.order.orderBtcInput, $scope.order.paymentMethod.name).then(function(data) {
+        Airbitz.ui.hideAlert();
+        $scope.order.quote = data;
+        $state.go("reviewOrder");
+      }, function(b) {
+        Airbitz.ui.showAlert('', 'Unable to receive quote.');
+      });
     };
   }
   function reviewOrderController($scope, $state, Error, DataFactory, UserFactory, Prices) {
@@ -56,8 +55,6 @@
     Airbitz.ui.title('Confirm Order');
     $scope.order = order;
     $scope.account = UserFactory.getUserAccount();
-    $scope.priceObj = ($scope.order.orderAction == 'buy')
-                    ? Prices.currentBuy : Prices.currentSell;
     if (!order.orderAction) {
       $state.go('dashboard');
     }
@@ -65,16 +62,15 @@
       $state.go('exchangeOrder', {'orderAction': order.orderAction});
     };
     $scope.executeOrder = function() {
-      console.log(JSON.stringify(order));
-      var amountFiat = DataFactory.getExchange().currencyNum == order.transferToWallet.currencyNum
-                     ? order.orderFiatInput : 0;
       if (order.orderAction == 'buy') {
-        DataFactory.buy(order.wallet, order.orderBtcInput, order.paymentMethod.name).then(function(data) {
+        Airbitz.ui.showAlert('', 'Placing order...', { 'showSpinner': true });
+        DataFactory.confirmBuy(order.quote.linkOrCode).then(function(data) {
           Airbitz.ui.showAlert('Bought Bitcoin', 'You bought bitcoin!');
           $state.go('orderReceipt');
         }, Error.reject);
       } else {
-        DataFactory.sell(order.wallet, order.orderBtcInput, order.paymentMethod.name).then(function(data) {
+        Airbitz.ui.showAlert('', 'Executing sell...', { 'showSpinner': true });
+        DataFactory.sell(order.orderBtcInput, order.paymentMethod.name).then(function(data) {
           Airbitz.ui.showAlert('Sold Bitcoin', 'You sold bitcoin!');
           $state.go('orderReceipt');
         }, Error.reject);
@@ -86,6 +82,14 @@
 
     $scope.exchange.confirmDeposit = function(){
       $state.go('confirmDeposit');
+    };
+  }
+  function receiptController($scope, $state, DataFactory, UserFactory) {
+    Airbitz.ui.title('Order Receipt');
+    $scope.order = DataFactory.getOrder(false);
+    $scope.account = UserFactory.getUserAccount();
+    $scope.finish = function() {
+      $state.go('dashboard');
     };
   }
 })();

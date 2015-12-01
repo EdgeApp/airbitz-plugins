@@ -2,17 +2,7 @@
   <div class="col-xs-6 no-pad">
   </div>
   <div class="col-xs-6 live-ticker text-right no-pad">
-    <div price-update price-type="{{ order.orderAction }}"></div>
-  </div>
-</div>
-
-<div class="exchange-buy-sell row">
-  <div class="col-xs-12 no-pad">
-    <ul class="list-group" style="margin-bottom: 0;">
-      <li class="ng-trans ng-trans-scale-up easeOutBack list-group-item">
-        <div exchange-limits></div>
-      </li>
-    </ul>
+    <div price-update price-type="buy"></div>
   </div>
 </div>
 
@@ -20,11 +10,10 @@
   <div class="exchange-buy-sell-interface row">
     <div class="col-xs-12">
       <div class="form-group">
-        <label for="inputFiatAmount">Amount to <span class="label label-outline">{{ order.orderAction | uppercase }}</span></label>
         <div class="input-group">
           <input
-            ng-model="order.orderValueInput"
-            ng-change="convertBtcValue(order.orderValueInput)"
+            ng-model="orderValueInput"
+            ng-change="convertBtcValue(orderValueInput)"
             type="number"
             name="orderValueInput"
             class="right-square input-lg"
@@ -44,8 +33,8 @@
       <div class="form-group">
         <div class="input-group">
           <input
-            ng-model="order.orderFiatInput"
-            ng-change="convertFiatValue(order.orderFiatInput)"
+            ng-model="orderFiatInput"
+            ng-change="convertFiatValue(orderFiatInput)"
             type="number"
             name="orderFiatInput"
             class="right-square input-lg"
@@ -69,7 +58,7 @@
     <div class="col-xs-6 no-pad">
       <button type="button"
       ui-sref="dashboard"
-      class="buy-sell-next btn btn-lg btn-block btn-danger">Cancel {{ order.orderAction | titlecase }}</button>
+      class="buy-sell-next btn btn-lg btn-block btn-danger">Cancel</button>
     </div>
     <div class="col-xs-6 no-pad">
       <button type="submit"
@@ -80,3 +69,10 @@
   </div>
 </form>
 
+
+<div class="return-to-dashboard ng-trans ng-trans-fade-up easeOutSine">
+  <div class="row">
+    <div class="col-xs-12 no-pad">
+      <button type="button" ui-sref="dashboard" class="btn btn-block btn-lg btn-info">Dashboard</button>
+  </div>
+</div>

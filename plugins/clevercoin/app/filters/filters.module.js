@@ -4,7 +4,10 @@
     .filter('stateFilter', stateFilter)
     .filter('titlecase', titleCase)
     .filter('roundFiat', roundFiat)
-    .filter('roundBtc', roundBtc);
+    .filter('formatBtc', ['$filter', formatBtc])
+    .filter('roundBtc', roundBtc)
+    .filter('valToBtc', valToBtc)
+    .filter('satoshiToDenom', satoshiToDenom);
 
   function statusFilter() {
     return function(status) {
@@ -17,6 +20,23 @@
       return (status == 'Exported') 
         ? 'Pending' : (status == 'Verified') 
         ? 'Verified' : 'Unverified';
+    };
+  }
+
+  function personalInfoFilter() {
+    return function(status) {
+      if ('SUBMITTED' == status) {
+        return 'Submitted'
+      } else if ('PENDING' === status) {
+        return 'Pending';
+      } else if ('VERIFICATIONSUBMITTED' === status) {
+        return 'Submitted';
+      } else if ('VERIFIED' === status) {
+        return 'Verified';
+      } else if ('FAILED' === status) {
+        return 'Failed';
+      }
+      return 'Unverified';
     };
   }
 
@@ -42,15 +62,55 @@
   }
 
   function roundFiat(){
-    return function(val,to){
-        console.log(val);
-        return val.toFixed(to || 2);
+    return function(val, to){
+        return (val || 0).toFixed(to || 2);
+    }
+  }
+
+  function formatBtc($filter) {
+    return function(val, denom) {
+      var d = Airbitz.cryptoDenom;
+      return $filter('roundBtc')(val) + ' ' + d;
     }
   }
 
   function roundBtc(){
-    return function(val,to){
-        return val.toFixed(to || 5);
+    return function(val, to){
+      if (!val) {
+        return 0;
+      }
+      val = parseFloat(val);
+      var d = Airbitz.cryptoDenom;
+      if (d == "mBTC") {
+        return (val * 1000).toFixed(to || 3);
+      } else if (d == "bits") {
+        return (val * 1000000).toFixed(to || 2);
+      }
+      return val.toFixed(to || 5);
+    }
+  }
+
+  function valToBtc() {
+    return function(val){
+      var d = Airbitz.cryptoDenom;
+      if (d == "mBTC") {
+        return val / 1000;
+      } else if (d == "bits") {
+        return val / 1000000;
+      }
+      return val;
+    }
+  }
+
+  function satoshiToDenom() {
+    return function(val) {
+      if ("bits" == Airbitz.cryptoDenom) {
+        return val / 100;
+      } else if ("mBTC" == Airbitz.cryptoDenom) {
+        return val / 100000;
+      } else {
+        return val / 100000000;
+      }
     }
   }
 

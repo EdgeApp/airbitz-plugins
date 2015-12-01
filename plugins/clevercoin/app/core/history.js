@@ -19,7 +19,7 @@
         Airbitz.ui.navStackPush(current);
       }
       // if we are on the dashboard screen, empty history
-      if (next.match(/\.html#\/exchange\/$/)
+      if (next.match(/\.html#\/dashboard\/$/)
         || next.match(/\.html#\/signup\/$/)) {
         history.length = 0;
         Airbitz.ui.navStackClear();

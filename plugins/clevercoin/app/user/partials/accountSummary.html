@@ -5,8 +5,8 @@
   <div class="col-xs-12 no-pad">
     <ul class="list-group">
       <li ng-click="showAccountOptions()" class="header list-group-item">
-        <span class="list-group-item-heading">{{ account.firstname || titlecase }} {{ account.surname || titlecase }}</span>
-        <p class="list-group-item-text">Tap to view your account details</p>
+      <span class="list-group-item-heading">{{ account.firstname || titlecase }} {{ account.surname || titlecase }}</span>
+        <p class="list-group-item-text">{{ account.email || "Tap to view your account details" }}</p>
         <label class="status label label-outline pull-right"
                ng-class="{'label-success': userStatus.userCanTransact}">{{ userStatus.userCanTransact | statusFilter }}</label>
       </li>
@@ -14,7 +14,7 @@
         <span class="list-group-item-heading">User Information</span>
         <p class="list-group-item-text">Tap to edit</p>
         <label class="status label label-outline pull-right"
-               ng-class="{'label-success': account.termsAgreedVersion == 1}">{{ account.termsAgreedVersion == 1 | statusFilter }}</label>
+               ng-class="{'label-success': (account.termsAgreedVersion == 1 || userStatus.userCanTransact)}">{{ (account.termsAgreedVersion == 1 || userStatus.userCanTransact) | statusFilter }}</label>
       </li>
       <li ng-if="showOptions" ng-click="identity()" class="ng-trans ng-trans-scale-up easeOutBack list-group-item">
         <span class="list-group-item-heading">Verify Identity</span>
@@ -27,6 +27,16 @@
         <p class="list-group-item-text">Tap to edit</p>
         <label class="status label label-outline pull-right"
                ng-class="{'label-success': userStatus.userAddressSetup}">{{ userStatus.userAddressState | stateFilter }}</label>
+      </li>
+      <li ng-if="showOptions" data-ng-repeat="bank in banks" class="ng-trans ng-trans-scale-up easeOutBack list-group-item">
+          <span class="list-group-item-heading">Bank Account</span>
+          <p class="list-group-item-text">{{ bank.bank }} {{ bank.IBAN }}</p>
+          <label class="status label label-outline pull-right"
+                ng-class="{'label-success': bank.verified}">{{ bank.verified | statusFilter }}</label>
+      </li>
+      <li data-ng-if="banks.length == 0 && showOpt" data-ng-click="editBank()" class="ng-trans ng-trans-scale-up easeOutBack list-group-item">
+        <span class="list-group-item-heading">Bank Account</span>
+        <p class="list-group-item-text">Tap to Add</p>
       </li>
     </ul>
   </div>

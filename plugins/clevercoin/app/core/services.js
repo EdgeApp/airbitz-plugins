@@ -16,6 +16,8 @@
       isSignedIn: false,
       isActivated: false
     };
+    var bankList = Airbitz.core.readData('bankList') || [];
+    var walletList = Airbitz.core.readData('walletList') || [];
 
     factory.isSignedIn = function() {
       return account.isSignedIn;
@@ -33,7 +35,15 @@
     var redirectUri = Airbitz.config.get('REDIRECT_URI');
     factory.registerUser = function(name, email, password) {
       var d = $q.defer();
-      CcFactory.register(name, email, password, redirectUri, function(_, c, b) {
+      var mailTitle = 'Welcome to Airbitz on Clevercoin';
+      var mailMessage = [ 'Dear %1$s,<br /><br />',
+        'You have created an account at CleverCoin with this e-mail address (%2$s). Welcome!<br />',
+        'Click the button below to activate your account.<br /><br />',
+        'We have also summarized some facts and knowledge about bitcoin in this article.Do you have any questions? Let us know. We are happy to help you!<br /><br />',
+        'Best regards,<br />',
+        'Airbitz team'
+      ].join('');
+      CcFactory.register(name, email, password, redirectUri, mailTitle, mailMessage, function(_, c, b) {
         console.log(JSON.stringify(b));
         if (c >= 200 && c <= 300) {
           var account = factory.getUserAccount();
@@ -85,6 +95,7 @@
     factory.fetchUserAccountStatus = function() {
       var d = $q.defer();
       CcFactory.verificationStatus(function(e,s,b) {
+        console.log(JSON.stringify(b));
         if (s == 200 && b.identity && b.identity.passport && b.address && b.address.proof) {
           userStatus.userIdentitySetup = b.identity.passport.progressState == 'Verified';
           userStatus.userIdentityState = b.identity.passport.progressState;
@@ -100,24 +111,40 @@
       });
       return d.promise;
     };
+    factory.getWallets = function() {
+      return walletList;
+    };
+    factory.fetchWallets = function() {
+      return $q(function(resolve, reject) {
+        CcFactory.accountWallets(function(e, s, b) {
+        if (s >= 200 && s <= 300) {
+          walletList = b;
+          Airbitz.core.writeData('walletList', walletList); 
+          resolve(b);
+        } else {
+          reject(b);
+        }
+        });
+      });
+    };
     factory.fetchAccount = function() {
       return $q(function(resolve, reject) {
         CcFactory.getAccount(function(e, s, b) {
           if (200 === s) {
-            account.firstname = b.firstname;
-            account.surname = b.surname;
-            account.email = b.email;
-            account.verificationState = b.verificationState;
-            account.gender = b.gender;
+            account.firstname = b.firstname || account.firstname;
+            account.surname = b.surname || account.surname;
+            account.email = b.email || account.email;
+            account.verificationState = b.verificationState || account.verificationState;
+            account.gender = b.gender || account.gender;
             if (b.birthday) {
               var arr = b.birthday.split("-");
               account.birthday = new Date(arr[0], arr[1] - 1, arr[2]);
             }
-            account.birthcountry = b.birthcountry;
-            account.birthcity = b.birthcity;
-            account.addresscountry = b.addresscountry;
-            account.phonenumber = b.phonenumber;
-            account.termsAgreedVersion = b.termsAgreedVersion;
+            account.birthcountry = b.birthcountry || account.birthcountry;
+            account.birthcity = b.birthcity || account.birthcity;
+            account.addresscountry = b.addresscountry || account.addresscountry;
+            account.phonenumber = b.phonenumber || account.phonenumber;
+            account.termsAgreedVersion = b.termsAgreedVersion || account.termsAgreedVersion;
             Airbitz.core.writeData('account', account);
             resolve(b)
           } else {
@@ -180,6 +207,48 @@
       });
     };
 
+    factory.getBanks = function() {
+      return bankList;
+    };
+    factory.fetchBanks = function() {
+      return $q(function(resolve, reject) {
+        CcFactory.bankAccounts(function(e, s, b) {
+          if (s === 200) {
+            bankList = b;
+            Airbitz.core.writeData('bankList', bankList);
+            resolve(b)
+          } else {
+            reject(b);
+          }
+        });
+      });
+    };
+
+    factory.addBank = function(accountholder, iban, bic, bankstatement, 
+                               bankname, bankcountry, bankaddress) {
+      return $q(function(resolve, reject) {
+        CcFactory.addBank({
+            'accountholder': accountholder,
+            'IBAN': iban,
+            'BIC': bic,
+            'bankStatement': bankstatement,
+            'bankname': bankname,
+            'country': bankcountry,
+            'address': bankaddress
+          }, function(e, s, b) {
+          s === 200 ?  resolve(b) : reject(b);
+        });
+      });
+    };
+
+    factory.depositSepa = function() {
+      return $q(function(resolve, reject) {
+        CcFactory.depositSepa(function(e, s, b) {
+          s === 200 ? resolve(b) : reject(b);
+        });
+      });
+    }
+
     var countryList = [];
     factory.getCountries = function() {
       return countryList;
@@ -220,6 +289,24 @@
   function DataFactory($q, $filter, ExchangeFactory, CcFactory, Prices) {
     var factory = {};
 
+    factory.getSelectedWallet = function() {
+      return $q(function(resolve, reject) {
+        Airbitz.core.selectedWallet({
+          success: resolve,
+          error: reject
+        });
+      });
+    };
+
+    factory.getUserWallets = function() {
+      return $q(function(resolve, reject) {
+        Airbitz.core.wallets({
+          success: resolve,
+          error: reject
+        });
+      });
+    };
+
     factory.getTrades = function() {
       return $q(function(resolve, reject) {
         CcFactory.trades(function(e, s, b) {
@@ -231,7 +318,17 @@
     factory.getFundsLedger = function() {
       return $q(function(resolve, reject) {
         CcFactory.fundsLedger(function(e, s, b) {
-          s >= 200 && s < 300 ? resolve(b) : reject(b);
+          if (s >= 200 && s < 300) {
+            var ls = [];
+            for (var k in b.ledger) {
+              var row = b.ledger[k];
+              row.time = new Date(row.time * 1000);
+              ls.push(row);
+            }
+            resolve(ls);
+          } else {
+            reject(b);
+          }
         });
       });
     };
@@ -294,19 +391,6 @@
       exchangeOrder = {};
     };
 
-    var createAddress = function(wallet, label, amountSatoshi, amountFiat,
-                                category, notes, resolve, reject) {
-        Airbitz.core.createReceiveRequest(wallet, {
-          label: label,
-          category: category,
-          notes: notes,
-          amountSatoshi: amountSatoshi,
-          amountFiat: amountFiat,
-          success: resolve,
-          error: reject
-        })
-    };
-
     var formatNotes = function(action, amountFiat) {
       return action + " on " + $filter('date')(new Date().getTime(), 'yyyy-MM-dd @ H:mm') + " for " + $filter('currency')(amountFiat);
     }
@@ -318,7 +402,7 @@
     var createAddress = function(wallet, label, amountSatoshi, amountFiat,
                                  category, notes, resolve, reject) {
         if (Airbitz._bridge.inDevMod()) {
-          resolve({'address': Airbitz.config.get('MAINNET_ADDRESS')});
+          resolve({'address': Airbitz.config.get('TESTNET_ADDRESS')});
         } else {
           Airbitz.core.createReceiveRequest(wallet, {
             label: label,
@@ -326,6 +410,7 @@
             notes: notes,
             amountSatoshi: amountSatoshi,
             amountFiat: amountFiat,
+            bizId: ExchangeFactory.bizId,
             success: resolve,
             error: reject
           });
@@ -340,32 +425,55 @@
       return d.promise;
     };
 
-    factory.buy = function(wallet, qty, paymentMethod) {
+    factory.requestBuy = function(btcQty, paymentMethod) {
       var d = $q.defer();
       var uri = Airbitz.config.get('REDIRECT_URI');
-      createAddress(wallet, 'CleverCoin', qty, '', 'Exchange:CleverCoin', 'Here are some notes', function(request) {
+      var wallet = Airbitz.currentWallet;
+      createAddress(wallet, 'CleverCoin', 0, 0, 'Exchange:CleverCoin', '', function(request) {
         var address = request['address'];
-        CcFactory.quote(qty, 'BTC', paymentMethod, uri, '', address, function(e, r, b) {
-          r == 200 ? d.resolve(b) : d.reject(b);
+        CcFactory.quote(btcQty, 'BTC', paymentMethod, uri, '', address, function(e, r, b) {
+          if (r == 200) {
+            b.amount = Math.abs(b.amount);
+            b.expires = new Date(b.expires * 1000);
+            d.resolve(b);
+          } else {
+            d.reject(b);
+          }
         });
       }, function() {
         Airbitz.ui.alert('Unable to create a receive address. Please try again later.');
       });
       return d.promise;
+    }
+
+    factory.confirmBuy = function(linkOrCode) {
+      var d = $q.defer();
+      CcFactory.quoteConfirm(linkOrCode, function(e, r, b) {
+        r == 200 ? d.resolve(b) : d.reject(b);
+      });
+      return d.promise;
     };
 
-    factory.sell = function(wallet, qty, paymentMethod) {
+    factory.sell = function(qty, paymentMethod) {
+      var wallet = Airbitz.currentWallet;
       var d = $q.defer();
       CcFactory.quote(-1 * qty, 'BTC', paymentMethod, uri, '', null, function(e, r, b) {
         r == 200 ? d.resolve(b) : d.reject(b);
       });
       return d.promise;
     };
-
     return factory;
   }
 
   function ExchangeFactory() {
-    return { };
+    var factory = {};
+    factory.name = 'CleverCoin';
+    factory.orderTimeout = '60';
+    factory.depositTimeout = '3600';
+    factory.currencySymbol = '€';
+    factory.currencyNum = '978';
+    factory.currency = 'EUR';
+    factory.bizId = 10106;
+    return factory;
   }
 })();

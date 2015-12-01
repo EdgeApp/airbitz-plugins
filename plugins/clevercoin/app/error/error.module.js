@@ -21,7 +21,12 @@
     return factory;
 
     function reject(res) {
-      Airbitz.ui.showAlert('Error', 'An unknown error occurred.');
+      console.log(res);
+      if (res.error) {
+        Airbitz.ui.showAlert('Error', res.error);
+      } else {
+        Airbitz.ui.showAlert('Error', 'An unknown error occurred.');
+      }
     }
   }
 

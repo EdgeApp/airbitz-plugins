@@ -1,0 +1,110 @@
+<form name="form" novalidate style="margin: 20px 0">
+
+  <div class="row">
+    <div class="form-group col-xs-12">
+      <label for="inputAccountholder" class="sr-only"></label>
+      <input ng-model="accountholder"
+            type="text" id="inputIban" class="form-control"
+            placeholder="Account holder" autofocus="" autocomplete="off" autocorrect="off"
+            name="accountholder"
+            required="" />
+      <div class="input-error" ng-show="form.$submitted || form.accountholder.$touched">
+        <span ng-show="form.accountholder.$error.required" class="label label-danger">Required</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="form-group col-xs-12">
+      <label for="inputIban" class="sr-only">IBAN</label>
+      <input ng-model="iban"
+            type="text" id="inputIban" class="form-control"
+            placeholder="IBAN" autofocus="" autocomplete="off" autocorrect="off"
+            name="iban"
+            required="" />
+      <div class="input-error" ng-show="form.$submitted || form.iban.$touched">
+        <span ng-show="form.iban.$error.required" class="label label-danger">Required</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="form-group col-xs-12">
+      <label for="inputBIC" class="sr-only">BIC</label>
+      <input ng-model="bic"
+              type="text" id="inputAddressZip" class="form-control"
+              placeholder="BIC (SWIFT)" autofocus="" autocomplete="off" autocorrect="off"
+              name="bic"
+              required="" />
+      <div class="input-error" ng-show="form.$submitted || form.bic.$touched">
+        <span ng-show="form.bic.$error.required" class="label label-danger">Required</span>
+        <span ng-show="form.zip.$error.number" class="label label-danger">Number Required</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="form-group col-xs-12">
+      <label for="inputBankname" class="sr-only">Bankname</label>
+      <input ng-model="bankname"
+            type="text" id="inputBankname" class="form-control"
+            placeholder="Bank name" autofocus="" autocomplete="off" autocorrect="off"
+            name="bankname"
+            required="" />
+      <div class="input-error" ng-show="form.$submitted || form.bankname.$touched">
+        <span ng-show="form.bankname.$error.required" class="label label-danger">Required</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="form-group col-xs-12">
+      <label for="inputBankCountry" class="">Bank Country</label>
+      <select
+        ng-options="o.name for o in countries"
+        ng-model="bankcountryObject" class="form-control"
+        id="inputBankCountry" name="bankcountry" required="" />
+        <option value="">Select a country</option>
+      </select>
+      <div class="input-error" ng-show="form.$submitted || form.bankcountry.$touched">
+        <span ng-show="form.bankcountry.$error.required" class="label label-danger">Required</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="form-group col-xs-12">
+      <label for="inputBankAddress" class="sr-only">Bank Address</label>
+      <input ng-model="bankaddress"
+            type="text" id="inputBankAddress" class="form-control"
+            placeholder="Bank Address" autofocus="" autocomplete="off" autocorrect="off"
+            name="bankaddress"
+            required="" />
+      <div class="input-error" ng-show="form.$submitted || form.bankaddress.$touched">
+        <span ng-show="form.bankaddress.$error.required" class="label label-danger">Required</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="form-group col-xs-12">
+      <!-- button type="button" ng-click="loadProofFile()" class="btn btn-lg">Proof File</button -->
+      <input type="file" file-model="bankstatement" />
+    </div>
+  </div>
+
+  <div class="row no-pad">
+    <div class="col-xs-6 no-pad">
+      <button type="button"
+        ng-click="cancel()"
+        class="btn btn-lg btn-block btn-danger">Cancel</button>
+    </div>
+    <div class="col-xs-6 no-pad">
+      <button type="button"
+        ng-click="save()" 
+        ng-disabled="form.$invalid"
+        class="btn btn-lg btn-block btn-success">Save</button>
+    </div>
+  </div>
+
+</form>

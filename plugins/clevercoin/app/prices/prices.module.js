@@ -24,11 +24,11 @@
 
   angular
     .module('app.prices', ['app.clevercoin'])
-    .factory('Prices', ['$q', 'CcFactory', Prices])
+    .factory('Prices', ['$q', '$filter', 'CcFactory', Prices])
     .directive('priceUpdate', ['$interval', '$filter', 'Prices', priceUpdate])
     .directive('priceExpires', ['$interval', '$filter', 'Prices', priceExpires])
 
-  function Prices($q, CcFactory) {
+  function Prices($q, $filter, CcFactory) {
     var factory = {};
     var timeDiff = function(timestamp) {
       return timestamp - new Date().getTime();
@@ -43,6 +43,31 @@
     factory.currentSell = {};
     factory.buyQty = 1;
     factory.sellQty = 1;
+
+    factory.convertFiatValue = function(orderAction, input) {
+      if (typeof(input)==='undefined') input = 0;
+      var price = (orderAction == 'buy')
+                ? factory.currentBuy.ask : factory.currentSell.ask;
+      var btcValue = input / parseFloat(price);
+      return {
+        'orderValueSatoshi': btcValue * 100000000,
+        'orderValueInput': parseFloat($filter('roundBtc')(btcValue)),
+        'orderBtcInput': btcValue
+      };
+    };
+
+    factory.convertBtcValue = function(orderAction, input) {
+      if (typeof(input)==='undefined') input = 0;
+      var price = (orderAction == 'buy')
+          ? factory.currentBuy.ask : factory.currentSell.ask;
+      var btc = $filter('valToBtc')(input);
+      var output = btc * price;
+      return {
+        'orderBtcInput': btc,
+        'orderValueSatoshi': btc * 100000000,
+        'orderFiatInput': parseFloat($filter('roundFiat')(parseFloat(output)))
+      };
+    };
 
     factory.setBuyQty = function(qty) {
       factory.buyQty = qty;

@@ -158,15 +158,15 @@ var CleverCoin = (function () {
       return CleverCoin.request(req, opts.callback);
     },
 
-    register: function(firstName, email, password, activateLink, callback) {
+    register: function(firstName, email, password, activateLink, mailTitle, mailMessage, callback) {
       var data = {
         'apiLabel': this.apiLabel,
         'activationLink': activateLink,
         'name': firstName,
         'password': password,
         'email': email,
-        'activationMailTitle': 'Hello',
-        'activationMailMessage': 'Hello',
+        'activationMailTitle': mailTitle,
+        'activationMailMessage': mailMessage,
       };
       return this._request(true, '/account', {
         'method': 'POST',
@@ -283,6 +283,17 @@ var CleverCoin = (function () {
       });
     },
 
+    quoteConfirm: function(linkOrCode, callback) {
+      var data = {
+        'code': linkOrCode,
+      };
+      return this._request(true, '/quote/confirm', {
+        'method': 'POST',
+        'data': data,
+        'callback': callback
+      });
+    },
+
     ticker: function(callback) {
       return this._request(false, '/ticker', {
         'callback': callback
@@ -309,6 +320,49 @@ var CleverCoin = (function () {
 
     supportedCountries: function(callback) {
       return this._request(true, '/utility/countries', {
+        'callback': callback
+      });
+    },
+
+    bankAccounts: function(callback) {
+      return this._request(true, '/account/bankAccounts', {
+        'callback': callback
+      });
+    },
+
+    addBank: function(data, callback) {
+      return this._request(true, '/verification/bank', {
+        'method': 'POST',
+        'data': data,
+        'callback': callback,
+        // 'content-transfer-encoding': 'base64',
+        'content-type': 'multipart/form-data'
+      });
+    },
+
+    depositIdealBanks: function(callback) {
+      return this._request(true, '/euro/deposit/ideal/banks', {
+        'callback': callback
+      });
+    },
+
+    depositSepa: function(callback) {
+      return this._request(true, '/euro/deposit/sepa', {
+        'callback': callback
+      });
+    },
+
+    depositAddress: function(newAddress, callback) {
+      return this._request(true, '/bitcoin/depositAddress', {
+        'data': {
+          'new': newAddress
+        },
+        'callback': callback
+      });
+    },
+
+    accountWallets: function(callback) {
+      return this._request(true, '/account/wallets', {
         'callback': callback
       });
     }

@@ -1,6 +1,8 @@
-<h2 class="order-receipt-heading">
-  <img class="bitcoin-logo" src="./img/bitcoin-icon-logo.png"> Order Receipt
-</h2>
+<div class="row no-pad">
+    <div class="col-xs-12">
+        <h2>Order Receipt</h2>
+    </div>
+</div>
 
 <div class="order-review row">
   <div class="col-xs-12">
@@ -8,7 +10,7 @@
       <tbody>
         <tr>
           <td>Order Type</td>
-          <td>{{ order.orderAction || "orderAction" | titlecase }} Order</td>
+          <td>{{ order.orderAction | titlecase }} Order</td>
         </tr>
       </tbody>
     </table>
@@ -17,11 +19,11 @@
       <tbody>
         <tr ng-show="{{ order.orderAction === 'buy' }}">
           <td>Destination Wallet</td>
-          <td>{{ order.transferToWallet.name || "" }}</td>
+          <td>{{ currentWallet.name || "" }}</td>
         </tr>
         <tr ng-show="{{ order.orderAction === 'sell' }}">
           <td>Sell From</td>
-          <td>{{ order.transferToWallet.name || "" }}</td>
+          <td>{{ currentWallet.name || "" }}</td>
         </tr>
       </tbody>
     </table>
@@ -29,24 +31,20 @@
     <table class="table table-bordered">
       <tbody>
         <tr>
-          <td>BTC Price:</td>
-          <td>{{ order.details.price | currency }}</td>
+          <td>Amount</td>
+          <td>{{ order.quote.amount || 0 | formatBtc }} </td>
         </tr>
         <tr>
-          <td>BTC Amount:</td>
-          <td>{{ order.orderBtcInput }}</td>
+          <td>Cost</td>
+          <td>{{ order.quote.toPay || 0 | roundFiat }} {{ exchange.currency }}</td>
         </tr>
         <tr>
-          <td>Sub Total:</td>
-          <td>{{ order.details.subtotal }}</td>
+          <td>BTC Price</td>
+          <td>{{ order.quote.btcPrice || 0 | roundFiat }} {{ exchange.currency }}</td>
         </tr>
         <tr>
-          <td>Fees:</td>
-          <td>{{ order.details.fees }}</td>
-        </tr>
-        <tr>
-          <td>Total:</td>
-          <td>{{ order.details.total }}</td>
+          <td>Fees</td>
+          <td>{{ order.quote.fee || 0 }}</td>
         </tr>
       </tbody>
     </table>
