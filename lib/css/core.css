@@ -1054,6 +1054,11 @@ button.btn-add.btn {
     width: 100%;
     height: auto;
 }
+.card-close {
+  position: absolute;
+  right: 25px;
+  top: 15px;
+}
 .add-funds-header {
   padding-top: 13px;
 }
