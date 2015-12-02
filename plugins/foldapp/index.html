@@ -59,14 +59,17 @@
 			<div class="card-barcode"><div class="material-placeholder"><img class="barcode materialboxed" src=""></div></div>
 		</div>
 		<div class="card-info-main card-content">
-			<div class="card-number"><i class="material-icons right">more_vert</i></div>
-			<div class="card-balance">Current Balance</div>
+			<div class="card-number"></div>
+			<div class="card-balance">Current Balance</div><i class="material-icons right activator">info_outline</i>
 			<div class="card-balance-amt"></div>
 		</div>
 		<div class="card-reveal">
+			<span class="card-title grey-text text-darken-4">Card Details<i class="material-icons right">close</i></span>
+			<a class="waves-effect waves-teal btn-flat left card-refund">Refund</a>
 		</div>
 	</div>
 </template>
+<!-- https://airbitz.co/go/wp-content/uploads/2015/12/download.png -->
 <template id="add-template">
 	<li class="collection-item avatar card-list">
 		<span class="title"><h4 class="card-value" value=""></h4></span>
@@ -181,9 +184,28 @@ if (supportsImports()) {
   console.log("Does not support imports.");
 }
 
+var createAddress = function(wallet, label, amountSatoshi, amountFiat,
+                            category, notes, resolve, reject) {
+    Airbitz.core.createReceiveRequest(wallet, {
+      label: label,
+      category: category,
+      notes: notes,
+      amountSatoshi: amountSatoshi,
+      amountFiat: amountFiat,
+      success: resolve,
+      error: reject
+    })
+};
+
 function updateWallet(wallet) {
 	//console.log("Wallet changed to: " + JSON.stringify(wallet));
 	Account.abWallet = wallet;
+	createAddress(wallet, "Fold", "", "", "Expense:Coffee Shops", "Refunded " + brand + " gift card.", 
+		function(data) {
+			Account.updateWAddr(data["address"]);
+		}, function(data) {
+			console.log(data);
+		});
 }
 
 function sRequest(url, json, handleReponse) {
@@ -244,6 +266,20 @@ var Account = {
 			$(".balance-amt").text("$" + balances["balances"][0]["amount"]);
 		});
 	},
+	updateWAddr: function(addr) { // Set the default BTC address
+		url = fold_api + "my/default_withdraw_addresses";
+		console.log("Setting default address to: " + addr.toString());
+		newAddr = {"default_withdraw_addresses": [{
+			  "currency": "BTC",
+			  "default_address": [{
+			    "address": addr.toString(),
+			    "address_type": "crypto"
+			  }]
+		}]};
+		sRequest(url, newAddr, function(response) {
+			console.log("Updated default_withdraw_address");
+		});
+	},
 	clearOwl: function() {
 		//document.querySelector("#user-cards").innerHTML = "";
 		for(cards in all_cards) {
@@ -255,7 +291,6 @@ var Account = {
 			console.log("User's cards: " + JSON.stringify(all_card_info));
 			cards = all_card_info["cards"];
 			for(numOfCards in cards) {
-				//console.log("Number of cards: " + numOfCards);
 				card = new Card(
 					cards[numOfCards]["id"],
 					cards[numOfCards]["code"][0],
@@ -267,12 +302,11 @@ var Account = {
 
 				if(!card.bal == 0) {
 					//card_html.querySelector(".gift-card").setAttribute("card", card.id);
-					card_html.querySelector(".card-barcode").innerHTML = "<img class=\"barcode materialboxed\" src=\"" + fold_api + "my/cards/" + card.id + "/barcode/png" + "\">";
+					card_html.querySelector(".card-barcode").innerHTML = "<img class=\"barcode \" src=\"" + fold_api + "my/cards/" + card.id + "/barcode/png" + "\">";
 					card_html.querySelector(".card-balance-amt").innerText = card.bal;
 					card_html.querySelector(".card-balance-amt").setAttribute("card", card.id);
 					card_html.querySelector(".card-number").innerText = card.num;
 					document.querySelector("#user-cards").appendChild( document.importNode(card_html, true) );
-					$('.materialboxed').materialbox();
 				}
 			}
 			Account.owl.owlCarousel({ // Activate owl Carousel for cards.
@@ -288,8 +322,22 @@ var Account = {
 			    // itemsTablet: false,
 			    // itemsMobile : false
 			});
+			$('.materialboxed').materialbox();
+			$(".card-refund").click(function() {
+				console.log("Refunding button");
+				var thisCardId = $(this).parent().parent().children(".card-info-main").children(".card-balance-amt").attr("card");
+				console.log("This card: " + thisCardId);
+				var thisCard = Account.getCardById(thisCardId);
+				thisCard.refund();
+			});
 		doneUpdating();
 		});
+	},
+	getCardById: function(cardId) {
+		var cardFromId = Account.all_cards.filter(function( obj ) {
+		  return obj.id == cardId;
+		});
+		return cardFromId[0];
 	},
 	pingCards: function() {
 		for(numOfCards in Account.all_cards) {
@@ -330,6 +378,11 @@ var Account = {
 			});
 		}, "");
 	},
+	logRefunds: function() {
+		Account.getInfo("refunds", function(refunds) {
+			console.log(JSON.stringify(refunds));
+		});
+	},
 	getInfo: function(info, handleResponse, root) {
 		root = typeof root !== 'undefined' ? root : "my/";
 		$.get(fold_api + root + info).done(function(response) {
@@ -338,7 +391,6 @@ var Account = {
 	},
 	getBal: function(handleResponse) { // Get total balance of user. Return 0 if user doesn't have bal.
 		this.getInfo("balances?currency=USD", function(balances) {
-			console.log(balances);
 			try {
 				handleResponse(balances["balances"][0]["amount"]);	
 			}
@@ -402,10 +454,12 @@ function Card(id, num, bal) {
 	this.num = num;
 	this.bal = bal;
 }
+
 Card.prototype.ping = function() { // Tell Fold we need to check this balance to see if the user has spent it.
 	var url = fold_api + "my/cards/" + this.id + "/ping";
 	$.post(url);
 }
+
 Card.prototype.update = function() { // Update UI with info Fold has about card.
 	//cardSelector = ;
 	this.ping();
@@ -420,6 +474,20 @@ Card.prototype.update = function() { // Update UI with info Fold has about card.
 		$(cardSelector).find("card-number").text( cardInfo["code"] );*/
 	});
 }
+
+Card.prototype.refund = function() {
+	url = fold_api + "my/refunds";
+	console.log("Refunding card " + this.id + " amount: " + this.bal);
+	refund = {"refunds": [{
+		  "id": "j9f4-F9e4-fe4E-8jf4",
+		  "card_id": this.id
+	}]};
+	sRequest(url, refund, function(response) {
+		console.log(response);
+		console.log("Done refunding!");
+	});
+}
+
 Card.prototype.remove = function() { // Remove card from UI
 	if(this.bal == 0) {
 
@@ -441,12 +509,6 @@ Card.prototype.mockBal = function(bal) {
 // Main
 var user = Object.create(Account);
 
-Airbitz.core.selectedWallet({
-      success: updateWallet,
-      error: function() {
-      	console.log("Could not get selected wallet");
-      }
-    });
 Airbitz.core.setWalletChangeListener(updateWallet);
 //Airbitz.core.clearData(); fold-2015-11-18-JszcOVECE0iHn5
 Account.username = Airbitz.core.readData("fold-username");
@@ -467,6 +529,13 @@ $.when(user.exists).done(function(data) {
 });
 $(function() {
 	$.when(user.logged_in).done(function(data) {
+		Account.logRefunds();
+		Airbitz.core.selectedWallet({
+		      success: updateWallet,
+		      error: function() {
+		      	console.log("Could not get selected wallet");
+		      }
+		    });
 		console.log("Updating UI");
 		user.listCards(function() { // Start getting avaliable cards for sale.
 			user.updateCards(function() {
