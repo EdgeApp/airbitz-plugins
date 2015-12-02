@@ -1041,6 +1041,10 @@ button.btn-add.btn {
 .main {
   display: none;
 }
+.card-barcode {
+  padding: 20px 10px 0 10px;
+  margin-bottom: 0;
+}
 .barcode {
   width: 200px;
   height: 65px;
@@ -1050,13 +1054,24 @@ button.btn-add.btn {
     width: 100%;
     height: auto;
 }
+.add-funds-header {
+  padding-top: 13px;
+}
 .add-buttons {
   text-align: left;
+}
+.card-value {
+  padding-top: 5px;
 }
 .collection .collection-item.avatar.card-list {
   padding: 10px 20px;
 }
 .card-content.card-info-main {
-  padding: 0;
-  margin: 0;
+  margin-top: 0;
+  padding-top: 0;
+}
+.fold-help {
+  position: absolute;
+  top: 5px;
+  right: 5px;
 }
