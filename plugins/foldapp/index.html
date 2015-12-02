@@ -63,9 +63,9 @@
 			<div class="card-balance">Current Balance</div><i class="material-icons right activator">info_outline</i>
 			<div class="card-balance-amt"></div>
 		</div>
-		<div class="card-reveal">
-			<span class="card-title grey-text text-darken-4">Card Details<i class="material-icons right">close</i></span>
-			<a class="waves-effect waves-teal btn-flat left card-refund">Refund</a>
+		<div class="card-reveal valign-wrapper">
+			<span class="card-title grey-text text-darken-4">Card Details<i class="material-icons card-close right">close</i></span>
+			<a class="waves-effect waves-teal btn-flat center card-refund valign">Refund</a>
 		</div>
 	</div>
 </template>
@@ -289,24 +289,28 @@ var Account = {
 	updateCards: function(doneUpdating) { // Updates the UI with cards the user has purchased.
 		user.getInfo("cards", function(all_card_info) {
 			console.log("User's cards: " + JSON.stringify(all_card_info));
-			cards = all_card_info["cards"];
-			for(numOfCards in cards) {
-				card = new Card(
-					cards[numOfCards]["id"],
-					cards[numOfCards]["code"][0],
-					cards[numOfCards]["balance"][0]["formatted"]["fewer_trailing_zeros"] // e.g. $5
-				);
-				Account.all_cards[numOfCards] = card;
-				//console.log("Card " + card.id + " has card num, " + card.num);
-				var card_html = document.querySelector('#card-template').content;
+			var cards = all_card_info["cards"];
+			if(!cards.length > 0) {
+				console.log("No cards. New acc?");
+			} else {
+				for(numOfCards in cards) {
+					card = new Card(
+						cards[numOfCards]["id"],
+						cards[numOfCards]["code"][0],
+						cards[numOfCards]["balance"][0]["formatted"]["fewer_trailing_zeros"] // e.g. $5
+					);
+					Account.all_cards[numOfCards] = card;
+					//console.log("Card " + card.id + " has card num, " + card.num);
+					var card_html = document.querySelector('#card-template').content;
 
-				if(!card.bal == 0) {
-					//card_html.querySelector(".gift-card").setAttribute("card", card.id);
-					card_html.querySelector(".card-barcode").innerHTML = "<img class=\"barcode \" src=\"" + fold_api + "my/cards/" + card.id + "/barcode/png" + "\">";
-					card_html.querySelector(".card-balance-amt").innerText = card.bal;
-					card_html.querySelector(".card-balance-amt").setAttribute("card", card.id);
-					card_html.querySelector(".card-number").innerText = card.num;
-					document.querySelector("#user-cards").appendChild( document.importNode(card_html, true) );
+					if(!card.bal == 0) {
+						//card_html.querySelector(".gift-card").setAttribute("card", card.id);
+						card_html.querySelector(".card-barcode").innerHTML = "<img class=\"barcode \" src=\"" + fold_api + "my/cards/" + card.id + "/barcode/png" + "\">";
+						card_html.querySelector(".card-balance-amt").innerText = card.bal;
+						card_html.querySelector(".card-balance-amt").setAttribute("card", card.id);
+						card_html.querySelector(".card-number").innerText = card.num;
+						document.querySelector("#user-cards").appendChild( document.importNode(card_html, true) );
+					}
 				}
 			}
 			Account.owl.owlCarousel({ // Activate owl Carousel for cards.
@@ -479,7 +483,6 @@ Card.prototype.refund = function() {
 	url = fold_api + "my/refunds";
 	console.log("Refunding card " + this.id + " amount: " + this.bal);
 	refund = {"refunds": [{
-		  "id": "j9f4-F9e4-fe4E-8jf4",
 		  "card_id": this.id
 	}]};
 	sRequest(url, refund, function(response) {
@@ -493,6 +496,7 @@ Card.prototype.remove = function() { // Remove card from UI
 
 	}
 }
+
 Card.prototype.mockBal = function(bal) {
 	var url = fold_api + "my/mock/cards";
 	var thisCard = this;
@@ -502,7 +506,7 @@ Card.prototype.mockBal = function(bal) {
 	  "balance_amount": bal.toString()
 	}]}
 	).done(function() {
-		console.log("Done mocking " + thisCard.id + "balance to: " + bal);
+		console.log("Done mocking " + thisCard.id + " balance to: " + bal);
 	});
 }
 
