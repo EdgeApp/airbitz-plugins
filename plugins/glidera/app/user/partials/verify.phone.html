@@ -46,12 +46,12 @@
   </div>
   <div class="col-xs-6 no-pad">
     <button type="submit"
-            ng-show="userStatus.userPhoneIsSetup"
+            ng-if="userStatus.userPhoneIsSetup"
             ng-click="deletePhone()"
             ng-disabled="form.$invalid"
             class="buy-sell-next btn btn-lg btn-block btn-danger">Delete</button>
     <button type="submit"
-            ng-show="!userStatus.userPhoneIsSetup"
+            ng-if="!userStatus.userPhoneIsSetup"
             ng-click="submitPhone()"
             ng-disabled="form.$invalid"
             class="buy-sell-next btn btn-lg btn-block btn-success">Verify</button>
