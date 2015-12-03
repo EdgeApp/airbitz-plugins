@@ -1040,6 +1040,7 @@ button.btn-add.btn {
 }
 .main {
   display: none;
+  margin: 10px;
 }
 .card-barcode {
   padding: 20px 10px 0 10px;
