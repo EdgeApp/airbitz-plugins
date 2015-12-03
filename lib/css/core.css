@@ -1050,6 +1050,9 @@ button.btn-add.btn {
   width: 200px;
   height: 65px;
 }
+.barcode-inactive {
+  opacity: .15;
+}
 #user-cards .item {
     display: block;
     width: 100%;

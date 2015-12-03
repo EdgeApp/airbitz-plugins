@@ -292,7 +292,7 @@ var Account = {
 			if(!cards.length > 0) {
 				console.log("No cards. New acc!");
 				var card_html = document.querySelector('#card-template').content;
-				card_html.querySelector(".card-barcode").innerHTML = "<img class=\"barcode \" src=\"https://airbitz.co/go/wp-content/uploads/2015/12/download.png\"/>";
+				card_html.querySelector(".card-barcode").innerHTML = "<img class=\"barcode barcode-inactive\" src=\"https://airbitz.co/go/wp-content/uploads/2015/12/download.png\"/>";
 				card_html.querySelector(".card-balance-amt").innerText = "$0.00";
 				card_html.querySelector(".card-number").innerText = "6666 6666 6666 6666";
 				card_html.querySelector(".card-info").innerText = "";
