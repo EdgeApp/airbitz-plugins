@@ -1063,10 +1063,9 @@ button.btn-add.btn {
     max-width: 400px;
 }
 #user-cards .owl-item div{
-  padding:5px;
 }
 .gift-card {
-  border-radius: 10px;
+  border-radius: 10px!important;
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
 }
