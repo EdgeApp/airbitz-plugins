@@ -104,33 +104,35 @@
 					<div class="title-header-2">&amp; Save 20%</div>
 			</header>
 			<main>
-			  	<div id="user-cards" class="owl-carousel owl-theme">
-			  		
-			  	</div>
-			  	<div class="add-funds">
-	  			<ul class="collapsible" data-collapsible="accordion">
-	  				<li>
-	  		  			<div class="collapsible-header active">
-	  				        <div class="add-funds-header">Add Funds</div>
-	  				    </div>
-	  				    <div class="collapsible-body">
-	  				    	<ul class="collection add-buttons">
+				<div class="container">
+				  	<div id="user-cards" class="owl-carousel owl-theme">
+				  		
+				  	</div>
+				  	<div class="add-funds">
+		  			<ul class="collapsible" data-collapsible="accordion">
+		  				<li>
+		  		  			<div class="collapsible-header active">
+		  				        <div class="add-funds-header">Add Funds</div>
+		  				    </div>
+		  				    <div class="collapsible-body">
+		  				    	<ul class="collection add-buttons">
 
-	  				    	</ul>
-	  				    </div>
-	  		  		</li>
-	  			</ul>
-					  	<!-- <div class="row">
-					  		<div class="col-md-12">
-						  		<button type="button" value="5" class="btn btn-info btn-lg btn-add add-first">$5</button> 
-						  		<button type="button" value="10" class="btn btn-info btn-lg btn-add add-second">$10</button> 
-						  	</div>
-						</div>
-						<div class="row">
-							<div class="col-md-12">
-						  		<button type="button" value="25" class="btn btn-info btn-lg btn-add add-third">$25</button>
-						  	</div>
-						</div> -->
+		  				    	</ul>
+		  				    </div>
+		  		  		</li>
+		  			</ul>
+						  	<!-- <div class="row">
+						  		<div class="col-md-12">
+							  		<button type="button" value="5" class="btn btn-info btn-lg btn-add add-first">$5</button> 
+							  		<button type="button" value="10" class="btn btn-info btn-lg btn-add add-second">$10</button> 
+							  	</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+							  		<button type="button" value="25" class="btn btn-info btn-lg btn-add add-third">$25</button>
+							  	</div>
+							</div> -->
+					</div>
 				</div>
 			</main>
 			<footer>
@@ -294,7 +296,7 @@ var Account = {
 				var card_html = document.querySelector('#card-template').content;
 				card_html.querySelector(".card-barcode").innerHTML = "<img class=\"barcode barcode-inactive\" src=\"https://airbitz.co/go/wp-content/uploads/2015/12/download.png\"/>";
 				card_html.querySelector(".card-balance-amt").innerText = "$0.00";
-				card_html.querySelector(".card-number").innerText = "6666 6666 6666 6666";
+				card_html.querySelector(".card-number").innerText = "6666 8888 4444 0000";
 				card_html.querySelector(".card-info").innerText = "";
 				document.querySelector("#user-cards").appendChild( document.importNode(card_html, true) );
 			} else {

@@ -1043,7 +1043,7 @@ button.btn-add.btn {
   margin: 10px;
 }
 .card-barcode {
-  padding: 20px 10px 0 10px;
+  padding: 20px 20px 0 20px;
   margin-bottom: 0;
 }
 .barcode {
@@ -1057,6 +1057,11 @@ button.btn-add.btn {
     display: block;
     width: 100%;
     height: auto;
+}
+.gift-card {
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
 }
 .card-close {
   position: absolute;
@@ -1075,8 +1080,7 @@ button.btn-add.btn {
 .collection .collection-item.avatar.card-list {
   padding: 10px 20px;
 }
-.card-content.card-info-main {
-  margin-top: 0;
+div.card.card-content.card-info-main {
   padding-top: 0;
 }
 .fold-help {
