@@ -46,7 +46,7 @@
         $scope.order.quote = data;
         $state.go("reviewOrder");
       }, function(b) {
-        Airbitz.ui.showAlert('', 'Unable to receive quote.');
+        Airbitz.ui.showAlert('', 'Unable to receive quote. ' + Error.errorMap(b));
       });
     };
   }

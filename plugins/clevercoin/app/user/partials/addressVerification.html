@@ -2,14 +2,19 @@
 
   <div class="row">
     <div class="form-group col-xs-12">
-        <label for="inputAddressType" class="">Type</label>
-        <select ng-model="addressType" ng-required="true" id="inputAddressType" name="addressType" required="" class="form-control">
-          <option value="proofofresidence">Proof of Residence</option>
-          <option value="selfieletter">Selfie Letter</option>
-        </select>
-        <div class="input-error" ng-show="form.$submitted || form.addressType.$touched">
-          <span ng-show="form.addressType.$error.required" class="label label-danger">Required</span>
-        </div>
+      The proof of residence must be:<br />
+      - maximum 3 months old.<br />
+      - containing name and address.<br />
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="form-group col-xs-12">
+      Allowed documents are:<br />
+      - bills for gas, water or electricity.<br />
+      - tax bills, internet or landline phone bills.<br />
+      - government / municipality extract with address<br />
+      - an extract from the population<br />
     </div>
   </div>
 
@@ -70,8 +75,8 @@
 
   <div class="row">
     <div class="form-group col-xs-12">
-      <!-- button type="button" ng-click="loadProofFile()" class="btn btn-lg">Proof File</button -->
-      <input type="file" file-model="proofFile" />
+      <button type="button" ng-click="loadProofFile()" class="btn btn-lg"
+        ng-class="{'btn-success': proofFile.length > 0, 'btn-info': proofFile.length == 0}">Attach Proof of Residence</button>
     </div>
   </div>
 
@@ -84,7 +89,7 @@
     <div class="col-xs-6 no-pad">
       <button type="button"
         ng-click="save()" 
-        ng-disabled="form.$invalid"
+        ng-disabled="form.$invalid || proofFile.length == 0"
         class="btn btn-lg btn-block btn-success">Save</button>
     </div>
   </div>

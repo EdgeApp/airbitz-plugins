@@ -1,4 +1,14 @@
 <form name="form" novalidate style="margin: 20px 0">
+
+  <div class="row">
+    <div class="form-group col-xs-12">
+      <strong>NOTE:</strong> Identity documents should be: valid (expiry date
+      clearly visible), not rotated, maximum 4 MB per file. Masking person
+      identification number is not allowed. Watermarking/timestamping the file is
+      allowed.
+    </div>
+  </div>
+
   <div class="row">
     <div class="form-group col-xs-12">
         <label for="inputIdentityType" class="">Identification Type</label>
@@ -29,15 +39,15 @@
 
   <div class="row">
     <div class="form-group col-xs-12">
-      <!-- button type="button" ng-click="loadIdentityFront()" class="btn btn-lg">Identity File Front</button -->
-      <input type="file" file-model="primaryFile" />
+      <button type="button" ng-click="loadIdentityFront()" class="btn btn-lg"
+        ng-class="{'btn-success': primaryFile.length > 0, 'btn-info': primaryFile.length == 0}">Identity File Front</button>
     </div>
   </div>
 
   <div class="row">
     <div class="form-group col-xs-12">
-      <!-- button type="button" ng-click="loadIdentityBack()" class="btn btn-lg">Identity File Back</button -->
-      <input type="file" file-model="secondaryFile" />
+      <button type="button" ng-click="loadIdentityBack()" class="btn btn-lg"
+        ng-class="{'btn-success': secondaryFile.length > 0, 'btn-info': primaryFile.length == 0}">Identity File Back</button>
     </div>
   </div>
 
@@ -50,7 +60,7 @@
     <div class="col-xs-6 no-pad">
       <button type="button"
         ng-click="save()" 
-        ng-disabled="form.$invalid"
+        ng-disabled="form.$invalid || primaryFile.length == 0 || secondaryFile.length == 0"
         class="btn btn-lg btn-block btn-success">Save</button>
     </div>
   </div>

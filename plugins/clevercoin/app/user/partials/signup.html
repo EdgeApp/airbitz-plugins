@@ -1,8 +1,11 @@
-
-<div class="row">
-  <form name="form" class="exchange-sign-up col-xs-12" novalidate>
-
-    <div class="form-group">
+<div class="row no-pad">
+    <div class="col-xs-12">
+        <h5>Signup</h5>
+    </div>
+</div>
+<form name="form" novalidate>
+  <div class="row">
+    <div class="form-group col-xs-12">
       <label for="inputFirstName" class="">First Name</label>
       <input ng-model="account.firstName" name="firstName" type="text" id="inputFirstName" class="form-control"
              placeholder="First Name"
@@ -14,8 +17,10 @@
         <span ng-show="form.firstName.$error.required" class="label label-danger">Required</span>
       </div>
     </div>
+  </div>
 
-    <div class="form-group">
+  <div class="row">
+    <div class="form-group col-xs-12">
       <label for="inputEmail" class="">Email</label>
       <input ng-model="account.email" name="email" type="email" id="inputEmail" class="form-control"
              placeholder="user@email.com"
@@ -26,8 +31,11 @@
         <span ng-show="form.email.$error.email" class="label label-danger">Valid Email Required</span>
       </div>
     </div>
+  </div>
 
-    <div class="form-group">
+  <!--
+  <div class="row">
+    <div class="form-group col-xs-12">
       <label for="inputPassword" class="">Password</label>
       <input ng-model="account.password" name="password" type="password" id="inputPassword" class="form-control"
              placeholder=""
@@ -37,8 +45,10 @@
         <span ng-show="form.password.$error.required" class="label label-danger">Required</span>
       </div>
     </div>
+  </div>
 
-    <div class="form-group">
+  <div class="row">
+    <div class="form-group col-xs-12">
       <label for="inputPassword" class="">Confirm Password</label>
       <input ng-model="confirmPassword" name="confirmPassword" type="password" id="confirmPassword" class="form-control"
              placeholder=""
@@ -48,24 +58,18 @@
         <span ng-show="form.confirmPassword.$error.required" class="label label-danger">Required</span>
       </div>
     </div>
+  </div>
+  -->
 
-    <div class="row text-right" style="margin-top: 40px;">
-      <div class="col-xs-12">
-        <button type="button"
-                ng-click="cancelSignup()"
-                class="btn btn-lg btn-link">Cancel</button>
-        <button type="button"
-                ng-disabled="form.$invalid"
-                ng-click="submitSignUp()"
-                class="btn btn-lg btn-success">Next</button>
-      </div>
+  <div class="row text-right" style="margin-top: 40px;">
+    <div class="col-xs-12">
+      <button type="button"
+              ng-click="cancelSignup()"
+              class="btn btn-lg btn-link">Cancel</button>
+      <button type="button"
+              ng-disabled="form.$invalid"
+              ng-click="submitSignUp()"
+              class="btn btn-lg btn-success">Next</button>
     </div>
-
-    <div class="row text-right" style="margin-top: 40px;">
-      <div class="col-xs-12">
-        <button type="button" ui-sref="link" class="btn btn-sm btn-primary">Existing Account?</button>
-      </div>
-    </div>
-
-  </form>
-</div>
+  </div>
+</form>

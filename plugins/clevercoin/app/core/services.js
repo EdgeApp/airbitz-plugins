@@ -3,8 +3,9 @@
 
   angular
     .module('app.dataFactory', ['app.clevercoin', 'app.constants'])
+    .factory('StatsFactory', [ '$http', 'ExchangeFactory', StatsFactory])
     .factory('UserFactory', [ '$q', '$filter', 'ExchangeFactory', 'CcFactory', UserFactory])
-    .factory('DataFactory', [ '$q', '$filter', 'ExchangeFactory', 'CcFactory', 'Prices', DataFactory]);
+    .factory('DataFactory', [ '$q', '$filter', 'ExchangeFactory', 'CcFactory', 'Prices', 'StatsFactory', DataFactory]);
 
   angular
     .module('app.constants', [])
@@ -72,7 +73,7 @@
 
     factory.activate = function(email, token) {
       var d = $q.defer();
-      CcFactory.activate(email, token, function(_, c, b) {
+      CcFactory.activate(account.email, token, function(_, c, b) {
         if (c >= 200 && c <= 300) {
           account.isActivated = true;
           Airbitz.core.writeData('account', account); 
@@ -96,12 +97,32 @@
       var d = $q.defer();
       CcFactory.verificationStatus(function(e,s,b) {
         console.log(JSON.stringify(b));
-        if (s == 200 && b.identity && b.identity.passport && b.address && b.address.proof) {
-          userStatus.userIdentitySetup = b.identity.passport.progressState == 'Verified';
-          userStatus.userIdentityState = b.identity.passport.progressState;
-          userStatus.userAddressSetup = b.address.proof.progressState == 'Verified';
-          userStatus.userAddressState = b.address.proof.progressState;
+        if (s == 200) {
+          if (b.identity.passport) {
+            userStatus.userIdentitySetup = b.identity.passport.progressState == 'Verified';
+            userStatus.userIdentityState = b.identity.passport.progressState;
+          }
+          if (b.identity.identityFront && b.identity.identityBack) {
+            userStatus.userIdentitySetup = b.identity.identityFront.progressState == 'Verified' &&
+                                           b.identity.identityBack.progressState == 'Verified';
+            userStatus.userIdentityState = b.identity.identityFront.progressState;
+          }
+          if (b.address.proof) {
+            userStatus.userAddressSetup = b.address.proof.progressState == 'Verified';
+            userStatus.userAddressState = b.address.proof.progressState;
+          }
           userStatus.userCanTransact = userStatus.userIdentitySetup && userStatus.userAddressSetup;
+
+          if (userStatus.userIdentityState == "Rejected") {
+            userStatus.identityRejectedReason = b.identity.passport.rejectReason;
+          } else {
+            userStatus.identityRejectedReason = '';
+          }
+          if (userStatus.userAddressState == "Rejected") {
+            userStatus.addressRejectedReason = b.address.proof.rejectReason;
+          } else {
+            userStatus.addressRejectedReason = '';
+          }
 
           Airbitz.core.writeData('userStatus', userStatus);
           d.resolve(userStatus);
@@ -286,7 +307,7 @@
     }
     return factory;
   }
-  function DataFactory($q, $filter, ExchangeFactory, CcFactory, Prices) {
+  function DataFactory($q, $filter, ExchangeFactory, CcFactory, Prices, StatsFactory) {
     var factory = {};
 
     factory.getSelectedWallet = function() {
@@ -372,14 +393,6 @@
 
     // initialize exchangeOrder
     var exchangeOrder = {};
-    factory.createBuyOrder = function(order) {
-      // exchangeOrder = angular.copy(order);
-      exchangeOrder.destinationWallet = order.destinationWallet;
-      exchangeOrder.qty = order.qty;
-      exchangeOrder.useCurrentPrice = order.useCurrentPrice;
-      exchangeOrder.orderAction = order.orderAction
-    };
-
     factory.getOrder = function(clear) {
       if(clear) {
         this.clearOrder();
@@ -431,7 +444,7 @@
       var wallet = Airbitz.currentWallet;
       createAddress(wallet, 'CleverCoin', 0, 0, 'Exchange:CleverCoin', '', function(request) {
         var address = request['address'];
-        CcFactory.quote(btcQty, 'BTC', paymentMethod, uri, '', address, function(e, r, b) {
+        CcFactory.quote('bid', btcQty, 'BTC', paymentMethod, uri, '', address, function(e, r, b) {
           if (r == 200) {
             b.amount = Math.abs(b.amount);
             b.expires = new Date(b.expires * 1000);
@@ -449,7 +462,13 @@
     factory.confirmBuy = function(linkOrCode) {
       var d = $q.defer();
       CcFactory.quoteConfirm(linkOrCode, function(e, r, b) {
-        r == 200 ? d.resolve(b) : d.reject(b);
+        if (r == 200) {
+          var order = factory.getOrder(false);
+          StatsFactory.recordEvent('buy', b, order.orderBtcInput);
+          d.resolve(b);
+        } else {
+          d.reject(b);
+        }
       });
       return d.promise;
     };
@@ -457,10 +476,40 @@
     factory.sell = function(qty, paymentMethod) {
       var wallet = Airbitz.currentWallet;
       var d = $q.defer();
-      CcFactory.quote(-1 * qty, 'BTC', paymentMethod, uri, '', null, function(e, r, b) {
+      CcFactory.quote('ask', qty, 'BTC', paymentMethod, uri, '', null, function(e, r, b) {
         r == 200 ? d.resolve(b) : d.reject(b);
       });
       return d.promise;
+    };
+    return factory;
+  }
+
+  function StatsFactory($http, ExchangeFactory) {
+    var factory = {};
+    factory.recordEvent = function(eventType, eventDictionary, btcAmount) {
+      var statsKey = Airbitz.config.get('AIRBITZ_STATS_KEY');
+      var network = Airbitz.config.get('SANDBOX') == 'true' ? 'testnet' : 'mainnet';
+      var s = angular.copy(eventDictionary);
+      s['btc'] = btcAmount;
+      s['partner'] = 'CleverCoin ' + ExchangeFactory.currency;
+      s['country'] = ExchangeFactory.currency;
+      $http({
+        method: 'POST',
+        url: 'https://airbitz.co/api/v1/events',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Token ' + statsKey
+        },
+        data: {
+          'event_type': eventType,
+          'event_network': network,
+          'event_text': JSON.stringify(s),
+        }
+      }).then(function successCallback(response) {
+        console.log(response);
+      }, function errorCallback(response) {
+        console.log(response);
+      });
     };
     return factory;
   }

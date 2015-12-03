@@ -267,14 +267,16 @@ var CleverCoin = (function () {
       });
     },
 
-    quote: function(amount, currencyShort, paymentMethod, callBackLink, paymentParameter, address, callback) {
+    quote: function(type, amount, currencyShort, paymentMethod, callBackLink, paymentParameter, address, callback) {
       var data = {
+        'type': type,
         'amount': amount,
         'currencyShort': currencyShort,
         'paymentMethod': paymentMethod,
         'callBackLink': callBackLink,
         'paymentParameter': paymentParameter,
-        'directWithdrawAddress': address
+        'directWithdrawAddress': address,
+        'profitPercentage': 1,
       };
       return this._request(true, '/quote', {
         'method': 'POST',

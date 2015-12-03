@@ -35,6 +35,10 @@
           <td>{{ order.quote.btcPrice || 0 | roundFiat }} {{ exchange.currency }}</td>
         </tr>
         <tr>
+          <td>Fees</td>
+          <td>{{ order.quote.fee || 0 }}</td>
+        </tr>
+        <tr>
           <td>Expires</td>
           <td am-time-ago="order.quote.expires"></td>
         </tr>

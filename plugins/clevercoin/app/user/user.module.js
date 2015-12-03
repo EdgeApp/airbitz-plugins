@@ -1,9 +1,6 @@
 (function () {
   'use strict';
 
-  // var BASE_64_IMAGE = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QA/wD/AP+gvaeTAAAAB3RJTUUH3woTCxIgaG9bcAAAAAxJREFUCNdjuHvzJgAFJgKQH8bAMAAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAxNS0xMS0yNFQxNjoyMDoxMS0wODowMJ/OiOMAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMTUtMTAtMTlUMTE6MTg6MzItMDc6MDC/SYTBAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAABJRU5ErkJggg==';
-  var BASE_64_IMAGE = '/tmp/resize.png';
-
   angular
     .module('app.user', ['app.dataFactory', 'app.constants'])
     .controller('homeController', ['$scope', '$state', '$location', 'UserFactory', homeController])
@@ -56,6 +53,9 @@
   function signupController($scope, $state, Error, UserFactory) {
     Airbitz.ui.title('CleverCoin');
     $scope.account = UserFactory.getUserAccount();
+    if (!$scope.account.password) {
+      $scope.account.password = '';
+    }
 
     $scope.cancelSignup = function() {
       Airbitz.ui.exit();
@@ -91,6 +91,10 @@
       Airbitz.core.write('account', $scope.account);
       $state.go("dashboard");
     });
+    $scope.changeEmail = function() {
+      Airbitz.core.clearData();
+      $state.go("signup");
+    };
   }
 
   function activateController($scope, $state, $stateParams, Error, UserFactory) {
@@ -116,7 +120,7 @@
     $scope.wallets = UserFactory.getWallets();
 
     var showOpts = function(s) {
-      $scope.showOptions = !s.userCanTransact;
+      $scope.showOptions = !s.userCanTransact || $scope.banks.length == 0;
     };
     showOpts($scope.userStatus);
 
@@ -143,11 +147,43 @@
       var msg = '';
       var counter = 0;
 
-      if (!$scope.userStatus.userIdentitySetup) {
+      function rejectMap(s) {
+        if (s == "SuspicionOfFraud") {
+          return "Suspicion of Fraud";
+        } else if (s == "BadQuality") {
+          return "Bad Quality";
+        } else if (s == "Expired") {
+          return "Expired";
+        } else if (s == "WrongType") {
+          return "Wrong Type";
+        } else if (s == "WrongPerson") {
+          return "WrongPerson";
+        }
+        return s;
+      }
+      if ($scope.userStatus.identityRejectedReason) {
+        counter++;
+        msg += '<h5><strong>' + counter + "</strong>." + 
+          " Identity documents rejected because "
+            + rejectMap($scope.userStatus.identityRejectedReason)
+            + ".</h5>";
+      } else if ($scope.userStatus.userIdentityState == 'Exported') {
+        counter++;
+        msg += '<h5><strong>' + counter + "</strong>. Identity verification pending review.</h5>";
+      } else if (!$scope.userStatus.userIdentitySetup) {
         counter++;
         msg += '<h5><strong>' + counter + "</strong>. Please verify your identity</h5>";
       }
-      if (!$scope.userStatus.userAddressSetup) {
+      if ($scope.userStatus.addressRejectedReason) {
+        counter++;
+        msg += '<h5><strong>' + counter + "</strong>." + 
+          " Address documents rejected because "
+            + rejectMap($scope.userStatus.addressRejectedReason)
+            + ".</h5>";
+      } else if ($scope.userStatus.userAddressState == 'Exported') {
+        counter++;
+        msg += '<h5><strong>' + counter + "</strong>. Address verification pending review.</h5>";
+      } else if (!$scope.userStatus.userAddressSetup) {
         counter++;
         msg += '<h5><strong>' + counter + "</strong>. Please verify your address</h5>";
       }
@@ -157,15 +193,31 @@
       return $sce.trustAsHtml(msg);
     };
 
+    $scope.userInformation = function() {
+      if ($scope.account.termsAgreedVersion == 1 || $scope.userStatus.userCanTransact) {
+        Airbitz.ui.showAlert('', 'User information has been submitted. Cannot be resubmitted.');
+      } else {
+        $state.go("userInformation");
+      }
+    }
+
     $scope.identity = function() {
-      if (["Exported", "Verified"].indexOf($scope.userStatus.userIdentityState) > -1) {
+      if (["Rejected"].indexOf($scope.userStatus.userIdentityState) > -1) {
+        Airbitz.ui.showAlert('', 'Identity documents have been rejected. Unable to resubmit at this time.');
+      } else if (["Verified"].indexOf($scope.userStatus.userIdentityState) > -1) {
+        Airbitz.ui.showAlert('', 'Verification documents have already been verified, and cannot be resubmitted.');
+      } else if (["Exported"].indexOf($scope.userStatus.userIdentityState) > -1) {
         Airbitz.ui.showAlert('', 'Verification documents have already been submitted. Please wait for them to be reviewed.');
       } else {
         $state.go("identityVerification");
       }
     };
     $scope.address = function() {
-      if (["Exported", "Verified"].indexOf($scope.userStatus.userAddressState) > -1) {
+      if (["Rejected"].indexOf($scope.userStatus.userAddressState) > -1) {
+        Airbitz.ui.showAlert('', 'Address documents have been rejected. Unable to resubmit at this time.');
+      } else if (["Verified"].indexOf($scope.userStatus.userAddressState) > -1) {
+        Airbitz.ui.showAlert('', 'Address documents have already been verified, and cannot be resubmitted.');
+      } else if (["Exported"].indexOf($scope.userStatus.userAddressState) > -1) {
         Airbitz.ui.showAlert('', 'Address documents have already been submitted. Please wait for them to be reviewed.');
       } else {
         $state.go("addressVerification");
@@ -222,6 +274,8 @@
   function identityVerificationController($scope, $state, Error, UserFactory) {
     Airbitz.ui.title('Identity Verification');
     $scope.account = UserFactory.getUserAccount();
+    $scope.primaryFile = '';
+    $scope.secondaryFile = '';
     UserFactory.fetchCountries().then(function(b) {
       $scope.countries = b;
       $scope.account.nationalityObject = UserFactory.findCountry($scope.account.birthcountry);
@@ -229,14 +283,22 @@
 
     $scope.loadIdentityFront = function() {
       Airbitz.core.requestFile({
-        success: function() { },
+        success: function(data) {
+          $scope.$apply(function() {
+            $scope.primaryFile = 'data:image/jpeg;name:primaryFile.jpg;base64,' + data;
+          });
+        },
         error: function() { }
       });
     };
 
     $scope.loadIdentityBack = function() {
       Airbitz.core.requestFile({
-        success: function() { },
+        success: function(data) {
+          $scope.$apply(function() {
+            $scope.secondaryFile = 'data:image/jpeg;name:secondaryFile.jpg;base64,' + data;
+          });
+        },
         error: function() { }
       });
     };
@@ -263,13 +325,18 @@
   function addressVerificationController($scope, $state, Error, UserFactory) {
     Airbitz.ui.title('Address Verification');
     $scope.account = UserFactory.getUserAccount();
+    $scope.proofFile = '';
     UserFactory.fetchCountries().then(function(b) {
       $scope.countries = b;
       $scope.account.addresscountryObject = UserFactory.findCountry($scope.account.addresscountry);
     });
     $scope.loadProofFile = function() {
       Airbitz.core.requestFile({
-        success: function() { },
+        success: function(data) {
+          $scope.$apply(function() {
+            $scope.proofFile = 'data:image/jpeg;name:primaryFile.jpg;base64,' + data;
+          });
+        },
         error: function() { }
       });
     };
@@ -283,7 +350,7 @@
       Airbitz.ui.showAlert('Saved', 'Submitting address information...', {
         'showSpinner': true
       });
-      UserFactory.verifyAddress($scope.addressType, $scope.account.address, $scope.account.city,
+      UserFactory.verifyAddress("proofofresidence", $scope.account.address, $scope.account.city,
                                 $scope.account.zipcode, $scope.account.addresscountry, $scope.proofFile).then(function() {
         Airbitz.ui.showAlert('Saved', 'Address information has been submitted.');
         $state.go('dashboard');
@@ -299,9 +366,14 @@
       $scope.countries = b;
     });
 
-    $scope.loadProofFile = function() {
+    $scope.bankstatement = '';
+    $scope.loadBankStatement = function() {
       Airbitz.core.requestFile({
-        success: function() { },
+        success: function(data) {
+          $scope.$apply(function() {
+            $scope.bankstatement = 'data:image/jpeg;name:primaryFile.jpg;base64,' + data;
+          });
+        },
         error: function() { }
       });
     };
@@ -341,6 +413,9 @@
       $scope.recipientZipcode = b.recipientZipcode;
       $scope.recipientCity = b.recipientCity;
       $scope.recipientCountry = b.recipientCountry;
+    }, function() {
+      Airbitz.ui.showAlert('', 'Unable to fetch SEPA information');
+      $state.go('dashboard');
     });
   }
   function fundsController($scope, $state, DataFactory) {
@@ -351,6 +426,9 @@
     DataFactory.getFundsLedger().then(function(funds) {
       Airbitz.ui.hideAlert();
       $scope.funds = funds;
+    }, function() {
+      Airbitz.ui.showAlert('', 'Error fetching funds.');
+      $state.go('dashboard');
     });
     $scope.clearAccount = function(){
       Airbitz.core.clearData();

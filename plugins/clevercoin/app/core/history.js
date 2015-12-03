@@ -26,8 +26,8 @@
       } else if (next.match(/\.html#\/receipt\/$/)) {
         Airbitz.ui.navStackClear();
 
-        history.push('/exchange/');
-        Airbitz.ui.navStackPush('/exchange/');
+        history.push('/dashboard/');
+        Airbitz.ui.navStackPush('/dashboard/');
       }
       skip = false;
     });

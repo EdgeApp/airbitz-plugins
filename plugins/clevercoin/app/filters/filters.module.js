@@ -2,6 +2,7 @@
   angular.module('app.filters', [])
     .filter('statusFilter', statusFilter)
     .filter('stateFilter', stateFilter)
+    .filter('stateClassFilter', stateClassFilter)
     .filter('titlecase', titleCase)
     .filter('roundFiat', roundFiat)
     .filter('formatBtc', ['$filter', formatBtc])
@@ -19,7 +20,17 @@
     return function(status) {
       return (status == 'Exported') 
         ? 'Pending' : (status == 'Verified') 
-        ? 'Verified' : 'Unverified';
+        ? 'Verified' : (status == 'Rejected')
+        ? 'Rejected' : 'Unverified';
+    };
+  }
+
+  function stateClassFilter() {
+    return function(status) {
+      return (status == 'Exported') 
+        ? 'label-pending' : (status == 'Verified') 
+        ? 'label-success' : (status == 'Rejected')
+        ? 'label-danger' : '';
     };
   }
 

@@ -16,9 +16,18 @@
 
   function errorService($state) {
     var factory = {
-      'reject': reject
+      'reject': reject,
+      'errorMap': errorMap
     };
     return factory;
+
+    function errorMap(res) {
+      if (res.error) {
+        return res.error;
+      } else {
+        return '';
+      }
+    }
 
     function reject(res) {
       console.log(res);

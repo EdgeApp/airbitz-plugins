@@ -2,6 +2,14 @@
 
   <div class="row">
     <div class="form-group col-xs-12">
+      <strong>NOTE:</strong> Upload a bank statement with a clearly visible IBAN and account holder name (not rotated, maximum 4 MB per file).
+      You can mask the balance and transaction details and putting a watermark or timestamp on the file is allowed.
+    </div>
+  </div>
+
+
+  <div class="row">
+    <div class="form-group col-xs-12">
       <label for="inputAccountholder" class="sr-only"></label>
       <input ng-model="accountholder"
             type="text" id="inputIban" class="form-control"
@@ -88,8 +96,8 @@
 
   <div class="row">
     <div class="form-group col-xs-12">
-      <!-- button type="button" ng-click="loadProofFile()" class="btn btn-lg">Proof File</button -->
-      <input type="file" file-model="bankstatement" />
+      <button type="button" ng-click="loadBankStatement()" class="btn btn-lg"
+        ng-class="{'btn-success': bankstatement.length > 0, 'btn-info': bankstatement.length == 0}">Attach Bank Statement</button>
     </div>
   </div>
 
@@ -102,7 +110,7 @@
     <div class="col-xs-6 no-pad">
       <button type="button"
         ng-click="save()" 
-        ng-disabled="form.$invalid"
+        ng-disabled="form.$invalid || bankstatement.length == 0"
         class="btn btn-lg btn-block btn-success">Save</button>
     </div>
   </div>
