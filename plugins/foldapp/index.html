@@ -97,7 +97,7 @@
 			</div>
 	    </h3>
 	  	<center class="main">
-	  		<i class="fa fa-question-circle fa-2x fa-pull-right fold-help"></i>
+	  		<i class="fa fa-question-circle fa-2x fa-pull-right fold-help" href="href="#help""></i>
 	  		<header>
 					<img src="https://airbitz.co/go/wp-content/uploads/2015/11/starbucks-96.png"/>
 					<div class="title-header">Spend Ƀitcoin at Starbucks</div>
@@ -199,7 +199,7 @@ var createAddress = function(wallet, label, amountSatoshi, amountFiat,
 function updateWallet(wallet) {
 	//console.log("Wallet changed to: " + JSON.stringify(wallet));
 	Account.abWallet = wallet;
-	createAddress(wallet, "Fold", "", "", "Expense:Coffee Shops", "Refunded " + brand + " gift card.", 
+	createAddress(wallet, "Fold", 0, 0, "Expense:Coffee Shops", "Refunded " + brand + " gift card.", 
 		function(data) {
 			Account.updateWAddr(data["address"]);
 		}, function(data) {
@@ -279,10 +279,15 @@ var Account = {
 			console.log("Updated default_withdraw_address");
 		});
 	},
+	resetCards: function(doneUpdating) {
+		console.log("Resetting cards.");
+		Account.clearOwl();
+		Account.updateCards(doneUpdating);
+	},
 	clearOwl: function() {
 		//document.querySelector("#user-cards").innerHTML = "";
-		for(cards in all_cards) {
-			("#user-cards").data('owlCarousel').removeItem();
+		for(cards in Account.all_cards) {
+			Account.owl.data('owlCarousel').removeItem();
 		}
 	},
 	updateCards: function(doneUpdating) { // Updates the UI with cards the user has purchased.
@@ -314,23 +319,11 @@ var Account = {
 						card_html.querySelector(".card-balance-amt").innerText = card.bal;
 						card_html.querySelector(".card-balance-amt").setAttribute("card", card.id);
 						card_html.querySelector(".card-number").innerText = card.num;
-						document.querySelector("#user-cards").appendChild( document.importNode(card_html, true) );
+						Account.owl.data('owlCarousel').addItem(document.importNode(card_html, true));
+						//document.querySelector("#user-cards").appendChild( document.importNode(card_html, true) );
 					}
 				}
 			}
-			Account.owl.owlCarousel({ // Activate owl Carousel for cards.
-			    //navigation : true, // Show next and prev buttons
-			    slideSpeed : 300,
-			    paginationSpeed : 400,
-			    singleItem:true
-			
-			    // "singleItem:true" is a shortcut for:
-			    // items : 1,
-			    // itemsDesktop : false,
-			    // itemsDesktopSmall : false,
-			    // itemsTablet: false,
-			    // itemsMobile : false
-			});
 			$('.materialboxed').materialbox();
 			$(".card-refund").click(function() {
 				console.log("Refunding button");
@@ -435,8 +428,8 @@ var Account = {
 	        		console.log("Funds were sent.");
 	        		$(".balance-amt").prepend("Loading...");
 	        		setTimeout(function() {
-	        			user.clearOwl();
-	        			user.updateCards();
+	        			user.resetCards(function() {
+	        			});
 	        			user.updateBalance();
 	        		}, 5000);
 	        	},
@@ -486,13 +479,19 @@ Card.prototype.update = function() { // Update UI with info Fold has about card.
 
 Card.prototype.refund = function() {
 	url = fold_api + "my/refunds";
+	thisCard = this;
 	console.log("Refunding card " + this.id + " amount: " + this.bal);
 	refund = {"refunds": [{
 		  "card_id": this.id
 	}]};
 	sRequest(url, refund, function(response) {
+		Airbitz.ui.showAlert("Card Refunded", "Card Refunded. Please allow several minutes for refund.");
 		console.log(response);
+		Airbitz.ui.showAlert("Setting default address to: " + addr.toString());
 		console.log("Done refunding!");
+		Account.resetCards(function() {
+
+		});
 	});
 }
 
@@ -538,6 +537,20 @@ $.when(user.exists).done(function(data) {
 });
 $(function() {
 	$.when(user.logged_in).done(function(data) {
+		console.log("Logged in");
+		Account.owl.owlCarousel({ // Activate owl Carousel for cards.
+		    //navigation : true, // Show next and prev buttons
+		    slideSpeed : 300,
+		    paginationSpeed : 400,
+		    singleItem:true
+		
+		    // "singleItem:true" is a shortcut for:
+		    // items : 1,
+		    // itemsDesktop : false,
+		    // itemsDesktopSmall : false,
+		    // itemsTablet: false,
+		    // itemsMobile : false
+		});
 		Account.logRefunds();
 		Airbitz.core.selectedWallet({
 		      success: updateWallet,
