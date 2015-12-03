@@ -197,14 +197,7 @@ var createAddress = function(wallet, label, amountSatoshi, amountFiat,
 };
 
 function updateWallet(wallet) {
-	//console.log("Wallet changed to: " + JSON.stringify(wallet));
 	Account.abWallet = wallet;
-	createAddress(wallet, "Fold", 0, 0, "Expense:Coffee Shops", "Refunded " + brand + " gift card.", 
-		function(data) {
-			Account.updateWAddr(data["address"]);
-		}, function(data) {
-			console.log(data);
-		});
 }
 
 function sRequest(url, json, handleReponse) {
@@ -265,8 +258,8 @@ var Account = {
 			$(".balance-amt").text("$" + balances["balances"][0]["amount"]);
 		});
 	},
-	updateWAddr: function(addr) { // Set the default BTC address
-		url = fold_api + "my/default_withdraw_addresses";
+	updateWAddr: function(addr, updated) { // Set the default BTC address
+		var withdraw_url = fold_api + "my/default_withdraw_addresses";
 		console.log("Setting default address to: " + addr.toString());
 		newAddr = {"default_withdraw_addresses": [{
 			  "currency": "BTC",
@@ -275,17 +268,22 @@ var Account = {
 			    "address_type": "crypto"
 			  }]
 		}]};
-		sRequest(url, newAddr, function(response) {
+		console.log(withdraw_url);
+		console.log(newAddr);
+		sRequest(withdraw_url, newAddr, function(response) {
 			console.log("Updated default_withdraw_address");
+			updated();
 		});
 	},
 	resetCards: function(doneUpdating) {
 		console.log("Resetting cards.");
 		Account.clearOwl();
-		Account.updateCards(doneUpdating);
+		setTimeout(function() {
+			Account.updateCards(doneUpdating);
+		}, 5000);
+
 	},
 	clearOwl: function() {
-		//document.querySelector("#user-cards").innerHTML = "";
 		for(cards in Account.all_cards) {
 			Account.owl.data('owlCarousel').removeItem();
 		}
@@ -301,7 +299,7 @@ var Account = {
 				card_html.querySelector(".card-balance-amt").innerText = "$0.00";
 				card_html.querySelector(".card-number").innerText = "6666 8888 4444 0000";
 				card_html.querySelector(".card-info").innerText = "";
-				document.querySelector("#user-cards").appendChild( document.importNode(card_html, true) );
+				Account.owl.data('owlCarousel').addItem( document.importNode(card_html, true) );
 			} else {
 				for(numOfCards in cards) {
 					card = new Card(
@@ -427,11 +425,7 @@ var Account = {
 	        	success: function(rawtx) {
 	        		console.log("Funds were sent.");
 	        		$(".balance-amt").prepend("Loading...");
-	        		setTimeout(function() {
-	        			user.resetCards(function() {
-	        			});
-	        			user.updateBalance();
-	        		}, 5000);
+        			user.resetCards(function() {});
 	        	},
 	        	error: function() {
 	        		console.log("Funds were not sent.");
@@ -484,15 +478,20 @@ Card.prototype.refund = function() {
 	refund = {"refunds": [{
 		  "card_id": this.id
 	}]};
-	sRequest(url, refund, function(response) {
-		Airbitz.ui.showAlert("Card Refunded", "Card Refunded. Please allow several minutes for refund.");
-		console.log(response);
-		Airbitz.ui.showAlert("Setting default address to: " + addr.toString());
-		console.log("Done refunding!");
-		Account.resetCards(function() {
-
+	createAddress(Account.abWallet, "Fold", 0, 0, "Expense:Coffee Shops", "Refunded " + brand + " gift card.", 
+		function(data) {
+			Account.updateWAddr(data["address"], function() {
+				sRequest(url, refund, function(response) {
+					Airbitz.ui.showAlert("Card Refunded", "Card Refunded. Please allow several minutes for refund.");
+					console.log(response);
+					console.log("Done refunding!");
+					Account.resetCards(function() {
+					});
+				});
+			});
+		}, function(data) {
+			console.log(data);
 		});
-	});
 }
 
 Card.prototype.remove = function() { // Remove card from UI
