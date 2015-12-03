@@ -59,7 +59,7 @@
 		</div>
 		<div class="card-info-main card-content">
 			<div class="card-number"></div>
-			<div class="card-balance">Current Balance</div><i class="material-icons right activator">info_outline</i>
+			<div class="card-balance">Current Balance</div><i class="material-icons right activator card-info">info_outline</i>
 			<div class="card-balance-amt"></div>
 		</div>
 		<div class="card-reveal valign-wrapper">
@@ -290,7 +290,13 @@ var Account = {
 			console.log("User's cards: " + JSON.stringify(all_card_info));
 			var cards = all_card_info["cards"];
 			if(!cards.length > 0) {
-				console.log("No cards. New acc?");
+				console.log("No cards. New acc!");
+				var card_html = document.querySelector('#card-template').content;
+				card_html.querySelector(".card-barcode").innerHTML = "<img class=\"barcode \" src=\"https://airbitz.co/go/wp-content/uploads/2015/12/download.png\"/>";
+				card_html.querySelector(".card-balance-amt").innerText = "$0.00";
+				card_html.querySelector(".card-number").innerText = "6666 6666 6666 6666";
+				card_html.querySelector(".card-info").innerText = "";
+				document.querySelector("#user-cards").appendChild( document.importNode(card_html, true) );
 			} else {
 				for(numOfCards in cards) {
 					card = new Card(
