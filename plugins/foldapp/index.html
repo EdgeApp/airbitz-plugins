@@ -407,7 +407,11 @@ var Account = {
 			Airbitz.ui.debugLevel(1,JSON.stringify(brands_cards["card_values"]));
 			user.getBal(function(total_bal) {
 				user.total_bal = total_bal;
-				var maxBal = parseInt(brands_cards["soft_max_total"][0]["amount"]);
+                if (brands_cards["soft_max_total"] && brands_cards["soft_max_total"].length > 0) {
+                    var maxBal = parseInt(brands_cards["soft_max_total"][0]["amount"]);
+                } else {
+                    var maxBal = 0;
+                }
 				Airbitz.ui.debugLevel(1,"User bal: " + user.total_bal);
 				Airbitz.ui.debugLevel(1,"Max: " + maxBal);
 				if(maxBal >= user.total_bal) {
