@@ -460,10 +460,12 @@ var Account = {
 	        	category: 'Expense:Coffee Shops',
 	        	notes: brand + " $" + String(denomination) + " gift card.",
 	        	success: function(rawtx) {
+	        		Airbitz.ui.showAlert("Sent", "Funds were sent. " + brand + " card should appear shortly.");
 	        		console.log("Funds were sent.");
 	        		$(".balance-amt").prepend("Loading...");
 	        	},
 	        	error: function() {
+	        		Airbitz.ui.showAlert("Unable to send funds.", "There was an error sending funds.");
 	        		console.log("Funds were not sent.");
 	        	}
 	        });
