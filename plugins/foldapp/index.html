@@ -159,7 +159,10 @@ document.title = brand; // Set page's title to brand of gift card.
 function toggleUi() {
 	$(".fold-loading").css("display", "none");
 	$(".main").css("display", "inline");
-	setInterval(Account.pingCards, 5000);
+	setInterval(function() {
+		//Account.pingCards();
+		user.resetCards(function() {});
+	}, 5000);
 }
 
 function supportsTemplate() {
@@ -224,6 +227,7 @@ var Account = {
 	logged_in: $.Deferred(),
 	all_cards: [],
 	owl: $("#user-cards"),
+	owlSet: false, // Owl set
 	create: function() {
 		console.log("Creating user.");
 		url = fold_api + "users";
@@ -277,61 +281,94 @@ var Account = {
 	},
 	resetCards: function(doneUpdating) {
 		console.log("Resetting cards.");
-		Account.clearOwl();
-		setTimeout(function() {
-			Account.updateCards(doneUpdating);
-		}, 5000);
-
+		Account.getCards(function(cards) {
+			Account.updateCards(cards, doneUpdating);
+		});
 	},
 	clearOwl: function() {
-		for(cards in Account.owl.data("owlCarousel").owl.owlItems.length) {
-			Account.owl.data('owlCarousel').removeItem();
-		}
+		if(Account.owlSet) {
+			console.log("Clearing Owl");
+			for(var o = 0; o < Account.owl.data("owlCarousel").owl.owlItems.length; o ++) {
+				Account.owl.data('owlCarousel').removeItem();
+			}
+		} else { Account.owlSet = true; }
 	},
-	updateCards: function(doneUpdating) { // Updates the UI with cards the user has purchased
+	getCards: function(c) {
 		user.getInfo("cards", function(all_card_info) {
 			console.log("User's cards: " + JSON.stringify(all_card_info));
-			var cards = all_card_info["cards"];
-			if(!cards.length > 0) {
+			c(all_card_info["cards"]);
+		});
+	},
+	updateCards: function(cards, doneUpdating) { // Updates the UI with cards the user has purchased
+		console.log("Updating " + cards.length + " cards.");
+		if(!cards.length > 0) {
+			if(!(Account.diffCs(cards))) {
 				console.log("No cards. New acc!");
 				var card_html = document.querySelector('#card-template').content;
 				card_html.querySelector(".card-barcode").innerHTML = "<img class=\"barcode barcode-inactive\" src=\"https://airbitz.co/go/wp-content/uploads/2015/12/download.png\"/>";
 				card_html.querySelector(".card-balance-amt").innerText = "$0.00";
 				card_html.querySelector(".card-number").innerText = "6666 8888 4444 0000";
 				card_html.querySelector(".card-info").innerText = "";
+				Account.clearOwl();
 				Account.owl.data('owlCarousel').addItem( document.importNode(card_html, true) );
-			} else {
+			}
+		} else { // There's at least one card
+			if(Account.diffCs(cards)) {
+				Account.clearOwl();
+				Account.all_cards = [];
 				for(numOfCards in cards) {
 					card = new Card(
 						cards[numOfCards]["id"],
 						cards[numOfCards]["code"][0],
-						cards[numOfCards]["balance"][0]["formatted"]["fewer_trailing_zeros"] // e.g. $5
+						cards[numOfCards]["balance"][0]["amount"]// e.g. $5
 					);
 					Account.all_cards[numOfCards] = card;
-					//console.log("Card " + card.id + " has card num, " + card.num);
 					var card_html = document.querySelector('#card-template').content;
-
 					if(!card.bal == 0) {
-						//card_html.querySelector(".gift-card").setAttribute("card", card.id);
 						card_html.querySelector(".card-barcode").innerHTML = "<img class=\"barcode \" src=\"" + fold_api + "my/cards/" + card.id + "/barcode/png" + "\">";
 						card_html.querySelector(".card-balance-amt").innerText = card.bal;
 						card_html.querySelector(".card-balance-amt").setAttribute("card", card.id);
 						card_html.querySelector(".card-number").innerText = card.num;
+						console.log("Adding card: " + numOfCards + " card info: " + cards[numOfCards]);
 						Account.owl.data('owlCarousel').addItem(document.importNode(card_html, true));
 						//document.querySelector("#user-cards").appendChild( document.importNode(card_html, true) );
 					}
 				}
 			}
-			$('.materialboxed').materialbox();
-			$(".card-refund").click(function() {
-				console.log("Refunding button");
-				var thisCardId = $(this).parent().parent().children(".card-info-main").children(".card-balance-amt").attr("card");
-				console.log("This card: " + thisCardId);
-				var thisCard = Account.getCardById(thisCardId);
-				thisCard.refund();
-			});
-		doneUpdating();
+		}
+		$('.materialboxed').materialbox();
+		$(".card-refund").click(function() {
+			console.log("Refunding button");
+			var thisCardId = $(this).parent().parent().children(".card-info-main").children(".card-balance-amt").attr("card");
+			console.log("This card: " + thisCardId);
+			var thisCard = Account.getCardById(thisCardId);
+			thisCard.refund();
 		});
+	doneUpdating();
+	},
+	diffCs: function(cards) { // Has different cards?
+		var match = 0;
+		console.log(cards.length);
+		console.log(Account.all_cards.length);
+		if(cards.length != Account.all_cards.length) {
+			return true;
+		}
+		for(fcard in cards) {
+			for(card in Account.all_cards) {
+				if(cards[fcard]["id"] == Account.all_cards[card].id) {
+					match++;
+					console.log("balances ares: " + cards[fcard]["balance"][0]["amount"]);
+					console.log(Account.all_cards[card].bal);
+					if(cards[fcard]["balance"][0]["amount"] != Account.all_cards[card].bal) {
+						return true;
+					}
+				}
+			}
+		}
+		if(match != cards.length) {
+			return true;
+		}
+		return false;
 	},
 	getCardById: function(cardId) {
 		var cardFromId = Account.all_cards.filter(function( obj ) {
@@ -425,7 +462,6 @@ var Account = {
 	        	success: function(rawtx) {
 	        		console.log("Funds were sent.");
 	        		$(".balance-amt").prepend("Loading...");
-        			user.resetCards(function() {});
 	        	},
 	        	error: function() {
 	        		console.log("Funds were not sent.");
@@ -485,8 +521,6 @@ Card.prototype.refund = function() {
 					Airbitz.ui.showAlert("Card Refunded", "Card Refunded. Please allow several minutes for refund.");
 					console.log(response);
 					console.log("Done refunding!");
-					Account.resetCards(function() {
-					});
 				});
 			});
 		}, function(data) {
@@ -559,8 +593,10 @@ $(function() {
 		    });
 		console.log("Updating UI");
 		user.listCards(function() { // Start getting avaliable cards for sale.
-			user.updateCards(function() {
+			user.getCards(function(cards) {
+				user.updateCards(cards,function() {
 				toggleUi();
+				});
 			});
 			// user.updateBalance();
 		}); 
