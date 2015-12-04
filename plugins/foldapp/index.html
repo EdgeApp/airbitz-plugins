@@ -175,17 +175,17 @@ function supportsImports() {
   return 'import' in document.createElement('link');
 }
 if (supportsTemplate()) {
-  console.log("Does support templates!");
+  Airbitz.ui.debugLevel(1,"Does support templates!");
 } else {
   // Use old templating techniques or libraries.
-  console.log("Does not support templates.");
+  Airbitz.ui.debugLevel(1,"Does not support templates.");
 }
 if (supportsImports()) {
   // Good to go!
-  console.log("Supports imports!");
+  Airbitz.ui.debugLevel(1,"Supports imports!");
 } else {
   // Use other libraries/require systems to load files.
-  console.log("Does not support imports.");
+  Airbitz.ui.debugLevel(1,"Does not support imports.");
 }
 
 var createAddress = function(wallet, label, amountSatoshi, amountFiat,
@@ -220,8 +220,8 @@ function sRequest(url, json, handleReponse) {
     	handleReponse(response);
     }
 }).fail(function(xhr, textStatus, error) {
-	console.log("There was an error. Status: " + xhr.status);
-	console.log(xhr.Message);
+	Airbitz.ui.debugLevel(1,"There was an error. Status: " + xhr.status);
+	Airbitz.ui.debugLevel(1,xhr.Message);
 });
 }
 
@@ -232,14 +232,14 @@ var Account = {
 	owl: $("#user-cards"),
 	owlSet: false, // Owl set
 	create: function() {
-		console.log("Creating user.");
+		Airbitz.ui.debugLevel(1,"Creating user.");
 		url = fold_api + "users";
   	newAcc = {"users": [{
   	  "random_username": true,
   	  "random_password": true
   	}]}
 	sRequest(url, newAcc, function(r) {
-		//console.log(r);
+		//Airbitz.ui.debugLevel(1,r);
 		Account.username = r['users'][0]['username'];
 		Account.pass = r['users'][0]['password'];
 		Account.creds = {"users": [{
@@ -253,21 +253,21 @@ var Account = {
 	},
 	login: function() {
 		url = fold_api + "my/session";
-		console.log(Account.creds);
+		Airbitz.ui.debugLevel(1,Account.creds);
 		sRequest(url, Account.creds, function(r) {
-			//console.log("Logging in" + JSON.stringify(r));
+			//Airbitz.ui.debugLevel(1,"Logging in" + JSON.stringify(r));
 			Account.logged_in.resolve(r);
 		});
 	},
 	updateBalance: function() {
 		this.getInfo("balances?currency=USD", function(balances) {
-			console.log("Balance: " + JSON.stringify(balances["balances"][0]["amount"]));
+			Airbitz.ui.debugLevel(1,"Balance: " + JSON.stringify(balances["balances"][0]["amount"]));
 			$(".balance-amt").text("$" + balances["balances"][0]["amount"]);
 		});
 	},
 	updateWAddr: function(addr, updated) { // Set the default BTC address
 		var withdraw_url = fold_api + "my/default_withdraw_addresses";
-		console.log("Setting default address to: " + addr.toString());
+		Airbitz.ui.debugLevel(1,"Setting default address to: " + addr.toString());
 		newAddr = {"default_withdraw_addresses": [{
 			  "currency": "BTC",
 			  "default_address": [{
@@ -275,22 +275,22 @@ var Account = {
 			    "address_type": "crypto"
 			  }]
 		}]};
-		console.log(withdraw_url);
-		console.log(newAddr);
+		Airbitz.ui.debugLevel(1,withdraw_url);
+		Airbitz.ui.debugLevel(1,newAddr);
 		sRequest(withdraw_url, newAddr, function(response) {
-			console.log("Updated default_withdraw_address");
+			Airbitz.ui.debugLevel(1,"Updated default_withdraw_address");
 			updated();
 		});
 	},
 	resetCards: function(doneUpdating) {
-		console.log("Resetting cards.");
+		Airbitz.ui.debugLevel(1,"Resetting cards.");
 		Account.getCards(function(cards) {
 			Account.updateCards(cards, doneUpdating);
 		});
 	},
 	clearOwl: function() {
 		if(Account.owlSet) {
-			console.log("Clearing Owl");
+			Airbitz.ui.debugLevel(1,"Clearing Owl");
 			for(var o = 0; o < Account.owl.data("owlCarousel").owl.owlItems.length; o ++) {
 				Account.owl.data('owlCarousel').removeItem();
 			}
@@ -298,15 +298,15 @@ var Account = {
 	},
 	getCards: function(c) {
 		user.getInfo("cards", function(all_card_info) {
-			console.log("User's cards: " + JSON.stringify(all_card_info));
+			Airbitz.ui.debugLevel(1,"User's cards: " + JSON.stringify(all_card_info));
 			c(all_card_info["cards"]);
 		});
 	},
 	updateCards: function(cards, doneUpdating) { // Updates the UI with cards the user has purchased
-		console.log("Updating " + cards.length + " cards.");
+		Airbitz.ui.debugLevel(1,"Updating " + cards.length + " cards.");
 		if(!cards.length > 0) {
 			if(Account.diffCs(cards) || (!Account.owlSet)) {
-				console.log("No cards. New acc!");
+				Airbitz.ui.debugLevel(1,"No cards. New acc!");
 				if(typeof Account.owl.data("owlCarousel").owl === 'undefined') {
 					Account.setDummyC();
 				} else if(Account.owl.data("owlCarousel").owl.owlItems.length > 0) {
@@ -337,7 +337,7 @@ var Account = {
 							card_html.querySelector(".card-info").innerText = "";
 						}
 						
-						console.log("Adding card: " + numOfCards + " card info: " + cards[numOfCards]);
+						Airbitz.ui.debugLevel(1,"Adding card: " + numOfCards + " card info: " + cards[numOfCards]);
 						Account.owl.data('owlCarousel').addItem(document.importNode(card_html, true));
 						//document.querySelector("#user-cards").appendChild( document.importNode(card_html, true) );
 					}
@@ -346,9 +346,9 @@ var Account = {
 		}
 		$('.materialboxed').materialbox();
 		$(".card-refund").click(function() {
-			console.log("Refunding button");
+			Airbitz.ui.debugLevel(1,"Refunding button");
 			var thisCardId = $(this).parent().parent().children(".card-info-main").children(".card-balance-amt").attr("card");
-			console.log("This card: " + thisCardId);
+			Airbitz.ui.debugLevel(1,"This card: " + thisCardId);
 			var thisCard = Account.getCardById(thisCardId);
 			thisCard.refund();
 		});
@@ -356,8 +356,8 @@ var Account = {
 	},
 	diffCs: function(cards) { // Has different cards?
 		var match = 0;
-		console.log(cards.length);
-		console.log(Account.all_cards.length);
+		Airbitz.ui.debugLevel(1,cards.length);
+		Airbitz.ui.debugLevel(1,Account.all_cards.length);
 		if(cards.length != Account.all_cards.length) {
 			return true;
 		}
@@ -365,8 +365,8 @@ var Account = {
 			for(card in Account.all_cards) {
 				if(cards[fcard]["id"] == Account.all_cards[card].id) {
 					match++;
-					console.log("balances ares: " + cards[fcard]["balance"][0]["amount"]);
-					console.log(Account.all_cards[card].bal);
+					Airbitz.ui.debugLevel(1,"balances ares: " + cards[fcard]["balance"][0]["amount"]);
+					Airbitz.ui.debugLevel(1,Account.all_cards[card].bal);
 					if(cards[fcard]["balance"][0]["amount"] != Account.all_cards[card].bal) {
 						return true;
 					}
@@ -395,7 +395,7 @@ var Account = {
 	},
 	listCards: function(doneListing) { // Updates the UI with cards avaliable to purchase from Fold.
 		this.getInfo("brands", function(cards_avil) {
-			console.log(JSON.stringify(cards_avil) );
+			Airbitz.ui.debugLevel(1,JSON.stringify(cards_avil) );
 			var all_brands = cards_avil["brands"];
 			var brands_cards = "";
 			for(numOfbrands in all_brands) {
@@ -404,17 +404,17 @@ var Account = {
 					break;
 				}
 			}
-			console.log(JSON.stringify(brands_cards["card_values"]));
+			Airbitz.ui.debugLevel(1,JSON.stringify(brands_cards["card_values"]));
 			user.getBal(function(total_bal) {
 				user.total_bal = total_bal;
 				var maxBal = parseInt(brands_cards["soft_max_total"][0]["amount"]);
-				console.log("User bal: " + user.total_bal);
-				console.log("Max: " + maxBal);
+				Airbitz.ui.debugLevel(1,"User bal: " + user.total_bal);
+				Airbitz.ui.debugLevel(1,"Max: " + maxBal);
 				if(maxBal >= user.total_bal) {
 					var card_vals = brands_cards["card_values"];
 					document.querySelector(".add-buttons").innerHTML = "";
 					for(numOfVals in card_vals) {
-						console.log("Listing card " + numOfVals);
+						Airbitz.ui.debugLevel(1,"Listing card " + numOfVals);
 						var add_html = document.querySelector('#add-template').content;
 						add_html.querySelector(".card-value").setAttribute("value", card_vals[numOfVals]["amount"]);
 						add_html.querySelector(".card-value").innerText = card_vals[numOfVals]["formatted"]["all_decimal_places"];
@@ -430,7 +430,7 @@ var Account = {
 	},
 	logRefunds: function() {
 		Account.getInfo("refunds", function(refunds) {
-			console.log(JSON.stringify(refunds));
+			Airbitz.ui.debugLevel(1,JSON.stringify(refunds));
 		});
 	},
 	getInfo: function(info, handleResponse, root) {
@@ -460,13 +460,13 @@ var Account = {
 	  "cancel_all_others": true
 	}
 		url = fold_api + "my/orders";
-		console.log("Getting new order");
+		Airbitz.ui.debugLevel(1,"Getting new order");
 		sRequest(url, newOrder, function(r) {
-			console.log("Order: " + JSON.stringify(r));
+			Airbitz.ui.debugLevel(1,"Order: " + JSON.stringify(r));
 			amt = (r["orders"][0]["price"]["amount"] * 100000000);
 			toAddr = r["orders"][0]["payment"][0]["address"];
-			console.log("Spending " + amt + " from wallet: " + user.abWallet + " to: " + toAddr);
-			console.log("Fiat amt: " + denomination)
+			Airbitz.ui.debugLevel(1,"Spending " + amt + " from wallet: " + user.abWallet + " to: " + toAddr);
+			Airbitz.ui.debugLevel(1,"Fiat amt: " + denomination)
 			Airbitz.core.requestSpend(Account.abWallet,
 				toAddr, amt, denomination, {
 	        	label: brand,
@@ -474,11 +474,11 @@ var Account = {
 	        	notes: brand + " $" + String(denomination) + " gift card.",
 	        	success: function(rawtx) {
 	        		Airbitz.ui.showAlert("Cool", "If you sent, your " + brand + " card should appear shortly.");
-	        		console.log("Funds were sent.");
+	        		Airbitz.ui.debugLevel(1,"Funds were sent.");
 	        	},
 	        	error: function() {
 	        		Airbitz.ui.showAlert("Unable to send funds.", "Funds weren't sent");
-	        		console.log("Funds were not sent.");
+	        		Airbitz.ui.debugLevel(1,"Funds were not sent.");
 	        	}
 	        });
 		});
@@ -489,8 +489,8 @@ var Account = {
 	  				"approved": true
 				}]}
 		sRequest(fold_api + "my/orders", cOrder, function(r) {
-			console.log("Approving order");
-			//console.log(r);
+			Airbitz.ui.debugLevel(1,"Approving order");
+			//Airbitz.ui.debugLevel(1,r);
 		});
 	}
 }
@@ -512,7 +512,7 @@ Card.prototype.refund = function() {
 	if(this.isRefundable) {
 		url = fold_api + "my/refunds";
 		thisCard = this;
-		console.log("Refunding card " + this.id + " amount: " + this.bal);
+		Airbitz.ui.debugLevel(1,"Refunding card " + this.id + " amount: " + this.bal);
 		refund = {"refunds": [{
 			  "card_id": this.id
 		}]};
@@ -521,12 +521,12 @@ Card.prototype.refund = function() {
 				Account.updateWAddr(data["address"], function() {
 					sRequest(url, refund, function(response) {
 						Airbitz.ui.showAlert("Card Refunded", "Card Refunded. Please allow several minutes for refund.");
-						console.log(response);
-						console.log("Done refunding!");
+						Airbitz.ui.debugLevel(1,response);
+						Airbitz.ui.debugLevel(1,"Done refunding!");
 					});
 				});
 			}, function(data) {
-				console.log(data);
+				Airbitz.ui.debugLevel(1,data);
 			});
 	}
 }
@@ -546,7 +546,7 @@ Card.prototype.mockBal = function(bal) {
 	  "balance_amount": bal.toString()
 	}]}
 	).done(function() {
-		console.log("Done mocking " + thisCard.id + " balance to: " + bal);
+		Airbitz.ui.debugLevel(1,"Done mocking " + thisCard.id + " balance to: " + bal);
 	});
 }
 
@@ -563,7 +563,7 @@ if(!(typeof Account.username === 'undefined' || Account.username == null)) {
 		  "username": Account.username,
 		  "password": Account.pass
 		}]};
-	console.log("User pulled from memory.");
+	Airbitz.ui.debugLevel(1,"User pulled from memory.");
 	user.exists.resolve();
 } else {
 	user.create();
@@ -573,7 +573,7 @@ $.when(user.exists).done(function(data) {
 });
 $(function() {
 	$.when(user.logged_in).done(function(data) {
-		console.log("Logged in");
+		Airbitz.ui.debugLevel(1,"Logged in");
 		Account.owl.owlCarousel({ // Activate owl Carousel for cards.
 		    //navigation : true, // Show next and prev buttons
 		    slideSpeed : 300,
@@ -591,10 +591,10 @@ $(function() {
 		Airbitz.core.selectedWallet({
 		      success: updateWallet,
 		      error: function() {
-		      	console.log("Could not get selected wallet");
+		      	Airbitz.ui.debugLevel(1,"Could not get selected wallet");
 		      }
 		    });
-		console.log("Updating UI");
+		Airbitz.ui.debugLevel(1,"Updating UI");
 		user.listCards(function() { // Start getting avaliable cards for sale.
 			user.getCards(function(cards) {
 				user.updateCards(cards,function() {
@@ -604,16 +604,16 @@ $(function() {
 			// user.updateBalance();
 		}); 
 		user.getInfo("profile", function(response) {
-			//console.log(response);
-			//console.log(response["logged_in"]);
+			//Airbitz.ui.debugLevel(1,response);
+			//Airbitz.ui.debugLevel(1,response["logged_in"]);
 			user.getInfo("orders", function(response) {
-				//console.log(response);
+				//Airbitz.ui.debugLevel(1,response);
 			});
 		// Done loading.
 		});
 	});
 	// UI stuff
-	console.log("logo: " + brand_logo_urls[brand]);
+	Airbitz.ui.debugLevel(1,"logo: " + brand_logo_urls[brand]);
 	$(".brand-name").text(brand);
 	$(".brand-logo").attr("src", brand_logo_urls[brand]);
 	$(".user-creds").text("Username: " + Account.username  + " Pass: " + Account.pass);
