@@ -157,14 +157,12 @@ var brand_logo_urls = {
 	"Starbucks":"https://airbitz.co/go/wp-content/uploads/2015/11/starbucks-96.png", // Starbucks
 	"Target":"https://airbitz.co/media/business_images/be675f196093fb4f052cb19e532a49a3.jpg" // Target
 };
-
 document.title = brand; // Set page's title to brand of gift card.
 
 function toggleUi() {
 	$(".fold-loading").css("display", "none");
 	$(".main").css("display", "inline");
 	setInterval(function() {
-		//Account.pingCards();
 		user.resetCards(function() {});
 	}, 5000);
 }
@@ -387,11 +385,6 @@ var Account = {
 		});
 		return cardFromId[0];
 	},
-	pingCards: function() {
-		for(numOfCards in Account.all_cards) {
-			Account.all_cards[numOfCards].update();
-		}
-	},
 	listCards: function(doneListing) { // Updates the UI with cards avaliable to purchase from Fold.
 		this.getInfo("brands", function(cards_avil) {
 			var all_brands = cards_avil["brands"];
@@ -502,21 +495,6 @@ function Card(id, num, bal) {
 Card.prototype.ping = function() { // Tell Fold we need to check this balance to see if the user has spent it.
 	var url = fold_api + "my/cards/" + this.id + "/ping";
 	$.post(url);
-}
-
-Card.prototype.update = function() { // Update UI with info Fold has about card.
-	//cardSelector = ;
-	this.ping();
-	var thisCard = this;
-	$.get(fold_api + "my/cards/" + this.id).done(function(cardInfo) {
-		console.log("id is: " + thisCard.id);
-		console.log($("[card=" + thisCard.id + "]").text()); // Balance before.
-		cardInfo = cardInfo["cards"][0];
-		console.log("fold bal: " + cardInfo["balance"][0]["formatted"]["all_decimal_places"]);
-		$("[card=" + thisCard.id + "]").text(cardInfo["balance"][0]["formatted"]["all_decimal_places"]);
-		/*$(cardSelector).children(".card-info-main").children(".card-balance-amt").text( cardInfo["balance"][0]["formatted"]["all_decimal_places"] );
-		$(cardSelector).find("card-number").text( cardInfo["code"] );*/
-	});
 }
 
 Card.prototype.refund = function() {
