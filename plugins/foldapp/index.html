@@ -99,8 +99,8 @@
 	  	<center class="main">
 	  		<i class="fa fa-question-circle fa-2x fa-pull-right fold-help" href="href="#help""></i>
 	  		<header>
-					<img src="https://airbitz.co/go/wp-content/uploads/2015/11/starbucks-96.png"/>
-					<div class="title-header">Spend Ƀitcoin at <span class="brand-name">Starbucks</span></div>
+					<img class="brand-logo" src=""/>
+					<div class="title-header">Spend Ƀitcoin at <span class="brand-name"></span></div>
 					<div class="title-header-2">&amp; Save 20%</div>
 			</header>
 			<main class="container-fluid">
@@ -138,7 +138,7 @@
 					<div class="row">
 						<div class="col l6 s12">
 							<h6>This service is provided by Fold Inc. For issues with gift card purchases and refunds, please contact support@foldapp.com. Please provide the following account ID to support: 12r12r-1b23g24g-2g24g2h-24h24hfa537esg</h6>
-							<h6>This application is not affiliated with the <span class="brand-name">Starbucks</span>Corporation</h6>
+							<h6>This application is not affiliated with the <span class="brand-name"></span> Corporation</h6>
 						</div>
 					</div>
 				</div>
@@ -153,6 +153,10 @@
 <script type="text/javascript">
 var fold_api = "https://api.foldapp.com/v1/";
 var brand = Airbitz.config.get("BRAND");
+var brand_logo_urls = {
+	"Starbucks":"https://airbitz.co/go/wp-content/uploads/2015/11/starbucks-96.png", // Starbucks
+	"Target":"https://airbitz.co/media/business_images/be675f196093fb4f052cb19e532a49a3.jpg" // Target
+};
 
 document.title = brand; // Set page's title to brand of gift card.
 
@@ -305,15 +309,9 @@ var Account = {
 			if(!(Account.diffCs(cards))) {
 				console.log("No cards. New acc!");
 				if(typeof Account.owl.data("owlCarousel").owl === 'undefined') {
-					if(Account.owl.data("owlCarousel").owl.owlItems.length > 0) {
-						var card_html = document.querySelector('#card-template').content;
-						card_html.querySelector(".card-barcode").innerHTML = "<img class=\"barcode barcode-inactive\" src=\"https://airbitz.co/go/wp-content/uploads/2015/12/download.png\"/>";
-						card_html.querySelector(".card-balance-amt").innerText = "$0.00";
-						card_html.querySelector(".card-number").innerText = "6666 8888 4444 0000";
-						card_html.querySelector(".card-info").innerText = "";
-						Account.clearOwl();
-						Account.owl.data('owlCarousel').addItem( document.importNode(card_html, true) );
-					}
+					Account.setDummyC();
+				} else if(Account.owl.data("owlCarousel").owl.owlItems.length > 0) {
+					Account.setDummyC();
 				}
 			}
 		} else { // There's at least one card
@@ -373,6 +371,15 @@ var Account = {
 			return true;
 		}
 		return false;
+	},
+	setDummyC: function() {
+		var card_html = document.querySelector('#card-template').content;
+		card_html.querySelector(".card-barcode").innerHTML = "<img class=\"barcode barcode-inactive\" src=\"https://airbitz.co/go/wp-content/uploads/2015/12/download.png\"/>";
+		card_html.querySelector(".card-balance-amt").innerText = "$0.00";
+		card_html.querySelector(".card-number").innerText = "6666 8888 4444 0000";
+		card_html.querySelector(".card-info").innerText = "";
+		Account.clearOwl();
+		Account.owl.data('owlCarousel').addItem( document.importNode(card_html, true) );
 	},
 	getCardById: function(cardId) {
 		var cardFromId = Account.all_cards.filter(function( obj ) {
@@ -614,6 +621,9 @@ $(function() {
 		// Done loading.
 		});
 	});
+	// UI stuff
+	$(".brand-name").text(brand);
+	$(".brand-logo").attr("src", brand_logo_urls[brand]);
 });
 
 </script>
