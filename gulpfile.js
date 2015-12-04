@@ -63,8 +63,8 @@ plugins.map(function(plugin) {
         .pipe(connect.reload());
   };
   gulp.task(plugin + '-partials', function() {
-    return gulp.src(["./plugins/glidera/partials/*.html",
-                     "./plugins/glidera/**/partials/*.html"])
+    return gulp.src(["./plugins/" + plugin + "/partials/*.html",
+                     "./plugins/" + plugin + "/**/partials/*.html"])
       .pipe(ngHtml2Js({
           moduleName: "app"
       }))

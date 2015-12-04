@@ -417,9 +417,9 @@
           'event_text': JSON.stringify(s),
         }
       }).then(function successCallback(response) {
-        console.log(respone);
+        console.log(response);
       }, function errorCallback(response) {
-        console.log(respone);
+        console.log(response);
       });
     };
     return factory;
