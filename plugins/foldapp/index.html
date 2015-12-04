@@ -101,7 +101,7 @@
 	  		<header>
 					<img class="brand-logo" src=""/>
 					<div class="title-header">Spend Ƀitcoin at <span class="brand-name"></span></div>
-					<div class="title-header-2">&amp; Save 20%</div>
+					<div class="title-header-2">&amp; Save <span class="brand-discount"></span></div>
 			</header>
 			<main class="container-fluid">
 			  	<div id="user-cards" class="owl-carousel owl-theme">
@@ -152,7 +152,7 @@
   <script src="vendors/owl-carousel/owl.carousel.js" type="text/javascript"></script>
 <script type="text/javascript">
 var fold_api = "https://api.foldapp.com/v1/";
-var brand = "Target";//Airbitz.config.get("BRAND");
+var brand = Airbitz.config.get("BRAND");
 var brand_logo_urls = {
 	"Starbucks":"https://airbitz.co/go/wp-content/uploads/2015/11/starbucks-96.png", // Starbucks
 	"Target":"https://airbitz.co/media/business_images/be675f196093fb4f052cb19e532a49a3.jpg" // Target
@@ -619,6 +619,13 @@ $(function() {
 	// UI stuff
 	Airbitz.ui.debugLevel(1,"logo: " + brand_logo_urls[brand]);
 	$(".brand-name").text(brand);
+	if (brand == "Starbucks") {
+		brand_discount = "20%"
+	} else if (brand == "Target") {
+		brand_discount = "~15%"
+	}
+
+	$(".brand-discount").text(brand_discount);
 	$(".brand-logo").attr("src", brand_logo_urls[brand]);
 	$(".user-creds").text("Username: " + Account.username  + " Pass: " + Account.pass);
 });
