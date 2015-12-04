@@ -137,7 +137,7 @@
 				<div class="container">
 					<div class="row">
 						<div class="col l6 s12">
-							<h6>This service is provided by Fold Inc. For issues with gift card purchases and refunds, please contact support@foldapp.com. Please provide the following account ID to support: 12r12r-1b23g24g-2g24g2h-24h24hfa537esg</h6>
+							<h6>This service is provided by Fold Inc. For issues with gift card purchases and refunds, please contact support@foldapp.com. Please provide the following account ID to support: <span class="user-creds"></span></h6>
 							<h6>This application is not affiliated with the <span class="brand-name"></span> Corporation</h6>
 						</div>
 					</div>
@@ -152,7 +152,7 @@
   <script src="vendors/owl-carousel/owl.carousel.js" type="text/javascript"></script>
 <script type="text/javascript">
 var fold_api = "https://api.foldapp.com/v1/";
-var brand = Airbitz.config.get("BRAND");
+var brand = Airbitz.config.get("BRAND");//"Target";
 var brand_logo_urls = {
 	"Starbucks":"https://airbitz.co/go/wp-content/uploads/2015/11/starbucks-96.png", // Starbucks
 	"Target":"https://airbitz.co/media/business_images/be675f196093fb4f052cb19e532a49a3.jpg" // Target
@@ -209,7 +209,8 @@ function sRequest(url, json, handleReponse) {
 	$.ajax({
     headers: {
         'Accept' : 'application/json',
-        'Content-Type' : 'application/json'
+        'Content-Type' : 'application/json',
+        'X-CFC-PartnerToken': 'bef57657-b148-4c91-8961-8640d6f70343'
     },
     'type' : 'POST',
     'url' : url,
@@ -304,7 +305,7 @@ var Account = {
 	updateCards: function(cards, doneUpdating) { // Updates the UI with cards the user has purchased
 		console.log("Updating " + cards.length + " cards.");
 		if(!cards.length > 0) {
-			if(!(Account.diffCs(cards))) {
+			if(Account.diffCs(cards) || (!Account.owlSet)) {
 				console.log("No cards. New acc!");
 				if(typeof Account.owl.data("owlCarousel").owl === 'undefined') {
 					Account.setDummyC();
@@ -321,6 +322,7 @@ var Account = {
 						cards[numOfCards]["id"],
 						cards[numOfCards]["code"][0],
 						cards[numOfCards]["balance"][0]["amount"]// e.g. $5
+						//cards[numOfCards]["refundable"]
 					);
 					Account.all_cards[numOfCards] = card;
 					var card_html = document.querySelector('#card-template').content;
@@ -464,7 +466,7 @@ var Account = {
 	        	category: 'Expense:Coffee Shops',
 	        	notes: brand + " $" + String(denomination) + " gift card.",
 	        	success: function(rawtx) {
-	        		Airbitz.ui.showAlert("Sent", "Funds were sent. " + brand + " card should appear shortly.");
+	        		Airbitz.ui.showAlert("Cool", "If you sent, your " + brand + " card should appear shortly.");
 	        		console.log("Funds were sent.");
 	        	},
 	        	error: function() {
@@ -486,10 +488,12 @@ var Account = {
 	}
 }
 
-function Card(id, num, bal) {
+function Card(id, num, bal, isRefundable) {
+	isRefundable = typeof isRefundable !== 'undefined' ? isRefundable : false;
 	this.id = id;
 	this.num = num;
 	this.bal = bal;
+	this.isRefundable = isRefundable;
 }
 
 Card.prototype.ping = function() { // Tell Fold we need to check this balance to see if the user has spent it.
@@ -498,24 +502,26 @@ Card.prototype.ping = function() { // Tell Fold we need to check this balance to
 }
 
 Card.prototype.refund = function() {
-	url = fold_api + "my/refunds";
-	thisCard = this;
-	console.log("Refunding card " + this.id + " amount: " + this.bal);
-	refund = {"refunds": [{
-		  "card_id": this.id
-	}]};
-	createAddress(Account.abWallet, "Fold", 0, 0, "Expense:Coffee Shops", "Refunded " + brand + " gift card.", 
-		function(data) {
-			Account.updateWAddr(data["address"], function() {
-				sRequest(url, refund, function(response) {
-					Airbitz.ui.showAlert("Card Refunded", "Card Refunded. Please allow several minutes for refund.");
-					console.log(response);
-					console.log("Done refunding!");
+	if(this.isRefundable) {
+		url = fold_api + "my/refunds";
+		thisCard = this;
+		console.log("Refunding card " + this.id + " amount: " + this.bal);
+		refund = {"refunds": [{
+			  "card_id": this.id
+		}]};
+		createAddress(Account.abWallet, "Fold", 0, 0, "Expense:Coffee Shops", "Refunded " + brand + " gift card.", 
+			function(data) {
+				Account.updateWAddr(data["address"], function() {
+					sRequest(url, refund, function(response) {
+						Airbitz.ui.showAlert("Card Refunded", "Card Refunded. Please allow several minutes for refund.");
+						console.log(response);
+						console.log("Done refunding!");
+					});
 				});
+			}, function(data) {
+				console.log(data);
 			});
-		}, function(data) {
-			console.log(data);
-		});
+	}
 }
 
 Card.prototype.remove = function() { // Remove card from UI
@@ -602,6 +608,7 @@ $(function() {
 	// UI stuff
 	$(".brand-name").text(brand);
 	$(".brand-logo").attr("src", brand_logo_urls[brand]);
+	$(".user-creds").text("Username: " + Account.username  + " Pass: " + Account.pass);
 });
 
 </script>
