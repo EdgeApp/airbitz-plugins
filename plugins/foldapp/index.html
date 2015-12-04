@@ -153,6 +153,8 @@
 <script type="text/javascript">
 var fold_api = "https://api.foldapp.com/v1/";
 var brand = Airbitz.config.get("BRAND");
+var api_token = Airbitz.config.get("API-TOKEN");
+
 var brand_logo_urls = {
 	"Starbucks":"https://airbitz.co/go/wp-content/uploads/2015/11/starbucks-96.png", // Starbucks
 	"Target":"https://airbitz.co/media/business_images/be675f196093fb4f052cb19e532a49a3.jpg" // Target
@@ -210,7 +212,7 @@ function sRequest(url, json, handleReponse) {
     headers: {
         'Accept' : 'application/json',
         'Content-Type' : 'application/json',
-        'X-CFC-PartnerToken': 'bef57657-b148-4c91-8961-8640d6f70343'
+        'X-CFC-PartnerToken': api_token,
     },
     'type' : 'POST',
     'url' : url,
