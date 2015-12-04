@@ -304,13 +304,17 @@ var Account = {
 		if(!cards.length > 0) {
 			if(!(Account.diffCs(cards))) {
 				console.log("No cards. New acc!");
-				var card_html = document.querySelector('#card-template').content;
-				card_html.querySelector(".card-barcode").innerHTML = "<img class=\"barcode barcode-inactive\" src=\"https://airbitz.co/go/wp-content/uploads/2015/12/download.png\"/>";
-				card_html.querySelector(".card-balance-amt").innerText = "$0.00";
-				card_html.querySelector(".card-number").innerText = "6666 8888 4444 0000";
-				card_html.querySelector(".card-info").innerText = "";
-				Account.clearOwl();
-				Account.owl.data('owlCarousel').addItem( document.importNode(card_html, true) );
+				if(typeof Account.owl.data("owlCarousel").owl === 'undefined') {
+					if(Account.owl.data("owlCarousel").owl.owlItems.length > 0) {
+						var card_html = document.querySelector('#card-template').content;
+						card_html.querySelector(".card-barcode").innerHTML = "<img class=\"barcode barcode-inactive\" src=\"https://airbitz.co/go/wp-content/uploads/2015/12/download.png\"/>";
+						card_html.querySelector(".card-balance-amt").innerText = "$0.00";
+						card_html.querySelector(".card-number").innerText = "6666 8888 4444 0000";
+						card_html.querySelector(".card-info").innerText = "";
+						Account.clearOwl();
+						Account.owl.data('owlCarousel').addItem( document.importNode(card_html, true) );
+					}
+				}
 			}
 		} else { // There's at least one card
 			if(Account.diffCs(cards)) {
@@ -462,10 +466,9 @@ var Account = {
 	        	success: function(rawtx) {
 	        		Airbitz.ui.showAlert("Sent", "Funds were sent. " + brand + " card should appear shortly.");
 	        		console.log("Funds were sent.");
-	        		$(".balance-amt").prepend("Loading...");
 	        	},
 	        	error: function() {
-	        		Airbitz.ui.showAlert("Unable to send funds.", "There was an error sending funds.");
+	        		Airbitz.ui.showAlert("Unable to send funds.", "Funds weren't sent");
 	        		console.log("Funds were not sent.");
 	        	}
 	        });
