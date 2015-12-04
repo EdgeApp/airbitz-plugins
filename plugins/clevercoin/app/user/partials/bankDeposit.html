@@ -1,0 +1,26 @@
+<div class="row">
+  <div class="col-xs-12 no-pad">
+    <table class="table table-striped">
+      <tr><td>IBAN</td><td>{{ iban || "" }}</td></tr>
+      <tr><td>BIC</td><td>{{ bic || "" }}</td></tr>
+      <tr><td>Description</td><td>{{ description || "" }}</td></tr>
+      <tr><td colspan="2">
+        <h5>Recipient</h5>
+        <table class="table table-striped">
+          <tr><td>Name</td><td>{{ recipientName || "" }}</td></tr>
+          <tr><td>Address</td><td>{{ recipientAddress || "" }}</td></tr>
+          <tr><td>Zipcode</td><td>{{ recipientZipcode || "" }}</td></tr>
+          <tr><td>City</td><td>{{ recipientCity || "" }}</td></tr>
+          <tr><td>Country</td><td>{{ recipientCountry || "" }}</td></tr>
+        </table>
+      </td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="return-to-dashboard ng-trans ng-trans-fade-up easeOutSine">
+  <div class="row">
+    <div class="col-xs-12 no-pad">
+      <button type="button" ui-sref="dashboard" class="btn btn-block btn-lg btn-info">Dashboard</button>
+  </div>
+</div>

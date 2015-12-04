@@ -1,0 +1,24 @@
+<div ng-show="showDisclaimer" class="row">
+  <div class="col-xs-12">
+    <h4>Airbitz Disclaimer</h4>
+    <p class="shadow-text">You are now signing up for CleverCoin, a third party exchange service.  Your personal information is transmitted to CleverCoin Inc. directly.</p>
+    <p class="shadow-text">A copy of your information will be encrypted and stored locally for your future use.</p>
+    <p class="shadow-text">Airbitz will never have access to your personal information which is encrypted on your device.</p>
+  </div>
+</div>
+
+<div class="row">
+  <form name="form" class="exchange-sign-up col-xs-12" novalidate>
+
+    <div class="row text-right" style="margin-top: 40px;">
+      <div class="col-xs-12">
+        <button type="button"
+                class="btn btn-lg btn-link">Cancel</button>
+        <button type="button"
+                ng-click="continueSignup()"
+                class="btn btn-lg btn-success">I Understand</button>
+      </div>
+    </div>
+
+  </form>
+</div>

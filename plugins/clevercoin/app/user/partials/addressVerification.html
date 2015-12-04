@@ -1,0 +1,97 @@
+<form name="form" novalidate style="margin: 20px 0">
+
+  <div class="row">
+    <div class="form-group col-xs-12">
+      The proof of residence must be:<br />
+      - maximum 3 months old.<br />
+      - containing name and address.<br />
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="form-group col-xs-12">
+      Allowed documents are:<br />
+      - bills for gas, water or electricity.<br />
+      - tax bills, internet or landline phone bills.<br />
+      - government / municipality extract with address<br />
+      - an extract from the population<br />
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="form-group col-xs-12">
+      <label for="inputAddress" class="">Address</label>
+      <input ng-model="account.address"
+            type="text" id="inputAddressStreet" class="form-control"
+            placeholder="Address" autofocus="" autocomplete="off" autocorrect="off"
+            name="address"
+            required="" />
+      <div class="input-error" ng-show="form.$submitted || form.address.$touched">
+        <span ng-show="form.address.$error.required" class="label label-danger">Required</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="form-group col-xs-12">
+      <label for="inputAddressCity" class="sr-only">City</label>
+      <input ng-model="account.city"
+            type="text" id="inputAddressCity" class="form-control"
+            placeholder="City" autofocus="" autocomplete="off" autocorrect="off"
+            name="city"
+            required="" />
+      <div class="input-error" ng-show="form.$submitted || form.city.$touched">
+        <span ng-show="form.city.$error.required" class="label label-danger">Required</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="form-group col-xs-6">
+      <label for="inputAddressZip" class="sr-only">Zipcode</label>
+      <input ng-model="account.zipcode"
+              type="text" id="inputAddressZip" class="form-control"
+              placeholder="Postal Code" autofocus="" autocomplete="off" autocorrect="off"
+              name="zipcode"
+              required="" />
+      <div class="input-error" ng-show="form.$submitted || form.zipcode.$touched">
+        <span ng-show="form.zipcode.$error.required" class="label label-danger">Required</span>
+        <span ng-show="form.zip.$error.number" class="label label-danger">Number Required</span>
+      </div>
+    </div>
+    <div class="form-group col-xs-6">
+      <label for="inputCountry" class="sr-only">Country</label>
+      <select
+        ng-options="o.name for o in countries"
+        ng-model="account.addresscountryObject" class="form-control"
+        id="inputCountry" name="country" required="" />
+        <option value="">Select a country</option>
+      </select>
+      <div class="input-error" ng-show="form.$submitted || form.zip.$touched">
+        <span ng-show="form.country.$error.required" class="label label-danger">Required</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="form-group col-xs-12">
+      <button type="button" ng-click="loadProofFile()" class="btn btn-lg"
+        ng-class="{'btn-success': proofFile.length > 0, 'btn-info': proofFile.length == 0}">Attach Proof of Residence</button>
+    </div>
+  </div>
+
+  <div class="row no-pad">
+    <div class="col-xs-6 no-pad">
+      <button type="button"
+        ng-click="cancel()"
+        class="btn btn-lg btn-block btn-danger">Cancel</button>
+    </div>
+    <div class="col-xs-6 no-pad">
+      <button type="button"
+        ng-click="save()" 
+        ng-disabled="form.$invalid || proofFile.length == 0"
+        class="btn btn-lg btn-block btn-success">Save</button>
+    </div>
+  </div>
+
+</form>

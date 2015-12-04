@@ -1,0 +1,58 @@
+<div class="row no-pad">
+    <div class="col-xs-12">
+        <h2>Order Receipt</h2>
+    </div>
+</div>
+
+<div class="order-review row">
+  <div class="col-xs-12">
+    <table class="table table-bordered">
+      <tbody>
+        <tr>
+          <td>Order Type</td>
+          <td>{{ order.orderAction | titlecase }} Order</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table class="table table-bordered">
+      <tbody>
+        <tr ng-show="{{ order.orderAction === 'buy' }}">
+          <td>Destination Wallet</td>
+          <td>{{ currentWallet.name || "" }}</td>
+        </tr>
+        <tr ng-show="{{ order.orderAction === 'sell' }}">
+          <td>Sell From</td>
+          <td>{{ currentWallet.name || "" }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table class="table table-bordered">
+      <tbody>
+        <tr>
+          <td>Amount</td>
+          <td>{{ order.quote.amount || 0 | formatBtc }} </td>
+        </tr>
+        <tr>
+          <td>Cost</td>
+          <td>{{ order.quote.toPay || 0 | roundFiat }} {{ exchange.currency }}</td>
+        </tr>
+        <tr>
+          <td>BTC Price</td>
+          <td>{{ order.quote.btcPrice || 0 | roundFiat }} {{ exchange.currency }}</td>
+        </tr>
+        <tr>
+          <td>Fees</td>
+          <td>{{ order.quote.fee || 0 }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="row">
+  <div class="text-right col-xs-12">
+    <button ng-click="finish()" class="btn btn-lg btn-primary">Finish</button>
+  </div>
+</div>

@@ -1,0 +1,37 @@
+<div class="row">
+  <div class="col-xs-12 no-pad">
+    <button type="button" ng-click="clearAccount()" class="btn btn-block btn-danger">Logout</button>
+</div>
+<div class="transactions row">
+  <table ng-model="transactions" class="table table-bordered table-striped col-xs-12 no-pad">
+    <tr ng-repeat="t in funds">
+      <td>
+        <table class="table-mini">
+          <tr>
+            <td class="datetime text-left">
+              <span class="date">{{ (t.time | date:'yyyy-MM-dd') }} <span class="seperator">|<span> <span class="time">{{ t.time | date:'h:mm a' }}</span></span>
+            </td>
+          </tr>
+          <tr>
+            <td class="type text-left"><span ng-class="{ 'buy': t.type=='deposit', 'sell': t.type=='withdrawl' }">{{ t.type }}</span></td>
+          </tr>
+        </table>
+      </td>
+
+      <td>
+        <table class="table-mini">
+          <tr>
+            <td class="qty text-right">{{ t.amount || 0 }} {{ t.currency }} </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<div class="return-to-dashboard ng-trans ng-trans-fade-up easeOutSine">
+  <div class="row">
+    <div class="col-xs-12 no-pad">
+      <button type="button" ui-sref="dashboard" class="btn btn-block btn-lg btn-info">Dashboard</button>
+  </div>
+</div>

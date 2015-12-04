@@ -1,0 +1,67 @@
+<form name="form" novalidate style="margin: 20px 0">
+
+  <div class="row">
+    <div class="form-group col-xs-12">
+      <strong>NOTE:</strong> Identity documents should be: valid (expiry date
+      clearly visible), not rotated, maximum 4 MB per file. Masking person
+      identification number is not allowed. Watermarking/timestamping the file is
+      allowed.
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="form-group col-xs-12">
+        <label for="inputIdentityType" class="">Identification Type</label>
+        <select ng-model="identityType" ng-required="true" id="inputIdentityType" name="identityType" required="" class="form-control">
+          <option value="passport">Passport</option>
+          <option value="identityCard">Identity Card</option>
+        </select>
+        <div class="input-error" ng-show="form.$submitted || form.identityType.$touched">
+          <span ng-show="form.identityType.$error.required" class="label label-danger">Required</span>
+        </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="form-group col-xs-12">
+      <label for="inputNationality" class="">Nationality</label>
+      <select
+        ng-options="o.name for o in countries"
+        ng-model="account.nationalityObject" class="form-control"
+        id="inputNationality" name="nationality" required="" />
+        <option value="">Select a country</option>
+      </select>
+      <div class="input-error" ng-show="form.$submitted || form.nationality.$touched">
+        <span ng-show="form.nationality.$error.required" class="label label-danger">Required</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="form-group col-xs-12">
+      <button type="button" ng-click="loadIdentityFront()" class="btn btn-lg"
+        ng-class="{'btn-success': primaryFile.length > 0, 'btn-info': primaryFile.length == 0}">Identity File Front</button>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="form-group col-xs-12">
+      <button type="button" ng-click="loadIdentityBack()" class="btn btn-lg"
+        ng-class="{'btn-success': secondaryFile.length > 0, 'btn-info': primaryFile.length == 0}">Identity File Back</button>
+    </div>
+  </div>
+
+  <div class="row no-pad">
+    <div class="col-xs-6 no-pad">
+      <button type="button"
+        ng-click="cancel()"
+        class="btn btn-lg btn-block btn-danger">Cancel</button>
+    </div>
+    <div class="col-xs-6 no-pad">
+      <button type="button"
+        ng-click="save()" 
+        ng-disabled="form.$invalid || primaryFile.length == 0 || secondaryFile.length == 0"
+        class="btn btn-lg btn-block btn-success">Save</button>
+    </div>
+  </div>
+</form>

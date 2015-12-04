@@ -1,0 +1,82 @@
+<div class="exchange-ticker row">
+  <div class="col-xs-6 no-pad">
+  </div>
+  <div class="col-xs-6 live-ticker text-right no-pad">
+    <div price-update price-type="{{ order.orderAction }}"></div>
+  </div>
+</div>
+
+<div class="exchange-buy-sell row">
+  <div class="col-xs-12 no-pad">
+    <ul class="list-group" style="margin-bottom: 0;">
+      <li class="ng-trans ng-trans-scale-up easeOutBack list-group-item">
+        <div exchange-limits></div>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<form ng-submit="next()" class="form" name="form">
+  <div class="exchange-buy-sell-interface row">
+    <div class="col-xs-12">
+      <div class="form-group">
+        <label for="inputFiatAmount">Amount to <span class="label label-outline">{{ order.orderAction | uppercase }}</span></label>
+        <div class="input-group">
+          <input
+            ng-model="order.orderValueInput"
+            ng-change="convertBtcValue(order.orderValueInput)"
+            type="number"
+            name="orderValueInput"
+            class="right-square input-lg"
+            id="inputBtcAmount"
+            placeholder="Enter Amount"
+            step="any"
+            autocorrect="off"
+            required="" />
+          <span style="min-width: 75px" class="input-group-addon">{{ cryptoDenom }}</span>
+        </div>
+        <div class="input-error"
+             ng-show="form.$submitted || form.orderValueInput.$touched">
+          <div ng-show="form.orderValueInput.$error.required" class="label label-danger">Required</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="input-group">
+          <input
+            ng-model="order.orderFiatInput"
+            ng-change="convertFiatValue(order.orderFiatInput)"
+            type="number"
+            name="orderFiatInput"
+            class="right-square input-lg"
+            id="inputFiatAmount"
+            placeholder="Enter Amount"
+            autocorrect="off"
+            tabindex="1"
+            step="any"
+            required="" />
+            <span style="min-width: 75px" class="input-group-addon">{{ exchange.currency }}</span>
+        </div>
+        <div class="input-error"
+             ng-show="form.$submitted || form.orderFiatInput.$touched">
+          <div ng-show="form.orderFiatInput.$error.required" class="label label-danger">Required</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-6 no-pad">
+      <button type="button"
+      ui-sref="dashboard"
+      class="buy-sell-next btn btn-lg btn-block btn-danger">Cancel {{ order.orderAction | titlecase }}</button>
+    </div>
+    <div class="col-xs-6 no-pad">
+      <button type="submit"
+      ng-disabled="form.$invalid"
+      tabindex="2"
+      class="buy-sell-next btn btn-lg btn-block btn-success">Next</button>
+    </div>
+  </div>
+</form>
+

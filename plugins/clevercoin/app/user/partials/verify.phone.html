@@ -1,0 +1,43 @@
+
+<div class="verify-phone-form text-center row">
+  <form name="form" class="form col-xs-12" novalidate>
+
+    <div class="row" style="margin: 20px 0">
+      <p>Please enter your phone number.</p>
+    </div>
+
+    <div class="row">
+      <div class="form-group col-xs-offset-1 col-xs-10">
+        <label for="inputPhone" class="sr-only">Verification Code</label>
+        <input ng-model="account.phone" name="phone" type="tel" id="inputPhone"
+               class="large glass-input form-control"
+               placeholder="Enter Your Phone #"
+               autofocus="true"
+               autocomplete="off"
+               phone-number-validator />
+
+      </div>
+
+      <div class="error-message-console col-xs-12" ng-show="form.$submitted || form.phone.$touched">
+        <span ng-show="form.phone.$error.required">Required.</span>
+        <span ng-show="form.phone.$error.tel">Not a valid phone number.</span>
+      </div>
+
+    </div>
+
+    <div class="row" style="margin: 20px 0">
+      <p><label class="label label-warning">Note</label> Phone must be able to receive SMS text messages.</p>
+    </div>
+
+    <div class="text-right row" style="margin-top: 40px;">
+      <div class="col-xs-12">
+        <button type="submit"
+                ng-click="submitPhone()"
+                ng-disabled="form.$invalid"
+                class="buy-sell-next btn btn-lg btn-success">Verify</button>
+      </div>
+    </div>
+
+  </form>
+
+</div>
