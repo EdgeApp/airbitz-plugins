@@ -419,7 +419,7 @@ var Account = {
 			console.log("Fiat amt: " + denomination)
 			Airbitz.core.requestSpend(Account.abWallet,
 				toAddr, amt, denomination, {
-	        	label: 'Fold',
+	        	label: brand,
 	        	category: 'Expense:Coffee Shops',
 	        	notes: brand + " $" + String(denomination) + " gift card.",
 	        	success: function(rawtx) {
