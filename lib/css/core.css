@@ -1045,6 +1045,10 @@ button.btn-add.btn {
 .main-container {
   width: 90%;
 }
+.brand-logo {
+  width: 200px;
+  height: 200px;
+}
 .card-barcode {
   padding: 20px 20px 0 20px;
   margin-bottom: 0;

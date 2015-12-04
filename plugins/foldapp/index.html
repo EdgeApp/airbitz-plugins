@@ -152,7 +152,7 @@
   <script src="vendors/owl-carousel/owl.carousel.js" type="text/javascript"></script>
 <script type="text/javascript">
 var fold_api = "https://api.foldapp.com/v1/";
-var brand = Airbitz.config.get("BRAND");//"Target";
+var brand = "Target";//Airbitz.config.get("BRAND");
 var brand_logo_urls = {
 	"Starbucks":"https://airbitz.co/go/wp-content/uploads/2015/11/starbucks-96.png", // Starbucks
 	"Target":"https://airbitz.co/media/business_images/be675f196093fb4f052cb19e532a49a3.jpg" // Target
@@ -321,8 +321,8 @@ var Account = {
 					card = new Card(
 						cards[numOfCards]["id"],
 						cards[numOfCards]["code"][0],
-						cards[numOfCards]["balance"][0]["amount"]// e.g. $5
-						//cards[numOfCards]["refundable"]
+						cards[numOfCards]["balance"][0]["amount"],// e.g. $5
+						cards[numOfCards]["refundable"]
 					);
 					Account.all_cards[numOfCards] = card;
 					var card_html = document.querySelector('#card-template').content;
@@ -331,6 +331,12 @@ var Account = {
 						card_html.querySelector(".card-balance-amt").innerText = card.bal;
 						card_html.querySelector(".card-balance-amt").setAttribute("card", card.id);
 						card_html.querySelector(".card-number").innerText = card.num;
+						if(card.isRefundable) {
+							card_html.querySelector(".card-info").innerText = "info_outline"; // Make sure the info button shows up.
+						} else { 
+							card_html.querySelector(".card-info").innerText = "";
+						}
+						
 						console.log("Adding card: " + numOfCards + " card info: " + cards[numOfCards]);
 						Account.owl.data('owlCarousel').addItem(document.importNode(card_html, true));
 						//document.querySelector("#user-cards").appendChild( document.importNode(card_html, true) );
@@ -389,6 +395,7 @@ var Account = {
 	},
 	listCards: function(doneListing) { // Updates the UI with cards avaliable to purchase from Fold.
 		this.getInfo("brands", function(cards_avil) {
+			console.log(JSON.stringify(cards_avil) );
 			var all_brands = cards_avil["brands"];
 			var brands_cards = "";
 			for(numOfbrands in all_brands) {
@@ -435,7 +442,7 @@ var Account = {
 	getBal: function(handleResponse) { // Get total balance of user. Return 0 if user doesn't have bal.
 		this.getInfo("balances?currency=USD", function(balances) {
 			try {
-				handleResponse(balances["balances"][0]["amount"]);	
+				handleResponse(balances["balances"][0]["amount"]);
 			}
 			catch(err) {
 				handleResponse(0);
@@ -606,6 +613,7 @@ $(function() {
 		});
 	});
 	// UI stuff
+	console.log("logo: " + brand_logo_urls[brand]);
 	$(".brand-name").text(brand);
 	$(".brand-logo").attr("src", brand_logo_urls[brand]);
 	$(".user-creds").text("Username: " + Account.username  + " Pass: " + Account.pass);
