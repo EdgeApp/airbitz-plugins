@@ -284,11 +284,11 @@ var Account = {
 
 	},
 	clearOwl: function() {
-		for(cards in Account.all_cards) {
+		for(cards in Account.owl.data("owlCarousel").owl.owlItems.length) {
 			Account.owl.data('owlCarousel').removeItem();
 		}
 	},
-	updateCards: function(doneUpdating) { // Updates the UI with cards the user has purchased.
+	updateCards: function(doneUpdating) { // Updates the UI with cards the user has purchased
 		user.getInfo("cards", function(all_card_info) {
 			console.log("User's cards: " + JSON.stringify(all_card_info));
 			var cards = all_card_info["cards"];
