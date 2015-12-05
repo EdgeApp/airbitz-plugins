@@ -1055,7 +1055,6 @@ button.btn-add.btn {
 }
 .barcode {
   width: 200px;
-  height: 65px;
 }
 .barcode-inactive {
   opacity: .15;
