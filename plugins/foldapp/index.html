@@ -214,6 +214,27 @@ function sRequest(url, json, handleReponse) {
 });
 }
 
+function sRequestHandler(url, json, handleReponse, handleError) {
+	$.ajax({
+		headers: {
+			'Accept' : 'application/json',
+			'Content-Type' : 'application/json',
+			'X-CFC-PartnerToken': api_token,
+		},
+		'type' : 'POST',
+		'url' : url,
+		'data' : JSON.stringify(json),
+		'dataType': 'json',
+		success : function(response) {
+			handleReponse(response);
+		}
+	}).fail(function(xhr, textStatus, error) {
+		Airbitz.ui.debugLevel(1,"There was an error. Status: " + xhr.status);
+		Airbitz.ui.debugLevel(1,xhr.Message);
+		handleError(xhr.status);
+	});
+}
+
 var Account = {
 	exists: $.Deferred(),
 	logged_in: $.Deferred(),
@@ -266,9 +287,11 @@ var Account = {
 		}]};
 		Airbitz.ui.debugLevel(1,withdraw_url);
 		Airbitz.ui.debugLevel(1,newAddr);
-		sRequest(withdraw_url, newAddr, function(response) {
+		sRequestHandler(withdraw_url, newAddr, function(response) {
 			Airbitz.ui.debugLevel(1,"Updated default_withdraw_address");
 			updated();
+		}, function(error) {
+			Airbitz.ui.showAlert("Card Not Refunded", "Error refunding card. Please try again later. Error:updateWAddr");
 		});
 	},
 	resetCards: function(doneUpdating) {
@@ -543,16 +566,19 @@ Card.prototype.refund = function() {
 		createAddress(Account.abWallet, brand, 0, 0, categoryString, "Refunded " + brand + " gift card.",
 			function(data) {
 				Account.updateWAddr(data["address"], function() {
-					sRequest(url, refund, function(response) {
+					sRequestHandler(url, refund, function(response) {
 						Airbitz.ui.showAlert("Card Refunded", "Card Refunded. Please allow several minutes for refund.");
 						Airbitz.ui.debugLevel(1,response);
 						Airbitz.ui.debugLevel(1,"Done refunding!");
+					}, function(error) {
+						Airbitz.ui.showAlert("Card Not Refunded", "Error refunding card. Please try again later. Error:sRequestHandler:refund");
 					});
 				});
 			}, function(data) {
-                Airbitz.ui.showAlert("Card Refunded", "Error refunding card. Please try again later.");
-				Airbitz.ui.debugLevel(1,data);
+					Airbitz.ui.showAlert("Card Not Refunded", "Error refunding card. Please try again later. Error:createAddress");
+					Airbitz.ui.debugLevel(1,data);
 			});
+
     } else {
         Airbitz.ui.showAlert('', 'Card is not refundable');
     }
