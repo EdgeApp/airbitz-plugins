@@ -530,6 +530,7 @@ var Account = {
                 bizId: bizId,
 	        	success: function(rawtx) {
 	        		Airbitz.ui.showAlert("Cool", "If you sent, your " + brand + " card should appear shortly.");
+					Account.clearOwl();
 	        		Airbitz.ui.debugLevel(1,"Funds were sent.");
 	        	},
 	        	error: function() {
@@ -546,6 +547,7 @@ var Account = {
 				}]}
 		sRequest(fold_api + "my/orders", cOrder, function(r) {
 			Airbitz.ui.debugLevel(1,"Approving order");
+			Account.clearOwl();
 			//Airbitz.ui.debugLevel(1,r);
 		});
 	}
@@ -582,6 +584,7 @@ Card.prototype.refund = function() {
 			function(data) {
 				Account.updateWAddr(data["address"], function() {
 					sRequestHandler(url, refund, function(response) {
+						Account.clearOwl();
 						Airbitz.ui.showAlert("Card Refunded", "Card Refunded. Please allow several minutes for refund.");
 						Airbitz.ui.debugLevel(1,response);
 						Airbitz.ui.debugLevel(1,"Done refunding!");
