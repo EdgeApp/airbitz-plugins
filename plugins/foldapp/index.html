@@ -374,7 +374,7 @@ var Account = {
 			}
 		}
 		$('.materialboxed').materialbox();
-		$(".card-refund").click(function() {
+		$(".card-refund").off().on('click', function() {
 			Airbitz.ui.debugLevel(1,"Refunding button");
 			var thisCardId = $(this).parent().parent().children(".card-info-main").children(".card-balance-amt").attr("card");
 			Airbitz.ui.debugLevel(1,"This card: " + thisCardId);
@@ -462,7 +462,7 @@ var Account = {
 						add_html.querySelector(".card-value").innerText = card_vals[numOfVals]["formatted"]["all_decimal_places"];
 						document.querySelector(".add-buttons").appendChild(document.importNode(add_html,true));
 					}
-					$(".buy-card").click(function() {
+					$(".buy-card").off().on('click', function() {
 				  		user.purchaseCard($(this).parent().parent().find(".card-value").attr("value"));
 					});
 				}
