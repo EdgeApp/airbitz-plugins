@@ -304,7 +304,17 @@ var Account = {
 		});
 	},
 	updateCards: function(cards, doneUpdating) { // Updates the UI with cards the user has purchased
-		Airbitz.ui.debugLevel(1,"Updating " + cards.length + " cards.");
+		Airbitz.ui.debugLevel(1,"Updating " + cards.length + " cards from all brands.");
+
+		// Filter cards and only show current brand
+		for (var c = 0; c < cards.length; c++) {
+			if (brand != cards[c]["brand_id"]) {
+				Airbitz.ui.debugLevel(1, "Remove card " + c + " vendor:" + cards[c]["brand_id"]);
+				cards.splice(c, 1);
+				c--;
+			}
+		}
+
 		if(!cards.length > 0) {
 			if(Account.diffCs(cards) || (!Account.owlSet)) {
 				Airbitz.ui.debugLevel(1,"No cards. New acc!");
