@@ -473,9 +473,9 @@ var Account = {
 			Airbitz.ui.debugLevel(1,"Spending " + amt + " from wallet: " + user.abWallet + " to: " + toAddr);
 			Airbitz.ui.debugLevel(1,"Fiat amt: " + denomination)
 			if (brand == "Starbucks") {
-				categoryString = 'Expense:Coffee Shops'
+				categoryString = 'Expense:Coffee Shops';
 			} else if (brand == "Target") {
-				categoryString = 'Expense:Shopping'
+				categoryString = 'Expense:Shopping';
 			}
 			Airbitz.core.requestSpend(Account.abWallet,
 				toAddr, amt, denomination, {
@@ -526,7 +526,12 @@ Card.prototype.refund = function() {
 		refund = {"refunds": [{
 			  "card_id": this.id
 		}]};
-		createAddress(Account.abWallet, "Fold", 0, 0, "Expense:Coffee Shops", "Refunded " + brand + " gift card.", 
+		if (brand == "Starbucks") {
+			categoryString = 'Expense:Coffee Shops';
+		} else if (brand == "Target") {
+			categoryString = 'Expense:Shopping';
+		}
+		createAddress(Account.abWallet, brand, 0, 0, categoryString, "Refunded " + brand + " gift card.",
 			function(data) {
 				Account.updateWAddr(data["address"], function() {
 					sRequest(url, refund, function(response) {
