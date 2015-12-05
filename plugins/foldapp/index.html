@@ -304,7 +304,8 @@ var Account = {
 			Airbitz.ui.debugLevel(1,"Clearing Owl");
 			Airbitz.ui.debugLevel(1,"Owl size before:" + Account.owl.data("owlCarousel").owl.owlItems.length);
 
-			for(var i = 0; i < Account.owl.data("owlCarousel").owl.owlItems.length; i++) {
+			var owlSize = Account.owl.data("owlCarousel").owl.owlItems.length;
+			for(var i = 0; i < owlSize; i++) {
 				Airbitz.ui.debugLevel(1,"Clearing Owl Item " + i);
 				Account.owl.data('owlCarousel').removeItem();
 			}
