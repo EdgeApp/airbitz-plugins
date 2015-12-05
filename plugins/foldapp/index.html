@@ -136,7 +136,9 @@
 				<div class="container">
 					<div class="row">
 						<div class="col l6 s12">
-							<h6>This service is provided by Fold Inc. For issues with gift card purchases and refunds, please contact support@foldapp.com. Please provide the following account ID to support: <span class="user-creds"></span></h6>
+							<h6>This service is provided by Fold Inc. For issues with gift card purchases and refunds, please contact <span class="support-mail-link"></span></h6>
+							<h6>Please provide the following account information to support:</h6>
+							<h6><span class="user-creds"></span></h6>
 							<h6>This application is not affiliated with the <span class="brand-name"></span> Corporation</h6>
 						</div>
 					</div>
@@ -657,6 +659,7 @@ $(function() {
 	$(".brand-discount").text(brand_discount);
 	$(".brand-logo").attr("src", brand_logo_urls[brand]);
 	$(".user-creds").text("Username: " + Account.username  + " Pass: " + Account.pass);
+	$(".support-mail-link").html("<a href=\"mailto:support@foldapp.com?subject=Support%20Requested&Body=" + "Username:" + Account.username  + " Pass:" + Account.pass + "\">support@foldapp.com.</a>");
 });
 
 </script>
