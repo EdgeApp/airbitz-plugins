@@ -405,6 +405,7 @@ var Account = {
 		return cardFromId[0];
 	},
 	listCards: function(doneListing) { // Updates the UI with cards avaliable to purchase from Fold.
+		var numCardsToBuy = 0;
 		this.getInfo("brands", function(cards_avil) {
 			Airbitz.ui.debugLevel(1,JSON.stringify(cards_avil) );
 			var all_brands = cards_avil["brands"];
@@ -429,6 +430,7 @@ var Account = {
 					var card_vals = brands_cards["card_values"];
 					document.querySelector(".add-buttons").innerHTML = "";
 					for(numOfVals in card_vals) {
+						numCardsToBuy++;
 						Airbitz.ui.debugLevel(1,"Listing card " + numOfVals);
 						var add_html = document.querySelector('#add-template').content;
 						add_html.querySelector(".card-value").setAttribute("value", card_vals[numOfVals]["amount"]);
@@ -439,6 +441,12 @@ var Account = {
 				  		user.purchaseCard($(this).parent().parent().find(".card-value").attr("value"));
 					});
 				}
+				if (numCardsToBuy) {
+					$(".add-funds-header").text("Add Funds");
+				} else {
+					$(".add-funds-header").text("Sorry, no cards available");
+				}
+
 				doneListing();
 			});
 		}, "");
