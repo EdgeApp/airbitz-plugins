@@ -80,22 +80,6 @@
 </head>
 <body>
 	<div class="container-fluid">
-		<h3 class="text-center fold-loading">
-	    	Loading
-	    	<div class="fold-loading-spin">
-		    	<div class="preloader-wrapper big active">
-			        <div class="spinner-layer spinner-blue-only">
-			          <div class="circle-clipper left">
-			            <div class="circle"></div>
-			          </div><div class="gap-patch">
-			            <div class="circle"></div>
-			          </div><div class="circle-clipper right">
-			            <div class="circle"></div>
-			          </div>
-			        </div>
-		    	</div>
-			</div>
-	    </h3>
 	  	<center class="main">
 	  		<header>
 					<img class="brand-logo" src=""/>
@@ -453,6 +437,7 @@ var Account = {
 	},
 	logRefunds: function() {
 		Account.getInfo("refunds", function(refunds) {
+			console.log(JSON.stringify(refunds));
 			Airbitz.ui.debugLevel(1,JSON.stringify(refunds));
 		});
 	},
@@ -538,6 +523,7 @@ Card.prototype.ping = function() { // Tell Fold we need to check this balance to
 
 Card.prototype.refund = function() {
 	if(this.isRefundable) {
+        Airbitz.ui.showAlert('', 'Refunding card...', {'showSpinner': true}); 
 		url = fold_api + "my/refunds";
 		thisCard = this;
 		Airbitz.ui.debugLevel(1,"Refunding card " + this.id + " amount: " + this.bal);
@@ -559,9 +545,12 @@ Card.prototype.refund = function() {
 					});
 				});
 			}, function(data) {
+                Airbitz.ui.showAlert("Card Refunded", "Error refunding card. Please try again later.");
 				Airbitz.ui.debugLevel(1,data);
 			});
-	}
+    } else {
+        Airbitz.ui.showAlert('', 'Card is not refundable');
+    }
 }
 
 Card.prototype.remove = function() { // Remove card from UI
@@ -590,6 +579,9 @@ Airbitz.core.setWalletChangeListener(updateWallet);
 //Airbitz.core.clearData(); fold-2015-11-18-JszcOVECE0iHn5
 Account.username = Airbitz.core.readData("fold-username");
 Account.pass = Airbitz.core.readData("fold-pass");
+Airbitz.ui.showAlert('', 'Loading account...', {
+    'showSpinner': true
+});
 
 if(!(typeof Account.username === 'undefined' || Account.username == null)) {
 	Account.creds = {"users": [{
@@ -632,6 +624,7 @@ $(function() {
 			user.getCards(function(cards) {
 				user.updateCards(cards,function() {
 				toggleUi();
+                Airbitz.ui.hideAlert();
 				});
 			});
 			// user.updateBalance();
