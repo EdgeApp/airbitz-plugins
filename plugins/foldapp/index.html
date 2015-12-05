@@ -302,9 +302,13 @@ var Account = {
 	clearOwl: function() {
 		if(Account.owlSet) {
 			Airbitz.ui.debugLevel(1,"Clearing Owl");
-			for(var o = 0; o < Account.owl.data("owlCarousel").owl.owlItems.length; o ++) {
+			Airbitz.ui.debugLevel(1,"Owl size before:" + Account.owl.data("owlCarousel").owl.owlItems.length);
+
+			for(var i = 0; i < Account.owl.data("owlCarousel").owl.owlItems.length; i++) {
+				Airbitz.ui.debugLevel(1,"Clearing Owl Item " + i);
 				Account.owl.data('owlCarousel').removeItem();
 			}
+			Airbitz.ui.debugLevel(1,"Owl size after:" + Account.owl.data("owlCarousel").owl.owlItems.length);
 		} else { Account.owlSet = true; }
 	},
 	getCards: function(c) {
@@ -314,7 +318,7 @@ var Account = {
 		});
 	},
 	updateCards: function(cards, doneUpdating) { // Updates the UI with cards the user has purchased
-		Airbitz.ui.debugLevel(1,"Updating " + cards.length + " cards from all brands.");
+		Airbitz.ui.debugLevel(1,"updateCards: " + cards.length + " cards from all brands.");
 
 		// Filter cards and only show current brand
 		for (var c = 0; c < cards.length; c++) {
@@ -325,8 +329,9 @@ var Account = {
 			}
 		}
 
+		Airbitz.ui.debugLevel(1,"updateCards: brand: "+ brand + ": " + cards.length);
 		if(!cards.length > 0) {
-			if(Account.diffCs(cards) || (!Account.owlSet)) {
+			if(Account.haveCardsChanged(cards) || (!Account.owlSet)) {
 				Airbitz.ui.debugLevel(1,"No cards. New acc!");
 				if(typeof Account.owl.data("owlCarousel").owl === 'undefined') {
 					Account.setDummyC();
@@ -335,7 +340,10 @@ var Account = {
 				}
 			}
 		} else { // There's at least one card
-			if(Account.diffCs(cards)) {
+
+			if(Account.haveCardsChanged(cards))
+			{
+				Airbitz.ui.debugLevel(1,"updateCards: brand: "+ brand + ": " + cards.length + " CARDS CHANGED");
 				Account.clearOwl();
 				Account.all_cards = [];
 				for(numOfCards in cards) {
@@ -375,28 +383,35 @@ var Account = {
 		});
 	doneUpdating();
 	},
-	diffCs: function(cards) { // Has different cards?
+	haveCardsChanged: function(cards) { // Has different cards?
 		var match = 0;
-		Airbitz.ui.debugLevel(1,cards.length);
-		Airbitz.ui.debugLevel(1,Account.all_cards.length);
+		Airbitz.ui.debugLevel(1,"haveCardsChanged: oldcards:" + Account.all_cards.length + " newcards:" + cards.length);
+
 		if(cards.length != Account.all_cards.length) {
+			Airbitz.ui.debugLevel(1,"haveCardsChanged: return TRUE");
 			return true;
 		}
-		for(fcard in cards) {
-			for(card in Account.all_cards) {
-				if(cards[fcard]["id"] == Account.all_cards[card].id) {
+		for(ic in cards) {
+			for(iac in Account.all_cards) {
+				if(cards[ic]["id"] == Account.all_cards[iac].id) {
 					match++;
-					Airbitz.ui.debugLevel(1,"balances ares: " + cards[fcard]["balance"][0]["amount"]);
-					Airbitz.ui.debugLevel(1,Account.all_cards[card].bal);
-					if(cards[fcard]["balance"][0]["amount"] != Account.all_cards[card].bal) {
+					Airbitz.ui.debugLevel(1,"haveCardsChanged: found id match:" + cards[ic]["id"]);
+					Airbitz.ui.debugLevel(1,"haveCardsChanged: oldbal:" + Account.all_cards[iac].bal);
+					Airbitz.ui.debugLevel(1,"haveCardsChanged: newbal:" + cards[ic]["balance"][0]["amount"]);
+					if(cards[ic]["balance"][0]["amount"] != Account.all_cards[ic].bal) {
+						Airbitz.ui.debugLevel(1,"haveCardsChanged: return TRUE");
 						return true;
 					}
 				}
 			}
 		}
+
+		Airbitz.ui.debugLevel(1,"haveCardsChanged: matched:" + match + " newlength:" + cards.length);
 		if(match != cards.length) {
+			Airbitz.ui.debugLevel(1,"haveCardsChanged: return TRUE");
 			return true;
 		}
+		Airbitz.ui.debugLevel(1,"haveCardsChanged: return FALSE");
 		return false;
 	},
 	setDummyC: function() {
