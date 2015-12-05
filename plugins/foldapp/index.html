@@ -137,6 +137,7 @@
 var fold_api = "https://api.foldapp.com/v1/";
 var brand = Airbitz.config.get("BRAND");
 var api_token = Airbitz.config.get("API-TOKEN");
+var bizId = 4900;
 
 var brand_logo_urls = {
 	"Starbucks":"https://airbitz.co/go/wp-content/uploads/2015/12/green-coffee-mug-128px.png", // Starbucks
@@ -181,6 +182,7 @@ var createAddress = function(wallet, label, amountSatoshi, amountFiat,
       notes: notes,
       amountSatoshi: amountSatoshi,
       amountFiat: amountFiat,
+      bizId: bizId,
       success: resolve,
       error: reject
     })
@@ -485,6 +487,7 @@ var Account = {
 	        	label: brand,
 	        	category: categoryString,
 	        	notes: brand + " $" + String(denomination) + " gift card.",
+                bizId: bizId,
 	        	success: function(rawtx) {
 	        		Airbitz.ui.showAlert("Cool", "If you sent, your " + brand + " card should appear shortly.");
 	        		Airbitz.ui.debugLevel(1,"Funds were sent.");
@@ -643,8 +646,10 @@ $(function() {
 	$(".brand-name").text(brand);
 	if (brand == "Starbucks") {
 		brand_discount = "20%"
+        bizId = 4900; // currently fold, update to starbucks
 	} else if (brand == "Target") {
 		brand_discount = "~15%"
+        bizId = 4900; // currenty fold, update to target
 	}
 
 	$(".brand-discount").text(brand_discount);
