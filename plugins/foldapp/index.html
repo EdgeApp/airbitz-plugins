@@ -359,7 +359,8 @@ var Account = {
 					var card_html = document.querySelector('#card-template').content;
 					if(!card.bal == 0) {
 						card_html.querySelector(".card-barcode").innerHTML = "<img class=\"barcode \" src=\"" + fold_api + "my/cards/" + card.id + "/barcode/png" + "\">";
-						card_html.querySelector(".card-balance-amt").innerText = "$" + card.bal;
+						var floatBalance = parseFloat(card.bal);
+						card_html.querySelector(".card-balance-amt").innerText = "$" + floatBalance.toFixed(2);
 						card_html.querySelector(".card-balance-amt").setAttribute("card", card.id);
 						card_html.querySelector(".card-number").innerText = card.num;
 						if(card.isRefundable) {
