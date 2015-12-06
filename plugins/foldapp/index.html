@@ -143,6 +143,7 @@ var api_token = Airbitz.config.get("API-TOKEN");
 var server_json_error = 0;
 var first_load = 1;
 var force_refresh = 1;
+var min_price_rate = 1;
 
 var brand_logo_urls = {
 	"Starbucks":"https://airbitz.co/go/wp-content/uploads/2015/12/green-coffee-mug-128px.png", // Starbucks
@@ -462,12 +463,29 @@ var Account = {
 			Airbitz.ui.debugLevel(1,JSON.stringify(cards_avil) );
 			var all_brands = cards_avil["brands"];
 			var brands_cards = "";
+			min_price_rate = 1.0;
 			for(numOfbrands in all_brands) {
+				if(typeof all_brands[numOfbrands] === 'undefined') server_json_error = 1;
+				else if(typeof all_brands[numOfbrands]["id"] === 'undefined') server_json_error = 1;
+				else if(typeof all_brands[numOfbrands]["price_rate"] === 'undefined') server_json_error = 1;
+
+				if (server_json_error) break;
+
 				if(all_brands[numOfbrands]["id"] == brand) {
+					if(parseFloat(all_brands[numOfbrands]["price_rate"]) < min_price_rate) {
+						min_price_rate = parseFloat(all_brands[numOfbrands]["price_rate"]);
+					}
+
 					brands_cards = all_brands[numOfbrands];
 					break;
 				}
 			}
+			Airbitz.ui.debugLevel(1,"min_price_rate:" + min_price_rate);
+
+			var maxDiscount = 100 * (1.0 - min_price_rate);
+			maxDiscount = maxDiscount.toFixed(0);
+			$(".brand-discount").text("~" + maxDiscount + "%");
+
 			Airbitz.ui.debugLevel(1,JSON.stringify(brands_cards["card_values"]));
 			user.getBal(function(total_bal) {
 				user.total_bal = total_bal;
@@ -705,6 +723,7 @@ $(function() {
 					if (server_json_error) {
 						Airbitz.ui.showAlert("Server Response Error", "Error in Server response. Please contact support");
 						Airbitz.ui.debugLevel(1,"Error in Server response. Please contact support");
+						server_json_error = 0;
 						first_load = 0;
 					} else if (first_load) {
 						Airbitz.ui.hideAlert();
@@ -729,10 +748,8 @@ $(function() {
 	Airbitz.ui.debugLevel(1,"logo: " + brand_logo_urls[brand]);
 	$(".brand-name").text(brand);
 	if (brand == "Starbucks") {
-		brand_discount = "20%"
         bizId = 11131; // currently fold, update to starbucks
 	} else if (brand == "Target") {
-		brand_discount = "~15%"
         bizId = 11132; // currenty fold, update to target
 	}
 
@@ -741,7 +758,6 @@ $(function() {
 		Airbitz.ui.debugLevel(1,"Error in Server response. Please contact support");
 	}
 
-	$(".brand-discount").text(brand_discount);
 	$(".brand-logo").attr("src", brand_logo_urls[brand]);
 	$(".user-creds").text("Username: " + Account.username  + " Pass: " + Account.pass);
 	$(".support-mail-link").html("<a href=\"mailto:support@foldapp.com?subject=Support%20Requested&Body=" + "Username:" + Account.username + "\">support@foldapp.com.</a>");
