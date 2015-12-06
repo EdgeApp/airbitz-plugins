@@ -198,6 +198,32 @@ function updateWallet(wallet) {
 	Account.abWallet = wallet;
 }
 
+function logStats(event, brand, amount) {
+	var statsKey = Airbitz.config.get('AIRBITZ_STATS_KEY');
+	s['btc'] = amount;
+	s['partner'] = 'Fold:' + brand;
+	s['country'] = 'USA';
+	$.ajax({
+		headers: {
+			'Content-Type' : 'application/json',
+			'Authorization': 'Token ' + statsKey,
+		},
+		'type' : 'POST',
+		'url' : 'https://airbitz.co/api/v1/events',
+		'data' : JSON.stringify({
+			'event_type': event,
+			'event_network' : 'mainnet',
+			'event_text': s,
+		}),
+		'dataType': 'json',
+		success : function(response) {
+			Airbitz.ui.debugLevel(1,"logStats: recorded");
+		}
+	}).fail(function(xhr, textStatus, error) {
+		Airbitz.ui.debugLevel(1,"logStats: There was an error. Status: " + xhr.status);
+	});
+}
+
 function sRequest(url, json, handleReponse) {
 	$.ajax({
     headers: {
@@ -577,6 +603,7 @@ var Account = {
 					force_refresh = 1;
 					Account.clearOwl();
 	        		Airbitz.ui.debugLevel(1,"Funds were sent.");
+//					logStats("purchase",brand,this.bal)
 	        	},
 	        	error: function() {
 	        		Airbitz.ui.showAlert("Unable to send funds.", "Funds weren't sent");
@@ -633,6 +660,7 @@ Card.prototype.refund = function() {
 						Airbitz.ui.showAlert("Card Refunded", "Card Refunded. Please allow several minutes for refund.");
 						Airbitz.ui.debugLevel(1,response);
 						Airbitz.ui.debugLevel(1,"Done refunding!");
+//						logStats("refund",brand,this.bal)
 						force_refresh = 1;
 					}, function(error) {
 						Airbitz.ui.showAlert("Card Not Refunded", "Error refunding card. Please try again later. Error:sRequestHandler:refund");
