@@ -575,11 +575,15 @@ var Account = {
 	        	category: categoryString,
 	        	notes: brand + " $" + String(denomination) + " gift card.",
                 bizId: bizId,
-	        	success: function(rawtx) {
-	        		Airbitz.ui.showAlert("Card Purchased", "Card purchased. Your " + brand + " card should appear shortly.");
-					force_refresh = 1;
-					Account.clearOwl();
-	        		Airbitz.ui.debugLevel(1,"Funds were sent.");
+                success: function(res) {
+                    if (res && res.back) {
+                        // User pressed backed button
+                    } else {
+                        Airbitz.ui.showAlert("Card Purchased", "Card purchased. Your " + brand + " card should appear shortly.");
+                        force_refresh = 1;
+                        Account.clearOwl();
+                        Airbitz.ui.debugLevel(1,"Funds were sent.");
+                    }
 	        	},
 	        	error: function() {
 	        		Airbitz.ui.showAlert("Unable to send funds.", "Funds weren't sent");
