@@ -189,9 +189,12 @@ var createAddress = function(wallet, label, amountSatoshi, amountFiat,
       amountSatoshi: amountSatoshi,
       amountFiat: amountFiat,
       bizId: bizId,
-      success: resolve,
+      success: function(data) {
+        Airbitz.core.finalizeRequest(wallet, data["requestId"]);
+        resolve(data);
+      },
       error: reject
-    })
+    });
 };
 
 function updateWallet(wallet) {
