@@ -140,6 +140,9 @@
 var fold_api = "https://api.foldapp.com/v1/";
 var brand = Airbitz.config.get("BRAND");
 var api_token = Airbitz.config.get("API-TOKEN");
+var server_json_error = 0;
+var first_load = 1;
+var force_refresh = 1;
 
 var brand_logo_urls = {
 	"Starbucks":"https://airbitz.co/go/wp-content/uploads/2015/12/green-coffee-mug-128px.png", // Starbucks
@@ -306,6 +309,11 @@ var Account = {
 			Airbitz.ui.debugLevel(1,"Owl size before:" + Account.owl.data("owlCarousel").owl.owlItems.length);
 
 			var owlSize = Account.owl.data("owlCarousel").owl.owlItems.length;
+
+			if (!owlSize) {
+				return;
+			}
+
 			for(var i = 0; i < owlSize; i++) {
 				Airbitz.ui.debugLevel(1,"Clearing Owl Item " + i);
 				Account.owl.data('owlCarousel').removeItem();
@@ -348,14 +356,25 @@ var Account = {
 				Airbitz.ui.debugLevel(1,"updateCards: brand: "+ brand + ": " + cards.length + " CARDS CHANGED");
 				Account.clearOwl();
 				Account.all_cards = [];
-				for(numOfCards in cards) {
+
+				var ic = 0;
+				for(ic in cards) {
+					// Check arrays values are defined
+					if(typeof cards[ic] === 'undefined') server_json_error = 1;
+					else if(typeof cards[ic]["id"] === 'undefined') server_json_error = 1;
+					else if(typeof cards[ic]["balance"] === 'undefined') server_json_error = 1;
+					else if(typeof cards[ic]["balance"][0] === 'undefined') server_json_error = 1;
+					else if(typeof cards[ic]["balance"][0]["amount"] === 'undefined') server_json_error = 1;
+
+					if (server_json_error == 1) break;
+
 					card = new Card(
-						cards[numOfCards]["id"],
-						cards[numOfCards]["code"][0],
-						cards[numOfCards]["balance"][0]["amount"],// e.g. $5
-						cards[numOfCards]["refundable"]
+						cards[ic]["id"],
+						cards[ic]["code"][0],
+						cards[ic]["balance"][0]["amount"],// e.g. $5
+						cards[ic]["refundable"]
 					);
-					Account.all_cards[numOfCards] = card;
+					Account.all_cards[ic] = card;
 					var card_html = document.querySelector('#card-template').content;
 					if(!card.bal == 0) {
 						card_html.querySelector(".card-barcode").innerHTML = "<img class=\"barcode \" src=\"" + fold_api + "my/cards/" + card.id + "/barcode/png" + "\">";
@@ -369,11 +388,12 @@ var Account = {
 							card_html.querySelector(".card-info").innerText = "";
 						}
 						
-						Airbitz.ui.debugLevel(1,"Adding card: " + numOfCards + " card info: " + cards[numOfCards]);
+						Airbitz.ui.debugLevel(1,"Adding card: " + ic + " card info: " + cards[ic]);
 						Account.owl.data('owlCarousel').addItem(document.importNode(card_html, true));
 						//document.querySelector("#user-cards").appendChild( document.importNode(card_html, true) );
 					}
 				}
+
 			}
 		}
 		$('.materialboxed').materialbox();
@@ -388,6 +408,10 @@ var Account = {
 	},
 	haveCardsChanged: function(cards) { // Has different cards?
 		var match = 0;
+		if (force_refresh) {
+			force_refresh = 0;
+			return true;
+		}
 		Airbitz.ui.debugLevel(1,"haveCardsChanged: oldcards:" + Account.all_cards.length + " newcards:" + cards.length);
 
 		if(cards.length != Account.all_cards.length) {
@@ -531,7 +555,8 @@ var Account = {
 	        	notes: brand + " $" + String(denomination) + " gift card.",
                 bizId: bizId,
 	        	success: function(rawtx) {
-	        		Airbitz.ui.showAlert("Cool", "If you sent, your " + brand + " card should appear shortly.");
+	        		Airbitz.ui.showAlert("Card Purchased", "Card purchased. Your " + brand + " card should appear shortly.");
+					force_refresh = 1;
 					Account.clearOwl();
 	        		Airbitz.ui.debugLevel(1,"Funds were sent.");
 	        	},
@@ -590,6 +615,7 @@ Card.prototype.refund = function() {
 						Airbitz.ui.showAlert("Card Refunded", "Card Refunded. Please allow several minutes for refund.");
 						Airbitz.ui.debugLevel(1,response);
 						Airbitz.ui.debugLevel(1,"Done refunding!");
+						force_refresh = 1;
 					}, function(error) {
 						Airbitz.ui.showAlert("Card Not Refunded", "Error refunding card. Please try again later. Error:sRequestHandler:refund");
 					});
@@ -663,7 +689,7 @@ $(function() {
 		    // itemsTablet: false,
 		    // itemsMobile : false
 		});
-		Account.logRefunds();
+//		Account.logRefunds();
 		Airbitz.core.selectedWallet({
 		      success: updateWallet,
 		      error: function() {
@@ -674,8 +700,18 @@ $(function() {
 		user.listCards(function() { // Start getting avaliable cards for sale.
 			user.getCards(function(cards) {
 				user.updateCards(cards,function() {
-				toggleUi();
-                Airbitz.ui.hideAlert();
+					toggleUi();
+
+					if (server_json_error) {
+						Airbitz.ui.showAlert("Server Response Error", "Error in Server response. Please contact support");
+						Airbitz.ui.debugLevel(1,"Error in Server response. Please contact support");
+						first_load = 0;
+					} else if (first_load) {
+						Airbitz.ui.hideAlert();
+						first_load = 0;
+					}
+
+
 				});
 			});
 			// user.updateBalance();
@@ -698,6 +734,11 @@ $(function() {
 	} else if (brand == "Target") {
 		brand_discount = "~15%"
         bizId = 11132; // currenty fold, update to target
+	}
+
+	if (server_json_error) {
+		Airbitz.ui.showAlert("Server Response Error", "Error in Server response. Please contact support");
+		Airbitz.ui.debugLevel(1,"Error in Server response. Please contact support");
 	}
 
 	$(".brand-discount").text(brand_discount);
