@@ -380,6 +380,7 @@ var Account = {
 		Airbitz.ui.debugLevel(1,"updateCards: brand: "+ brand + ": " + cards.length);
 		if(!cards.length > 0) {
 			if(Account.haveCardsChanged(cards) || (!Account.owlSet)) {
+                Account.all_cards = [];
 				Airbitz.ui.debugLevel(1,"No cards. New acc!");
 				if(typeof Account.owl.data("owlCarousel").owl === 'undefined') {
 					Account.setDummyC();
