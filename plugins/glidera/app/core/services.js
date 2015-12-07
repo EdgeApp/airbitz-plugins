@@ -289,6 +289,7 @@
           notes: notes,
           amountSatoshi: amountSatoshi,
           amountFiat: amountFiat,
+          bizId: ExchangeFactory.bizId,
           success: resolve,
           error: reject
         })
@@ -359,6 +360,7 @@
         Airbitz.core.requestSpend(wallet, data.sellAddress, btcToSatoshi(qty), amountFiat, {
           label: 'Glidera',
           category: 'Exchange:Sell Bitcoin',
+          bizId: ExchangeFactory.bizId,
           notes: notes,
           success: function(res) {
             if (res && res.back) {
@@ -433,6 +435,7 @@
     factory.depositId = 'Glidera Inc';
     factory.orderTimeout = '60';
     factory.depositTimeout = '3600';
+    factory.bizId = 11063;
     factory.updateCurrency = function(countryCode) {
       if (!countryCode) {
         return;
