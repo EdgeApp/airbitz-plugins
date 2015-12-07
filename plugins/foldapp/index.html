@@ -204,6 +204,7 @@ function updateWallet(wallet) {
 
 function logStats(event, brand, amount) {
 	var statsKey = Airbitz.config.get('AIRBITZ_STATS_KEY');
+    var s = {};
 	s['btc'] = amount;
 	s['partner'] = 'Fold:' + brand;
 	s['country'] = 'USA';
@@ -614,7 +615,7 @@ var Account = {
                         force_refresh = 1;
                         Account.clearOwl();
                         Airbitz.ui.debugLevel(1,"Funds were sent.");
-//                        logStats("purchase",brand,this.bal)
+                        logStats("purchase",brand,this.bal)
                     }
 	        	},
 	        	error: function() {
@@ -671,8 +672,8 @@ Card.prototype.refund = function() {
 						Account.clearOwl();
 						Airbitz.ui.showAlert("Card Refunded", "Card Refunded. Please allow several minutes for refund.");
 						Airbitz.ui.debugLevel(1,response);
-						Airbitz.ui.debugLevel(1,"Done refunding!");
-//						logStats("refund",brand,this.bal)
+                        Airbitz.ui.debugLevel(1,"Done refunding!");
+                        logStats("refund",brand,this.bal)
 						force_refresh = 1;
 					}, function(error) {
 						Airbitz.ui.showAlert("Card Not Refunded", "Error refunding card. Please try again later. Error:sRequestHandler:refund");
