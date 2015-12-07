@@ -123,9 +123,9 @@
 					<div class="row">
 						<div class="col l6 s12">
 							<h6>This service is provided by</h6>
-                            <img class="partner-logo" src="https://airbitz.co/go/wp-content/uploads/2015/12/fold-logo-yellow-text.png">
+                            <img class="partner-logo" src="https://airbitz.co/go/wp-content/uploads/2015/12/fold-logo-yellow-text.png"><br>
                             For issues with gift card purchases and refunds, please contact <span class="support-mail-link"></span></h6>
-							<h6>Please provide the following account information to support:</h6>
+							<h6>Account Credentials:</h6>
 							<h6><span class="user-creds"></span></h6>
 							<h6>This application is not affiliated with the <span class="brand-name"></span> Corporation</h6>
 						</div>
@@ -806,7 +806,7 @@ $(function() {
 	}
 
 	$(".brand-logo").attr("src", brand_logo_urls[brand]);
-	$(".user-creds").text("Username: " + Account.username  + " Pass: " + Account.pass);
+	$(".user-creds").text("Username: " + Account.username  + " Password: " + Account.pass);
 	$(".support-mail-link").html("<a href=\"mailto:support@foldapp.com?subject=Support%20Requested&Body=" + "Username:" + Account.username + "\">support@foldapp.com.</a>");
 });
 
