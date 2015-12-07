@@ -1040,19 +1040,42 @@ button.btn-add.btn {
 }
 .main {
   display: none;
+  margin: 10px;
+}
+.main-container {
+  width: 90%;
+}
+.brand-logo {
+  width: 64px;
+  height: 64px;
 }
 .card-barcode {
-  padding: 20px 10px 0 10px;
+  padding: 20px 20px 0 20px;
   margin-bottom: 0;
 }
 .barcode {
   width: 200px;
-  height: 65px;
+}
+.barcode-inactive {
+  opacity: .15;
 }
 #user-cards .item {
     display: block;
     width: 100%;
     height: auto;
+    max-width: 400px;
+}
+#user-cards .owl-item div{
+}
+.gift-card {
+  border-radius: 10px!important;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+}
+.card-close {
+  position: absolute;
+  right: 25px;
+  top: 15px;
 }
 .add-funds-header {
   padding-top: 13px;
@@ -1066,8 +1089,7 @@ button.btn-add.btn {
 .collection .collection-item.avatar.card-list {
   padding: 10px 20px;
 }
-.card-content.card-info-main {
-  margin-top: 0;
+div.card.card-content.card-info-main {
   padding-top: 0;
 }
 .fold-help {

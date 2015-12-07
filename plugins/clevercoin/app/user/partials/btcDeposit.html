@@ -1,0 +1,78 @@
+<div class="exchange-ticker row">
+  <div class="col-xs-6 no-pad">
+  </div>
+  <div class="col-xs-6 live-ticker text-right no-pad">
+    <div price-update price-type="buy"></div>
+  </div>
+</div>
+
+<form ng-submit="next()" class="form" name="form">
+  <div class="exchange-buy-sell-interface row">
+    <div class="col-xs-12">
+      <div class="form-group">
+        <div class="input-group">
+          <input
+            ng-model="orderValueInput"
+            ng-change="convertBtcValue(orderValueInput)"
+            type="number"
+            name="orderValueInput"
+            class="right-square input-lg"
+            id="inputBtcAmount"
+            placeholder="Enter Amount"
+            step="any"
+            autocorrect="off"
+            required="" />
+          <span style="min-width: 75px" class="input-group-addon">{{ cryptoDenom }}</span>
+        </div>
+        <div class="input-error"
+             ng-show="form.$submitted || form.orderValueInput.$touched">
+          <div ng-show="form.orderValueInput.$error.required" class="label label-danger">Required</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="input-group">
+          <input
+            ng-model="orderFiatInput"
+            ng-change="convertFiatValue(orderFiatInput)"
+            type="number"
+            name="orderFiatInput"
+            class="right-square input-lg"
+            id="inputFiatAmount"
+            placeholder="Enter Amount"
+            autocorrect="off"
+            tabindex="1"
+            step="any"
+            required="" />
+            <span style="min-width: 75px" class="input-group-addon">{{ exchange.currency }}</span>
+        </div>
+        <div class="input-error"
+             ng-show="form.$submitted || form.orderFiatInput.$touched">
+          <div ng-show="form.orderFiatInput.$error.required" class="label label-danger">Required</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-6 no-pad">
+      <button type="button"
+      ui-sref="dashboard"
+      class="buy-sell-next btn btn-lg btn-block btn-danger">Cancel</button>
+    </div>
+    <div class="col-xs-6 no-pad">
+      <button type="submit"
+      ng-disabled="form.$invalid"
+      tabindex="2"
+      class="buy-sell-next btn btn-lg btn-block btn-success">Next</button>
+    </div>
+  </div>
+</form>
+
+
+<div class="return-to-dashboard ng-trans ng-trans-fade-up easeOutSine">
+  <div class="row">
+    <div class="col-xs-12 no-pad">
+      <button type="button" ui-sref="dashboard" class="btn btn-block btn-lg btn-info">Dashboard</button>
+  </div>
+</div>
