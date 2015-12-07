@@ -144,6 +144,7 @@ var server_json_error = 0;
 var first_load = 1;
 var force_refresh = 1;
 var min_price_rate = 1;
+var refund_enabled = 0;
 
 var brand_logo_urls = {
 	"Starbucks":"https://airbitz.co/go/wp-content/uploads/2015/12/green-coffee-mug-128px.png", // Starbucks
@@ -412,7 +413,7 @@ var Account = {
 						card_html.querySelector(".card-balance-amt").innerText = "$" + floatBalance.toFixed(2);
 						card_html.querySelector(".card-balance-amt").setAttribute("card", card.id);
 						card_html.querySelector(".card-number").innerText = card.num;
-						if(card.isRefundable) {
+						if(card.isRefundable && refund_enabled) {
 							card_html.querySelector(".card-info").innerText = "info_outline"; // Make sure the info button shows up.
 						} else { 
 							card_html.querySelector(".card-info").innerText = "";
@@ -493,19 +494,21 @@ var Account = {
 			var all_brands = cards_avil["brands"];
 			var brands_cards = "";
 			min_price_rate = 1.0;
-			for(numOfbrands in all_brands) {
-				if(typeof all_brands[numOfbrands] === 'undefined') server_json_error = 1;
-				else if(typeof all_brands[numOfbrands]["id"] === 'undefined') server_json_error = 1;
-				else if(typeof all_brands[numOfbrands]["price_rate"] === 'undefined') server_json_error = 1;
+			for(ic in all_brands) {
+				if(typeof all_brands[ic] === 'undefined') server_json_error = 1;
+				else if(typeof all_brands[ic]["id"] === 'undefined') server_json_error = 1;
+				else if(typeof all_brands[ic]["price_rate"] === 'undefined') server_json_error = 1;
+				else if(typeof all_brands[ic]["refund_enabled"] === 'undefined') server_json_error = 1;
 
 				if (server_json_error) break;
 
-				if(all_brands[numOfbrands]["id"] == brand) {
-					if(parseFloat(all_brands[numOfbrands]["price_rate"]) < min_price_rate) {
-						min_price_rate = parseFloat(all_brands[numOfbrands]["price_rate"]);
+				if(all_brands[ic]["id"] == brand) {
+					if(parseFloat(all_brands[ic]["price_rate"]) < min_price_rate) {
+						min_price_rate = parseFloat(all_brands[ic]["price_rate"]);
 					}
+					refund_enabled = all_brands[ic]["refund_enabled"];
 
-					brands_cards = all_brands[numOfbrands];
+					brands_cards = all_brands[ic];
 					break;
 				}
 			}
@@ -528,12 +531,14 @@ var Account = {
 				if(maxBal >= user.total_bal) {
 					var card_vals = brands_cards["card_values"];
 					document.querySelector(".add-buttons").innerHTML = "";
-					for(numOfVals in card_vals) {
+					for(ic in card_vals) {
 						numCardsToBuy++;
-						Airbitz.ui.debugLevel(1,"Listing card " + numOfVals);
+						var price_rate = parseFloat(card_vals[ic]["price_rate"]);
+
+						Airbitz.ui.debugLevel(1,"Listing card " + ic);
 						var add_html = document.querySelector('#add-template').content;
-						add_html.querySelector(".card-value").setAttribute("value", card_vals[numOfVals]["amount"]);
-						add_html.querySelector(".card-value").innerText = card_vals[numOfVals]["formatted"]["all_decimal_places"];
+						add_html.querySelector(".card-value").setAttribute("value", card_vals[ic]["amount"]);
+						add_html.querySelector(".card-value").innerText = card_vals[ic]["formatted"]["all_decimal_places"];
 						document.querySelector(".add-buttons").appendChild(document.importNode(add_html,true));
 					}
 					$(".buy-card").off().on('click', function() {
