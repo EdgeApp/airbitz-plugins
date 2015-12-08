@@ -141,6 +141,8 @@
   <script type="text/javascript" src="js/materialize.min.js"></script>
   <script src="vendors/owl-carousel/owl.carousel.js" type="text/javascript"></script>
 <script type="text/javascript">
+    "use strict";
+
 var fold_api = "https://api.foldapp.com/v1/";
 var brand = Airbitz.config.get("BRAND");
 var api_token = Airbitz.config.get("API-TOKEN");
@@ -285,25 +287,27 @@ var Account = {
 	create: function() {
 		Airbitz.ui.debugLevel(1,"Creating user.");
 		url = fold_api + "users";
-  	newAcc = {"users": [{
-  	  "random_username": true,
-  	  "random_password": true
-  	}]}
-	sRequest(url, newAcc, function(r) {
-		//Airbitz.ui.debugLevel(1,r);
-		Account.username = r['users'][0]['username'];
-		Account.pass = r['users'][0]['password'];
-		Account.creds = {"users": [{
-		  "username": Account.username,
-		  "password": Account.pass
-		}]};
-		Airbitz.core.writeData("fold-username", Account.username);
-		Airbitz.core.writeData("fold-pass", Account.pass);
-		Account.exists.resolve();
-	});
+        var newAcc = {"users": [{
+            "random_username": true,
+            "random_password": true
+        }]}
+
+        sRequest(url, newAcc, function(r) {
+            //Airbitz.ui.debugLevel(1,r);
+            Account.username = r['users'][0]['username'];
+            Account.pass = r['users'][0]['password'];
+            Account.creds = {"users": [{
+                "username": Account.username,
+                "password": Account.pass
+            }]};
+            Airbitz.core.writeData("fold-username", Account.username);
+            Airbitz.core.writeData("fold-pass", Account.pass);
+            Account.exists.resolve();
+    	});
 	},
+
 	login: function() {
-		url = fold_api + "my/session";
+		var url = fold_api + "my/session";
 		Airbitz.ui.debugLevel(1,Account.creds);
 		sRequest(url, Account.creds, function(r) {
 			//Airbitz.ui.debugLevel(1,"Logging in" + JSON.stringify(r));
@@ -319,7 +323,7 @@ var Account = {
 	updateWAddr: function(addr, updated) { // Set the default BTC address
 		var withdraw_url = fold_api + "my/default_withdraw_addresses";
 		Airbitz.ui.debugLevel(1,"Setting default address to: " + addr.toString());
-		newAddr = {"default_withdraw_addresses": [{
+		var newAddr = {"default_withdraw_addresses": [{
 			  "currency": "BTC",
 			  "default_address": [{
 			    "address": addr.toString(),
@@ -407,7 +411,7 @@ var Account = {
 
 					if (server_json_error == 1) break;
 
-					card = new Card(
+					var card = new Card(
 						cards[ic]["id"],
 						cards[ic]["code"][0],
 						cards[ic]["balance"][0]["amount"],// e.g. $5
@@ -423,10 +427,10 @@ var Account = {
 						card_html.querySelector(".card-number").innerText = card.num;
 						if(card.isRefundable && refund_enabled) {
 							card_html.querySelector(".card-info").innerText = "Refund Card"; // Make sure the info button shows up.
-						} else { 
+						} else {
 							card_html.querySelector(".card-info").innerText = "";
 						}
-						
+
 						Airbitz.ui.debugLevel(1,"Adding card: " + ic + " card info: " + cards[ic]);
 						Account.owl.data('owlCarousel').addItem(document.importNode(card_html, true));
 						//document.querySelector("#user-cards").appendChild( document.importNode(card_html, true) );
@@ -457,8 +461,8 @@ var Account = {
 			Airbitz.ui.debugLevel(1,"haveCardsChanged: return TRUE");
 			return true;
 		}
-		for(ic in cards) {
-			for(iac in Account.all_cards) {
+		for(var ic in cards) {
+			for(var iac in Account.all_cards) {
 				if(cards[ic]["id"] == Account.all_cards[iac].id) {
 					match++;
 					Airbitz.ui.debugLevel(1,"haveCardsChanged: found id match:" + cards[ic]["id"]);
@@ -502,7 +506,7 @@ var Account = {
 			var all_brands = cards_avil["brands"];
 			var brands_cards = "";
 			min_price_rate = 1.0;
-			for(ic in all_brands) {
+			for(var ic in all_brands) {
 				if(typeof all_brands[ic] === 'undefined') server_json_error = 1;
 				else if(typeof all_brands[ic]["id"] === 'undefined') server_json_error = 1;
 				else if(typeof all_brands[ic]["price_rate"] === 'undefined') server_json_error = 1;
@@ -587,7 +591,7 @@ var Account = {
 	},
 	purchaseCard: function(denomination, brand_id) {
 		brand_id = typeof a !== 'undefined' ? a : brand;
-		newOrder = { "orders": [{
+		var newOrder = { "orders": [{
 	    "brand_id": String(brand_id),
 	    "value": { "amount": String(denomination), "currency": "USD" },
 	    "price": { "currency": "BTC" },
@@ -599,10 +603,11 @@ var Account = {
 		Airbitz.ui.debugLevel(1,"Getting new order");
 		sRequest(url, newOrder, function(r) {
 			Airbitz.ui.debugLevel(1,"Order: " + JSON.stringify(r));
-			amt = (r["orders"][0]["price"]["amount"] * 100000000);
-			toAddr = r["orders"][0]["payment"][0]["address"];
+			var amt = (r["orders"][0]["price"]["amount"] * 100000000);
+			var toAddr = r["orders"][0]["payment"][0]["address"];
 			Airbitz.ui.debugLevel(1,"Spending " + amt + " from wallet: " + user.abWallet + " to: " + toAddr);
 			Airbitz.ui.debugLevel(1,"Fiat amt: " + denomination)
+            var categoryString = "";
 			if (brand == "Starbucks") {
 				categoryString = 'Expense:Coffee Shops';
 			} else if (brand == "Target") {
@@ -633,7 +638,7 @@ var Account = {
 		});
 	},
 	approveOrder: function(order_id) { // Manually Approve an order
-		cOrder = {"orders": [{
+		var cOrder = {"orders": [{
 	  				"id": String(order_id),
 	  				"approved": true
 				}]}
@@ -660,14 +665,15 @@ Card.prototype.ping = function() { // Tell Fold we need to check this balance to
 
 Card.prototype.refund = function() {
 	if(this.isRefundable) {
-        Airbitz.ui.showAlert('', 'Refunding card...', {'showSpinner': true}); 
+        Airbitz.ui.showAlert('', 'Refunding card...', {'showSpinner': true});
 		url = fold_api + "my/refunds";
-		thisCard = this;
+		var thisCard = this;
 		var balance = this.bal;
 		Airbitz.ui.debugLevel(1,"Refunding card " + this.id + " amount: " + this.bal);
-		refund = {"refunds": [{
+		var refund = {"refunds": [{
 			  "card_id": this.id
 		}]};
+        var categoryString = "";
 		if (brand == "Starbucks") {
 			categoryString = 'Expense:Coffee Shops';
 		} else if (brand == "Target") {
@@ -706,7 +712,7 @@ Card.prototype.remove = function() { // Remove card from UI
 Card.prototype.mockBal = function(bal) {
 	var url = fold_api + "my/mock/cards";
 	var thisCard = this;
-	$.post(url, 
+	$.post(url,
 	{"cards": [{
 	  "id": thisCard.id.toString(),
 	  "balance_amount": bal.toString()
@@ -748,7 +754,7 @@ $(function() {
 		    slideSpeed : 300,
 		    paginationSpeed : 400,
 		    singleItem:true
-		
+
 		    // "singleItem:true" is a shortcut for:
 		    // items : 1,
 		    // itemsDesktop : false,
@@ -783,7 +789,7 @@ $(function() {
 				});
 			});
 			// user.updateBalance();
-		}); 
+		});
 		user.getInfo("profile", function(response) {
 			//Airbitz.ui.debugLevel(1,response);
 			//Airbitz.ui.debugLevel(1,response["logged_in"]);
@@ -796,6 +802,7 @@ $(function() {
 	// UI stuff
 	Airbitz.ui.debugLevel(1,"logo: " + brand_logo_urls[brand]);
 	$(".brand-name").text(brand);
+    var bizId;
 	if (brand == "Starbucks") {
         bizId = 11131; // currently fold, update to starbucks
 	} else if (brand == "Target") {
