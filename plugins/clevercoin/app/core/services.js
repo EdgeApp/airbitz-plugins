@@ -283,8 +283,12 @@
         return $q(function(resolve, reject) {
           CcFactory.supportedCountries(function(e, s, b) {
             if (s === 200) {
-              countryList = b;
-              resolve(b)
+              countryList = b.filter(function(e) {
+                return e.isResidenceAccepted;
+              }).sort(function(a, b) {
+                return a.codeAlpha3 - b.codeAlpha3;
+              });
+              resolve(countryList);
             } else {
               reject(b);
             } 
