@@ -288,7 +288,7 @@
               countryList = b.filter(function(e) {
                 return e.isResidenceAccepted;
               }).sort(function(a, b) {
-                return a.name - b.name;
+                return a.name.localeCompare(b.name);
               });
               resolve(countryList);
             } else {
