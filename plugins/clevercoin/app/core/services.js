@@ -139,9 +139,11 @@
       return $q(function(resolve, reject) {
         CcFactory.accountWallets(function(e, s, b) {
         if (s >= 200 && s <= 300) {
-          walletList = b;
+          walletList = b.filter(function(n) {
+            return n.currency == 'EUR';
+          });
           Airbitz.core.writeData('walletList', walletList); 
-          resolve(b);
+          resolve(walletList);
         } else {
           reject(b);
         }
@@ -354,15 +356,6 @@
           } else {
             reject(b);
           }
-        });
-      });
-    };
-
-    factory.getUserWallets = function() {
-      return $q(function(resolve, reject) {
-        Airbitz.core.wallets({
-          success: resolve,
-          error: reject
         });
       });
     };
