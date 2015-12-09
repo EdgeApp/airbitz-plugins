@@ -106,6 +106,7 @@ run(['$rootScope', 'DataFactory', function ($rootScope, DataFactory) {
   });
   Airbitz.cryptoDenom = Airbitz.core.getBtcDenomination();
   $rootScope.cryptoDenom = Airbitz.core.getBtcDenomination();
+  $rootScope.launchExternal = Airbitz.ui.launchExternal;
   Airbitz.core.setDenominationChangeListener(function(newDenom) {
     $rootScope.$apply(function() {
       Airbitz.cryptoDenom = newDenom;
