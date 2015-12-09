@@ -132,6 +132,12 @@
 <script type="text/javascript">
     "use strict";
 
+    var CardsChanged = {
+        NO : 0,
+        YES : 1,
+        VALUE_ONLY : 2
+    };
+
     var fold_api = "https://api.foldapp.com/v1/";
     var brand = Airbitz.config.get("BRAND");
     var api_token = Airbitz.config.get("API-TOKEN");
@@ -275,6 +281,7 @@
         all_cards: [],
         owl: $("#user-cards"),
         owlSet: false, // Owl set
+        numUpdates: 0,
         current_card_id: "", // The currently visible card id. used to ping Fold servers for balance update
         create: function() {
             Airbitz.ui.debugLevel(1,"Creating user.");
@@ -367,10 +374,46 @@
                 Airbitz.ui.debugLevel(1,"Owl size after:" + Account.owl.data("owlCarousel").owl.owlItems.length);
             } else { Account.owlSet = true; }
         },
-        getCards: function(c) {
+        getCards: function(callback) {
             user.getInfo("cards?brand_id=" + brand, function(all_card_info) {
                 Airbitz.ui.debugLevel(1,"User's cards: " + JSON.stringify(all_card_info));
-                c(all_card_info["cards"]);
+
+                /////////////////////////
+                // Fake updating balances
+//                for (var ic in all_card_info["cards"]) {
+//                    var amt = 0;
+//                    var num = "";
+//                    if (typeof Account.all_cards[ic] === 'undefined') {
+//                        amt = all_card_info["cards"][ic]["balance"][0]["amount"];
+//                        num = all_card_info["cards"][ic]["code"];
+//                    } else {
+//                        amt = Account.all_cards[ic].bal;
+//                        num = Account.all_cards[ic].num;
+//                    }
+//                    all_card_info["cards"][ic]["balance"][0]["amount"] = amt - 0.10;
+//                    all_card_info["cards"][ic]["code"][0] = num + "h";
+//                }
+//
+//                Account.numUpdates++;
+//                if (Account.numUpdates == 5){
+//                    all_card_info["cards"][0]["balance"][0]["amount"] = 1234.0;
+//                    all_card_info["cards"][0]["code"][0] = "updated #1";
+//                } else if (Account.numUpdates == 10) {
+//                    all_card_info["cards"][1]["balance"][0]["amount"] = 2234.0;
+//                    all_card_info["cards"][1]["code"][0] = "updated #2";
+//                } else if (Account.numUpdates == 15) {
+//                    all_card_info["cards"][2]["balance"][0]["amount"] = 3234.0;
+//                    all_card_info["cards"][2]["code"][0] = "updated #3";
+//                } else if (Account.numUpdates == 20) {
+//                    all_card_info["cards"][3]["balance"][0]["amount"] = 4234.0;
+//                    all_card_info["cards"][3]["code"][0] = "updated #4";
+//                }
+                /////////////////////////
+
+
+
+
+                callback(all_card_info["cards"]);
             });
         },
 
@@ -380,11 +423,14 @@
             for (var c = 0; c < cards.length; c++) {
                 // Check arrays values are defined
                 if(typeof cards[c] === 'undefined') server_json_error = true;
-                else if(typeof cards[c]["id"] === 'undefined') server_json_error = true;
-                else if(typeof cards[c]["brand_id"] === 'undefined') server_json_error = true;
-                else if(typeof cards[c]["balance"] === 'undefined') server_json_error = true;
-                else if(typeof cards[c]["balance"][0] === 'undefined') server_json_error = true;
-                else if(typeof cards[c]["balance"][0]["amount"] === 'undefined') server_json_error = true;
+                else if(typeof cards[c].id === 'undefined') server_json_error = true;
+                else if(typeof cards[c].refundable === 'undefined') server_json_error = true;
+                else if(typeof cards[c].code === 'undefined') server_json_error = true;
+                else if(typeof cards[c].code[0] === 'undefined') server_json_error = true;
+                else if(typeof cards[c].brand_id === 'undefined') server_json_error = true;
+                else if(typeof cards[c].balance === 'undefined') server_json_error = true;
+                else if(typeof cards[c].balance[0] === 'undefined') server_json_error = true;
+                else if(typeof cards[c].balance[0]["amount"] === 'undefined') server_json_error = true;
 
                 if (server_json_error == true) {
                     doneUpdating();
@@ -394,7 +440,8 @@
 
             Airbitz.ui.debugLevel(1,"updateCards: brand: "+ brand + ": " + cards.length);
             if(!cards.length > 0) {
-                if(Account.haveCardsChanged(cards) || (!Account.owlSet)) {
+                var changed = Account.haveCardsChanged(cards);
+                if(changed || (!Account.owlSet)) {
                     Account.all_cards = [];
                     Airbitz.ui.debugLevel(1,"No cards. New acc!");
                     if(typeof Account.owl.data("owlCarousel").owl === 'undefined') {
@@ -404,15 +451,16 @@
                     }
                 }
             } else { // There's at least one card
+                var changed = Account.haveCardsChanged(cards);
 
-                if(Account.haveCardsChanged(cards))
+                if(changed == CardsChanged.YES)
                 {
                     Airbitz.ui.debugLevel(1,"updateCards: brand: "+ brand + ": " + cards.length + " CARDS CHANGED");
                     Account.clearOwl();
                     Account.all_cards = [];
 
                     var c = 0;
-                    for(c in cards) {
+                    for (c in cards) {
 
                         var card = new Card(
                                 cards[c]["id"],
@@ -427,26 +475,42 @@
                         }
                         Account.all_cards[c] = card;
                         var card_html = document.querySelector('#card-template').content;
-                        if(!card.bal == 0) {
+                        if (!card.bal == 0) {
                             card_html.querySelector(".card-barcode").innerHTML = "<img class=\"barcode \" src=\"" + fold_api + "my/cards/" + card.id + "/barcode/png" + "\">";
                             var floatBalance = parseFloat(card.bal);
                             card_html.querySelector(".card-balance-amt").innerText = "$" + floatBalance.toFixed(2);
                             card_html.querySelector(".card-balance-amt").setAttribute("card", card.id);
                             card_html.querySelector(".card-number").innerText = card.num;
-                            if(card.isRefundable && refund_enabled) {
+                            card_html.querySelector(".card-number").setAttribute("card", card.id);
+                            if (card.isRefundable && refund_enabled) {
                                 card_html.querySelector(".card-info").innerText = "Refund Card"; // Make sure the info button shows up.
                             } else {
                                 card_html.querySelector(".card-info").innerText = "";
                             }
 
-                            Airbitz.ui.debugLevel(1,"Adding card: " + c + " card info: " + cards[c]);
+                            Airbitz.ui.debugLevel(1, "Adding card: " + c + " card info: " + cards[c]);
                             Account.owl.data('owlCarousel').addItem(document.importNode(card_html, true));
                             //document.querySelector("#user-cards").appendChild( document.importNode(card_html, true) );
                         }
                     }
+                } else if (changed == CardsChanged.VALUE_ONLY) {
+                    Account.all_cards = [];
 
+                    for (var c in cards) {
+                        var card = new Card(
+                                cards[c].id,
+                                cards[c].code[0],
+                                cards[c].balance[0].amount,// e.g. $5
+                                cards[c].refundable
+                        );
+                        Account.all_cards[c] = card;
 
+                        var amt = parseFloat(card.bal);
+                        var amtString = "$" + amt.toFixed(2);
 
+                        $("div.card-balance-amt[card=" + card.id + "]").text(amtString);
+                        $("div.card-number[card=" + card.id + "]").text(card.num);
+                    }
                 }
             }
             $('.materialboxed').materialbox();
@@ -463,14 +527,15 @@
             var match = 0;
             if (force_refresh) {
                 force_refresh = 0;
-                return true;
+                return CardsChanged.YES;
             }
             Airbitz.ui.debugLevel(1,"haveCardsChanged: oldcards:" + Account.all_cards.length + " newcards:" + cards.length);
 
             if(cards.length != Account.all_cards.length) {
-                Airbitz.ui.debugLevel(1,"haveCardsChanged: return TRUE");
-                return true;
+                Airbitz.ui.debugLevel(1,"haveCardsChanged: return YES");
+                return CardsChanged.YES;
             }
+            var balance_changed = false;
             for(var ic in cards) {
                 for(var iac in Account.all_cards) {
                     if(cards[ic]["id"] == Account.all_cards[iac].id) {
@@ -479,8 +544,8 @@
                         Airbitz.ui.debugLevel(1,"haveCardsChanged: oldbal:" + Account.all_cards[iac].bal);
                         Airbitz.ui.debugLevel(1,"haveCardsChanged: newbal:" + cards[ic]["balance"][0]["amount"]);
                         if(cards[ic]["balance"][0]["amount"] != Account.all_cards[ic].bal) {
-                            Airbitz.ui.debugLevel(1,"haveCardsChanged: return TRUE");
-                            return true;
+                            Airbitz.ui.debugLevel(1,"haveCardsChanged: Balance changed card");
+                            balance_changed = true;
                         }
                     }
                 }
@@ -488,11 +553,17 @@
 
             Airbitz.ui.debugLevel(1,"haveCardsChanged: matched:" + match + " newlength:" + cards.length);
             if(match != cards.length) {
-                Airbitz.ui.debugLevel(1,"haveCardsChanged: return TRUE");
-                return true;
+                Airbitz.ui.debugLevel(1,"haveCardsChanged: return YES");
+                return CardsChanged.YES;
             }
-            Airbitz.ui.debugLevel(1,"haveCardsChanged: return FALSE");
-            return false;
+
+            if (balance_changed) {
+                Airbitz.ui.debugLevel(1,"haveCardsChanged: return VALUE_ONLY");
+                return CardsChanged.VALUE_ONLY;
+            } else {
+                Airbitz.ui.debugLevel(1,"haveCardsChanged: return YES");
+                return CardsChanged.NO;
+            }
         },
         setDummyC: function() {
             var card_html = document.querySelector('#card-template').content;
@@ -666,11 +737,6 @@
         this.num = num;
         this.bal = bal;
         this.isRefundable = isRefundable;
-    }
-
-    Card.prototype.ping = function() { // Tell Fold we need to check this balance to see if the user has spent it.
-        var url = fold_api + "my/cards/" + this.id + "/ping";
-        $.post(url);
     }
 
     Card.prototype.refund = function() {
