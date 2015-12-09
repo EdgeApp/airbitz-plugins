@@ -135,22 +135,24 @@
     var fold_api = "https://api.foldapp.com/v1/";
     var brand = Airbitz.config.get("BRAND");
     var api_token = Airbitz.config.get("API-TOKEN");
-    var server_json_error = 0;
+    var server_json_error = false;
     var first_load = 1;
     var force_refresh = 1;
     var min_price_rate = 1;
     var refund_enabled = 0;
+    var bizId = 0;
 
     var brand_logo_urls = {
-        "Starbucks":"https://airbitz.co/go/wp-content/uploads/2015/12/green-coffee-mug-128px.png", // Starbucks
-        "Target":"https://airbitz.co/go/wp-content/uploads/2015/12/red-bulls-eye-128px.png" // Target
+        "Starbucks" : "https://airbitz.co/go/wp-content/uploads/2015/12/green-coffee-mug-128px.png", // Starbucks
+        "Target" : "https://airbitz.co/go/wp-content/uploads/2015/12/red-bulls-eye-128px.png" // Target
     };
     document.title = brand; // Set page's title to brand of gift card.
 
     function toggleUi() {
         $(".fold-loading").css("display", "none");
         $(".main").css("display", "inline");
-        setInterval(function() {
+        setInterval( function() {
+            Account.pingCard(Account.current_card_id);
             user.resetCards(function() {});
         }, 3000); // Refresh UI every 3 seconds
     }
@@ -273,9 +275,10 @@
         all_cards: [],
         owl: $("#user-cards"),
         owlSet: false, // Owl set
+        current_card_id: "", // The currently visible card id. used to ping Fold servers for balance update
         create: function() {
             Airbitz.ui.debugLevel(1,"Creating user.");
-            url = fold_api + "users";
+            var url = fold_api + "users";
             var newAcc = {"users": [{
                 "random_username": true,
                 "random_password": true
@@ -309,6 +312,18 @@
                 $(".balance-amt").text("$" + balances["balances"][0]["amount"]);
             });
         },
+
+        pingCard: function(cardid) {
+            var url = fold_api + "my/cards/" + cardid + "/ping";
+            Airbitz.ui.debugLevel(1,"Pinging card " + cardid);
+            sRequestHandler(url, "", function(r){
+                Airbitz.ui.debugLevel(1,"Pinging card success");
+            },
+            function(e) {
+                Airbitz.ui.debugLevel(1,"Pinging card failed");
+            });
+        },
+
         updateWAddr: function(addr, updated) { // Set the default BTC address
             var withdraw_url = fold_api + "my/default_withdraw_addresses";
             Airbitz.ui.debugLevel(1,"Setting default address to: " + addr.toString());
@@ -358,16 +373,32 @@
                 c(all_card_info["cards"]);
             });
         },
+
         updateCards: function(cards, doneUpdating) { // Updates the UI with cards the user has purchased
             Airbitz.ui.debugLevel(1,"updateCards: " + cards.length + " cards from all brands.");
 
             // Filter cards and only show current brand
             for (var c = 0; c < cards.length; c++) {
+                // Check arrays values are defined
+                if(typeof cards[c] === 'undefined') server_json_error = true;
+                else if(typeof cards[c]["id"] === 'undefined') server_json_error = true;
+                else if(typeof cards[c]["brand_id"] === 'undefined') server_json_error = true;
+                else if(typeof cards[c]["balance"] === 'undefined') server_json_error = true;
+                else if(typeof cards[c]["balance"][0] === 'undefined') server_json_error = true;
+                else if(typeof cards[c]["balance"][0]["amount"] === 'undefined') server_json_error = true;
+
+                if (server_json_error == true) break;
+
                 if (brand != cards[c]["brand_id"]) {
                     Airbitz.ui.debugLevel(1, "Remove card " + c + " vendor:" + cards[c]["brand_id"]);
                     cards.splice(c, 1);
                     c--;
                 }
+            }
+
+            if (server_json_error == true) {
+                doneUpdating();
+                return;
             }
 
             Airbitz.ui.debugLevel(1,"updateCards: brand: "+ brand + ": " + cards.length);
@@ -389,24 +420,21 @@
                     Account.clearOwl();
                     Account.all_cards = [];
 
-                    var ic = 0;
-                    for(ic in cards) {
-                        // Check arrays values are defined
-                        if(typeof cards[ic] === 'undefined') server_json_error = 1;
-                        else if(typeof cards[ic]["id"] === 'undefined') server_json_error = 1;
-                        else if(typeof cards[ic]["balance"] === 'undefined') server_json_error = 1;
-                        else if(typeof cards[ic]["balance"][0] === 'undefined') server_json_error = 1;
-                        else if(typeof cards[ic]["balance"][0]["amount"] === 'undefined') server_json_error = 1;
-
-                        if (server_json_error == 1) break;
+                    var c = 0;
+                    for(c in cards) {
 
                         var card = new Card(
-                                cards[ic]["id"],
-                                cards[ic]["code"][0],
-                                cards[ic]["balance"][0]["amount"],// e.g. $5
-                                cards[ic]["refundable"]
+                                cards[c]["id"],
+                                cards[c]["code"][0],
+                                cards[c]["balance"][0]["amount"],// e.g. $5
+                                cards[c]["refundable"]
                         );
-                        Account.all_cards[ic] = card;
+                        Account.pingCard(card["id"]);
+                        if (0 == c) {
+                            // Assign the current card to the first on the list
+                            Account.current_card_id = card["id"];
+                        }
+                        Account.all_cards[c] = card;
                         var card_html = document.querySelector('#card-template').content;
                         if(!card.bal == 0) {
                             card_html.querySelector(".card-barcode").innerHTML = "<img class=\"barcode \" src=\"" + fold_api + "my/cards/" + card.id + "/barcode/png" + "\">";
@@ -420,11 +448,13 @@
                                 card_html.querySelector(".card-info").innerText = "";
                             }
 
-                            Airbitz.ui.debugLevel(1,"Adding card: " + ic + " card info: " + cards[ic]);
+                            Airbitz.ui.debugLevel(1,"Adding card: " + c + " card info: " + cards[c]);
                             Account.owl.data('owlCarousel').addItem(document.importNode(card_html, true));
                             //document.querySelector("#user-cards").appendChild( document.importNode(card_html, true) );
                         }
                     }
+
+
 
                 }
             }
@@ -496,10 +526,10 @@
                 var brands_cards = "";
                 min_price_rate = 1.0;
                 for(var ic in all_brands) {
-                    if(typeof all_brands[ic] === 'undefined') server_json_error = 1;
-                    else if(typeof all_brands[ic]["id"] === 'undefined') server_json_error = 1;
-                    else if(typeof all_brands[ic]["price_rate"] === 'undefined') server_json_error = 1;
-                    else if(typeof all_brands[ic]["refund_enabled"] === 'undefined') server_json_error = 1;
+                    if(typeof all_brands[ic] === 'undefined') server_json_error = true;
+                    else if(typeof all_brands[ic]["id"] === 'undefined') server_json_error = true;
+                    else if(typeof all_brands[ic]["price_rate"] === 'undefined') server_json_error = true;
+                    else if(typeof all_brands[ic]["refund_enabled"] === 'undefined') server_json_error = true;
 
                     if (server_json_error) break;
 
@@ -588,7 +618,7 @@
             }],
                 "cancel_all_others": true
             }
-            url = fold_api + "my/orders";
+            var url = fold_api + "my/orders";
             Airbitz.ui.debugLevel(1,"Getting new order");
             sRequest(url, newOrder, function(r) {
                 Airbitz.ui.debugLevel(1,"Order: " + JSON.stringify(r));
@@ -655,7 +685,7 @@
     Card.prototype.refund = function() {
         if(this.isRefundable) {
             Airbitz.ui.showAlert('', 'Refunding card...', {'showSpinner': true});
-            url = fold_api + "my/refunds";
+            var url = fold_api + "my/refunds";
             var thisCard = this;
             var balance = this.bal;
             Airbitz.ui.debugLevel(1,"Refunding card " + this.id + " amount: " + this.bal);
@@ -742,7 +772,14 @@
                 //navigation : true, // Show next and prev buttons
                 slideSpeed : 300,
                 paginationSpeed : 400,
-                singleItem:true
+                singleItem:true,
+                afterMove: function(elem) {
+                    var current = this.currentItem;
+                    var card = elem.find(".owl-item").eq(current).find(".card-balance-amt").attr('card');
+                    Airbitz.ui.debugLevel(1,"Current card is " + card);
+                    Account.current_card_id = card;
+                    Account.pingCard(card);
+                }
 
                 // "singleItem:true" is a shortcut for:
                 // items : 1,
@@ -751,7 +788,7 @@
                 // itemsTablet: false,
                 // itemsMobile : false
             });
-//		Account.logRefunds();
+    //		Account.logRefunds();
             Airbitz.core.selectedWallet({
                 success: updateWallet,
                 error: function() {
@@ -767,7 +804,7 @@
                         if (server_json_error) {
                             Airbitz.ui.showAlert("Server Response Error", "Error in Server response. Please contact support");
                             Airbitz.ui.debugLevel(1,"Error in Server response. Please contact support");
-                            server_json_error = 0;
+                            server_json_error = false;
                             first_load = 0;
                         } else if (first_load) {
                             Airbitz.ui.hideAlert();
