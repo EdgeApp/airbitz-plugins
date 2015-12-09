@@ -368,7 +368,7 @@
             } else { Account.owlSet = true; }
         },
         getCards: function(c) {
-            user.getInfo("cards", function(all_card_info) {
+            user.getInfo("cards?brand_id=" + brand, function(all_card_info) {
                 Airbitz.ui.debugLevel(1,"User's cards: " + JSON.stringify(all_card_info));
                 c(all_card_info["cards"]);
             });
@@ -377,7 +377,6 @@
         updateCards: function(cards, doneUpdating) { // Updates the UI with cards the user has purchased
             Airbitz.ui.debugLevel(1,"updateCards: " + cards.length + " cards from all brands.");
 
-            // Filter cards and only show current brand
             for (var c = 0; c < cards.length; c++) {
                 // Check arrays values are defined
                 if(typeof cards[c] === 'undefined') server_json_error = true;
@@ -387,18 +386,10 @@
                 else if(typeof cards[c]["balance"][0] === 'undefined') server_json_error = true;
                 else if(typeof cards[c]["balance"][0]["amount"] === 'undefined') server_json_error = true;
 
-                if (server_json_error == true) break;
-
-                if (brand != cards[c]["brand_id"]) {
-                    Airbitz.ui.debugLevel(1, "Remove card " + c + " vendor:" + cards[c]["brand_id"]);
-                    cards.splice(c, 1);
-                    c--;
+                if (server_json_error == true) {
+                    doneUpdating();
+                    return;
                 }
-            }
-
-            if (server_json_error == true) {
-                doneUpdating();
-                return;
             }
 
             Airbitz.ui.debugLevel(1,"updateCards: brand: "+ brand + ": " + cards.length);
