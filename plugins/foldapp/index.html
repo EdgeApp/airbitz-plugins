@@ -23,6 +23,11 @@
         .card-info        {font-family: Lato, Verdana, Arial, Helvetica, sans-serif; font-size:10pt; color: #007aFF; height: 20px}
         .partner-logo     {height: 35px; align-content: center}
         .collapsible-header {vert-align: middle}
+        .reset-account    {
+            background-color: #FFFFFF;
+            color: #FFFFFF;
+            border: 0px;
+        }
         .buy-card         {
             background-color: #FFFFFF;
             -moz-border-radius: 10px;
@@ -118,6 +123,7 @@
                         <h6>Account Credentials:</h6>
                         <h6><span class="user-creds"></span></h6>
                         <h6>This application is not affiliated with the <span class="brand-name"></span> Corporation</h6>
+                        <button onClick=resetAccount() class="material-icons reset-account right">close</button>
                     </div>
                 </div>
             </div>
@@ -153,6 +159,18 @@
         "Target" : "https://airbitz.co/go/wp-content/uploads/2015/12/red-bulls-eye-128px.png" // Target
     };
     document.title = brand; // Set page's title to brand of gift card.
+
+    function resetAccount() {
+        var x;
+        if (confirm("Reset Account? This will delete all cards and create a new account with Fold") == true) {
+            if (confirm("Reset Account? ARE YOU SURE. All cards from all vendors will be lost?") == true) {
+                if (confirm("Reset Account? ARE YOU REALLY SURE?") == true) {
+                    Account.create();
+                    Airbitz.ui.showAlert("New Account Created", "New Account Created. Please exit this screen and reenter to use new account");
+                }
+            }
+        }
+    }
 
     function toggleUi() {
         $(".fold-loading").css("display", "none");
@@ -898,7 +916,7 @@
         }
 
         $(".brand-logo").attr("src", brand_logo_urls[brand]);
-        $(".user-creds").text("Username: " + Account.username  + " Password: " + Account.pass);
+        $(".user-creds").html("Username: " + Account.username  + "<br>Password: " + Account.pass);
         $(".support-mail-link").html("<a href=\"mailto:support@foldapp.com?subject=Support%20Requested&Body=" + "Username:" + Account.username + "\">support@foldapp.com.</a>");
     });
 
