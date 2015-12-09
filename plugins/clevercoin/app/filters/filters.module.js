@@ -8,7 +8,8 @@
     .filter('formatBtc', ['$filter', formatBtc])
     .filter('roundBtc', roundBtc)
     .filter('valToBtc', valToBtc)
-    .filter('satoshiToDenom', satoshiToDenom);
+    .filter('satoshiToDenom', satoshiToDenom)
+    .directive('ngFocus', ['$timeout', ngFocus]);
 
   function statusFilter() {
     return function(status) {
@@ -125,4 +126,17 @@
     }
   }
 
+  function ngFocus($timeout) {
+    return {
+      link: function (scope, element, attrs) {
+        scope.$watch(attrs.ngFocus, function (val) {
+          if (angular.isDefined(val) && val) {
+            $timeout(function () {
+              element[0].focus();
+            });
+          }
+        }, true);
+      }
+    };
+  }
 })();
