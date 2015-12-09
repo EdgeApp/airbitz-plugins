@@ -23,8 +23,11 @@
       <label for="inputAddress" class="">Address</label>
       <input ng-model="account.address"
             type="text" id="inputAddressStreet" class="form-control"
-            placeholder="Address" autofocus="" autocomplete="off" autocorrect="off"
             name="address"
+            placeholder="Address"
+            ng-focus="true"
+            autocomplete="off"
+            autocorrect="off"
             required="" />
       <div class="input-error" ng-show="form.$submitted || form.address.$touched">
         <span ng-show="form.address.$error.required" class="label label-danger">Required</span>
