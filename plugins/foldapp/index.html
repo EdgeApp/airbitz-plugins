@@ -713,7 +713,7 @@
                     categoryString = 'Expense:Shopping';
                 }
                 Airbitz.core.requestSpend(Account.abWallet,
-                        toAddr, amt, denomination, {
+                        toAddr, amt, 0, {
                             label: brand,
                             category: categoryString,
                             notes: brand + " $" + String(denomination) + " gift card.",
