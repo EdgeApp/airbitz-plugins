@@ -166,7 +166,8 @@
             if (confirm("Reset Account? ARE YOU SURE. All cards from all vendors will be lost?") == true) {
                 if (confirm("Reset Account? ARE YOU REALLY SURE?") == true) {
                     Account.create();
-                    Airbitz.ui.showAlert("New Account Created", "New Account Created. Please exit this screen and reenter to use new account");
+                    Airbitz.ui.showAlert("New Account Created", "New Account Created. Please reenter to use new account");
+                    Airbitz.ui.exit();
                 }
             }
         }
