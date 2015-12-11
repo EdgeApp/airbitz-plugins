@@ -12,7 +12,12 @@
   <div class="row">
     <div class="form-group col-xs-12">
         <label for="inputIdentityType" class="">Identification Type</label>
-        <select ng-model="identityType" ng-required="true" id="inputIdentityType" name="identityType" required="" class="form-control">
+        <select ng-model="identityType" ng-required="true"
+            id="inputIdentityType"
+            name="identityType" 
+            required=""
+            ng-focus="true"
+            class="form-control">
           <option value="passport">Passport</option>
           <option value="identityCard">Identity Card</option>
         </select>
@@ -47,7 +52,7 @@
   <div class="row">
     <div class="form-group col-xs-12">
       <button type="button" ng-click="loadIdentityBack()" class="btn btn-lg"
-        ng-class="{'btn-success': secondaryFile.length > 0, 'btn-info': primaryFile.length == 0}">Identity File Back</button>
+        ng-class="{'btn-success': secondaryFile.length > 0, 'btn-info': secondaryFile.length == 0}">Identity File Back</button>
     </div>
   </div>
 
