@@ -357,14 +357,15 @@ var Account = {
                     if (!card.bal == 0) {
                         var floatBalance = parseFloat(card.bal);
                         //card_html.querySelector(".card-number").setAttribute("card", card.id);
-                        var refundText = "";
+                        var rText = "";
                         if (card.isRefundable && refund_enabled) {
-                            refundText = "Refund Card"; // Make sure the info button shows up.
+                            rText = "Refund Card"; // Make sure the info button shows up.
                         }
                         var thisCard = {
                             cardNumber: "<div class=\"card-number\" card=\"" + card.id + "\">" + card.num + "</div>",
                             cardAmount: "<div class=\"card-balance-amt\" card=\"" + card.id + "\">" + "$" + floatBalance.toFixed(2) + "</div>",
-                            cardBarcode: "<img class=\"barcode \" src=\"" + fold_api + "my/cards/" + card.id + "/barcode/png" + "\"/>"
+                            cardBarcode: "<img class=\"barcode \" src=\"" + fold_api + "my/cards/" + card.id + "/barcode/png" + "\"/>",
+                            refundText: rText
                         }
                         var thisCardHTML = cardTemplate(thisCard);
                         Airbitz.ui.debugLevel(1, "Adding card: " + c + " card info: " + cards[c]);
@@ -445,13 +446,18 @@ var Account = {
         }
     },
     setDummyC: function() {
-        /*var card_html = document.querySelector('#card-template').content;
-        card_html.querySelector(".card-barcode").innerHTML = "<img class=\"barcode barcode-inactive\" src=\"https://airbitz.co/go/wp-content/uploads/2015/12/download.png\"/>";
-        card_html.querySelector(".card-balance-amt").innerText = "$0.00";
-        card_html.querySelector(".card-number").innerText = "6666 8888 4444 0000";
-        card_html.querySelector(".card-info").innerText = "";*/
-        Account.clearOwl();
-        //Account.owl.data('owlCarousel').addItem( document.importNode(card_html, true) );
+        var tSource = $("#card-template").html();
+        var cardTemplate = Handlebars.compile(tSource);
+
+        var thisCard = {
+            cardNumber: "<div class=\"card-number\">" + "6666 8888 4444 0000" + "</div>",
+            cardAmount: "<div class=\"card-balance-amt\">" + "$0.00" + "</div>",
+            cardBarcode: "<img class=\"barcode barcode-inactive\" src=\"https://airbitz.co/go/wp-content/uploads/2015/12/download.png\"/>",
+            refundText: ""
+        }
+        var thisCardHTML = cardTemplate(thisCard);
+        Account.clearOwl(); // Make sure there's only ever ONE grey card and no other cards at the same time.
+        Account.owl.data('owlCarousel').addItem(thisCardHTML);
     },
     getCardById: function(cardId) {
         var cardFromId = Account.all_cards.filter(function( obj ) {
