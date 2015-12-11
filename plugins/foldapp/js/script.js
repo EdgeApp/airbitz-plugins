@@ -356,15 +356,14 @@ var Account = {
                     var cardTemplate = Handlebars.compile(tSource);
                     if (!card.bal == 0) {
                         var floatBalance = parseFloat(card.bal);
-                        //card_html.querySelector(".card-balance-amt").setAttribute("card", card.id);
                         //card_html.querySelector(".card-number").setAttribute("card", card.id);
                         var refundText = "";
                         if (card.isRefundable && refund_enabled) {
                             refundText = "Refund Card"; // Make sure the info button shows up.
                         }
                         var thisCard = {
-                            cardNumber: card.num,
-                            cardAmount: "$" + floatBalance.toFixed(2),
+                            cardNumber: "<div class=\"card-number\" card=\"" + card.id + "\">" + card.num + "</div>",
+                            cardAmount: "<div class=\"card-balance-amt\" card=\"" + card.id + "\">" + "$" + floatBalance.toFixed(2) + "</div>",
                             cardBarcode: "<img class=\"barcode \" src=\"" + fold_api + "my/cards/" + card.id + "/barcode/png" + "\"/>"
                         }
                         var thisCardHTML = cardTemplate(thisCard);
@@ -513,10 +512,11 @@ var Account = {
                         var addTemplate = Handlebars.compile(source);
 
                         var thisCard = {
-                            cardValue: card_vals[ic]["formatted"]["all_decimal_places"]
+                            cardValue: "<h4 class=\"card-value\" value=\"" + card_vals[ic]["amount"] + "\">" + card_vals[ic]["formatted"]["all_decimal_places"] + "</h4>"
                         }
                         var addTemplate = addTemplate(thisCard);
                         $(".add-buttons").html(addTemplate);
+
                         //var add_html = document.querySelector('#add-template').content;
                         //add_html.querySelector(".card-value").setAttribute("value", card_vals[ic]["amount"]);
                         //add_html.querySelector(".card-value").innerText = card_vals[ic]["formatted"]["all_decimal_places"];
