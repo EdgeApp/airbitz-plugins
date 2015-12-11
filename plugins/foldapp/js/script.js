@@ -368,7 +368,7 @@ var Account = {
                             cardAmount: "$" + floatBalance.toFixed(2),
                             cardBarcode: "<img class=\"barcode \" src=\"" + fold_api + "my/cards/" + card.id + "/barcode/png" + "\">"
                         }
-                        var thisCardHTML = template(thisCard);
+                        var thisCardHTML = cardTemplate(thisCard);
                         Airbitz.ui.debugLevel(1, "Adding card: " + c + " card info: " + cards[c]);
                         Account.owl.data('owlCarousel').addItem(thisCardHTML);
                         //document.querySelector("#user-cards").appendChild( document.importNode(card_html, true) );
@@ -511,12 +511,12 @@ var Account = {
 
                         Airbitz.ui.debugLevel(1,"Listing card " + ic);
                         var source = $("#add-funds").html();
-                        var template = Handlebars.compile(source);
+                        var addTemplate = Handlebars.compile(source);
 
                         var thisCard = {
                             cardValue: card_vals[ic]["formatted"]["all_decimal_places"]
                         }
-                        var addTemplate = template(thisCard);
+                        var addTemplate = addTemplate(thisCard);
                         $(".add-buttons").html(addTemplate);
                         //var add_html = document.querySelector('#add-template').content;
                         //add_html.querySelector(".card-value").setAttribute("value", card_vals[ic]["amount"]);
