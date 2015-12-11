@@ -202,6 +202,9 @@ var Account = {
     },
 
     pingCard: function(cardid) {
+        if (!cardid) {
+          return;
+        }
         var url = fold_api + "my/cards/" + cardid + "/ping";
         Airbitz.ui.debugLevel(1,"Pinging card " + cardid);
         sRequestHandler(url, "", function(r){
