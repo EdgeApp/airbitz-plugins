@@ -365,7 +365,7 @@ var Account = {
                         var thisCard = {
                             cardNumber: card.num,
                             cardAmount: "$" + floatBalance.toFixed(2),
-                            cardBarcode: "<img class=\"barcode \" src=\"" + fold_api + "my/cards/" + card.id + "/barcode/png" + "\">"
+                            cardBarcode: "<img class=\"barcode \" src=\"" + fold_api + "my/cards/" + card.id + "/barcode/png" + "\"/>"
                         }
                         var thisCardHTML = cardTemplate(thisCard);
                         Airbitz.ui.debugLevel(1, "Adding card: " + c + " card info: " + cards[c]);
