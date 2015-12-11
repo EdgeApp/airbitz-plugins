@@ -93,10 +93,10 @@
         <div class="card-barcode"><div class="material-placeholder">{{{cardBarcode}}}</div></div>
     </div>
     <div class="card-info-main card-content">
-        <div class="card-number" card="">{{cardNumber}}</div>
+        {{{cardNumber}}}
         <div class="card-balance">Current Balance</div>
-        <div class="card-balance-amt" card="">{{cardAmount}}</div>
-        <div><span class="activator card-info">Refund Card</span></div>
+        {{{cardAmount}}}
+        <div><span class="activator card-info">{{refundText}}</span></div>
     </div>
     <div class="card-reveal valign-wrapper"><br>
         <a class="waves-effect btn center card-refund valign">Refund Card</a><br><br>
@@ -106,7 +106,7 @@
 </script>
 <script id="add-funds" type="text/x-handlebars-template">
 <li class="collection-item avatar card-list">
-    <span class="title"><h4 class="card-value" value="">{{cardValue}}</h4></span>
+    <span class="title">{{{cardValue}}}</span>
     <div class="secondary-content">
         <button type="button" class="buy-card">Buy</button>
     </div>
