@@ -8,7 +8,7 @@ var CardsChanged = {
 
 var fold_api = "https://api.foldapp.com/v1/";
 var brand = Airbitz.config.get("BRAND");
-var api_token = Airbitz.config.get("APITOKEN");
+var api_token = Airbitz.config.get("API-TOKEN");
 var server_json_error = false;
 var first_load = 1;
 var force_refresh = 1;
@@ -513,6 +513,7 @@ var Account = {
                 if(maxBal >= user.total_bal) {
                     var card_vals = brands_cards["card_values"];
                     $(".add-buttons").html(""); // Wipe out any cards that are currently there.
+                    var addTemplateHtml = "";
                     for(ic in card_vals) {
                         numCardsToBuy++;
                         var price_rate = parseFloat(card_vals[ic]["price_rate"]);
@@ -524,9 +525,9 @@ var Account = {
                         var thisCard = {
                             cardValue: "<h4 class=\"card-value\" value=\"" + card_vals[ic]["amount"] + "\">" + card_vals[ic]["formatted"]["all_decimal_places"] + "</h4>"
                         }
-                        var addTemplate = addTemplate(thisCard);
-                        $(".add-buttons").html(addTemplate);
+                        var addTemplateHtml = addTemplateHtml + addTemplate(thisCard);
                     }
+                    $(".add-buttons").html(addTemplateHtml);
                     $(".buy-card").off().on('click', function() {
                         user.purchaseCard($(this).parent().parent().find(".card-value").attr("value"));
                     });
