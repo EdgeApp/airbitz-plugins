@@ -317,7 +317,12 @@
         Airbitz.ui.showAlert('Saved', 'Identity information has been submitted.');
         $state.go('dashboard');
       }, function(e) {
-        Airbitz.ui.showAlert('', 'Unable to submit identity information at this time.');
+        console.log(e);
+        var msg = 'Unable to submit identity information at this time. ';
+        if (e.error) {
+          msg += e.error;
+        }
+        Airbitz.ui.showAlert('', msg);
       });
     };
   }
@@ -355,7 +360,12 @@
         Airbitz.ui.showAlert('Saved', 'Address information has been submitted.');
         $state.go('dashboard');
       }, function(e) {
-        Airbitz.ui.showAlert('', 'Unable to submit address information');
+        console.log(e);
+        var msg = 'Unable to submit address information at this time. ';
+        if (e.error) {
+          msg += e.error;
+        }
+        Airbitz.ui.showAlert('', msg);
       });
     };
   }

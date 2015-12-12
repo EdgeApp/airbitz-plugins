@@ -28,8 +28,7 @@ function resetAccount() {
         if (confirm("Reset Account? ARE YOU SURE. All cards from all vendors will be lost?") == true) {
             if (confirm("Reset Account? ARE YOU REALLY SURE?") == true) {
                 Account.create();
-                Airbitz.ui.showAlert("New Account Created", "New Account Created. Please re-enter to use new account");
-                Airbitz.ui.exit();
+                Airbitz.ui.showAlert("New Account Created", "New Account Created. Please exit this screen and reenter to use new account");
             }
         }
     }
@@ -202,9 +201,6 @@ var Account = {
     },
 
     pingCard: function(cardid) {
-        if (!cardid) {
-          return;
-        }
         var url = fold_api + "my/cards/" + cardid + "/ping";
         Airbitz.ui.debugLevel(1,"Pinging card " + cardid);
         sRequestHandler(url, "", function(r){
@@ -360,20 +356,19 @@ var Account = {
                     var cardTemplate = Handlebars.compile(tSource);
                     if (!card.bal == 0) {
                         var floatBalance = parseFloat(card.bal);
+                        //card_html.querySelector(".card-balance-amt").setAttribute("card", card.id);
                         //card_html.querySelector(".card-number").setAttribute("card", card.id);
-                        var rText = "";
+                        var refundText = "";
                         if (card.isRefundable && refund_enabled) {
-                            rText = "Refund Card"; // Make sure the info button shows up.
+                            refundText = "Refund Card"; // Make sure the info button shows up.
                         }
-                        var thisCard = {
-                            cardNumber: "<div class=\"card-number\" card=\"" + card.id + "\">" + card.num + "</div>",
-                            cardAmount: "<div class=\"card-balance-amt\" card=\"" + card.id + "\">" + "$" + floatBalance.toFixed(2) + "</div>",
-                            cardBarcode: "<img class=\"barcode \" src=\"" + fold_api + "my/cards/" + card.id + "/barcode/png" + "\"/>",
-                            refundText: rText
+                        thisCard = {
+                            card number: card.num,
+                            card amount: "$" + floatBalance.toFixed(2),
+                            card barcode: "<img class=\"barcode \" src=\"" + fold_api + "my/cards/" + card.id + "/barcode/png" + "\">"
                         }
-                        var thisCardHTML = cardTemplate(thisCard);
                         Airbitz.ui.debugLevel(1, "Adding card: " + c + " card info: " + cards[c]);
-                        Account.owl.data('owlCarousel').addItem(thisCardHTML);
+                        Account.owl.data('owlCarousel').addItem(document.importNode(card_html, true));
                         //document.querySelector("#user-cards").appendChild( document.importNode(card_html, true) );
                     }
                 }
@@ -450,18 +445,13 @@ var Account = {
         }
     },
     setDummyC: function() {
-        var tSource = $("#card-template").html();
-        var cardTemplate = Handlebars.compile(tSource);
-
-        var thisCard = {
-            cardNumber: "<div class=\"card-number\">" + "6666 8888 4444 0000" + "</div>",
-            cardAmount: "<div class=\"card-balance-amt\">" + "$0.00" + "</div>",
-            cardBarcode: "<img class=\"barcode barcode-inactive\" src=\"https://airbitz.co/go/wp-content/uploads/2015/12/download.png\"/>",
-            refundText: ""
-        }
-        var thisCardHTML = cardTemplate(thisCard);
-        Account.clearOwl(); // Make sure there's only ever ONE grey card and no other cards at the same time.
-        Account.owl.data('owlCarousel').addItem(thisCardHTML);
+        var card_html = document.querySelector('#card-template').content;
+        card_html.querySelector(".card-barcode").innerHTML = "<img class=\"barcode barcode-inactive\" src=\"https://airbitz.co/go/wp-content/uploads/2015/12/download.png\"/>";
+        card_html.querySelector(".card-balance-amt").innerText = "$0.00";
+        card_html.querySelector(".card-number").innerText = "6666 8888 4444 0000";
+        card_html.querySelector(".card-info").innerText = "";
+        Account.clearOwl();
+        Account.owl.data('owlCarousel').addItem( document.importNode(card_html, true) );
     },
     getCardById: function(cardId) {
         var cardFromId = Account.all_cards.filter(function( obj ) {
@@ -512,20 +502,16 @@ var Account = {
                 Airbitz.ui.debugLevel(1,"Max: " + maxBal);
                 if(maxBal >= user.total_bal) {
                     var card_vals = brands_cards["card_values"];
-                    $(".add-buttons").html(""); // Wipe out any cards that are currently there.
+                    document.querySelector(".add-buttons").innerHTML = "";
                     for(ic in card_vals) {
                         numCardsToBuy++;
                         var price_rate = parseFloat(card_vals[ic]["price_rate"]);
 
                         Airbitz.ui.debugLevel(1,"Listing card " + ic);
-                        var source = $("#add-funds").html();
-                        var addTemplate = Handlebars.compile(source);
-
-                        var thisCard = {
-                            cardValue: "<h4 class=\"card-value\" value=\"" + card_vals[ic]["amount"] + "\">" + card_vals[ic]["formatted"]["all_decimal_places"] + "</h4>"
-                        }
-                        var addTemplate = addTemplate(thisCard);
-                        $(".add-buttons").html(addTemplate);
+                        var add_html = document.querySelector('#add-template').content;
+                        add_html.querySelector(".card-value").setAttribute("value", card_vals[ic]["amount"]);
+                        add_html.querySelector(".card-value").innerText = card_vals[ic]["formatted"]["all_decimal_places"];
+                        document.querySelector(".add-buttons").appendChild(document.importNode(add_html,true));
                     }
                     $(".buy-card").off().on('click', function() {
                         user.purchaseCard($(this).parent().parent().find(".card-value").attr("value"));
@@ -588,7 +574,7 @@ var Account = {
                 categoryString = 'Expense:Shopping';
             }
             Airbitz.core.requestSpend(Account.abWallet,
-                    toAddr, amt, 0, {
+                    toAddr, amt, denomination, {
                         label: brand,
                         category: categoryString,
                         notes: brand + " $" + String(denomination) + " gift card.",
@@ -738,7 +724,7 @@ $(function() {
             // itemsTablet: false,
             // itemsMobile : false
         });
-//      Account.logRefunds();
+//		Account.logRefunds();
         Airbitz.core.selectedWallet({
             success: updateWallet,
             error: function() {
