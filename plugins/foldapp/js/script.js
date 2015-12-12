@@ -779,7 +779,7 @@ $(function() {
     // UI stuff
     Airbitz.ui.debugLevel(1,"logo: " + brand_logo_urls[brand]);
     $(".brand-name").text(brand);
-    var bizId;
+
     if (brand == "Starbucks") {
         bizId = 11131; // currently fold, update to starbucks
     } else if (brand == "Target") {
