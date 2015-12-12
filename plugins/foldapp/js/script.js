@@ -8,7 +8,7 @@ var CardsChanged = {
 
 var fold_api = "https://api.foldapp.com/v1/";
 var brand = Airbitz.config.get("BRAND");
-var api_token = Airbitz.config.get("APITOKEN");
+var api_token = Airbitz.config.get("API-TOKEN");
 var server_json_error = false;
 var first_load = 1;
 var force_refresh = 1;
