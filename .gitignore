@@ -4,8 +4,10 @@ build
 config.js
 plugins/*/.idea/*
 .idea/*
+.DS_Store
 
 
 
 
 config.codekit
+
