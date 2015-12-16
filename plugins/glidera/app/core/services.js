@@ -47,6 +47,9 @@
     factory.userSetupRedirect = function() {
       return glideraFactory.userSetupRedirect(redirectUri, 'usersetup');
     };
+    factory.idVerifyRedirect = function() {
+      return glideraFactory.idVerifyRedirect(redirectUri, 'idverify');
+    };
     factory.createBankAccountUrl = function() {
       return glideraFactory.createBankAccountRedirect(redirectUri, 'bankaccount');
     };
@@ -172,6 +175,7 @@
           'occupation': account.occupation ? account.occupation.id : null,
           'employerName': account.employerName,
           'employerDescription': account.employerDescription,
+          'last4Ssn': account.last4Ssn,
           'ip': '127.0.0.1'
         };
         console.log(d);

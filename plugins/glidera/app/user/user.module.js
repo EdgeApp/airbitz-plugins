@@ -8,6 +8,7 @@
     .controller('userAccountController', ['$scope', '$state', 'Error', 'States', 'Occupations', 'UserFactory', 'ExchangeFactory', userAccountController])
     .controller('bankAccountController', ['$scope', '$sce', '$state', 'UserFactory', bankAccountController])
     .controller('increaseLimitsController', ['$scope', '$sce', '$state', 'UserFactory', increaseLimitsController])
+    .controller('idVerifyController', ['$scope', '$sce', '$state', 'UserFactory', idVerifyController])
     .controller('disclaimerController', ['$scope', '$state', 'Error', 'States', 'UserFactory', disclaimerController])
     .controller('authController', ['$scope', '$state', '$location', 'UserFactory', authController])
     .controller('verifyEmailController', ['$scope', '$state', 'Error', 'UserFactory', verifyEmailController])
@@ -105,6 +106,7 @@
       showOptionStatus();
       $scope.userStatus = b;
       $scope.extraComplete = b.userSsnIsSetup && b.userOowIsSetup;
+      $scope.userPictureIsSetup = b.userPictureIdState == 'VERIFIED' || b.userPictureIdState == 'PASSED';
     }).then(function() {
       return UserFactory.getEmailAddress();
     }).then(function() {
@@ -147,6 +149,10 @@
       if (!$scope.userStatus.userPhoneIsSetup) {
         counter++;
         msg += '<h5><strong class="step">' + counter + "</strong> Verify mobile phone</h5>";
+      }
+      if (!$scope.userStatus.userPictureIsSetup) {
+        counter++;
+        msg += '<h5><strong class="step">' + counter + "</strong> Provide a photo for verification</h5>";
       }
       if (!$scope.userStatus.userBankAccountIsSetup) {
         counter++;
@@ -205,6 +211,16 @@
 
     Airbitz.ui.title('Additional User Info');
     url = UserFactory.userSetupRedirect();
+
+    $scope.iframeUrl = $sce.trustAsResourceUrl(url);
+  }
+
+  function idVerifyController($scope, $sce, $state, UserFactory) {
+    $scope.userStatus = UserFactory.getUserAccountStatus();
+    var url = '';
+
+    Airbitz.ui.title('Additional User Info');
+    url = UserFactory.idVerifyRedirect();
 
     $scope.iframeUrl = $sce.trustAsResourceUrl(url);
   }

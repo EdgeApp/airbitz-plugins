@@ -130,6 +130,21 @@
       </div>
     </div>
 
+    <div class="row">
+      <div class="no-pad-left form-group col-xs-12">
+        <label for="last4Ssn" class="sr-only">Postal Code</label>
+        <input ng-model="account.last4Ssn"
+        type="text" id="last4Ssn" class="form-control large"
+        placeholder="Last 4 SSN" autofocus="" autocomplete="off" autocorrect="off"
+        name="last4Ssn"
+        required="" />
+        <div class="input-error" ng-show="form.$submitted || form.last4Ssn.$touched">
+          <span ng-show="form.last4Ssn.$error.required" class="label label-danger">Required</span>
+          <span ng-show="form.last4Ssn.$error.number" class="label label-danger">Number Required</span>
+        </div>
+      </div>
+    </div>
+
 </form>
 </div>
 
