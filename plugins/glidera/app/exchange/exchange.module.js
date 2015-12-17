@@ -15,6 +15,9 @@
     $scope.limits = Limits.getLimits();
     $scope.order = DataFactory.getOrder(false); // initialize new order and clear existing order
     $scope.order.orderAction = $stateParams.orderAction; // set order action
+    if (!$scope.order.orderMode) {
+      $scope.order.orderMode = 'btc'; // default to btc
+    }
 
     if ($scope.order.orderAction == 'buy') {
       Airbitz.ui.title('Buy Bitcoin');
@@ -25,8 +28,8 @@
     Limits.fetchLimits().then(function(limits) {
       $scope.limits = limits;
     }).then(function() {
-      return Prices.setBuyQty(1).then(function() {
-        Prices.setSellQty(1);
+      return Prices.setBuyQty(scope.order.orderBtcInput || 1, $scope.order.orderFiatInput, $scope.order.orderMode).then(function() {
+        Prices.setSellQty(scope.order.orderBtcInput || 1, $scope.order.orderFiatInput, $scope.order.orderMode);
       });
     });
 
@@ -47,6 +50,7 @@
       $scope.order.orderValueSatoshi = btcValue * 100000000;
       $scope.order.orderValueInput = parseFloat($filter('roundBtc')(btcValue));
       $scope.order.orderBtcInput = btcValue;
+      $scope.order.orderMode = 'fiat';
     };
 
     $scope.convertBtcValue = function(input) {
@@ -59,6 +63,7 @@
       $scope.order.orderBtcInput = btc;
       $scope.order.orderValueSatoshi = btc * 100000000;
       $scope.order.orderFiatInput = parseFloat($filter('roundFiat')(parseFloat(output)));
+      $scope.order.orderMode = 'btc';
     };
     $scope.next = function() {
       // Trim extra decimals off BTC amount
@@ -75,8 +80,16 @@
         Airbitz.ui.showAlert('Error', 'The sell limit will be exceeded. Please reduce your sell amount.');
         return;
       }
-      var d = $scope.order.orderAction == 'buy' ? Prices.setBuyQty($scope.order.orderBtcInput) : Prices.setSellQty($scope.order.orderBtcInput);
-      d.then(function() {
+      Airbitz.ui.showAlert('', 'Locking price...', {'showSpinner': true});
+      var d = $scope.order.orderAction == 'buy'
+          ? Prices.setBuyQty($scope.order.orderBtcInput, $scope.order.orderFiatInput, $scope.order.orderMode)
+          : Prices.setSellQty($scope.order.orderBtcInput, $scope.order.orderFiatInput, $scope.order.orderMode);
+      d.then(function(data) {
+        Airbitz.ui.hideAlert();
+        // If we are in fiat mode, update the BTC amount with the value Glidera returned
+        if ($scope.order.orderMode == 'fiat') {
+          $scope.order.orderBtcInput = data.qty;
+        }
         TwoFactor.showTwoFactor(function() {
           $state.go("reviewOrder");
         });
@@ -92,6 +105,7 @@
       $scope.priceObj = ($scope.order.orderAction == 'buy')
                       ? Prices.currentBuy : Prices.currentSell;
     };
+
     update();
     $scope.$on('PriceUpdate', function(events, args){
       update();

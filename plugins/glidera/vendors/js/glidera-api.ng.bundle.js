@@ -280,10 +280,16 @@ var Glidera = (function () {
       });
     },
 
-    buyPrices: function(qty, callback) {
+    buyPrices: function(qty, mode, callback) {
+      var data = {};
+      if (mode == 'fiat') {
+        data['fiat'] = qty;
+      } else {
+        data['qty'] = qty;
+      }
       return this._request(true, '/prices/buy', {
         'method': 'POST',
-        'data': { 'qty': qty },
+        'data': data,
         'callback': callback
       });
     },
@@ -313,12 +319,16 @@ var Glidera = (function () {
       });
     },
 
-    sellPrices: function(qty, callback) {
+    sellPrices: function(qty, mode, callback) {
+      var data = {};
+      if (mode == 'fiat') {
+        data['fiat'] = qty;
+      } else {
+        data['qty'] = qty;
+      }
       return this._request(true, '/prices/sell', {
         'method': 'POST',
-        'data': {
-          'qty': qty
-        },
+        'data': data,
         'callback': callback
       });
     },

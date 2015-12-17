@@ -42,13 +42,17 @@
     factory.buyQty = 1;
     factory.sellQty = 1;
 
-    factory.setBuyQty = function(qty) {
+    factory.setBuyQty = function(qty, fiat, mode) {
       factory.buyQty = qty;
+      factory.buyFiatQty = fiat;
+      factory.buyMode = mode;
       factory.currentBuy = {};
       return factory.updateBuy();
     }
-    factory.setSellQty = function(qty) {
+    factory.setSellQty = function(qty, fiat, mode) {
       factory.sellQty = qty;
+      factory.sellFiatQty = fiat;
+      factory.sellMode = mode;
       factory.currentSell = {};
       return factory.updateSell();
     }
@@ -61,7 +65,8 @@
       if (cached(factory.currentBuy)) {
         deferred.resolve(cached(factory.currentBuy));
       } else {
-        glideraFactory.buyPrices(factory.buyQty, function(e, r, b) {
+        var qty = factory.buyMode == 'fiat' ? factory.buyFiatQty : factory.buyQty;
+        glideraFactory.buyPrices(qty, factory.buyMode, function(e, r, b) {
           factory.currentBuy = b;
           if (r == 200) {
             deferred.resolve(b);
@@ -82,7 +87,8 @@
       if (cached(factory.currentSell)) {
         deferred.resolve(cached(factory.currentSell));
       } else {
-        glideraFactory.sellPrices(factory.sellQty, function(e, r, b) {
+        var qty = factory.sellMode == 'fiat' ? factory.sellFiatQty : factory.sellQty;
+        glideraFactory.sellPrices(qty, factory.sellMode, function(e, r, b) {
           factory.currentSell = b;
           if (r == 200) {
             deferred.resolve(b);
