@@ -148,6 +148,9 @@
             account.occupation = Occupations.find(b.occupation);
             account.employerName = b.employerName;
             account.employerDescription = b.employerDescription;
+            if (!account.last4Ssn) {
+              account.last4Ssn = b.last4Ssn;
+            }
             ExchangeFactory.updateCurrency(account.country);
 
             if (b.birthDate) {
