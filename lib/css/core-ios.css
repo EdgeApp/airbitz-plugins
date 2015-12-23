@@ -5,3 +5,11 @@
 .ng-trans-fade.ng-enter.ng-enter-active {
   display: block;
 }
+.add-funds-header {font-family:Helvetica, Arial, sans-serif;}
+.title-header     {font-family:Helvetica, Arial, sans-serif;}
+.title-header-2   {font-family:Helvetica, Arial, sans-serif;}
+.card-balance     {font-family:Helvetica, Arial, sans-serif;}
+.card-balance-amt {font-family:Helvetica, Arial, sans-serif;}
+.card-value       {font-family:Helvetica, Arial, sans-serif;}
+.card-info        {font-family:Helvetica, Arial, sans-serif;}
+.buy-card         {font-family:Helvetica, Arial, sans-serif;}
