@@ -115,26 +115,6 @@ function logStats(event, brand, amount) {
     });
 }
 
-function sRequest(url, json, handleReponse) {
-    $.ajax({
-        headers: {
-            'Accept' : 'application/json',
-            'Content-Type' : 'application/json',
-            'X-CFC-PartnerToken': api_token,
-        },
-        'type' : 'POST',
-        'url' : url,
-        'data' : JSON.stringify(json),
-        'dataType': 'json',
-        success : function(response) {
-            handleReponse(response);
-        }
-    }).fail(function(xhr, textStatus, error) {
-        Airbitz.ui.debugLevel(1,"There was an error. Status: " + xhr.status);
-        Airbitz.ui.debugLevel(1,xhr.Message);
-    });
-}
-
 function sRequestHandler(url, json, handleReponse, handleError) {
     $.ajax({
         headers: {
@@ -172,7 +152,7 @@ var Account = {
             "random_password": true
         }]}
 
-        sRequest(url, newAcc, function(r) {
+        sRequestHandler(url, newAcc, function(r) {
             //Airbitz.ui.debugLevel(1,r);
             Account.username = r['users'][0]['username'];
             Account.pass = r['users'][0]['password'];
@@ -183,15 +163,19 @@ var Account = {
             Airbitz.core.writeData("fold-username", Account.username);
             Airbitz.core.writeData("fold-pass", Account.pass);
             Account.exists.resolve();
+        }, function(error) {
+            Airbitz.ui.showAlert("Account creation error", "Error creating account. Please try again later");
         });
     },
 
     login: function() {
         var url = fold_api + "my/session";
         Airbitz.ui.debugLevel(1,Account.creds);
-        sRequest(url, Account.creds, function(r) {
+        sRequestHandler(url, Account.creds, function(r) {
             //Airbitz.ui.debugLevel(1,"Logging in" + JSON.stringify(r));
             Account.logged_in.resolve(r);
+        }, function(error) {
+            Airbitz.ui.showAlert("Login error", "Error logging into account. Please try again later");
         });
     },
     updateBalance: function() {
@@ -576,7 +560,7 @@ var Account = {
         }
         var url = fold_api + "my/orders";
         Airbitz.ui.debugLevel(1,"Getting new order");
-        sRequest(url, newOrder, function(r) {
+        sRequestHandler(url, newOrder, function(r) {
             Airbitz.ui.debugLevel(1,"Order: " + JSON.stringify(r));
             var amt = (r["orders"][0]["price"]["amount"] * 100000000);
             var toAddr = r["orders"][0]["payment"][0]["address"];
@@ -610,17 +594,8 @@ var Account = {
                             Airbitz.ui.debugLevel(1,"Funds were not sent.");
                         }
                     });
-        });
-    },
-    approveOrder: function(order_id) { // Manually Approve an order
-        var cOrder = {"orders": [{
-            "id": String(order_id),
-            "approved": true
-        }]}
-        sRequest(fold_api + "my/orders", cOrder, function(r) {
-            Airbitz.ui.debugLevel(1,"Approving order");
-            Account.clearOwl();
-            //Airbitz.ui.debugLevel(1,r);
+        }, function(error) {
+            Airbitz.ui.showAlert("Server error", "Error making purchase. Please contact support");
         });
     }
 }
