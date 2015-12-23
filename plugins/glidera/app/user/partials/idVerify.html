@@ -1,8 +1,31 @@
-<iframe id="glidera-iframe" ng-src="{{ iframeUrl }}" frameBorder="0"></iframe>
-
-<div class="return-to-dashboard relative ng-trans ng-trans-fade-up easeOutSine">
+<form name="form" novalidate style="margin: 20px 0">
   <div class="row">
-    <div class="col-xs-12 no-pad">
-      <button type="button" ui-sref="dashboard" class="btn btn-block btn-lg btn-info">Dashboard</button>
+    <div class="form-group col-xs-12">
+      Please upload photo of a government issued identity document: <br />
+      - Driver’s license <br />
+      - State ID <br />
+      - Passport <br />
+    </div>
   </div>
-</div>
+
+  <div class="row">
+    <div class="form-group col-xs-12">
+      <button type="button" ng-click="loadPhoto()" class="btn btn-lg"
+        ng-class="{'btn-success': photo.length > 0, 'btn-info': photo.length == 0}">Attach Photo Verification</button>
+    </div>
+  </div>
+
+  <div class="row no-pad">
+    <div class="col-xs-6 no-pad">
+      <button type="button"
+        ng-click="cancel()"
+        class="btn btn-lg btn-block btn-danger">Cancel</button>
+    </div>
+    <div class="col-xs-6 no-pad">
+      <button type="button"
+        ng-click="save()" 
+        ng-disabled="form.$invalid || photo.length == 0"
+        class="btn btn-lg btn-block btn-success">Upload</button>
+    </div>
+  </div>
+</form>

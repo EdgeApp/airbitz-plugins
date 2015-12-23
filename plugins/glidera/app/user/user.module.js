@@ -8,7 +8,7 @@
     .controller('userAccountController', ['$scope', '$state', 'Error', 'States', 'Occupations', 'UserFactory', 'ExchangeFactory', userAccountController])
     .controller('bankAccountController', ['$scope', '$sce', '$state', 'UserFactory', bankAccountController])
     .controller('increaseLimitsController', ['$scope', '$sce', '$state', 'UserFactory', increaseLimitsController])
-    .controller('idVerifyController', ['$scope', '$sce', '$state', 'UserFactory', idVerifyController])
+    .controller('idVerifyController', ['$scope', '$sce', '$state', 'UserFactory', 'Error', idVerifyController])
     .controller('disclaimerController', ['$scope', '$state', 'Error', 'States', 'UserFactory', disclaimerController])
     .controller('authController', ['$scope', '$state', '$location', 'UserFactory', authController])
     .controller('verifyEmailController', ['$scope', '$state', 'Error', 'UserFactory', verifyEmailController])
@@ -215,14 +215,36 @@
     $scope.iframeUrl = $sce.trustAsResourceUrl(url);
   }
 
-  function idVerifyController($scope, $sce, $state, UserFactory) {
+  function idVerifyController($scope, $sce, $state, UserFactory, Error) {
     $scope.userStatus = UserFactory.getUserAccountStatus();
     var url = '';
+    Airbitz.ui.title('Photo Identification');
 
-    Airbitz.ui.title('Additional User Info');
-    url = UserFactory.idVerifyRedirect();
+    $scope.photo = '';
+    $scope.loadPhoto = function() {
+      Airbitz.core.requestFile({
+        success: function(data) {
+          $scope.$apply(function() {
+            $scope.photo = 'data:image/jpeg;base64,' + data;
+          });
+        },
+        error: function() { }
+      });
+    };
 
-    $scope.iframeUrl = $sce.trustAsResourceUrl(url);
+    $scope.cancel = function(){
+      $state.go('dashboard');
+    };
+
+    $scope.save = function() {
+      Airbitz.ui.showAlert('Saved', 'Uploading identification...', {'showSpinner': true});
+      UserFactory.userIdVerify($scope.photo).then(function() {
+        Airbitz.ui.hideAlert();
+        $state.go('dashboard');
+      }, function(e) {
+        Error.reject(e);
+      });
+    };
   }
 
   function userAccountController($scope, $state, Error, States, Occupations, UserFactory, ExchangeFactory) {

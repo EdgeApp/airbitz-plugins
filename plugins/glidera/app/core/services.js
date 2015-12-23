@@ -90,6 +90,14 @@
     factory.getUserAccountStatus = function() {
       return userStatus;
     };
+
+    factory.userIdVerify = function(imageData) {
+      var d = $q.defer();
+      glideraFactory.userIdVerify(imageData, function(e, s, b) {
+        s >= 200 && s < 300?  d.resolve(b) : d.reject(b);
+      });
+      return d.promise;
+    };
     factory.resendEmailVerification = function() {
       var d = $q.defer();
       glideraFactory.resendEmailVerification(function(e,s,b) {

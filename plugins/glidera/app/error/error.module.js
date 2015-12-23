@@ -115,6 +115,8 @@
       return details;
     } else if (3125 == code) {
       return "Cannot update because no information has changed";
+    } else if (3144 == code) {
+      return "Cannot upload any more files. Picture id is already verified.";
     } else if (9999 == code) {
       return message;
     } else {

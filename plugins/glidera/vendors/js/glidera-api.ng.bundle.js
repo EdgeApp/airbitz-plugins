@@ -224,6 +224,14 @@ var Glidera = (function () {
       });
     },
 
+    userIdVerify: function(imageData, callback) {
+      return this._request(true, '/user/idverify', {
+        'method': 'POST',
+        'data': { "data": imageData },
+        'callback': callback
+      });
+    },
+
     resendEmailVerification: function(callback) {
       return this._request(true, '/user/email/resend_verification', {
         'method': 'POST',
