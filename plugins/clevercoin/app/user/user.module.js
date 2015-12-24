@@ -5,7 +5,7 @@
     .module('app.user', ['app.dataFactory', 'app.constants'])
     .controller('homeController', ['$scope', '$state', '$location', 'UserFactory', homeController])
     .controller('pendingActivationController', ['$scope', '$state', 'Error', 'UserFactory', pendingActivationController])
-    .controller('activateController', ['$scope', '$state', '$stateParams', '$timeout', 'Error', 'UserFactory', activateController])
+    .controller('activateController', ['$scope', '$state', '$stateParams', 'Error', 'UserFactory', activateController])
     .controller('dashboardController', ['$scope', '$sce', '$state', 'Error', 'DataFactory', 'UserFactory', 'Prices', dashboardController])
     .controller('signupController', ['$scope', '$state', 'Error', 'UserFactory', signupController])
     .controller('linkController', ['$scope', '$state', 'Error', 'UserFactory', linkController])
@@ -97,20 +97,18 @@
     };
   }
 
-  function activateController($scope, $state, $stateParams, $timeout, Error, UserFactory) {
+  function activateController($scope, $state, $stateParams, Error, UserFactory) {
     Airbitz.ui.title('Activating your account');
     Airbitz.ui.showAlert('', 'Activating account.', {
       'showSpinner': true
     });
-    $timeout(function() {
-      UserFactory.activate($stateParams.email, $stateParams.token).then(function(b) {
-        Airbitz.ui.showAlert('', 'Account activated');
-        $state.go("dashboard");
-      }, function(b) {
-        Airbitz.ui.showAlert('', 'Unable to activate account.');
-        $state.go("pendingActivation");
-      });
-    }, 5000);
+    UserFactory.activate($stateParams.email, $stateParams.token).then(function(b) {
+      Airbitz.ui.showAlert('', 'Account activated');
+      $state.go("dashboard");
+    }, function(b) {
+      Airbitz.ui.showAlert('', 'Unable to activate account.');
+      $state.go("pendingActivation");
+    });
   }
 
   function dashboardController($scope, $sce, $state, Error, DataFactory, UserFactory, Prices) {
