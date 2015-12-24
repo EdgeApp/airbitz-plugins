@@ -16,6 +16,10 @@ var min_price_rate = 1;
 var refund_enabled = 0;
 var bizId = 0;
 
+// Purchases over this amount are given a popup warning as 1 confirmation is required
+// before card is available
+var large_value_threshold = 50;
+
 var brand_logo_urls = {
     "Starbucks" : "https://airbitz.co/go/wp-content/uploads/2015/12/green-coffee-mug-128px.png", // Starbucks
     "Target" : "https://airbitz.co/go/wp-content/uploads/2015/12/red-bulls-eye-128px.png" // Target
@@ -571,6 +575,9 @@ var Account = {
                 categoryString = 'Expense:Coffee Shops';
             } else if (brand == "Target") {
                 categoryString = 'Expense:Shopping';
+            }
+            if (large_value_threshold < denomination) {
+                Airbitz.ui.showAlert("High Value Card", "You are purchasing a card over $50 in value. This requires one bitcoin network confirmation before your card will be available and may take over 10 minutes.");
             }
             Airbitz.core.requestSpend(Account.abWallet,
                     toAddr, amt, 0, {
