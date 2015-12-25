@@ -169,6 +169,7 @@ var Account = {
             Account.exists.resolve();
         }, function(error) {
             Airbitz.ui.showAlert("Account creation error", "Error creating account. Please try again later");
+            Airbitz.ui.exit();
         });
     },
 
@@ -180,6 +181,7 @@ var Account = {
             Account.logged_in.resolve(r);
         }, function(error) {
             Airbitz.ui.showAlert("Login error", "Error logging into account. Please try again later");
+            Airbitz.ui.exit();
         });
     },
     updateBalance: function() {
