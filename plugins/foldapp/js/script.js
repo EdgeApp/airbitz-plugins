@@ -466,6 +466,7 @@ var Account = {
             var all_brands = cards_avil["brands"];
             var brands_cards = "";
             min_price_rate = 1.0;
+
             for(var ic in all_brands) {
                 if(typeof all_brands[ic] === 'undefined') server_json_error = true;
                 else if(typeof all_brands[ic]["id"] === 'undefined') server_json_error = true;
@@ -504,6 +505,14 @@ var Account = {
                     var card_vals = brands_cards["card_values"];
                     $(".add-buttons").html(""); // Wipe out any cards that are currently there.
                     var addTemplateHtml = "";
+
+                    // Sort cards from lowest to highest
+                    card_vals.sort(function(a, b){
+                        if (a["amount"] < b["amount"]) return -1;
+                        if (b["amount"] < a["amount"]) return 1;
+                        else return 0;
+                    });
+
                     for(ic in card_vals) {
                         numCardsToBuy++;
                         var price_rate = parseFloat(card_vals[ic]["price_rate"]);
