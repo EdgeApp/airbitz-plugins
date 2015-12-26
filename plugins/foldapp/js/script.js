@@ -506,9 +506,7 @@ var Account = {
 
                     // Sort cards from lowest to highest
                     card_vals.sort(function(a, b){
-                        if (a["amount"] < b["amount"]) return -1;
-                        if (b["amount"] < a["amount"]) return 1;
-                        else return 0;
+                        return a["amount"] - b["amount"];
                     });
 
                     for(ic in card_vals) {
