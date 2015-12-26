@@ -75,7 +75,7 @@ var createAddress = function(wallet, label, amountSatoshi, amountFiat,
         notes: notes,
         amountSatoshi: amountSatoshi,
         amountFiat: amountFiat,
-        bizId: bizId,
+        bizId: parseInt(bizId),
         success: function(data) {
             Airbitz.core.finalizeRequest(wallet, data["requestId"]);
             resolve(data);
@@ -585,7 +585,7 @@ var Account = {
                         label: brand,
                         category: category,
                         notes: brand + " $" + String(denomination) + " gift card.",
-                        bizId: bizId,
+                        bizId: parseInt(bizId),
                         success: function(res) {
                             if (res && res.back) {
                                 // User pressed backed button
