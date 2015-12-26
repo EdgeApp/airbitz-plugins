@@ -9,21 +9,19 @@ var CardsChanged = {
 var fold_api = "https://api.foldapp.com/v1/";
 var brand = Airbitz.config.get("BRAND");
 var api_token = Airbitz.config.get("API-TOKEN");
+var bizId = Airbitz.config.get("BIZID");
+var logo_url = Airbitz.config.get("LOGO_URL");
+var category = Airbitz.config.get("CATEGORY");
 var server_json_error = false;
 var first_load = 1;
 var force_refresh = 1;
 var min_price_rate = 1;
 var refund_enabled = 0;
-var bizId = 0;
 
 // Purchases over this amount are given a popup warning as 1 confirmation is required
 // before card is available
 var large_value_threshold = 50;
 
-var brand_logo_urls = {
-    "Starbucks" : "https://airbitz.co/go/wp-content/uploads/2015/12/green-coffee-mug-128px.png", // Starbucks
-    "Target" : "https://airbitz.co/go/wp-content/uploads/2015/12/red-bulls-eye-128px.png" // Target
-};
 document.title = brand; // Set page's title to brand of gift card.
 
 function resetAccount() {
@@ -581,19 +579,13 @@ var Account = {
             var toAddr = r["orders"][0]["payment"][0]["address"];
             Airbitz.ui.debugLevel(1,"Spending " + amt + " from wallet: " + user.abWallet + " to: " + toAddr);
             Airbitz.ui.debugLevel(1,"Fiat amt: " + denomination)
-            var categoryString = "";
-            if (brand == "Starbucks") {
-                categoryString = 'Expense:Coffee Shops';
-            } else if (brand == "Target") {
-                categoryString = 'Expense:Shopping';
-            }
             if (large_value_threshold < denomination) {
                 Airbitz.ui.showAlert("High Value Card", "You are purchasing a card over $50 in value. This requires one bitcoin network confirmation before your card will be available and may take over 10 minutes.");
             }
             Airbitz.core.requestSpend(Account.abWallet,
                     toAddr, amt, 0, {
                         label: brand,
-                        category: categoryString,
+                        category: category,
                         notes: brand + " $" + String(denomination) + " gift card.",
                         bizId: bizId,
                         success: function(res) {
@@ -636,13 +628,7 @@ Card.prototype.refund = function() {
         var refund = {"refunds": [{
             "card_id": this.id
         }]};
-        var categoryString = "";
-        if (brand == "Starbucks") {
-            categoryString = 'Expense:Coffee Shops';
-        } else if (brand == "Target") {
-            categoryString = 'Expense:Shopping';
-        }
-        createAddress(Account.abWallet, brand, 0, 0, categoryString, "Refunded " + brand + " gift card.",
+        createAddress(Account.abWallet, brand, 0, 0, category, "Refunded " + brand + " gift card.",
                 function(data) {
                     Account.updateWAddr(data["address"], function() {
                         sRequestHandler(url, refund, function(response) {
@@ -770,21 +756,15 @@ $(function() {
         });
     });
     // UI stuff
-    Airbitz.ui.debugLevel(1,"logo: " + brand_logo_urls[brand]);
+    Airbitz.ui.debugLevel(1,"logo: " + logo_url);
     $(".brand-name").text(brand);
-
-    if (brand == "Starbucks") {
-        bizId = 11131; // currently fold, update to starbucks
-    } else if (brand == "Target") {
-        bizId = 11132; // currenty fold, update to target
-    }
 
     if (server_json_error) {
         Airbitz.ui.showAlert("Server Response Error", "Error in Server response. Please contact support");
         Airbitz.ui.debugLevel(1,"Error in Server response. Please contact support");
     }
 
-    $(".brand-logo").attr("src", brand_logo_urls[brand]);
+    $(".brand-logo").attr("src", logo_url);
     $(".user-creds").html("Username: " + Account.username  + "<br>Password: " + Account.pass);
     $(".support-mail-link").html("<a href=\"mailto:support@foldapp.com?subject=Support%20Requested&Body=" + "Username:" + Account.username + "\">support@foldapp.com.</a>");
 });
