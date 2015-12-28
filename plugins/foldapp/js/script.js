@@ -571,12 +571,14 @@ var Account = {
         }
         var url = fold_api + "my/orders";
         Airbitz.ui.debugLevel(1,"Getting new order");
+        Airbitz.ui.showAlert('', 'Creating Order', {'showSpinner': true});
         sRequestHandler(url, newOrder, function(r) {
             Airbitz.ui.debugLevel(1,"Order: " + JSON.stringify(r));
             var amt = (r["orders"][0]["price"]["amount"] * 100000000);
             var toAddr = r["orders"][0]["payment"][0]["address"];
             Airbitz.ui.debugLevel(1,"Spending " + amt + " from wallet: " + user.abWallet + " to: " + toAddr);
             Airbitz.ui.debugLevel(1,"Fiat amt: " + denomination)
+            Airbitz.ui.hideAlert();
             if (large_value_threshold < denomination) {
                 Airbitz.ui.showAlert("High Value Card", "You are purchasing a card over $50 in value. This requires one bitcoin network confirmation before your card will be available and may take over 10 minutes.");
             }
