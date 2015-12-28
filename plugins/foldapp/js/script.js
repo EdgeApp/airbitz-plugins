@@ -528,7 +528,7 @@ var Account = {
                     });
                 }
                 if (numCardsToBuy) {
-                    $(".add-funds-header").text("Add Funds");
+                    $(".add-funds-header").text("Buy Gift Card");
                 } else {
                     $(".add-funds-header").text("Sorry, no cards available");
                 }
