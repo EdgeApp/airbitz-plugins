@@ -504,23 +504,25 @@ var Account = {
                     $(".add-buttons").html(""); // Wipe out any cards that are currently there.
                     var addTemplateHtml = "";
 
-                    // Sort cards from lowest to highest
-                    card_vals.sort(function(a, b){
-                        return a["amount"] - b["amount"];
-                    });
+                    if (card_vals) {
+                      // Sort cards from lowest to highest
+                      card_vals.sort(function(a, b){
+                          return a["amount"] - b["amount"];
+                      });
 
-                    for(ic in card_vals) {
-                        numCardsToBuy++;
-                        var price_rate = parseFloat(card_vals[ic]["price_rate"]);
+                      for(ic in card_vals) {
+                          numCardsToBuy++;
+                          var price_rate = parseFloat(card_vals[ic]["price_rate"]);
 
-                        Airbitz.ui.debugLevel(1,"Listing card " + ic);
-                        var source = $("#add-funds").html();
-                        var addTemplate = Handlebars.compile(source);
+                          Airbitz.ui.debugLevel(1,"Listing card " + ic);
+                          var source = $("#add-funds").html();
+                          var addTemplate = Handlebars.compile(source);
 
-                        var thisCard = {
-                            cardValue: "<h4 class=\"card-value\" value=\"" + card_vals[ic]["amount"] + "\">" + card_vals[ic]["formatted"]["all_decimal_places"] + "</h4>"
-                        }
-                        var addTemplateHtml = addTemplateHtml + addTemplate(thisCard);
+                          var thisCard = {
+                              cardValue: "<h4 class=\"card-value\" value=\"" + card_vals[ic]["amount"] + "\">" + card_vals[ic]["formatted"]["all_decimal_places"] + "</h4>"
+                          }
+                          var addTemplateHtml = addTemplateHtml + addTemplate(thisCard);
+                      }
                     }
                     $(".add-buttons").html(addTemplateHtml);
                     $(".buy-card").off().on('click', function() {
