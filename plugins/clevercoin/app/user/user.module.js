@@ -69,7 +69,12 @@
         Airbitz.ui.showAlert('', 'Account created...');
         $state.go('pendingActivation');
       }, function(e) {
-        Airbitz.ui.showAlert('Error', 'Error signing up');
+        console.log(e);
+        var msg = 'Unable to signup at this time. ';
+        if (e.error) {
+          msg += e.error;
+        }
+        Airbitz.ui.showAlert('Error', msg);
       });
     };
   }
