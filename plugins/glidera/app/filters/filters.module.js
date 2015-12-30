@@ -1,6 +1,7 @@
 (function() {
   angular.module('app.filters', [])
     .filter('statusFilter', statusFilter)
+    .filter('stateFilter', stateFilter)
     .filter('titlecase', titleCase)
     .filter('roundFiat', roundFiat)
     .filter('formatBtc', ['$filter', formatBtc])
@@ -11,6 +12,22 @@
   function statusFilter() {
     return function(status) {
       return (status) ? 'Verified' : 'Unverified';
+    };
+  }
+
+  function stateFilter() {
+    return function(state) {
+      if (state == 'UNSUBMITTED') {
+        return 'Unsubmitted';
+      } else if (state == 'SUBMITTED') {
+        return 'Submitted';
+      } else if (state == 'VERIFIED') {
+        return 'Verified';
+      } else if (state == 'FAILED') {
+        return 'Failed';
+      } else {
+        return state;
+      }
     };
   }
 

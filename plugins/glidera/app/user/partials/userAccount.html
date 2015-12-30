@@ -17,7 +17,7 @@
       <label for="inputLastName" class="sr-only">Last</label>
       <input ng-model="account.lastName" ng-required="true"
       type="text" id="inputLastName" class="form-control large"
-      placeholder="Last name" autofocus="" autocomplete="off" autocorrect="off"
+      placeholder="Last name" autocomplete="off" autocorrect="off"
       name="lastName"
       required="" />
       <div class="input-error" ng-show="form.$submitted || form.lastName.$touched">
@@ -29,7 +29,7 @@
       <label for="inputAddress" class="">Address</label>
       <input ng-model="account.address1"
       type="text" id="inputAddressStreet" class="form-control large"
-      placeholder="Address" autofocus="" autocomplete="off" autocorrect="off"
+      placeholder="Address"  autocomplete="off" autocorrect="off"
       name="address"
       required="" />
       <div class="input-error" ng-show="form.$submitted || form.address.$touched">
@@ -41,14 +41,14 @@
       <label for="inputAddress2" class="sr-only">Address 2</label>
       <input ng-model="account.address2"
       type="text" id="inputAddressStreet2" class="form-control large"
-      placeholder="Address 2" autofocus="" autocomplete="off" autocorrect="off" />
+      placeholder="Address 2" autocomplete="off" autocorrect="off" />
     </div>
 
     <div class="form-group">
       <label for="inputAddressCity" class="sr-only">City</label>
       <input ng-model="account.city"
       type="text" id="inputAddressCity" class="form-control large"
-      placeholder="City" autofocus="" autocomplete="off" autocorrect="off"
+      placeholder="City" autocomplete="off" autocorrect="off"
       name="city"
       required="" />
       <div class="input-error" ng-show="form.$submitted || form.city.$touched">
@@ -61,7 +61,7 @@
         <label for="inputAddressZip" class="sr-only">Postal Code</label>
         <input ng-model="account.zipCode"
         type="text" id="inputAddressZip" class="form-control large"
-        placeholder="Postal Code" autofocus="" autocomplete="off" autocorrect="off"
+        placeholder="Postal Code" autocomplete="off" autocorrect="off"
         name="zip"
         required="" />
         <div class="input-error" ng-show="form.$submitted || form.zip.$touched">
@@ -83,7 +83,7 @@
     <div class="form-group">
       <label for="inputDob" class="">Date of Birth</label>
       <input ng-model="account.birthDate"
-        type="date" id="inputDob" class="form-control large" placeholder="YYYY-MM-DD" autofocus=""
+        type="date" id="inputDob" class="form-control large" placeholder="YYYY-MM-DD"
         autocomplete="off"
         name="dob"
         required="" />
@@ -110,7 +110,7 @@
       <label for="inputEmployerName" class="">Employer Name</label>
       <input ng-model="account.employerName" ng-required="true"
              type="text" id="inputEmployerName" class="form-control large"
-             placeholder="Employer name" autofocus="true" autocomplete="off" autocorrect="off"
+             placeholder="Employer name" autocomplete="off" autocorrect="off"
              name="employerName" 
              ng-required="account.occupation.id == OTHER"/>
       <div class="input-error" ng-show="form.$submitted || form.employerName.$touched">
@@ -134,8 +134,8 @@
       <div class="no-pad-left form-group col-xs-12">
         <label for="last4Ssn">Last 4 of SSN</label>
         <input ng-model="account.last4Ssn"
-        type="text" id="last4Ssn" class="form-control large"
-        placeholder="Last 4 SSN" autofocus="" autocomplete="off" autocorrect="off"
+        type="number" id="last4Ssn" class="form-control large"
+        placeholder="Last 4 SSN" autocomplete="off" autocorrect="off"
         name="last4Ssn"
         required="" />
         <div class="input-error" ng-show="form.$submitted || form.last4Ssn.$touched">
