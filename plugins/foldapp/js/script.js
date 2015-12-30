@@ -29,9 +29,13 @@ function resetAccount() {
     if (confirm("Reset Account? This will delete all cards and create a new account with Fold") == true) {
         if (confirm("Reset Account? ARE YOU SURE. All cards from all vendors will be lost?") == true) {
             if (confirm("Reset Account? ARE YOU REALLY SURE?") == true) {
-                Account.create();
-                Airbitz.ui.showAlert("New Account Created", "New Account Created. Please re-enter to use new account");
-                Airbitz.ui.exit();
+                Account.createWithHandler(function(){
+                    Airbitz.ui.debugLevel(1,"New account creation for reset succeeded.");
+                    Airbitz.ui.exit();
+                }, function(){
+                    Airbitz.ui.showAlert("New Account Creation Failed", "New Account Creation Failed. Please check network or try again later");
+                    Airbitz.ui.debugLevel(1,"New account creation for reset failed.");
+                });
             }
         }
     }
@@ -147,6 +151,14 @@ var Account = {
     numUpdates: 0,
     current_card_id: "", // The currently visible card id. used to ping Fold servers for balance update
     create: function() {
+        Account.createWithHandler(function(){
+            Airbitz.ui.debugLevel(1,"Account created successfully");
+        },function(){
+            Airbitz.ui.showAlert("Account creation error", "Error creating account. Please try again later");
+        });
+    },
+
+    createWithHandler: function(handleReponse, handleError) {
         Airbitz.ui.debugLevel(1,"Creating user.");
         var url = fold_api + "users";
         var newAcc = {"users": [{
@@ -165,9 +177,9 @@ var Account = {
             Airbitz.core.writeData("fold-username", Account.username);
             Airbitz.core.writeData("fold-pass", Account.pass);
             Account.exists.resolve();
+            handleReponse();
         }, function(error) {
-            Airbitz.ui.showAlert("Account creation error", "Error creating account. Please try again later");
-            Airbitz.ui.exit();
+            handleError();
         });
     },
 
@@ -179,7 +191,6 @@ var Account = {
             Account.logged_in.resolve(r);
         }, function(error) {
             Airbitz.ui.showAlert("Login error", "Error logging into account. Please try again later");
-            Airbitz.ui.exit();
         });
     },
     updateBalance: function() {
