@@ -12,6 +12,7 @@ var api_token = Airbitz.config.get("API-TOKEN");
 var bizId = Airbitz.config.get("BIZID");
 var logo_url = Airbitz.config.get("LOGO_URL");
 var category = Airbitz.config.get("CATEGORY");
+var statsKey = Airbitz.config.get('AIRBITZ_STATS_KEY');
 var server_json_error = false;
 var first_load = 1;
 var force_refresh = 1;
@@ -93,10 +94,9 @@ function updateWallet(wallet) {
 }
 
 function logStats(event, brand, amount) {
-    var statsKey = Airbitz.config.get('AIRBITZ_STATS_KEY');
     var s = {};
     s['btc'] = 0;
-    s['partner'] = 'Fold:';
+    s['partner'] = 'Fold';
     s['country'] = 'USA';
     s['brand'] = brand;
     s['usd'] = amount;
