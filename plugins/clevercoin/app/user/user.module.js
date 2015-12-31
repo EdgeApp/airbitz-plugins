@@ -70,10 +70,7 @@
         $state.go('pendingActivation');
       }, function(e) {
         console.log(e);
-        var msg = 'Unable to signup at this time. ';
-        if (e.error) {
-          msg += e.error;
-        }
+        var msg = 'Unable to signup at this time.\n' + Error.errorMap(e);
         Airbitz.ui.showAlert('Error', msg);
       });
     };
@@ -327,10 +324,7 @@
         $state.go('dashboard');
       }, function(e) {
         console.log(e);
-        var msg = 'Unable to submit identity information at this time. ';
-        if (e.error) {
-          msg += e.error;
-        }
+        var msg = 'Unable to submit identity information at this time.\n' + Error.errorMap(e);
         Airbitz.ui.showAlert('', msg);
       });
     };
