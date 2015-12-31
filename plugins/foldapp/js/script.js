@@ -532,7 +532,7 @@ var Account = {
                           var addTemplate = Handlebars.compile(source);
 
                           var thisCard = {
-                              cardValue: "<h4 class=\"card-value\" value=\"" + card_vals[ic]["amount"] + "\">" + card_vals[ic]["formatted"]["all_decimal_places"] + "</h4>"
+                              cardValue: "<span class=\"card-value\" value=\"" + card_vals[ic]["amount"] + "\">" + card_vals[ic]["formatted"]["all_decimal_places"] + "</span>"
                           }
                           var addTemplateHtml = addTemplateHtml + addTemplate(thisCard);
                       }

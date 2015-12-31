@@ -75,9 +75,13 @@
 </script>
 <script id="add-funds" type="text/x-handlebars-template">
 <li class="collection-item avatar card-list">
-    <span class="title">{{{cardValue}}}</span>
-    <div class="secondary-content">
-        <button type="button" class="buy-card">Buy</button>
+    <div style="position:relative">
+        <div style="position:absolute; top:50%; height:10em; margin-top:-4.5em;">
+            <span class="title">{{{cardValue}}}</span>
+        </div>
+        <div style="position:absolute; top:50%; height:10em; margin-top:-5em; right:0;">
+            <button type="button" style="float: right;" class="buy-card">Buy</button>
+        </div>
     </div>
 </li>
 </script>
