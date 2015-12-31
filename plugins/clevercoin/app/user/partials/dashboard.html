@@ -21,7 +21,7 @@
   </div>
 </div>
 
-<div class="row" ng-if="wallets.length > 0">
+<div ng-if="userStatus.userCanTransact" class="row" ng-if="wallets.length > 0">
   <table class="table table-bordered table-striped col-xs-12 no-pad">
     <tr>
       <th>CleverCoin Balance</th>

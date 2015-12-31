@@ -191,7 +191,11 @@
         msg += '<h5><strong>' + counter + "</strong>. Address verification pending review.</h5>";
       } else if (!$scope.userStatus.userAddressSetup) {
         counter++;
-        msg += '<h5><strong>' + counter + "</strong>. Please verify your address</h5>";
+        msg += '<h5><strong>' + counter + "</strong>. Please verify your address.</h5>";
+      }
+      if ($scope.banks.length == 0) {
+        counter++;
+        msg += '<h5><strong>' + counter + "</strong>. Please add a bank account.</h5>";
       }
       if (msg !== '') {
         msg = '<h4 style="margin-top: 0;">To Buy or Sell Bitcoin:</h4>' + msg;
