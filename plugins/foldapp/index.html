@@ -8,37 +8,6 @@
     <link rel="stylesheet" href="css/core.css">
     <link rel="stylesheet" href="vendors/owl-carousel/owl.carousel.css"> <!-- Basic stylesheet -->
     <link rel="stylesheet" href="vendors/owl-carousel/owl.theme.css"> <!-- Default Theme -->
-    <style type="text/css">
-        <!--
-        .add-funds-header {font-family: Lato, Verdana, Arial, Helvetica, sans-serif; font-size:16pt; color: #007aFF; height: 70px}
-        .title-header     {font-family: Lato, Verdana, Arial, Helvetica, sans-serif; font-size:16pt; color: #555555; padding-top: 10px; padding-bottom: 0px}
-        .title-header-2   {font-family: Lato, Verdana, Arial, Helvetica, sans-serif; font-size:16pt; color: #555555; padding-bottom: 5px}
-        .card-number      {font-family: Courier, serif; font-size:11pt; color: #555555}
-        .card-balance     {font-family: Lato, Verdana, Arial, Helvetica, sans-serif; font-size:11pt; color: #555555; padding-top: 5px}
-        .card-balance-amt {font-family: Lato, Verdana, Arial, Helvetica, sans-serif; font-size:20pt; color: #555555; padding-bottom: 10px}
-        .card-value       {font-family: Lato, Verdana, Arial, Helvetica, sans-serif; font-size:18pt; color: #555555; height: 50px}
-        .card-info        {font-family: Lato, Verdana, Arial, Helvetica, sans-serif; font-size:10pt; color: #007aFF; height: 20px}
-        .partner-logo     {height: 35px; align-content: center}
-        .collapsible-header {vert-align: middle}
-        .reset-account    {
-            background-color: #FFFFFF;
-            color: #FFFFFF;
-            border: 0px;
-        }
-        .buy-card         {
-            background-color: #FFFFFF;
-            -moz-border-radius: 10px;
-            -webkit-border-radius: 10px;
-            border: 1px solid #007aFF;
-            color: #007aFF;
-            padding-top: 3.5px;
-            padding-bottom: 3.5px;
-            padding-left: 9px;
-            padding-right: 9px;
-            font-family: Lato, Verdana, Arial, Helvetica, sans-serif; font-size:12pt;
-        }
-        -->
-    </style>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link type="text/css" rel="stylesheet" href="css/materialize.css"  media="screen,projection"/>
     <!-- https://airbitz.co/go/wp-content/uploads/2015/12/download.png -->
@@ -59,7 +28,7 @@
                 <ul class="collapsible" data-collapsible="accordion">
                     <li>
                         <div class="collapsible-header active">
-                            <div class="add-funds-header">Add Funds</div>
+                            <div class="add-funds-header">Buy Gift Card</div>
                         </div>
                         <div class="collapsible-body">
                             <ul class="collection add-buttons">
@@ -106,9 +75,13 @@
 </script>
 <script id="add-funds" type="text/x-handlebars-template">
 <li class="collection-item avatar card-list">
-    <span class="title">{{{cardValue}}}</span>
-    <div class="secondary-content">
-        <button type="button" class="buy-card">Buy</button>
+    <div style="position:relative">
+        <div style="position:absolute; top:50%; height:10em; margin-top:-4.5em;">
+            <span class="title">{{{cardValue}}}</span>
+        </div>
+        <div style="position:absolute; top:50%; height:10em; margin-top:-5em; right:0;">
+            <button type="button" style="float: right;" class="buy-card">Buy</button>
+        </div>
     </div>
 </li>
 </script>

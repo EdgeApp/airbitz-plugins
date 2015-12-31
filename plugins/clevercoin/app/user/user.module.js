@@ -6,7 +6,7 @@
     .controller('homeController', ['$scope', '$state', '$location', 'UserFactory', homeController])
     .controller('pendingActivationController', ['$scope', '$state', 'Error', 'UserFactory', pendingActivationController])
     .controller('activateController', ['$scope', '$state', '$stateParams', 'Error', 'UserFactory', activateController])
-    .controller('dashboardController', ['$scope', '$sce', '$state', 'Error', 'DataFactory', 'UserFactory', dashboardController])
+    .controller('dashboardController', ['$scope', '$sce', '$state', 'Error', 'DataFactory', 'UserFactory', 'Prices', dashboardController])
     .controller('signupController', ['$scope', '$state', 'Error', 'UserFactory', signupController])
     .controller('linkController', ['$scope', '$state', 'Error', 'UserFactory', linkController])
     .controller('userInformationController', ['$scope', '$state', 'Error', 'UserFactory', userInformationController])
@@ -69,7 +69,12 @@
         Airbitz.ui.showAlert('', 'Account created...');
         $state.go('pendingActivation');
       }, function(e) {
-        Airbitz.ui.showAlert('Error', 'Error signing up');
+        console.log(e);
+        var msg = 'Unable to signup at this time. ';
+        if (e.error) {
+          msg += e.error;
+        }
+        Airbitz.ui.showAlert('Error', msg);
       });
     };
   }
@@ -111,7 +116,7 @@
     });
   }
 
-  function dashboardController($scope, $sce, $state, Error, DataFactory, UserFactory) {
+  function dashboardController($scope, $sce, $state, Error, DataFactory, UserFactory, Prices) {
     Airbitz.ui.title('CleverCoin');
     // set variables that might be cached locally to make sure they load faster if available
     $scope.account = UserFactory.getUserAccount();
@@ -124,10 +129,14 @@
     };
     showOpts($scope.userStatus);
 
-    UserFactory.fetchAccount().then(function(account) {
-      $scope.account = account;
-    }, function() {
-      // Error, error
+    Prices.setBuyQty(1).then(function() {
+      return Prices.setSellQty(1);
+    }).then(function() {
+      return UserFactory.fetchAccount().then(function(account) {
+        $scope.account = account;
+      }, function() {
+        // Error, error
+      });
     }).then(function() {
       return UserFactory.fetchUserAccountStatus().then(function(b) {
         $scope.userStatus = b;

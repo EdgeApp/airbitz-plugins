@@ -188,6 +188,18 @@ var Glidera = (function () {
       return url;
     },
 
+    idVerifyRedirect: function(next, state) {
+      var nonce = new Date().getTime();
+      var url = [this.GLIDERA_URL, '/user/idverify',
+        '?redirect_uri=', encodeURIComponent(next),
+        '&state=', encodeURIComponent(state),
+        '&X-CLIENT-ID=', this.clientId,
+        '&X-ACCESS-KEY=', this.accessKey,
+        '&X-ACCESS-NONCE=', nonce].join('');
+      url += '&X-ACCESS-SIGNATURE=' + Glidera.hmacsha256(url, this.secret);
+      return url;
+    },
+
     isAuthorized: function() {
       return this.accessKey ? true : false;
     },
@@ -208,6 +220,14 @@ var Glidera = (function () {
       return this._request(true, '/user/personalinfo', {
         'method': 'POST',
         'data': data,
+        'callback': callback
+      });
+    },
+
+    userIdVerify: function(imageData, callback) {
+      return this._request(true, '/user/idverify', {
+        'method': 'POST',
+        'data': { "data": imageData },
         'callback': callback
       });
     },
@@ -268,10 +288,16 @@ var Glidera = (function () {
       });
     },
 
-    buyPrices: function(qty, callback) {
+    buyPrices: function(qty, mode, callback) {
+      var data = {};
+      if (mode == 'fiat') {
+        data['fiat'] = qty;
+      } else {
+        data['qty'] = qty;
+      }
       return this._request(true, '/prices/buy', {
         'method': 'POST',
-        'data': { 'qty': qty },
+        'data': data,
         'callback': callback
       });
     },
@@ -301,12 +327,16 @@ var Glidera = (function () {
       });
     },
 
-    sellPrices: function(qty, callback) {
+    sellPrices: function(qty, mode, callback) {
+      var data = {};
+      if (mode == 'fiat') {
+        data['fiat'] = qty;
+      } else {
+        data['qty'] = qty;
+      }
       return this._request(true, '/prices/sell', {
         'method': 'POST',
-        'data': {
-          'qty': qty
-        },
+        'data': data,
         'callback': callback
       });
     },

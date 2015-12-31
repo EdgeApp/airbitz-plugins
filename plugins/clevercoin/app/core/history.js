@@ -20,7 +20,9 @@
       }
       // if we are on the dashboard screen, empty history
       if (next.match(/\.html#\/dashboard\/$/)
-        || next.match(/\.html#\/signup\/$/)) {
+        || next.match(/\.html#\/signup\/$/)
+        || next.match(/\.html#\/activate\/.*$/)
+        || next.match(/\.html#\/pendingActivation\/$/)) {
         history.length = 0;
         Airbitz.ui.navStackClear();
       } else if (next.match(/\.html#\/receipt\/$/)) {

@@ -6,9 +6,14 @@
     <ul class="list-group">
       <li ng-click="showAccountOptions()" class="header list-group-item">
       <span class="list-group-item-heading">{{ account.firstname || titlecase }} {{ account.surname || titlecase }}</span>
-        <p class="list-group-item-text">{{ account.email || "Tap to view your account details" }}</p>
+        <p class="list-group-item-text">{{ "Tap to view your account details" }}</p>
         <label class="status label label-outline pull-right"
                ng-class="{'label-success': userStatus.userCanTransact}">{{ userStatus.userCanTransact | statusFilter }}</label>
+      </li>
+      <li ng-if="showOptions" class="ng-trans ng-trans-scale-up ng-trans-scale-up easeOutBack list-group-item">
+        <span class="list-group-item-heading">Email</span>
+        <p class="list-group-item-text">{{account.email || ''}}</p>
+        <label class="status label pull-right label-success">{{ true | statusFilter }}</label>
       </li>
       <li ng-if="showOptions" ng-click="userInformation()" class="ng-trans ng-trans-scale-up easeOutBack list-group-item">
         <span class="list-group-item-heading">User Information</span>

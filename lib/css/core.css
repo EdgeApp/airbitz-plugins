@@ -1046,7 +1046,6 @@ button.btn-add.btn {
   width: 90%;
 }
 .brand-logo {
-  width: 64px;
   height: 64px;
 }
 .card-barcode {
@@ -1096,4 +1095,31 @@ div.card.card-content.card-info-main {
   position: absolute;
   top: 5px;
   right: 5px;
+}
+.add-funds-header {font-size:16pt; color: #007aFF; height: 70px}
+.title-header     {font-size:16pt; color: #555555; padding-top: 10px; padding-bottom: 0px}
+.title-header-2   {font-size:16pt; color: #555555; padding-bottom: 5px}
+.card-balance     {font-size:11pt; color: #555555; padding-top: 5px}
+.card-balance-amt {font-size:20pt; color: #555555; padding-bottom: 10px}
+.card-value       {font-size:18pt; color: #555555; height: 50px}
+.card-info        {font-size:10pt; color: #007aFF; height: 20px}
+.card-number      {font-family: Courier, monospace, serif; font-size:13pt; color: #555555}
+.partner-logo     {height: 35px; align-content: center}
+.collapsible-header {vert-align: middle}
+.reset-account    {
+  background-color: #FFFFFF;
+  color: #FFFFFF;
+  border: 0px;
+}
+.buy-card         {
+  background-color: #FFFFFF;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  border: 1px solid #007aFF;
+  color: #007aFF;
+  padding-top: 3.5px;
+  padding-bottom: 3.5px;
+  padding-left: 9px;
+  padding-right: 9px;
+  font-size:12pt;
 }

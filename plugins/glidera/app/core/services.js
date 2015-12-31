@@ -47,6 +47,9 @@
     factory.userSetupRedirect = function() {
       return glideraFactory.userSetupRedirect(redirectUri, 'usersetup');
     };
+    factory.idVerifyRedirect = function() {
+      return glideraFactory.idVerifyRedirect(redirectUri, 'idverify');
+    };
     factory.createBankAccountUrl = function() {
       return glideraFactory.createBankAccountRedirect(redirectUri, 'bankaccount');
     };
@@ -86,6 +89,14 @@
     };
     factory.getUserAccountStatus = function() {
       return userStatus;
+    };
+
+    factory.userIdVerify = function(imageData) {
+      var d = $q.defer();
+      glideraFactory.userIdVerify(imageData, function(e, s, b) {
+        s >= 200 && s < 300?  d.resolve(b) : d.reject(b);
+      });
+      return d.promise;
     };
     factory.resendEmailVerification = function() {
       var d = $q.defer();
@@ -137,6 +148,9 @@
             account.occupation = Occupations.find(b.occupation);
             account.employerName = b.employerName;
             account.employerDescription = b.employerDescription;
+            if (!account.last4Ssn) {
+              account.last4Ssn = b.last4Ssn;
+            }
             ExchangeFactory.updateCurrency(account.country);
 
             if (b.birthDate) {
@@ -172,6 +186,7 @@
           'occupation': account.occupation ? account.occupation.id : null,
           'employerName': account.employerName,
           'employerDescription': account.employerDescription,
+          'last4Ssn': account.last4Ssn,
           'ip': '127.0.0.1'
         };
         console.log(d);

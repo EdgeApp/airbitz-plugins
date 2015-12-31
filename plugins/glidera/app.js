@@ -98,6 +98,12 @@ app.config(['$stateProvider', '$urlRouterProvider', '$sceDelegateProvider', func
       templateUrl: "app/user/partials/increaseLimits.html",
       controller: "increaseLimitsController",
     })
+
+    .state("idVerify", {
+      url: "/idVerify/",
+      templateUrl: "app/user/partials/idVerify.html",
+      controller: "idVerifyController",
+    })
     // route for errors
     .state("error", {
       url: "/error/",
