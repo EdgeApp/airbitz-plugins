@@ -1103,7 +1103,7 @@ div.card.card-content.card-info-main {
 .card-balance-amt {font-size:20pt; color: #555555; padding-bottom: 10px}
 .card-value       {font-size:18pt; color: #555555; height: 50px}
 .card-info        {font-size:10pt; color: #007aFF; height: 20px}
-.card-number      {font-family: Courier, monospace, serif; font-size:11pt; color: #555555}
+.card-number      {font-family: Courier, monospace, serif; font-size:13pt; color: #555555}
 .partner-logo     {height: 35px; align-content: center}
 .collapsible-header {vert-align: middle}
 .reset-account    {
