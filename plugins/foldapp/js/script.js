@@ -18,6 +18,7 @@ var first_load = 1;
 var force_refresh = 1;
 var min_price_rate = 1;
 var refund_enabled = 0;
+var new_account = false;
 
 // Purchases over this amount are given a popup warning as 1 confirmation is required
 // before card is available
@@ -215,7 +216,7 @@ var Account = {
         });
     },
 
-    updateWAddr: function(addr, updated) { // Set the default BTC address
+    updateWAddr: function(addr, handleResponse, handleError) { // Set the default BTC address
         var withdraw_url = fold_api + "my/default_withdraw_addresses";
         Airbitz.ui.debugLevel(1,"Setting default address to: " + addr.toString());
         var newAddr = {"default_withdraw_addresses": [{
@@ -229,9 +230,9 @@ var Account = {
         Airbitz.ui.debugLevel(1,newAddr);
         sRequestHandler(withdraw_url, newAddr, function(response) {
             Airbitz.ui.debugLevel(1,"Updated default_withdraw_address");
-            updated();
+            handleResponse();
         }, function(error) {
-            Airbitz.ui.showAlert("Card Not Refunded", "Error refunding card. Please try again later. Error:updateWAddr");
+            handleError();
         });
     },
     resetCards: function(doneUpdating) {
@@ -647,7 +648,7 @@ Card.prototype.refund = function() {
                     Account.updateWAddr(data["address"], function() {
                         sRequestHandler(url, refund, function(response) {
                             Account.clearOwl();
-                            Airbitz.ui.showAlert("Card Refunded", "Card Refunded. Please allow several minutes for refund.");
+                            Airbitz.ui.showAlert("Card Refunded", "Card Refunded. Please allow 8-15 minutes for refund.");
                             Airbitz.ui.debugLevel(1,response);
                             Airbitz.ui.debugLevel(1,"Done refunding!");
                             logStats("refund",brand,balance);
@@ -655,6 +656,8 @@ Card.prototype.refund = function() {
                         }, function(error) {
                             Airbitz.ui.showAlert("Card Not Refunded", "Error refunding card. Please try again later. Error:sRequestHandler:refund");
                         });
+                    }, function() {
+                        Airbitz.ui.showAlert("Card Not Refunded", "Error refunding card. Please try again later. Error:updateWAddr");
                     });
                 }, function(data) {
                     Airbitz.ui.showAlert("Card Not Refunded", "Error refunding card. Please try again later. Error:createAddress");
@@ -705,6 +708,7 @@ if(!(typeof Account.username === 'undefined' || Account.username == null)) {
     user.exists.resolve();
 } else {
     user.create();
+    new_account = true;
 }
 $.when(user.exists).done(function(data) {
     user.login();
@@ -737,8 +741,23 @@ $(function() {
             success: updateWallet,
             error: function() {
                 Airbitz.ui.debugLevel(1,"Could not get selected wallet");
+                Airbitz.ui.showAlert("Wallet Error", "Error could not select wallet.");
             }
         });
+
+        // If this is a new account. Set an initial refund address in case any purchases get botched
+        if (new_account) {
+            createAddress(Account.abWallet, brand, 0, 0, category, "Refunded " + brand + " gift card.",
+                function(data) {
+                    Account.updateWAddr(data["address"], function() {
+                    }, function() {
+                    });
+                }, function(data) {
+                    Airbitz.ui.debugLevel(1,data);
+                });
+        }
+
+
         Airbitz.ui.debugLevel(1,"Updating UI");
         user.listCards(function() { // Start getting avaliable cards for sale.
             user.getCards(function(cards) {
