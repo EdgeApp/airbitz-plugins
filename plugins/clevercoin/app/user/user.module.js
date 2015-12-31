@@ -212,7 +212,7 @@
 
     $scope.identity = function() {
       if (["Rejected"].indexOf($scope.userStatus.userIdentityState) > -1) {
-        Airbitz.ui.showAlert('', 'Identity documents have been rejected. Unable to resubmit at this time.');
+        $state.go("identityVerification");
       } else if (["Verified"].indexOf($scope.userStatus.userIdentityState) > -1) {
         Airbitz.ui.showAlert('', 'Verification documents have already been verified, and cannot be resubmitted.');
       } else if (["Exported"].indexOf($scope.userStatus.userIdentityState) > -1) {
@@ -223,7 +223,7 @@
     };
     $scope.address = function() {
       if (["Rejected"].indexOf($scope.userStatus.userAddressState) > -1) {
-        Airbitz.ui.showAlert('', 'Address documents have been rejected. Unable to resubmit at this time.');
+        $state.go("addressVerification");
       } else if (["Verified"].indexOf($scope.userStatus.userAddressState) > -1) {
         Airbitz.ui.showAlert('', 'Address documents have already been verified, and cannot be resubmitted.');
       } else if (["Exported"].indexOf($scope.userStatus.userAddressState) > -1) {
