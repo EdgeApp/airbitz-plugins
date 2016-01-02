@@ -39,15 +39,19 @@
       $scope.order.orderFiatInput = d.orderFiatInput;
     };
     $scope.next = function() {
-      Airbitz.ui.showAlert('', 'Requesting quote...', { 'showSpinner': true });
-      $scope.order.orderBtcInput = parseFloat($scope.order.orderBtcInput).toFixed(8);
-      DataFactory.requestBuy($scope.order.orderBtcInput, $scope.order.paymentMethod.name).then(function(data) {
-        Airbitz.ui.hideAlert();
-        $scope.order.quote = data;
-        $state.go("reviewOrder");
-      }, function(b) {
-        Airbitz.ui.showAlert('', 'Unable to receive quote. ' + Error.errorMap(b));
-      });
+      if ($scope.order.orderFiatInput < 1.0) {
+        Airbitz.ui.showAlert('', 'Orders must be greater than 1 Euro.');
+      } else {
+        Airbitz.ui.showAlert('', 'Requesting quote...', { 'showSpinner': true });
+        $scope.order.orderBtcInput = parseFloat($scope.order.orderBtcInput).toFixed(8);
+        DataFactory.requestBuy($scope.order.orderBtcInput, $scope.order.paymentMethod.name).then(function(data) {
+          Airbitz.ui.hideAlert();
+          $scope.order.quote = data;
+          $state.go("reviewOrder");
+        }, function(b) {
+          Airbitz.ui.showAlert('', 'Unable to receive quote. ' + Error.errorMap(b));
+        });
+      }
     };
   }
   function reviewOrderController($scope, $state, Error, DataFactory, UserFactory, Prices) {

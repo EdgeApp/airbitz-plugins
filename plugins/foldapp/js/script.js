@@ -99,7 +99,7 @@ function logStats(event, brand, amount) {
     s['btc'] = 0;
     s['partner'] = 'Fold';
     s['country'] = 'USA';
-    s['username'] = Account.username.substr(Account.username.length - 8);
+    s['user'] = Account.username.substr(Account.username.length - 8);
     s['brand'] = brand;
     s['usd'] = amount;
     $.ajax({

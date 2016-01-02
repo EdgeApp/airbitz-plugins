@@ -70,10 +70,7 @@
         $state.go('pendingActivation');
       }, function(e) {
         console.log(e);
-        var msg = 'Unable to signup at this time. ';
-        if (e.error) {
-          msg += e.error;
-        }
+        var msg = 'Unable to signup at this time.\n' + Error.errorMap(e);
         Airbitz.ui.showAlert('Error', msg);
       });
     };
@@ -194,7 +191,11 @@
         msg += '<h5><strong>' + counter + "</strong>. Address verification pending review.</h5>";
       } else if (!$scope.userStatus.userAddressSetup) {
         counter++;
-        msg += '<h5><strong>' + counter + "</strong>. Please verify your address</h5>";
+        msg += '<h5><strong>' + counter + "</strong>. Please verify your address.</h5>";
+      }
+      if ($scope.banks.length == 0) {
+        counter++;
+        msg += '<h5><strong>' + counter + "</strong>. Please add a bank account.</h5>";
       }
       if (msg !== '') {
         msg = '<h4 style="margin-top: 0;">To Buy or Sell Bitcoin:</h4>' + msg;
@@ -212,7 +213,7 @@
 
     $scope.identity = function() {
       if (["Rejected"].indexOf($scope.userStatus.userIdentityState) > -1) {
-        Airbitz.ui.showAlert('', 'Identity documents have been rejected. Unable to resubmit at this time.');
+        $state.go("identityVerification");
       } else if (["Verified"].indexOf($scope.userStatus.userIdentityState) > -1) {
         Airbitz.ui.showAlert('', 'Verification documents have already been verified, and cannot be resubmitted.');
       } else if (["Exported"].indexOf($scope.userStatus.userIdentityState) > -1) {
@@ -223,7 +224,7 @@
     };
     $scope.address = function() {
       if (["Rejected"].indexOf($scope.userStatus.userAddressState) > -1) {
-        Airbitz.ui.showAlert('', 'Address documents have been rejected. Unable to resubmit at this time.');
+        $state.go("addressVerification");
       } else if (["Verified"].indexOf($scope.userStatus.userAddressState) > -1) {
         Airbitz.ui.showAlert('', 'Address documents have already been verified, and cannot be resubmitted.');
       } else if (["Exported"].indexOf($scope.userStatus.userAddressState) > -1) {
@@ -327,10 +328,7 @@
         $state.go('dashboard');
       }, function(e) {
         console.log(e);
-        var msg = 'Unable to submit identity information at this time. ';
-        if (e.error) {
-          msg += e.error;
-        }
+        var msg = 'Unable to submit identity information at this time.\n' + Error.errorMap(e);
         Airbitz.ui.showAlert('', msg);
       });
     };

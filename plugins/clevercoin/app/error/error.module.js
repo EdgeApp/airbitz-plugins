@@ -23,7 +23,17 @@
 
     function errorMap(res) {
       if (res.error) {
-        return res.error;
+        if (typeof res.error == 'string') {
+          return res.error;
+        } else if (typeof res.error == 'object') { 
+          var s = '';
+          for (var i in res.error) {
+            s += res.error[i] + '\n';
+          }
+          return s.trim();
+        } else {
+          return '';
+        }
       } else {
         return '';
       }
