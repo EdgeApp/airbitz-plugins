@@ -47,9 +47,22 @@ function toggleUi() {
     $(".fold-loading").css("display", "none");
     $(".main").css("display", "inline");
     setInterval( function() {
-        Account.pingCard(Account.current_card_id);
-        user.resetCards(function() {});
+        updateAllCards();
     }, 3000); // Refresh UI every 3 seconds
+}
+
+function updateAllCards() {
+    user.updateUsersCards(function() {
+        user.updateCardsForSale(function() {
+            Account.pingCard(Account.current_card_id);
+            if (server_json_error) {
+                Airbitz.ui.showAlert("Server Response Error", "Error in Server response. Please contact support");
+                Airbitz.ui.debugLevel(1,"Error in Server response. Please contact support");
+                server_json_error = false;
+                first_load = 0;
+            }
+        }); // Start getting avaliable cards for sale.
+    });
 }
 
 function supportsTemplate() {
@@ -235,10 +248,11 @@ var Account = {
             handleError();
         });
     },
-    resetCards: function(doneUpdating) {
+    // Updates list of user's cards
+    updateUsersCards: function(doneUpdating) {
         Airbitz.ui.debugLevel(1,"Resetting cards.");
         Account.getCards(function(cards) {
-            Account.updateCards(cards, doneUpdating);
+            Account.updateUsersCardsUI(cards, doneUpdating);
         });
     },
     clearOwl: function() {
@@ -302,8 +316,8 @@ var Account = {
         });
     },
 
-    updateCards: function(cards, doneUpdating) { // Updates the UI with cards the user has purchased
-        Airbitz.ui.debugLevel(1,"updateCards: " + cards.length + " cards from all brands.");
+    updateUsersCardsUI: function(cards, doneUpdating) { // Updates the UI with cards the user has purchased
+        Airbitz.ui.debugLevel(1,"updateUsersCardsUI: " + cards.length + " cards from all brands.");
 
         for (var c = 0; c < cards.length; c++) {
             // Check arrays values are defined
@@ -323,25 +337,25 @@ var Account = {
             }
         }
 
-        Airbitz.ui.debugLevel(1,"updateCards: brand: "+ brand + ": " + cards.length);
+        Airbitz.ui.debugLevel(1,"updateUsersCardsUI: brand: "+ brand + ": " + cards.length);
         if(!cards.length > 0) {
             var changed = Account.haveCardsChanged(cards);
             if(changed || (!Account.owlSet)) {
                 Account.all_cards = [];
                 Airbitz.ui.debugLevel(1,"No cards. New acc!");
                 if(typeof Account.owl.data("owlCarousel").owl === 'undefined') {
-                    Account.setDummyC();
+                    Account.setDummyCard();
                 } else if(Account.owl.data("owlCarousel").owl.owlItems.length > 0) {
-                    Account.setDummyC();
+                    Account.setDummyCard();
                 }
             }
         } else { // There's at least one card
             var changed = Account.haveCardsChanged(cards);
 
             if(changed == CardsChanged.YES) {
-                Airbitz.ui.debugLevel(1,"updateCards: brand: "+ brand + ": " + cards.length + " CARDS CHANGED");
-                Account.clearOwl();
+                Airbitz.ui.debugLevel(1,"updateUsersCardsUI: brand: "+ brand + ": " + cards.length + " CARDS CHANGED");
                 Account.all_cards = [];
+                var needToClearOwl = true;
 
                 var c = 0;
                 for (c in cards) {
@@ -374,6 +388,11 @@ var Account = {
                         }
                         var thisCardHTML = cardTemplate(thisCard);
                         Airbitz.ui.debugLevel(1, "Adding card: " + c + " card info: " + cards[c]);
+                        if (needToClearOwl) {
+                            Account.clearOwl();
+                            needToClearOwl = false;
+                        }
+
                         Account.owl.data('owlCarousel').addItem(thisCardHTML);
                         //document.querySelector("#user-cards").appendChild( document.importNode(card_html, true) );
                     }
@@ -450,7 +469,21 @@ var Account = {
             return CardsChanged.NO;
         }
     },
-    setDummyC: function() {
+    setLoadingCard: function() {
+        var tSource = $("#card-template").html();
+        var cardTemplate = Handlebars.compile(tSource);
+
+        var thisCard = {
+            cardNumber: "<div class=\"card-number\">" + "Loading..." + "</div>",
+            cardAmount: "<div class=\"card-balance-amt\">" + "$0.00" + "</div>",
+            cardBarcode: "",
+            refundText: ""
+        }
+        var thisCardHTML = cardTemplate(thisCard);
+        Account.clearOwl(); // Make sure there's only ever ONE grey card and no other cards at the same time.
+        Account.owl.data('owlCarousel').addItem(thisCardHTML);
+    },
+    setDummyCard: function() {
         var tSource = $("#card-template").html();
         var cardTemplate = Handlebars.compile(tSource);
 
@@ -470,7 +503,8 @@ var Account = {
         });
         return cardFromId[0];
     },
-    listCards: function(doneListing) { // Updates the UI with cards avaliable to purchase from Fold.
+
+    updateCardsForSale: function(doneListing) { // Updates the UI with cards avaliable to purchase from Fold.
         var numCardsToBuy = 0;
         this.getInfo("brands", function(cards_avil) {
             Airbitz.ui.debugLevel(1,JSON.stringify(cards_avil) );
@@ -736,6 +770,8 @@ $(function() {
             // itemsTablet: false,
             // itemsMobile : false
         });
+        Account.setLoadingCard();
+
 //      Account.logRefunds();
         Airbitz.core.selectedWallet({
             success: updateWallet,
@@ -759,26 +795,11 @@ $(function() {
 
 
         Airbitz.ui.debugLevel(1,"Updating UI");
-        user.listCards(function() { // Start getting avaliable cards for sale.
-            user.getCards(function(cards) {
-                user.updateCards(cards,function() {
-                    toggleUi();
+        Airbitz.ui.hideAlert();
 
-                    if (server_json_error) {
-                        Airbitz.ui.showAlert("Server Response Error", "Error in Server response. Please contact support");
-                        Airbitz.ui.debugLevel(1,"Error in Server response. Please contact support");
-                        server_json_error = false;
-                        first_load = 0;
-                    } else if (first_load) {
-                        Airbitz.ui.hideAlert();
-                        first_load = 0;
-                    }
+        updateAllCards();
+        toggleUi();
 
-
-                });
-            });
-            // user.updateBalance();
-        });
         user.getInfo("profile", function(response) {
             //Airbitz.ui.debugLevel(1,response);
             //Airbitz.ui.debugLevel(1,response["logged_in"]);
