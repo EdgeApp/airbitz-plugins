@@ -148,7 +148,11 @@
             account.address1 = b.address1;
             account.address2 = b.address2;
             account.city = b.city;
-            account.zipCode = b.zipCode;
+            try {
+              account.zipCode = parseInt(b.zipCode);
+            } catch (e) {
+              account.zipCode = b.zipCode;
+            }
             account.state = States.findState(b.state);
             account.country = b.countryCode;
             account.occupation = Occupations.find(b.occupation);
