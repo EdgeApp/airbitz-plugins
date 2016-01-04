@@ -34,7 +34,7 @@
       return timestamp - new Date().getTime();
     };
     var cached = function(data) {
-      if (data && data.ask && !data.expires) {
+      if (data && data.btcPrice && !data.expires) {
         data.expires = new Date().getTime() + (60 * 1000); // expires in a minute
       }
       return (data && timeDiff(data.expires) > 30) ? data : null;
@@ -47,7 +47,7 @@
     factory.convertFiatValue = function(orderAction, input) {
       if (typeof(input)==='undefined') input = 0;
       var price = (orderAction == 'buy')
-                ? factory.currentBuy.ask : factory.currentSell.ask;
+                ? factory.currentBuy.btcPrice : factory.currentSell.btcPrice;
       var btcValue = input / parseFloat(price);
       return {
         'orderValueSatoshi': btcValue * 100000000,
@@ -59,7 +59,7 @@
     factory.convertBtcValue = function(orderAction, input) {
       if (typeof(input)==='undefined') input = 0;
       var price = (orderAction == 'buy')
-          ? factory.currentBuy.ask : factory.currentSell.ask;
+          ? factory.currentBuy.btcPrice : factory.currentSell.btcPrice;
       var btc = $filter('valToBtc')(input);
       var output = btc * price;
       return {
@@ -84,7 +84,7 @@
       if (cached(factory.currentBuy)) {
         deferred.resolve(cached(factory.currentBuy));
       } else {
-        CcFactory.ticker(function(e, r, b) {
+        CcFactory.quotePrice(1, 'bid', 'BTC', 'Wallet', function(e, r, b) {
           factory.currentBuy = b;
           (r == 200) ?  deferred.resolve(b) : deferred.reject();
         });
@@ -96,7 +96,7 @@
       if (cached(factory.currentSell)) {
         deferred.resolve(cached(factory.currentSell));
       } else {
-        CcFactory.ticker(function(e, r, b) {
+        CcFactory.quotePrice(1, 'ask', 'BTC', 'Wallet', function(e, r, b) {
           factory.currentSell = b;
           (r == 200) ?  deferred.resolve(b) : deferred.reject();
         });
@@ -110,7 +110,7 @@
       templateUrl: 'app/prices/partials/rate.html',
       link: function(scope, elements, attrs){
         return priceLink($interval, Prices, scope, elements, attrs, function(scope, b) {
-          scope.price = $filter('currency')(b.ask, '€', 2);
+          scope.price = $filter('currency')(b.btcPrice, '€', 2);
           scope.currency = '';
         });
       }

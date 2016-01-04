@@ -248,8 +248,9 @@ var CleverCoin = (function () {
       });
     },
 
-    quotePrice: function(qty, currency, method, callback) {
+    quotePrice: function(qty, type, currency, method, callback) {
       var data = {
+        'type': type,
         'amount': qty,
         'currencyShort': currency,
         'paymentMethod': method
