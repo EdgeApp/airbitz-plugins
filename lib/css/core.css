@@ -529,6 +529,9 @@ html body .label.label-outline.label-success {
 html body .label.label-outline.label-danger {
   background: #ff5656;
 }
+html body .label.label-outline.label-warning {
+  background: #ffffe0;
+}
 html body .label.status {
   font-size: 10px;
   position: absolute;

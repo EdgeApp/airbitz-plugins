@@ -1,6 +1,7 @@
 (function() {
   angular.module('app.filters', [])
     .filter('statusFilter', statusFilter)
+    .filter('progressFilter', progressFilter)
     .filter('stateFilter', stateFilter)
     .filter('titlecase', titleCase)
     .filter('roundFiat', roundFiat)
@@ -12,6 +13,21 @@
   function statusFilter() {
     return function(status) {
       return (status) ? 'Verified' : 'Unverified';
+    };
+  }
+
+  function progressFilter() {
+    return function(userStatus) {
+      if (userStatus.tier2SetupComplete) {
+        return 'Verified';
+      } else if (userStatus.tier2TransactionVolumeRequirementComplete 
+          || userStatus.tier2AccountAgeRequirementComplete
+          || userStatus.userOowIsSetup
+          || userStatus.userSsnIsSetup) {
+        return 'In Progress';
+      } else {
+        return 'Unverified';
+      }
     };
   }
 

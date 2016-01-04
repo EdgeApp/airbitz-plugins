@@ -85,7 +85,13 @@
       'userCanTransact': false,
       'userEmailIsSetup': false,
       'userBankAccountIsSetup': false,
-      'userBasicInfoIsSetup': false
+      'userBasicInfoIsSetup': false,
+      'tier1SetupComplete': false,
+      'tier2SetupComplete': false,
+      'tier2TransactionVolumeRequirementComplete': false,
+      'tier2AccountAgeRequirementComplete': false,
+      'userOowIsSetup': false,
+      'userSsnIsSetup': false,
     };
     factory.getUserAccountStatus = function() {
       return userStatus;
