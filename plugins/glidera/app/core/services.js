@@ -3,7 +3,7 @@
 
   angular
     .module('app.dataFactory', ['app.glidera', 'app.2fa', 'app.constants', 'app.limits', 'app.constants'])
-    .factory('StatsFactory', [ '$http', 'ExchangeFactory', StatsFactory])
+    .factory('StatsFactory', [ '$http', 'ExchangeFactory', 'UserFactory', StatsFactory])
     .factory('UserFactory', [ '$q', '$filter', 'States', 'Occupations', 'ExchangeFactory', 'glideraFactory', 'TwoFactor', UserFactory])
     .factory('DataFactory', [ '$q', '$filter', 'States', 'ExchangeFactory', 'glideraFactory', 'TwoFactor', 'Prices', 'StatsFactory', DataFactory]);
 
@@ -412,15 +412,18 @@
     };
     return factory;
   }
-  function StatsFactory($http, ExchangeFactory) {
+  function StatsFactory($http, ExchangeFactory, UserFactory) {
     var factory = {};
     factory.recordEvent = function(eventType, eventDictionary, btcAmount) {
       var statsKey = Airbitz.config.get('AIRBITZ_STATS_KEY');
       var network = Airbitz.config.get('SANDBOX') == 'true' ? 'testnet' : 'mainnet';
+      var acct = UserFactory.getUserAccount();
+      //var string_to_hash = acct.firstName + acct.lastName + acct.last4Ssn + acct.email;
       var s = angular.copy(eventDictionary);
       s['btc'] = btcAmount;
       s['partner'] = 'Glidera ' + ExchangeFactory.countryCode;
       s['country'] = ExchangeFactory.countryCode;
+      //s['user'] = Sha256.hash(string_to_hash);
       $http({
         method: 'POST',
         url: 'https://airbitz.co/api/v1/events',
