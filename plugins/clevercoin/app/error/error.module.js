@@ -42,7 +42,11 @@
     function reject(res) {
       console.log(res);
       if (res.error) {
-        Airbitz.ui.showAlert('Error', res.error);
+        var errorstring = errorMap(res);
+        if (~errorstring.indexOf("Insufficient funds")) {
+          errorstring = 'Insufficient Funds. Please deposit funds via SEPA transfer';
+        }
+        Airbitz.ui.showAlert('Error', errorstring);
       } else {
         Airbitz.ui.showAlert('Error', 'An unknown error occurred.');
       }
