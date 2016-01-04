@@ -2,7 +2,9 @@
   <div class="col-xs-6 no-pad">
   </div>
   <div class="col-xs-6 live-ticker text-right no-pad">
-    <div price-update price-type="{{ order.orderAction }}"></div>
+    <div class="live-price-rate">
+      <span class="price-rate-label">1 BTC =</span> <span class="price-rate-data">{{ order.quote.btcPrice || 0 | roundFiat }} {{ exchange.currency }}</span>
+    </div>
   </div>
 </div>
 
