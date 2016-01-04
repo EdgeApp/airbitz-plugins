@@ -436,15 +436,15 @@
     });
   }
   function fundsController($scope, $state, DataFactory) {
-    Airbitz.ui.title('Funds');
-    Airbitz.ui.showAlert('', 'Loading funds...', {
+    Airbitz.ui.title('Transactions');
+    Airbitz.ui.showAlert('', 'Loading transactions...', {
       'showSpinner': true
     });
     DataFactory.getFundsLedger().then(function(funds) {
       Airbitz.ui.hideAlert();
       $scope.funds = funds;
     }, function() {
-      Airbitz.ui.showAlert('', 'Error fetching funds.');
+      Airbitz.ui.showAlert('', 'Error fetching transactions.');
       $state.go('dashboard');
     });
     $scope.clearAccount = function(){
