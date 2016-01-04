@@ -15,7 +15,7 @@
 
 <div account-summary></div>
 
-<div class="row" ng-if="banks.length > 0">
+<div class="row" ng-if="userStatus.userCanTransact">
   <div class="col-xs-12 no-pad">
     <button data-ng-click="sepaDeposit()" class="buy-button btn-primary btn-lg btn-block btn">SEPA Deposit</button>
   </div>
