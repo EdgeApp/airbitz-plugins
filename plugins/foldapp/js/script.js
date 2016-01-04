@@ -377,7 +377,7 @@ var Account = {
                         var floatBalance = parseFloat(card.bal);
                         //card_html.querySelector(".card-number").setAttribute("card", card.id);
                         var rText = "";
-                        if (card.isRefundable && refund_enabled) {
+                        if (card.isRefundable /* && refund_enabled */) {
                             rText = "Refund Card"; // Make sure the info button shows up.
                         }
                         var thisCard = {
