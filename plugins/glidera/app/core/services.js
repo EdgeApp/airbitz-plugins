@@ -418,12 +418,14 @@
       var statsKey = Airbitz.config.get('AIRBITZ_STATS_KEY');
       var network = Airbitz.config.get('SANDBOX') == 'true' ? 'testnet' : 'mainnet';
       var acct = UserFactory.getUserAccount();
-      //var string_to_hash = acct.firstName + acct.lastName + acct.last4Ssn + acct.email;
+      var string_to_hash = acct.firstName + acct.lastName + acct.last4Ssn + acct.email;
+      var userhash = sha256(string_to_hash);
+      var shortuserhash = userhash.substr(0,8)
       var s = angular.copy(eventDictionary);
       s['btc'] = btcAmount;
       s['partner'] = 'Glidera ' + ExchangeFactory.countryCode;
       s['country'] = ExchangeFactory.countryCode;
-      //s['user'] = Sha256.hash(string_to_hash);
+      s['user'] = shortuserhash;
       $http({
         method: 'POST',
         url: 'https://airbitz.co/api/v1/events',
