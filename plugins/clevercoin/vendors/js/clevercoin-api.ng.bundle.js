@@ -276,7 +276,7 @@ var CleverCoin = (function () {
         'callBackLink': callBackLink,
         'paymentParameter': paymentParameter,
         'directWithdrawAddress': address,
-        'profitPercentage': 1,
+        'profitPercentage': 0.5,
       };
       return this._request(true, '/quote', {
         'method': 'POST',
