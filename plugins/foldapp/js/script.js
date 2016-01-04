@@ -534,7 +534,7 @@ var Account = {
 
             var maxDiscount = 100 * (1.0 - min_price_rate);
             maxDiscount = maxDiscount.toFixed(0);
-            $(".brand-discount").text("~" + maxDiscount + "%");
+            $(".brand-discount").text(maxDiscount + "%");
 
             Airbitz.ui.debugLevel(1,JSON.stringify(brands_cards["card_values"]));
             user.getBal(function(total_bal) {
