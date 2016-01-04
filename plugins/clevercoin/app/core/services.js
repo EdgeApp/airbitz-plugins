@@ -3,7 +3,7 @@
 
   angular
     .module('app.dataFactory', ['app.clevercoin', 'app.constants'])
-    .factory('StatsFactory', [ '$http', 'ExchangeFactory', StatsFactory])
+    .factory('StatsFactory', [ '$http', 'ExchangeFactory', 'UserFactory', StatsFactory])
     .factory('UserFactory', [ '$q', '$filter', 'ExchangeFactory', 'CcFactory', UserFactory])
     .factory('DataFactory', [ '$q', '$filter', 'ExchangeFactory', 'CcFactory', 'Prices', 'StatsFactory', DataFactory]);
 
@@ -481,15 +481,20 @@
     return factory;
   }
 
-  function StatsFactory($http, ExchangeFactory) {
+  function StatsFactory($http, ExchangeFactory, UserFactory) {
     var factory = {};
     factory.recordEvent = function(eventType, eventDictionary, btcAmount) {
       var statsKey = Airbitz.config.get('AIRBITZ_STATS_KEY');
       var network = Airbitz.config.get('SANDBOX') == 'true' ? 'testnet' : 'mainnet';
+      var acct = UserFactory.getUserAccount();
+      var string_to_hash = acct.name + acct.email;
+      var userhash = sha256(string_to_hash);
+      var shortuserhash = userhash.substr(0,8)
       var s = angular.copy(eventDictionary);
       s['btc'] = btcAmount;
       s['partner'] = 'CleverCoin ' + ExchangeFactory.currency;
       s['country'] = ExchangeFactory.currency;
+      s['user'] = shortuserhash;
       $http({
         method: 'POST',
         url: 'https://airbitz.co/api/v1/events',
