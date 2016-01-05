@@ -176,6 +176,17 @@ var CleverCoin = (function () {
       });
     },
 
+    deleteUser: function(reason, callback) {
+      var data = {
+        'reason': reason
+      };
+      return this._request(true, '/account', {
+        'method': 'DELETE',
+        'data': data,
+        'callback': callback
+      });
+    },
+
     requestLink: function(email, activateLink, callback) {
       var data = {
         'email': email,

@@ -63,6 +63,14 @@
       });
       return d.promise;
     };
+
+    factory.deleteUser = function(reason) {
+      var d = $q.defer();
+      CcFactory.deleteUser(reason, function(_, c, b) {
+        c >= 200 && c <= 300 ? d.resolve(b) : d.reject(b);
+      });
+      return d.promise;
+    };
     factory.requestLink = function(email) {
       var d = $q.defer();
       CcFactory.requestLink(email, redirectUri, function(_, c, b) {
