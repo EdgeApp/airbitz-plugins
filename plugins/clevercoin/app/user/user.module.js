@@ -294,9 +294,11 @@
     $scope.loadIdentityFront = function() {
       Airbitz.core.requestFile({
         success: function(data) {
-          $scope.$apply(function() {
-            $scope.primaryFile = 'data:image/jpeg;name:primaryFile.jpg;base64,' + data;
-          });
+          if (data) {
+            $scope.$apply(function() {
+              $scope.primaryFile = 'data:image/jpeg;name:primaryFile.jpg;base64,' + data;
+            });
+          }
         },
         error: function() { }
       });
@@ -305,9 +307,11 @@
     $scope.loadIdentityBack = function() {
       Airbitz.core.requestFile({
         success: function(data) {
-          $scope.$apply(function() {
-            $scope.secondaryFile = 'data:image/jpeg;name:secondaryFile.jpg;base64,' + data;
-          });
+          if (data) {
+            $scope.$apply(function() {
+              $scope.secondaryFile = 'data:image/jpeg;name:secondaryFile.jpg;base64,' + data;
+            });
+          }
         },
         error: function() { }
       });
@@ -345,9 +349,11 @@
     $scope.loadProofFile = function() {
       Airbitz.core.requestFile({
         success: function(data) {
-          $scope.$apply(function() {
-            $scope.proofFile = 'data:image/jpeg;name:primaryFile.jpg;base64,' + data;
-          });
+          if (data) {
+            $scope.$apply(function() {
+              $scope.proofFile = 'data:image/jpeg;name:primaryFile.jpg;base64,' + data;
+            });
+          }
         },
         error: function() { }
       });
@@ -387,9 +393,11 @@
     $scope.loadBankStatement = function() {
       Airbitz.core.requestFile({
         success: function(data) {
-          $scope.$apply(function() {
-            $scope.bankstatement = 'data:image/jpeg;name:primaryFile.jpg;base64,' + data;
-          });
+          if (data) {
+            $scope.$apply(function() {
+              $scope.bankstatement = 'data:image/jpeg;name:primaryFile.jpg;base64,' + data;
+            });
+          }
         },
         error: function() { }
       });
