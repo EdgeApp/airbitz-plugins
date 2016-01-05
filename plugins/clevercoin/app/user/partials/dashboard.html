@@ -15,16 +15,16 @@
 
 <div account-summary></div>
 
-<div class="row" ng-if="banks.length > 0">
+<div class="row" ng-if="userStatus.userCanTransact">
   <div class="col-xs-12 no-pad">
-    <button data-ng-click="sepaDeposit()" class="buy-button btn-primary btn-lg btn-block btn">SEPA Deposit</button>
+    <button data-ng-click="sepaDeposit()" class="buy-button btn-primary btn-lg btn-block btn">Deposit Euro via SEPA</button>
   </div>
 </div>
 
 <div ng-if="userStatus.userCanTransact" class="row" ng-if="wallets.length > 0">
   <table class="table table-bordered table-striped col-xs-12 no-pad">
     <tr>
-      <th>CleverCoin Balance</th>
+      <th>Euro Wallet Balance</th>
     </tr>
     <tr ng-repeat="w in wallets">
       <td>{{ w.balance }} {{ w.currency }}</td>

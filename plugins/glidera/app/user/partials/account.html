@@ -44,7 +44,7 @@
         <span class="list-group-item-heading">Increase Spending Limits</span>
         <p class="list-group-item-text text-primary">Tap to edit</p>
         <label class="status label pull-right"
-               ng-class="(extraComplete) ? 'label-success' : 'label-danger'">{{ extraComplete | statusFilter }}</label>
+               ng-class="(userStatus.tier2SetupComplete) ? 'label-success' : 'label-warning'">{{ userStatus | progressFilter }}</label>
       </li>
     </ul>
   </div>

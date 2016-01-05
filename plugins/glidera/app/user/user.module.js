@@ -102,11 +102,16 @@
     }
     showOptionStatus();
 
+    var checkExtras = function(userStatus) {
+      $scope.extraComplete = userStatus.userSsnIsSetup && userStatus.userOowIsSetup;
+      $scope.userPictureIsSetup = userStatus.userPictureIdState == 'VERIFIED'
+                              || userStatus.userPictureIdState == 'PASSED';
+    }
+    checkExtras($scope.userStatus);
     UserFactory.fetchUserAccountStatus().then(function(b) {
       showOptionStatus();
       $scope.userStatus = b;
-      $scope.extraComplete = b.userSsnIsSetup && b.userOowIsSetup;
-      $scope.userPictureIsSetup = b.userPictureIdState == 'VERIFIED' || b.userPictureIdState == 'PASSED';
+      checkExtras($scope.userStatus);
     }).then(function() {
       return UserFactory.getEmailAddress();
     }).then(function() {

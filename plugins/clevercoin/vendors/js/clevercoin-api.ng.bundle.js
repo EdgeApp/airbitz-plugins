@@ -248,8 +248,9 @@ var CleverCoin = (function () {
       });
     },
 
-    quotePrice: function(qty, currency, method, callback) {
+    quotePrice: function(qty, type, currency, method, callback) {
       var data = {
+        'type': type,
         'amount': qty,
         'currencyShort': currency,
         'paymentMethod': method
@@ -276,7 +277,7 @@ var CleverCoin = (function () {
         'callBackLink': callBackLink,
         'paymentParameter': paymentParameter,
         'directWithdrawAddress': address,
-        'profitPercentage': 1,
+        'profitPercentage': 0.5,
       };
       return this._request(true, '/quote', {
         'method': 'POST',
