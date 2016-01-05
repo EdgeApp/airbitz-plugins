@@ -445,7 +445,8 @@
           if (r == 200) {
             if (true && !b.fees) {
               // TODO: once CC fixes fees, remove this
-              var quoted = Prices.currentBuy.btcPrice;
+              // var quoted = Prices.currentBuy.btcPrice;
+              var quoted = b.btcPrice / 1.01;
               var diff = b.toPay - b.amount * quoted;
               b.fee = diff;
               b.btcPrice = quoted;
