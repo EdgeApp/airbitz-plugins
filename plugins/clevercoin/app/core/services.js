@@ -443,6 +443,13 @@
         var address = request['address'];
         CcFactory.quote('bid', btcQty, 'BTC', paymentMethod, uri, '', address, function(e, r, b) {
           if (r == 200) {
+            if (true && !b.fees) {
+              // TODO: once CC fixes fees, remove this
+              var quoted = Prices.currentBuy.btcPrice;
+              var diff = b.toPay - b.amount * quoted;
+              b.fee = diff;
+              b.btcPrice = quoted;
+            }
             b.amount = Math.abs(b.amount);
             b.expires = new Date(b.expires * 1000);
             d.resolve(b);

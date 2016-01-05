@@ -93,8 +93,9 @@
     };
     factory.updateSell = function() {
       var deferred = $q.defer();
-      if (cached(factory.currentSell)) {
-        deferred.resolve(cached(factory.currentSell));
+      // TODO: when sell is implemented switch back to currencySell
+      if (cached(factory.currentBuy)) {
+        deferred.resolve(cached(factory.currentBuy));
       } else {
         CcFactory.quotePrice(1, 'ask', 'BTC', 'Wallet', function(e, r, b) {
           factory.currentSell = b;
