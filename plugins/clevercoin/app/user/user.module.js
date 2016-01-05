@@ -94,8 +94,19 @@
       $state.go("dashboard");
     });
     $scope.changeEmail = function() {
-      Airbitz.core.clearData();
-      $state.go("signup");
+      Airbitz.ui.showAlert('', 'Removing old account...', {
+        'showSpinner': true
+      });
+      UserFactory.deleteUser('Wrong email address').then(function() {
+        Airbitz.ui.hideAlert();
+        UserFactory.clearUser();
+        Airbitz.core.clearData();
+        $state.go("signup");
+      }, function(e) {
+        Airbitz.ui.hideAlert();
+        var msg = 'Unable to change email address at this time..\n' + Error.errorMap(e);
+        Airbitz.ui.showAlert('', msg);
+      });
     };
   }
 
