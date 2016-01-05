@@ -44,7 +44,7 @@
         </tr>
         <tr>
           <td>Fees</td>
-          <td>{{ order.quote.fee || 0 }}</td>
+          <td>{{ order.quote.fee || 0 | roundFiat }} {{ exchange.currency }} </td>
         </tr>
       </tbody>
     </table>
