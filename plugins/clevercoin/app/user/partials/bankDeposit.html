@@ -4,7 +4,7 @@
       <tr><td colspan="2">
         <table class="table table-striped">
           <tr><td colspan="2"><h4>To purchase Bitcoin, please fund your Euro wallet by sending a SEPA deposit to the following account.</h4>
-          <tr><td>IBAN</td><td>{{ iban || "" }}</td></tr>
+          <tr><td>IBAN</td><td>{{ iban || "" | formatIban}}</td></tr>
           <tr><td>BIC</td><td>{{ bic || "" }}</td></tr>
           <tr><td>Description</td><td>{{ description || "" }}</td></tr>
         </table>

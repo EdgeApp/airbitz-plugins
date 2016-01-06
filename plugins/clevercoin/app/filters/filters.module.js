@@ -9,6 +9,7 @@
     .filter('roundBtc', roundBtc)
     .filter('valToBtc', valToBtc)
     .filter('satoshiToDenom', satoshiToDenom)
+    .filter('formatIban', formatIban)
     .directive('ngFocus', ['$timeout', ngFocus]);
 
   function statusFilter() {
@@ -123,6 +124,19 @@
       } else {
         return val / 100000000;
       }
+    }
+  }
+
+  function formatIban() {
+    return function(val) {
+      var s = '';
+      for (var i = 0; i < val.length; ++i) {
+        if (i % 4 == 0) {
+          s += ' ';
+        }
+        s += val[i];
+      }
+      return s;
     }
   }
 
