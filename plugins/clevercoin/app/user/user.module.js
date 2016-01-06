@@ -448,9 +448,11 @@
     Airbitz.ui.showAlert('', 'Loading transactions...', {
       'showSpinner': true
     });
+    $scope.showEmpty = false;
     DataFactory.getFundsLedger().then(function(funds) {
       Airbitz.ui.hideAlert();
       $scope.funds = funds;
+      $scope.showEmpty = funds.length == 0;
     }, function() {
       Airbitz.ui.showAlert('', 'Error fetching transactions.');
       $state.go('dashboard');
