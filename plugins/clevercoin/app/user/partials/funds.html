@@ -1,5 +1,8 @@
 <div class="transactions row">
   <table ng-model="transactions" class="table table-bordered table-striped col-xs-12 no-pad">
+    <tr ng-if="showEmpty">
+      <td colspan="2">No transaction history</td>
+    </tr>
     <tr ng-repeat="t in funds">
       <td>
         <table class="table-mini">
