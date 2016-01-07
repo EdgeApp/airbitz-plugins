@@ -378,7 +378,7 @@
         return d.promise;
       }).then(function(data) {
         var d = $q.defer();
-        Airbitz.core.requestSpend(wallet, data.sellAddress, btcToSatoshi(qty), amountFiat, {
+        Airbitz.core.requestSign(wallet, data.sellAddress, btcToSatoshi(qty), amountFiat, {
           label: 'Glidera',
           category: 'Exchange:Sell Bitcoin',
           bizId: ExchangeFactory.bizId,
@@ -402,10 +402,16 @@
         var opts = {'priceUuid': Prices.sellUuid()};
         glideraFactory.sell(TwoFactor.getCode(), data.refundAddress, data.signedTx, opts, function(e, r, b) {
           if (r == 200) {
+            // Save the tx in the airbit database
+            Airbitz.core.saveTx(wallet, data.signedTx);
+
             factory.getOrder(false).details = b;
             StatsFactory.recordEvent('sell', b, qty);
             d.resolve(b);
           } else {
+            console.log('------------');
+            console.log(JSON.stringify(b));
+            console.log('------------');
             d.reject(b);
           }
         });
