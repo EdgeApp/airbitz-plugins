@@ -215,7 +215,7 @@
     };
 
     $scope.userInformation = function() {
-      if ($scope.account.termsAgreedVersion == 1 || $scope.userStatus.userCanTransact) {
+      if ($scope.userStatus.userCanTransact) {
         Airbitz.ui.showAlert('', 'User information has been submitted. Cannot be resubmitted.');
       } else {
         $state.go("userInformation");
