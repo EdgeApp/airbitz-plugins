@@ -116,13 +116,18 @@
 
   <div class="row">
     <div class="form-group col-xs-12">
-        <label for="inputTos" class=""><a target="_blank" href="#" ng-click="launchExternal('https://www.clevercoin.com/en/terms-conditions')">Agree to TOS?</a></label>
+        <a target="_blank" href="#" ng-click="launchExternal('https://www.clevercoin.com/en/terms-conditions')">Review to TOS?</a>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="form-group col-xs-12">
+        <label for="inputTos" class="">Agree to TOS?</label>
         <input type="checkbox"
           ng-required="true"
           ng-checked="account.termsAgreedVersion > 0"
           ng-click="account.termsAgreedVersion = account.termsAgreedVersion > 0 ? 0 : 1"
-          class="form-control"
-          id="inputAgreeOnTerms"
+          id="inputTos"
           name="agreeOnTerms"
           required="" />
         <div class="input-error" ng-show="form.$submitted || form.agreeOnTerms.$touched">
