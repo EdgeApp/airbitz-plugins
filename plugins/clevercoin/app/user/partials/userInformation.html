@@ -49,7 +49,8 @@
             placeholder="Birthday"
             autocorrect="off"
             autocomplete="off"
-            required="" />
+            required=""
+            max="{{date | date:'yyyy-MM-dd'}}" />
       <div class="input-error" ng-show="form.$submitted || form.birthday.$touched">
         <span ng-show="form.birthday.$error.required" class="label label-danger">Required</span>
       </div>

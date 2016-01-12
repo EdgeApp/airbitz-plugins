@@ -265,6 +265,8 @@
 
   function userInformationController($scope, $state, Error, UserFactory) {
     Airbitz.ui.title('User Information');
+    $scope.date = new Date();
+    $scope.date.setYear($scope.date.getYear() - 18 );
     $scope.account = UserFactory.getUserAccount();
     $scope.countries = UserFactory.getCountries();
     $scope.supportedCountries = UserFactory.getSupportedCountries();
