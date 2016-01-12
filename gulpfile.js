@@ -12,7 +12,8 @@ var plugins = fs.readdirSync('plugins');
 var core = function(bridge) {
   return gulp.src(['./lib/vendor/js/jquery-2.1.3.min.js',
             './lib/vendor/js/bootstrap.min.js',
-            './lib/vendor/js/qrcode.min.js'].
+            './lib/vendor/js/qrcode.min.js',
+            './lib/js/countries.js'].
             concat(bridge).concat(
             ['./lib/js/airbitz-core.js']))
     .pipe(concat('abc.js'))

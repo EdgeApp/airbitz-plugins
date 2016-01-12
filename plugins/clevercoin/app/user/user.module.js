@@ -180,7 +180,7 @@
       }
       if ($scope.userStatus.identityRejectedReason) {
         counter++;
-        msg += '<h5><strong>' + counter + "</strong>." + 
+        msg += '<h5><strong>' + counter + "</strong>." +
           " Identity documents rejected because "
             + rejectMap($scope.userStatus.identityRejectedReason)
             + ".</h5>";
@@ -193,7 +193,7 @@
       }
       if ($scope.userStatus.addressRejectedReason) {
         counter++;
-        msg += '<h5><strong>' + counter + "</strong>." + 
+        msg += '<h5><strong>' + counter + "</strong>." +
           " Address documents rejected because "
             + rejectMap($scope.userStatus.addressRejectedReason)
             + ".</h5>";
@@ -267,10 +267,10 @@
     Airbitz.ui.title('User Information');
     $scope.account = UserFactory.getUserAccount();
     $scope.countries = UserFactory.getCountries();
-    UserFactory.fetchCountries().then(function(b) {
-      $scope.countries = b;
-      $scope.account.birthcountryObject = UserFactory.findCountry($scope.account.birthcountry);
-      $scope.account.addresscountryObject = UserFactory.findCountry($scope.account.addresscountry);
+    $scope.supportedCountries = UserFactory.getSupportedCountries();
+    UserFactory.fetchSupportedCountries().then(function(b) {
+      $scope.supportedCountries = b;
+      $scope.account.addresscountryObject = UserFactory.findSupportedCountry($scope.account.addresscountry);
     });
 
     $scope.cancel = function() {
@@ -297,9 +297,9 @@
     $scope.account = UserFactory.getUserAccount();
     $scope.primaryFile = '';
     $scope.secondaryFile = '';
-    UserFactory.fetchCountries().then(function(b) {
-      $scope.countries = b;
-      $scope.account.nationalityObject = UserFactory.findCountry($scope.account.birthcountry);
+    UserFactory.fetchSupportedCountries().then(function(b) {
+      $scope.supportedCountries = b;
+      $scope.account.nationalityObject = UserFactory.findSupportedCountry($scope.account.birthcountry);
     });
 
     $scope.loadIdentityFront = function() {
@@ -337,7 +337,7 @@
         'showSpinner': true
       });
       // Update the address value
-      $scope.account.birthcountry = $scope.account.nationalityObject.codeAlpha3;
+      $scope.account.birthcountry = $scope.account.birthcountryObject.codeAlpha3;
       UserFactory.verifyIdentity($scope.identityType, $scope.account.birthcountry, $scope.primaryFile, $scope.secondaryFile).then(function() {
         Airbitz.ui.showAlert('Saved', 'Identity information has been submitted.');
         $state.go('dashboard');
@@ -353,9 +353,9 @@
     Airbitz.ui.title('Address Verification');
     $scope.account = UserFactory.getUserAccount();
     $scope.proofFile = '';
-    UserFactory.fetchCountries().then(function(b) {
-      $scope.countries = b;
-      $scope.account.addresscountryObject = UserFactory.findCountry($scope.account.addresscountry);
+    UserFactory.fetchSupportedCountries().then(function(b) {
+      $scope.supportedCountriess = b;
+      $scope.account.addresscountryObject = UserFactory.findSupportedCountry($scope.account.addresscountry);
     });
     $scope.loadProofFile = function() {
       Airbitz.core.requestFile({
@@ -396,8 +396,8 @@
 
   function editBankController($scope, $state, Error, UserFactory) {
     Airbitz.ui.title('Bank Account');
-    UserFactory.fetchCountries().then(function(b) {
-      $scope.countries = b;
+    UserFactory.fetchSupportedCountries().then(function(b) {
+      $scope.supportedCountries = b;
     });
 
     $scope.bankstatement = '';
@@ -485,7 +485,7 @@
         link: function(scope, element, attrs) {
             var model = $parse(attrs.fileModel);
             var modelSetter = model.assign;
-            
+
             element.bind('change', function(){
                 scope.$apply(function(){
                     modelSetter(scope, element[0].files[0]);
