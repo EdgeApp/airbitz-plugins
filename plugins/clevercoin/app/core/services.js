@@ -84,7 +84,7 @@
       CcFactory.activate(account.email, token, function(_, c, b) {
         if (c >= 200 && c <= 300) {
           account.isActivated = true;
-          Airbitz.core.writeData('account', account); 
+          Airbitz.core.writeData('account', account);
           d.resolve(b);
         } else {
           d.reject(b);
@@ -150,7 +150,7 @@
           walletList = b.filter(function(n) {
             return n.currency == 'EUR';
           });
-          Airbitz.core.writeData('walletList', walletList); 
+          Airbitz.core.writeData('walletList', walletList);
           resolve(walletList);
         } else {
           reject(b);
@@ -255,7 +255,7 @@
       });
     };
 
-    factory.addBank = function(accountholder, iban, bic, bankstatement, 
+    factory.addBank = function(accountholder, iban, bic, bankstatement,
                                bankname, bankcountry, bankaddress) {
       return $q(function(resolve, reject) {
         CcFactory.addBank({
@@ -280,39 +280,43 @@
       });
     }
 
-    var countryList = [];
-    factory.getCountries = function() {
-      return countryList;
+    var supportedCountryList = [];
+    factory.getSupportedCountries = function() {
+      return supportedCountryList;
     };
-    factory.fetchCountries = function() {
-      if (countryList.length > 0) {
+    factory.fetchSupportedCountries = function() {
+      if (supportedCountryList.length > 0) {
         return $q(function(resolve, reject) {
-          resolve(countryList);
+          resolve(supportedCountryList);
         });
       } else {
         return $q(function(resolve, reject) {
           CcFactory.supportedCountries(function(e, s, b) {
             if (s === 200) {
-              countryList = b.filter(function(e) {
+              supportedCountryList = b.filter(function(e) {
                 return e.isResidenceAccepted;
               }).sort(function(a, b) {
                 return a.name.localeCompare(b.name);
               });
-              resolve(countryList);
+              resolve(supportedCountryList);
             } else {
               reject(b);
-            } 
-          }); 
+            }
+          });
         });
       }
     };
-    factory.findCountry = function(alpha3) {
-      for (var i = 0; i < countryList.length; ++i) {
-        if (countryList[i].codeAlpha3 == alpha3) {
-          return countryList[i];
+    factory.findSupportedCountry = function(alpha3) {
+      for (var i = 0; i < supportedCountryList.length; ++i) {
+        if (supportedCountryList[i].codeAlpha3 == alpha3) {
+          return supportedCountryList[i];
         }
       }
       return null;
+    };
+
+    factory.getCountries = function() {
+      return countryList;
     };
 
     // Fetch the user data if available
