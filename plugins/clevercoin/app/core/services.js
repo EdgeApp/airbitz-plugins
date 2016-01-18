@@ -357,8 +357,11 @@
             var ls = [];
             for (var k in b.ledger) {
               var row = b.ledger[k];
-              row.time = new Date(row.time * 1000);
-              ls.push(row);
+              if(row.type != "withdrawal")
+              {
+                row.time = new Date(row.time * 1000);
+                ls.push(row);
+              }
             }
             resolve(ls);
           } else {
