@@ -65,7 +65,7 @@
     <div class="form-group col-xs-6">
       <label for="inputCountry" class="sr-only">Country</label>
       <select
-        ng-options="o.name for o in countries"
+        ng-options="o.name for o in supportedCountries"
         ng-model="account.addresscountryObject" class="form-control"
         id="inputCountry" name="country" required="" />
         <option value="">Select a country</option>
@@ -91,7 +91,7 @@
     </div>
     <div class="col-xs-6 no-pad">
       <button type="button"
-        ng-click="save()" 
+        ng-click="save()"
         ng-disabled="form.$invalid || proofFile.length == 0"
         class="btn btn-lg btn-block btn-success">Save</button>
     </div>

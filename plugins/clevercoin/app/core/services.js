@@ -319,6 +319,15 @@
       return countryList;
     };
 
+    factory.findCountry = function(alpha3) {
+      for (var i = 0; i < countryList.length; ++i) {
+        if (countryList[i].codeAlpha3 == alpha3) {
+          return countryList[i];
+        }
+      }
+      return null;
+    };
+
     // Fetch the user data if available
     if (factory.isSignedIn()) {
       factory.fetchAccount();
