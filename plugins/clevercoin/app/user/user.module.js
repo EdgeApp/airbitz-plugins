@@ -299,10 +299,8 @@
     $scope.account = UserFactory.getUserAccount();
     $scope.primaryFile = '';
     $scope.secondaryFile = '';
-    UserFactory.fetchSupportedCountries().then(function(b) {
-      $scope.supportedCountries = b;
-      $scope.account.nationalityObject = UserFactory.findSupportedCountry($scope.account.birthcountry);
-    });
+    $scope.countries = UserFactory.getCountries();
+    $scope.account.nationalityObject = UserFactory.findCountry($scope.account.birthcountry);
 
     $scope.loadIdentityFront = function() {
       Airbitz.core.requestFile({
@@ -339,7 +337,7 @@
         'showSpinner': true
       });
       // Update the address value
-      $scope.account.birthcountry = $scope.account.birthcountryObject.codeAlpha3;
+      $scope.account.birthcountry = $scope.account.nationalityObject.codeAlpha3;
       UserFactory.verifyIdentity($scope.identityType, $scope.account.birthcountry, $scope.primaryFile, $scope.secondaryFile).then(function() {
         Airbitz.ui.showAlert('Saved', 'Identity information has been submitted.');
         $state.go('dashboard');
@@ -355,8 +353,9 @@
     Airbitz.ui.title('Address Verification');
     $scope.account = UserFactory.getUserAccount();
     $scope.proofFile = '';
+    $scope.supportedCountries = UserFactory.getSupportedCountries();
     UserFactory.fetchSupportedCountries().then(function(b) {
-      $scope.supportedCountriess = b;
+      $scope.supportedCountries = b;
       $scope.account.addresscountryObject = UserFactory.findSupportedCountry($scope.account.addresscountry);
     });
     $scope.loadProofFile = function() {
