@@ -105,7 +105,7 @@
     var checkExtras = function(userStatus) {
       $scope.extraComplete = userStatus.userSsnIsSetup && userStatus.userOowIsSetup;
       $scope.userPictureIsSetup = userStatus.userPictureIdState == 'VERIFIED'
-                               || userStatus.userPictureIdState == 'PASSED';
+                               || userStatus.userPictureIdState == 'PASSED'
                                || userStatus.userPictureIdState == 'SUBMITTED';
     }
     checkExtras($scope.userStatus);
