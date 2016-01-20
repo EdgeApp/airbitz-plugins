@@ -34,7 +34,7 @@
   function stateFilter() {
     return function(state) {
       if (state == 'UNSUBMITTED') {
-        return 'Unsubmitted';
+        return 'Unverified';
       } else if (state == 'SUBMITTED') {
         return 'Submitted';
       } else if (state == 'VERIFIED') {
