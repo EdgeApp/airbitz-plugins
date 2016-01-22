@@ -217,6 +217,8 @@
     $scope.userInformation = function() {
       if ($scope.userStatus.userCanTransact) {
         Airbitz.ui.showAlert('', 'User information has been submitted. Cannot be resubmitted.');
+      } else if($scope.account.requiredDataSupplied) {
+        Airbitz.ui.showAlert('', 'User information has already been submitted.');
       } else {
         $state.go("userInformation");
       }
