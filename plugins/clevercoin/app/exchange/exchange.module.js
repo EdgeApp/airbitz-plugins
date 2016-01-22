@@ -12,7 +12,7 @@
     $scope.account = UserFactory.getUserAccount();
     $scope.order = DataFactory.getOrder(false); // initialize new order and clear existing order
     $scope.order.orderAction = $stateParams.orderAction; // set order action
-    
+
     if ($scope.order.orderAction == 'buy') {
       Airbitz.ui.title('Buy Bitcoin');
       $scope.order.paymentMethod = {"name":"Wallet","lockDuration":0,"type":"pull"};
@@ -26,14 +26,14 @@
     });
 
     $scope.convertFiatValue = function(input) {
-      var d = Prices.convertFiatValue($scope.order.orderAction, input); 
+      var d = Prices.convertFiatValue($scope.order.orderAction, input);
       $scope.order.orderValueSatoshi = d.orderValueSatoshi;
       $scope.order.orderValueInput = d.orderValueInput;
       $scope.order.orderBtcInput = d.orderBtcInput;
     };
 
     $scope.convertBtcValue = function(input) {
-      var d = Prices.convertBtcValue($scope.order.orderAction, input); 
+      var d = Prices.convertBtcValue($scope.order.orderAction, input);
       $scope.order.orderBtcInput = d.orderBtcInput;
       $scope.order.orderValueSatoshi = d.orderValueSatoshi;
       $scope.order.orderFiatInput = d.orderFiatInput;
@@ -43,8 +43,8 @@
         Airbitz.ui.showAlert('', 'Orders must be greater than 1 Euro.');
       } else {
         Airbitz.ui.showAlert('', 'Requesting quote...', { 'showSpinner': true });
-        $scope.order.orderBtcInput = parseFloat($scope.order.orderBtcInput).toFixed(8);
-        DataFactory.requestBuy($scope.order.orderBtcInput, $scope.order.paymentMethod.name).then(function(data) {
+        $scope.order.orderFiatInput = parseFloat($scope.order.orderFiatInput).toFixed(2);
+        DataFactory.requestBuy($scope.order.orderFiatInput, $scope.order.paymentMethod.name).then(function(data) {
           Airbitz.ui.hideAlert();
           $scope.order.quote = data;
           $state.go("reviewOrder");
