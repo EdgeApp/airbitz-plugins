@@ -53,8 +53,9 @@
   function signupController($scope, $state, Error, UserFactory) {
     Airbitz.ui.title('CleverCoin');
     $scope.account = UserFactory.getUserAccount();
+    // we have to null out the password otherwise account is linked to exchange
     if (!$scope.account.password) {
-      $scope.account.password = '';
+      $scope.account.password = null;
     }
 
     $scope.cancelSignup = function() {
@@ -135,25 +136,21 @@
     var showOpts = function(s) {
       $scope.showOptions = !s.userCanTransact; // || $scope.banks.length == 0;
     };
-    showOpts($scope.userStatus);
+    showOpts($scope.account);
 
     Prices.setBuyQty(1).then(function() {
       return Prices.setSellQty(1);
     }).then(function() {
       return UserFactory.fetchAccount().then(function(account) {
         $scope.account = account;
+        showOpts($scope.account);
       }, function() {
         // Error, error
       });
     }).then(function() {
       return UserFactory.fetchUserAccountStatus().then(function(b) {
         $scope.userStatus = b;
-        showOpts($scope.userStatus);
       });
-    // }).then(function() {
-    //   return UserFactory.fetchBanks(function(b) {
-    //     $scope.banks = b;
-    //   });
     }).then(function() {
       return UserFactory.fetchWallets(function(b) {
         $scope.wallets = b;
@@ -215,7 +212,7 @@
     };
 
     $scope.userInformation = function() {
-      if ($scope.userStatus.userCanTransact) {
+      if ($scope.account.userCanTransact) {
         Airbitz.ui.showAlert('', 'User information has been submitted. Cannot be resubmitted.');
       } else if($scope.account.requiredDataSupplied) {
         Airbitz.ui.showAlert('', 'User information has already been submitted.');
