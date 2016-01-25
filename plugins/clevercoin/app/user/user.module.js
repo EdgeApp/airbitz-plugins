@@ -53,8 +53,9 @@
   function signupController($scope, $state, Error, UserFactory) {
     Airbitz.ui.title('CleverCoin');
     $scope.account = UserFactory.getUserAccount();
+    // we have to null out the password otherwise account is linked to exchange
     if (!$scope.account.password) {
-      $scope.account.password = '';
+      $scope.account.password = null;
     }
 
     $scope.cancelSignup = function() {
