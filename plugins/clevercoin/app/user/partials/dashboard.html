@@ -4,7 +4,7 @@
   </div>
 </div>
 
-<div ng-if="userStatus.userCanTransact" class="exchange-buy-sell row">
+<div ng-if="account.userCanTransact" class="exchange-buy-sell row">
   <div class="col-xs-6 no-pad">
     <button ng-click="buy()" class="buy-button btn-success btn-lg btn-block btn">BUY</button>
   </div>
@@ -15,13 +15,13 @@
 
 <div account-summary></div>
 
-<div class="row" ng-if="userStatus.userCanTransact">
+<div class="row" ng-if="account.userCanTransact">
   <div class="col-xs-12 no-pad">
     <button data-ng-click="sepaDeposit()" class="buy-button btn-primary btn-lg btn-block btn">Deposit Euro via SEPA</button>
   </div>
 </div>
 
-<div ng-if="userStatus.userCanTransact" class="row" ng-if="wallets.length > 0">
+<div ng-if="account.userCanTransact" class="row" ng-if="wallets.length > 0">
   <table class="table table-bordered table-striped col-xs-12 no-pad">
     <tr>
       <th>Euro Wallet Balance</th>
@@ -32,7 +32,7 @@
   </table>
 </div>
 
-<div ng-if="userStatus.userCanTransact" class="ng-trans ng-trans-fade-up easeOutSine">
+<div ng-if="account.userCanTransact" class="ng-trans ng-trans-fade-up easeOutSine">
   <hr />
   <div class="row">
     <div class="col-xs-12 no-pad">

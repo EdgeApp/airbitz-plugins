@@ -15,7 +15,8 @@
     var factory = {};
     var account = Airbitz.core.readData('account') || {
       isSignedIn: false,
-      isActivated: false
+      isActivated: false,
+      userCanTransact: false
     };
     var bankList = Airbitz.core.readData('bankList') || [];
     var walletList = Airbitz.core.readData('walletList') || [];
@@ -93,7 +94,6 @@
       return d.promise;
     };
     var userStatus = Airbitz.core.readData('userStatus') || {
-      userCanTransact: false,
       userIdentitySetup: false,
       userAddressSetup: false
     };
@@ -119,8 +119,6 @@
             userStatus.userAddressSetup = b.address.proof.progressState == 'Verified';
             userStatus.userAddressState = b.address.proof.progressState;
           }
-          userStatus.userCanTransact = userStatus.userIdentitySetup && userStatus.userAddressSetup;
-
           if (userStatus.userIdentityState == "Rejected") {
             userStatus.identityRejectedReason = b.identity.passport.rejectReason;
           } else {
@@ -166,6 +164,7 @@
             account.surname = b.surname || account.surname;
             account.email = b.email || account.email;
             account.verificationState = b.verificationState || account.verificationState;
+            account.userCanTransact = account.verificationState == "Verified";
             account.gender = b.gender || account.gender;
             if (b.birthday) {
               var arr = b.birthday.split("-");
@@ -177,7 +176,7 @@
             account.phonenumber = b.phonenumber || account.phonenumber;
             account.termsAgreedVersion = b.termsAgreedVersion || account.termsAgreedVersion;
             Airbitz.core.writeData('account', account);
-            resolve(b)
+            resolve(account)
           } else {
             reject(b);
           }
