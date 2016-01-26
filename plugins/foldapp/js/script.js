@@ -820,5 +820,5 @@ $(function() {
 
     $(".brand-logo").attr("src", logo_url);
     $(".user-creds").html("Username: " + Account.username  + "<br>Password: " + Account.pass);
-    $(".support-mail-link").html("<a href=\"mailto:support@foldapp.com?subject=Support%20Requested&Body=" + "Username:" + Account.username + "\">support@foldapp.com.</a>");
+    $(".support-mail-link").html("<a href=\"mailto:support@foldapp.com?subject=Support%20Requested&body=" + "Username:" + Account.username + "\">support@foldapp.com.</a>");
 });

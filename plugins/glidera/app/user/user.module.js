@@ -107,6 +107,9 @@
       $scope.userPictureIsSetup = userStatus.userPictureIdState == 'VERIFIED'
                                || userStatus.userPictureIdState == 'PASSED'
                                || userStatus.userPictureIdState == 'SUBMITTED';
+      if ($scope.exchange.countryCode == 'CA') {
+        $scope.userPictureIsSetup = true;
+      }
     }
     checkExtras($scope.userStatus);
     UserFactory.fetchUserAccountStatus().then(function(b) {
@@ -156,7 +159,7 @@
         counter++;
         msg += '<h5><strong class="step">' + counter + "</strong> Verify mobile phone</h5>";
       }
-      if (!$scope.userStatus.userPictureIsSetup) {
+      if (!$scope.userStatus.userPictureIsSetup ) {
         counter++;
         msg += '<h5><strong class="step">' + counter + "</strong> Provide a photo for verification</h5>";
       }

@@ -26,12 +26,6 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
       templateUrl: "app/user/partials/pendingActivation.html",
       controller: "pendingActivationController",
     })
-    // route for signup
-    .state("activate", {
-      url: "/activate/:email/:token",
-      templateUrl: "app/user/partials/activating.html",
-      controller: "activateController",
-    })
     // route for dashboard
     .state("dashboard", {
       url: "/dashboard/",
