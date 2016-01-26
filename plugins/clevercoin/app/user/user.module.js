@@ -5,7 +5,6 @@
     .module('app.user', ['app.dataFactory', 'app.constants'])
     .controller('homeController', ['$scope', '$state', '$location', 'UserFactory', homeController])
     .controller('pendingActivationController', ['$scope', '$state', 'Error', 'UserFactory', pendingActivationController])
-    .controller('activateController', ['$scope', '$state', '$stateParams', 'Error', 'UserFactory', activateController])
     .controller('dashboardController', ['$scope', '$sce', '$state', 'Error', 'DataFactory', 'UserFactory', 'Prices', dashboardController])
     .controller('signupController', ['$scope', '$state', 'Error', 'UserFactory', signupController])
     .controller('linkController', ['$scope', '$state', 'Error', 'UserFactory', linkController])
@@ -20,18 +19,14 @@
 
   function homeController($scope, $state, $location, UserFactory) {
     var d = parseParameters($location);
-    if (d.token) {
-      $state.go('activate', {'token': d.token, 'email': d.email});
-    } else {
-      if (UserFactory.isSignedIn()) {
-        if (UserFactory.isActivated()) {
-          $state.go("dashboard");
-        } else {
-          $state.go("pendingActivation");
-        }
+    if (UserFactory.isSignedIn()) {
+      if (UserFactory.isActivated()) {
+        $state.go("dashboard");
       } else {
-        $state.go("signup");
+        $state.go("pendingActivation");
       }
+    } else {
+      $state.go("signup");
     }
   }
 
@@ -88,8 +83,8 @@
   function pendingActivationController($scope, $state, Error, UserFactory) {
     Airbitz.ui.title('Activate account');
     $scope.account = UserFactory.getUserAccount();
-    // If we can fetch the account, we know the user has been activated
-    UserFactory.fetchAccount().then(function(account) {
+    // If we can fetch the wallets, we know the user has been activated
+    UserFactory.fetchUserAccountStatus().then(function() {
       $scope.account.isActivated = true;
       Airbitz.core.write('account', $scope.account);
       $state.go("dashboard");
@@ -109,20 +104,6 @@
         Airbitz.ui.showAlert('', msg);
       });
     };
-  }
-
-  function activateController($scope, $state, $stateParams, Error, UserFactory) {
-    Airbitz.ui.title('Activating your account');
-    Airbitz.ui.showAlert('', 'Activating account.', {
-      'showSpinner': true
-    });
-    UserFactory.activate($stateParams.email, $stateParams.token).then(function(b) {
-      Airbitz.ui.showAlert('', 'Account activated');
-      $state.go("dashboard");
-    }, function(b) {
-      Airbitz.ui.showAlert('', 'Unable to activate account.');
-      $state.go("pendingActivation");
-    });
   }
 
   function dashboardController($scope, $sce, $state, Error, DataFactory, UserFactory, Prices) {
