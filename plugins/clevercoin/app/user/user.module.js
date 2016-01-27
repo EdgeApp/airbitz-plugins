@@ -86,9 +86,22 @@
     // If we can fetch the wallets, we know the user has been activated
     UserFactory.fetchUserAccountStatus().then(function() {
       $scope.account.isActivated = true;
-      Airbitz.core.write('account', $scope.account);
+      Airbitz.core.writeData('account', $scope.account);
       $state.go("dashboard");
     });
+    $scope.toDashboard = function() {
+      Airbitz.ui.showAlert('', 'Checking account...', {
+        'showSpinner': true
+      });
+      UserFactory.fetchUserAccountStatus().then(function() {
+        $scope.account.isActivated = true;
+        Airbitz.core.writeData('account', $scope.account);
+        $state.go("dashboard");
+        Airbitz.ui.hideAlert();
+      }, function() {
+        Airbitz.ui.showAlert('', 'Account has not been activated. Please click the link in your email.');
+      });
+    };
     $scope.changeEmail = function() {
       Airbitz.ui.showAlert('', 'Removing old account...', {
         'showSpinner': true
