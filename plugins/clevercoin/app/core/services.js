@@ -458,13 +458,13 @@
       return d.promise;
     };
 
-    factory.requestBuy = function(btcQty, paymentMethod) {
+    factory.requestBuy = function(qty, currency, paymentMethod) {
       var d = $q.defer();
       var uri = Airbitz.config.get('REDIRECT_URI');
       var wallet = Airbitz.currentWallet;
       createAddress(wallet, 'CleverCoin', 0, 0, 'Exchange:CleverCoin', '', function(request) {
         var address = request['address'];
-        CcFactory.quote('bid', btcQty, 'EUR', paymentMethod, uri, '', address, function(e, r, b) {
+        CcFactory.quote('bid', qty, currency, paymentMethod, uri, '', address, function(e, r, b) {
           if (r == 200) {
             if (true && !b.fees) {
               // TODO: once CC fixes fees, remove this

@@ -43,8 +43,21 @@
         Airbitz.ui.showAlert('', 'Orders must be greater than 1 Euro.');
       } else {
         Airbitz.ui.showAlert('', 'Requesting quote...', { 'showSpinner': true });
-        $scope.order.orderFiatInput = parseFloat($scope.order.orderFiatInput).toFixed(2);
-        DataFactory.requestBuy($scope.order.orderFiatInput, $scope.order.paymentMethod.name).then(function(data) {
+        var $amount = 0;
+        var $currency = "BTC";
+
+        // Check if Euro value has not more than 2 digits
+        var $pattern = /^\d(\.\d{1,2})?$/;
+        if ($pattern.test($scope.order.orderFiatInput)) {  //buy as Euros
+          $amount = parseFloat($scope.order.orderFiatInput).toFixed(2);
+          $currency = "EUR"
+        }
+        else  // buy as Bitcoins
+        {
+          $amount = parseFloat($scope.order.orderBtcInput).toFixed(8);
+          $currency = "BTC"
+        }
+        DataFactory.requestBuy($amount, $currency, $scope.order.paymentMethod.name).then(function(data) {
           Airbitz.ui.hideAlert();
           $scope.order.quote = data;
           $state.go("reviewOrder");
