@@ -824,6 +824,12 @@ function main() {
   $(".support-mail-link").html("<a href=\"mailto:support@foldapp.com?subject=Support%20Requested&body=" + "Username:" + Account.username + "\">support@foldapp.com.</a>");
 }
 
+window.onerror = function(message) {
+  Airbitz.ui.showAlert("Internal error", "Service is unavailable at this time. Please try again later.");
+  Airbitz.ui.exit();
+  Airbitz.ui.debugLevel(1, message);
+}
+
 $(function() {
   try {
     main();
