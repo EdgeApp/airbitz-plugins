@@ -462,7 +462,7 @@
       var d = $q.defer();
       var uri = Airbitz.config.get('REDIRECT_URI');
       var wallet = Airbitz.currentWallet;
-      createAddress(wallet, 'CleverCoin', 0, 0, 'Exchange:CleverCoin', '', function(request) {
+      createAddress(wallet, 'CleverCoin', 0, 0, 'Exchange:Buy Bitcoin', '', function(request) {
         var address = request['address'];
         CcFactory.quote('bid', qty, currency, paymentMethod, uri, '', address, function(e, r, b) {
           if (r == 200) {
