@@ -522,7 +522,7 @@
       return d.promise;
     };
 
-    factory.confirmSell = function(linkOrCode, amountBtc, amountFiat) {
+    factory.confirmSell = function(linkOrCode, amountBtc, amountFiat, iban) {
       var notes = formatNotes("Sold", amountFiat);
       var wallet = Airbitz.currentWallet;
       var d = $q.defer();
@@ -536,6 +536,15 @@
             if (res && res.back) {
                 d.reject({"code": "IgnoreAction"});
             } else {
+                CcFactory.withdrawalSepa(amountFiat, iban, "CleverCoin Sell",function(e, r, b) {
+                if (r == 200) {
+                    var order = factory.getOrder(false);
+                    StatsFactory.recordEvent('sell', b, amountFiat);
+                    d.resolve(b);
+                } else {
+                    d.reject(b);
+                }
+                });
                 d.resolve({'sellAddress': linkOrCode,
                             'signedTx': res});
             }

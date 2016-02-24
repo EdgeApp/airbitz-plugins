@@ -86,7 +86,10 @@
           $state.go('orderReceipt');
         }, Error.reject);
       } else {
-        DataFactory.confirmSell(order.quote.linkOrCode, order.quote.toPay, order.quote.amount).then(function(data) {
+        UserFactory.fetchBanks();
+        var banks = UserFactory.getBanks();
+        var iban = banks[0].IBAN;
+        DataFactory.confirmSell(order.quote.linkOrCode, order.quote.toPay, order.quote.amount, iban).then(function(data) {
           Airbitz.ui.showAlert('Sold Bitcoin', 'You sold bitcoin!');
           $state.go('orderReceipt');
         }, Error.reject);
