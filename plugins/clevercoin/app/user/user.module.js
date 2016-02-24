@@ -249,7 +249,8 @@
       $state.go('exchangeOrder', {'orderAction': 'buy'});
     };
     $scope.sell = function() {
-      Airbitz.ui.showAlert('', 'Sell is coming soon!');
+      DataFactory.getOrder(true);
+      $state.go('exchangeOrder', {'orderAction': 'sell'});
     };
     $scope.showAccountOptions = function() {
       $scope.showOptions = !$scope.showOptions;

@@ -18,7 +18,7 @@
       $scope.order.paymentMethod = {"name":"Wallet","lockDuration":0,"type":"pull"};
     } else {
       Airbitz.ui.title('Sell Bitcoin');
-      // $scope.order.paymentMethod = {"name":"Wallet","lockDuration":1,"type":"pull"};
+       $scope.order.paymentMethod = {"name":"DirectDeposit","lockDuration":1,"type":"pull"};
     }
 
     Prices.setBuyQty(1).then(function() {
@@ -48,16 +48,16 @@
 
         // Check if Euro value has not more than 2 digits
         var $pattern = /^\d(\.\d{1,2})?$/;
-        if ($pattern.test($scope.order.orderFiatInput)) {  //buy as Euros
+        if ($pattern.test($scope.order.orderFiatInput)) {  //buy/sell as Euros
           $amount = parseFloat($scope.order.orderFiatInput).toFixed(2);
           $currency = "EUR"
         }
-        else  // buy as Bitcoins
+        else  // buy/sell as Bitcoins
         {
           $amount = parseFloat($scope.order.orderBtcInput).toFixed(8);
           $currency = "BTC"
         }
-        DataFactory.requestBuy($amount, $currency, $scope.order.paymentMethod.name).then(function(data) {
+        DataFactory.requestExchange($amount, $currency, $scope.order.paymentMethod.name).then(function(data) {
           Airbitz.ui.hideAlert();
           $scope.order.quote = data;
           $state.go("reviewOrder");
@@ -86,8 +86,7 @@
           $state.go('orderReceipt');
         }, Error.reject);
       } else {
-        Airbitz.ui.showAlert('', 'Executing sell...', { 'showSpinner': true });
-        DataFactory.sell(order.orderBtcInput, order.paymentMethod.name).then(function(data) {
+        DataFactory.confirmSell(order.quote.linkOrCode, order.quote.toPay, order.quote.amount).then(function(data) {
           Airbitz.ui.showAlert('Sold Bitcoin', 'You sold bitcoin!');
           $state.go('orderReceipt');
         }, Error.reject);
