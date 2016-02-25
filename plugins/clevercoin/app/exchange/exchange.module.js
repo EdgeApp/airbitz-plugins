@@ -40,7 +40,10 @@
     };
     $scope.next = function() {
       if ($scope.order.orderFiatInput < 1.0) {
-        Airbitz.ui.showAlert('', 'Orders must be greater than 1 Euro.');
+        Airbitz.ui.showAlert('', 'Buy orders must be greater than 1 Euro.');
+      } else if($scope.order.orderAction == 'sell' && $scope.order.orderFiatInput < 10.0)
+      {
+        Airbitz.ui.showAlert('', 'Sell orders must be greater than 10 Euro.');
       } else {
         Airbitz.ui.showAlert('', 'Requesting quote...', { 'showSpinner': true });
         var $amount = 0;
