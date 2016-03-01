@@ -69,7 +69,7 @@
     <div class="form-group col-xs-12">
       <label for="inputBankCountry" class="">Bank Country</label>
       <select
-        ng-options="o.name for o in countries"
+        ng-options="o.name for o in supportedCountries"
         ng-model="bankcountryObject" class="form-control"
         id="inputBankCountry" name="bankcountry" required="" />
         <option value="">Select a country</option>
@@ -109,7 +109,7 @@
     </div>
     <div class="col-xs-6 no-pad">
       <button type="button"
-        ng-click="save()" 
+        ng-click="save()"
         ng-disabled="form.$invalid || bankstatement.length == 0"
         class="btn btn-lg btn-block btn-success">Save</button>
     </div>

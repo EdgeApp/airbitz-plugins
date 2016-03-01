@@ -124,11 +124,11 @@
     // set variables that might be cached locally to make sure they load faster if available
     $scope.account = UserFactory.getUserAccount();
     $scope.userStatus = UserFactory.getUserAccountStatus();
-    // $scope.banks = UserFactory.getBanks();
+    $scope.banks = UserFactory.getBanks();
     $scope.wallets = UserFactory.getWallets();
 
     var showOpts = function(s) {
-      $scope.showOptions = !s.userCanTransact; // || $scope.banks.length == 0;
+      $scope.showOptions = !s.userCanTransact || $scope.banks.length == 0;
     };
     showOpts($scope.account);
 
@@ -145,6 +145,10 @@
       return UserFactory.fetchUserAccountStatus().then(function(b) {
         $scope.userStatus = b;
       });
+    }).then(function() {
+       return UserFactory.fetchBanks(function(b) {
+         $scope.banks = b;
+     });
     }).then(function() {
       return UserFactory.fetchWallets(function(b) {
         $scope.wallets = b;
@@ -195,10 +199,6 @@
         counter++;
         msg += '<h5><strong>' + counter + "</strong>. Please verify your address.</h5>";
       }
-      // if ($scope.banks.length == 0) {
-      //   counter++;
-      //   msg += '<h5><strong>' + counter + "</strong>. Please add a bank account.</h5>";
-      // }
       if (msg !== '') {
         msg = '<h4 style="margin-top: 0;">To Buy or Sell Bitcoin:</h4>' + msg;
       }
@@ -249,6 +249,12 @@
       $state.go('exchangeOrder', {'orderAction': 'buy'});
     };
     $scope.sell = function() {
+      UserFactory.fetchBanks();
+      var banks = UserFactory.getBanks();
+      if (banks.length == 0) {
+        Airbitz.ui.showAlert('', 'Please add a bank account.');
+        return;
+      }
       DataFactory.getOrder(true);
       $state.go('exchangeOrder', {'orderAction': 'sell'});
     };
