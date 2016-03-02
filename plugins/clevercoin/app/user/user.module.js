@@ -255,6 +255,10 @@
         Airbitz.ui.showAlert('', 'Please add a bank account.');
         return;
       }
+      if (!banks[0].verified) {
+        Airbitz.ui.showAlert('', 'Please wait until your bank account is verified.');
+        return;
+      }
       DataFactory.getOrder(true);
       $state.go('exchangeOrder', {'orderAction': 'sell'});
     };
