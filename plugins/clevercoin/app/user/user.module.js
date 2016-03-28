@@ -61,13 +61,19 @@
       Airbitz.ui.showAlert('', 'Creating account...', {
         'showSpinner': true
       });
-      UserFactory.registerUser($scope.account.firstName, $scope.account.email, $scope.account.password).then(function() {
-        Airbitz.ui.showAlert('', 'Account created...');
+
+      UserFactory.requestLink($scope.account.email).then(function() {
+        Airbitz.ui.showAlert('', 'Account connected...');
         $state.go('pendingActivation');
       }, function(e) {
-        console.log(e);
-        var msg = 'Unable to signup at this time.\n' + Error.errorMap(e);
-        Airbitz.ui.showAlert('Error', msg);
+        UserFactory.registerUser($scope.account.firstName, $scope.account.email, $scope.account.password).then(function() {
+          Airbitz.ui.showAlert('', 'Account created...');
+          $state.go('pendingActivation');
+        }, function(e) {
+          console.log(e);
+          var msg = 'Unable to signup at this time.\n' + Error.errorMap(e);
+          Airbitz.ui.showAlert('Error', msg);
+        });
       });
     };
   }

@@ -37,7 +37,7 @@
     var redirectUri = Airbitz.config.get('REDIRECT_URI');
     factory.registerUser = function(name, email, password) {
       var d = $q.defer();
-      var mailTitle = 'Welcome to Airbitz on Clevercoin';
+      var mailTitle = 'Welcome to Airbitz on CleverCoin';
       var mailMessage = [ 'Dear %1$s,<br /><br />',
         'You have created an account at CleverCoin with this e-mail address (%2$s). Welcome!<br />',
         'Click the button below to activate your account.<br /><br />',
@@ -75,7 +75,21 @@
     factory.requestLink = function(email) {
       var d = $q.defer();
       CcFactory.requestLink(email, redirectUri, function(_, c, b) {
-        (c >= 200 && c <= 300) ? d.resolve(b) : d.reject(b);
+        console.log(JSON.stringify(b));
+        if (c >= 200 && c <= 300) {
+          var account = factory.getUserAccount();
+          account.name = name;
+          account.email = email;
+          account.isSignedIn = true;
+          account.key = b.key;
+          account.secret = b.secret;
+          CcFactory.clientKey = account.key;
+          CcFactory.clientSecret = account.secret;
+          Airbitz.core.writeData('account', account);
+          d.resolve(b);
+        } else {
+          d.reject(b);
+        }
       });
       return d.promise;
     };
