@@ -19,6 +19,8 @@ var force_refresh = 1;
 var min_price_rate = 1;
 var refund_enabled = 0;
 var new_account = false;
+var affiliate_address;
+var affiliate_fee_percent;
 
 // Purchases over this amount are given a popup warning as 1 confirmation is required
 // before card is available
@@ -115,6 +117,12 @@ function logStats(event, brand, amount) {
     s['user'] = Account.username.substr(Account.username.length - 8);
     s['brand'] = brand;
     s['usd'] = amount;
+    if (affiliate_address.length >= 8) {
+        s['afaddr'] = affiliate_address.substr(affiliate_address.length - 8);
+    } else {
+        s['afaddr'] = "none";
+    }
+
     $.ajax({
         headers: {
             'Content-Type' : 'application/json',
@@ -209,6 +217,17 @@ var Account = {
             Airbitz.ui.showAlert("Login error", "Error logging into account. Please try again later");
             Airbitz.ui.exit();
         });
+        var affiliateInfo = Airbitz.core.getAffiliateInfo();
+        if (affiliateInfo["affiliate_address"].length > 20) {
+            for (var ic in affiliateInfo["objects"]) {
+                if (affiliateInfo["objects"][ic]["key"] == "gift_card_affiliate_fee") {
+                    affiliate_address = affiliateInfo["affiliate_address"];
+                    affiliate_fee_percent = affiliateInfo["objects"][ic]["value"] / 100;
+                    break;
+                }
+            }
+        }
+
     },
     updateBalance: function() {
         this.getInfo("balances?currency=USD", function(balances) {
@@ -633,8 +652,8 @@ var Account = {
             if (large_value_threshold < denomination) {
                 Airbitz.ui.showAlert("High Value Card", "You are purchasing a card over $50 in value. This requires one bitcoin network confirmation before your card will be available and may take over 10 minutes.");
             }
-            Airbitz.core.requestSpend(Account.abWallet,
-                    toAddr, amt, 0, {
+            Airbitz.core.requestSpend2(Account.abWallet,
+                    toAddr, amt, affiliate_address, amt*affiliate_fee_percent, 0, {
                         label: brand,
                         category: category,
                         notes: brand + " $" + String(denomination) + " gift card.",
