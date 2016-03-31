@@ -178,7 +178,9 @@
             account.surname = b.surname || account.surname;
             account.email = b.email || account.email;
             account.verificationState = b.verificationState || account.verificationState;
-            account.userCanTransact = account.verificationState == "Verified";
+            account.verificationProgressState = b.verificationProgressState || account.verificationProgressState;
+            account.userCanTransact = (account.verificationState == "Verified") && (account.verificationProgressState == "Verified");
+            account.requiredDataSupplied = b.requiredDataSupplied;
             account.gender = b.gender || account.gender;
             if (b.birthday) {
               var arr = b.birthday.split("-");

@@ -19,8 +19,8 @@
         <span class="list-group-item-heading">User Information</span>
         <p class="list-group-item-text">Tap to edit</p>
         <label class="status label label-outline pull-right"
-               ng-class="{'label-success': (account.termsAgreedVersion == 1 || account.userCanTransact)}">
-               {{ (account.termsAgreedVersion == 1 || account.userCanTransact) | statusFilter }}</label>
+               ng-class="{'label-success': (account.termsAgreedVersion == 1 && account.userCanTransact)}">
+               {{ (account.termsAgreedVersion == 1 && account.userCanTransact) | statusFilter }}</label>
       </li>
       <li ng-if="showOptions" ng-click="identity()" class="ng-trans ng-trans-scale-up easeOutBack list-group-item">
         <span class="list-group-item-heading">Verify Identity</span>

@@ -212,7 +212,14 @@
     };
 
     $scope.userInformation = function() {
-      if ($scope.account.userCanTransact) {
+      UserFactory.fetchAccount();
+      var account = UserFactory.getUserAccount();
+      if ($scope.account.verificationState == "Verified" || $scope.account.verificationProgressState == "Verified") {
+        Airbitz.ui.showAlert('', 'User information have already been verified. Cannot be resubmitted.');
+      //if ($scope.account.verificationState == "Verified") {
+//      if ($scope.account.verified) {
+  //    if (["Verified"].indexOf($scope.account.verificationState) > -1) {
+      } else if (account.verificationProgressState == "Exported") {
         Airbitz.ui.showAlert('', 'User information has been submitted. Cannot be resubmitted.');
       } else if($scope.account.requiredDataSupplied) {
         Airbitz.ui.showAlert('', 'User information has already been submitted.');
