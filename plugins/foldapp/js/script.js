@@ -19,8 +19,8 @@ var force_refresh = 1;
 var min_price_rate = 1;
 var refund_enabled = 0;
 var new_account = false;
-var affiliate_address;
-var affiliate_fee_percent;
+var affiliate_address = null;
+var affiliate_fee_percent = 0;
 
 // Purchases over this amount are given a popup warning as 1 confirmation is required
 // before card is available
@@ -117,7 +117,7 @@ function logStats(event, brand, amount) {
     s['user'] = Account.username.substr(Account.username.length - 8);
     s['brand'] = brand;
     s['usd'] = amount;
-    if (affiliate_address.length >= 8) {
+    if (affiliate_address && affiliate_address.length >= 8) {
         s['afaddr'] = affiliate_address.substr(affiliate_address.length - 8);
     } else {
         s['afaddr'] = "none";
@@ -218,7 +218,9 @@ var Account = {
             Airbitz.ui.exit();
         });
         var affiliateInfo = Airbitz.core.getAffiliateInfo();
-        if (affiliateInfo["affiliate_address"].length > 20) {
+        if (affiliateInfo
+              && affiliateInfo["affiliate_address"] 
+              && affiliateInfo["affiliate_address"].length > 20) {
             for (var ic in affiliateInfo["objects"]) {
                 if (affiliateInfo["objects"][ic]["key"] == "gift_card_affiliate_fee") {
                     affiliate_address = affiliateInfo["affiliate_address"];
