@@ -22,6 +22,9 @@ var new_account = false;
 var affiliate_address = null;
 var affiliate_fee_percent = 0;
 
+// TODO: get this number from the core
+var DUST = 4000;
+
 // Purchases over this amount are given a popup warning as 1 confirmation is required
 // before card is available
 var large_value_threshold = 50;
@@ -654,8 +657,14 @@ var Account = {
             if (large_value_threshold < denomination) {
                 Airbitz.ui.showAlert("High Value Card", "You are purchasing a card over $50 in value. This requires one bitcoin network confirmation before your card will be available and may take over 10 minutes.");
             }
+            var affiliateAmount = amt*affiliate_fee_percent;
+            var tmpAddress = affiliate_address;
+            if (affiliateAmount <= DUST) {
+              affiliateAmount = 0;
+              tmpAddress = null;
+            }
             Airbitz.core.requestSpend2(Account.abWallet,
-                    toAddr, amt, affiliate_address, amt*affiliate_fee_percent, 0, {
+                    toAddr, amt, tmpAddress, affiliateAmount, 0, {
                         label: brand,
                         category: category,
                         notes: brand + " $" + String(denomination) + " gift card.",
