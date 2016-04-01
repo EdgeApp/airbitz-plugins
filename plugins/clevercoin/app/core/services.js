@@ -37,7 +37,7 @@
     var redirectUri = Airbitz.config.get('REDIRECT_URI');
     factory.registerUser = function(name, email, password) {
       var d = $q.defer();
-      var mailTitle = 'Welcome to Airbitz on Clevercoin';
+      var mailTitle = 'Welcome to Airbitz on CleverCoin';
       var mailMessage = [ 'Dear %1$s,<br /><br />',
         'You have created an account at CleverCoin with this e-mail address (%2$s). Welcome!<br />',
         'Click the button below to activate your account.<br /><br />',
@@ -75,7 +75,21 @@
     factory.requestLink = function(email) {
       var d = $q.defer();
       CcFactory.requestLink(email, redirectUri, function(_, c, b) {
-        (c >= 200 && c <= 300) ? d.resolve(b) : d.reject(b);
+        console.log(JSON.stringify(b));
+        if (c >= 200 && c <= 300) {
+          var account = factory.getUserAccount();
+          account.name = name;
+          account.email = email;
+          account.isSignedIn = true;
+          account.key = b.key;
+          account.secret = b.secret;
+          CcFactory.clientKey = account.key;
+          CcFactory.clientSecret = account.secret;
+          Airbitz.core.writeData('account', account);
+          d.resolve(b);
+        } else {
+          d.reject(b);
+        }
       });
       return d.promise;
     };
@@ -164,7 +178,9 @@
             account.surname = b.surname || account.surname;
             account.email = b.email || account.email;
             account.verificationState = b.verificationState || account.verificationState;
-            account.userCanTransact = account.verificationState == "Verified";
+            account.verificationProgressState = b.verificationProgressState || account.verificationProgressState;
+            account.userCanTransact = (account.verificationState == "Verified") && (account.verificationProgressState == "Verified");
+            account.requiredDataSupplied = b.requiredDataSupplied;
             account.gender = b.gender || account.gender;
             if (b.birthday) {
               var arr = b.birthday.split("-");
@@ -458,19 +474,19 @@
       return d.promise;
     };
 
-    factory.requestBuy = function(qty, currency, paymentMethod) {
+    factory.requestExchange = function(qty, currency, paymentMethod) {
       var d = $q.defer();
       var uri = Airbitz.config.get('REDIRECT_URI');
       var wallet = Airbitz.currentWallet;
-      createAddress(wallet, 'CleverCoin', 0, 0, 'Exchange:Buy Bitcoin', '', function(request) {
-        var address = request['address'];
-        CcFactory.quote('bid', qty, currency, paymentMethod, uri, '', address, function(e, r, b) {
+      if (paymentMethod == "DirectDeposit") // sell
+      {
+        CcFactory.quote('ask', qty, currency, paymentMethod, uri, '', '', function(e, r, b) {
           if (r == 200) {
             if (true && !b.fees) {
               // TODO: once CC fixes fees, remove this
               // var quoted = Prices.currentBuy.btcPrice;
               var quoted = b.btcPrice / 1.01;
-              var diff = b.toPay - b.amount * quoted;
+              var diff = b.amount - b.toPay * quoted;
               b.fee = diff;
               b.btcPrice = quoted;
             }
@@ -481,9 +497,30 @@
             d.reject(b);
           }
         });
-      }, function() {
-        Airbitz.ui.alert('Unable to create a receive address. Please try again later.');
-      });
+      } else{ // buy
+        createAddress(wallet, 'CleverCoin', 0, 0, 'Exchange:Buy Bitcoin', '', function(request) {
+          var address = request['address'];
+          CcFactory.quote('bid', qty, currency, paymentMethod, uri, '', address, function(e, r, b) {
+            if (r == 200) {
+              if (true && !b.fees) {
+                // TODO: once CC fixes fees, remove this
+                // var quoted = Prices.currentBuy.btcPrice;
+                var quoted = b.btcPrice / 1.01;
+                var diff = b.toPay - b.amount * quoted;
+                b.fee = diff;
+                b.btcPrice = quoted;
+              }
+              b.amount = Math.abs(b.amount);
+              b.expires = new Date(b.expires * 1000);
+              d.resolve(b);
+            } else {
+              d.reject(b);
+            }
+          });
+        }, function() {
+          Airbitz.ui.alert('Unable to create a receive address. Please try again later.');
+        });
+      }
       return d.promise;
     }
 
@@ -501,11 +538,36 @@
       return d.promise;
     };
 
-    factory.sell = function(qty, paymentMethod) {
+    factory.confirmSell = function(linkOrCode, amountBtc, amountFiat, iban) {
+      var notes = formatNotes("Sold", amountFiat);
       var wallet = Airbitz.currentWallet;
       var d = $q.defer();
-      CcFactory.quote('ask', qty, 'BTC', paymentMethod, uri, '', null, function(e, r, b) {
-        r == 200 ? d.resolve(b) : d.reject(b);
+
+      Airbitz.core.requestSpend(wallet, linkOrCode, btcToSatoshi(amountBtc), amountFiat, {
+          label: 'CleverCoin',
+          category: 'Exchange:Sell Bitcoin',
+          bizId: ExchangeFactory.bizId,
+          notes: notes,
+          success: function(res) {
+            if (res && res.back) {
+                d.reject({"code": "IgnoreAction"});
+            } else {
+                CcFactory.withdrawalSepa(amountFiat, iban, "CleverCoin Sell",function(e, r, b) {
+                if (r == 200) {
+                    var order = factory.getOrder(false);
+                    StatsFactory.recordEvent('sell', b, amountFiat);
+                    d.resolve(b);
+                } else {
+                    d.reject(b);
+                }
+                });
+                d.resolve({'sellAddress': linkOrCode,
+                            'signedTx': res});
+            }
+          },
+          error: function() {
+          d.reject({"code": "9999", "message": "Error during send"});
+          }
       });
       return d.promise;
     };
