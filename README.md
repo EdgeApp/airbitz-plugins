@@ -1,6 +1,12 @@
 Airbitz Plugins
 ===============
 
+## About
+
+Plugins are HTML5 applications that can be easily loaded in the Airbitz mobile
+wallet. The plugins utilize `airbitz-core.js` in order to securely store data,
+generate bitcoin payment addresses and request spends from the user.
+
 ## Install dependencies
 
 Install node on Ubuntu
