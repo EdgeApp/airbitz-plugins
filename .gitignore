@@ -5,6 +5,8 @@ config.js
 plugins/*/.idea/*
 .idea/*
 .DS_Store
+.sass-cache
+_site
 
 
 
