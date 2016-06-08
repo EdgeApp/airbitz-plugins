@@ -18,7 +18,6 @@ var first_load = 1;
 var force_refresh = 1;
 var min_price_rate = 1;
 var refund_enabled = 0;
-var new_account = false;
 var affiliate_address = null;
 var affiliate_fee_percent = 0;
 
@@ -774,7 +773,6 @@ function main() {
       user.exists.resolve();
   } else {
       user.create();
-      new_account = true;
   }
   $.when(user.exists).done(function(data) {
       user.login();
@@ -812,18 +810,25 @@ function main() {
           }
       });
 
+      var withdrawal_address = Airbitz.core.readData("withdrawal-address");
+
       // If this is a new account. Set an initial refund address in case any purchases get botched
-      if (new_account) {
+      if (!withdrawal_address || withdrawal_address.length < 20) {
           createAddress(Account.abWallet, brand, 0, 0, category, "Refunded " + brand + " gift card.",
               function(data) {
                   Account.updateWAddr(data["address"], function() {
+                      Airbitz.ui.debugLevel(1,"Setting withdrawal address:" + data["address"]);
+                      Airbitz.core.writeData("withdrawal-address", data["address"])
                   }, function() {
+                      Airbitz.ui.debugLevel(1,"WARNING: could not set withdrawal address");
+                      Airbitz.ui.debugLevel(1,data);
                   });
               }, function(data) {
                   Airbitz.ui.debugLevel(1,data);
               });
+      } else {
+          Airbitz.ui.debugLevel(1,"Withdrawal address already set:" + withdrawal_address);
       }
-
 
       Airbitz.ui.debugLevel(1,"Updating UI");
       Airbitz.ui.hideAlert();
