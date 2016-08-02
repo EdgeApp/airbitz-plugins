@@ -543,7 +543,7 @@
       var wallet = Airbitz.currentWallet;
       var d = $q.defer();
 
-      Airbitz.core.createSpendRequest(wallet, linkOrCode, btcToSatoshi(amountBtc), amountFiat, {
+      Airbitz.core.createSpendRequest(wallet, linkOrCode, btcToSatoshi(amountBtc), {
           label: 'CleverCoin',
           category: 'Exchange:Sell Bitcoin',
           bizId: ExchangeFactory.bizId,
