@@ -100,7 +100,7 @@ var createAddress = function(wallet, label, amountSatoshi, amountFiat,
         amountFiat: amountFiat,
         bizId: parseInt(bizId),
         success: function(data) {
-            Airbitz.core.finalizeRequest(wallet, data["requestId"]);
+            Airbitz.core.finalizeReceiveRequest(wallet, data["requestId"]);
             resolve(data);
         },
         error: reject
@@ -662,7 +662,7 @@ var Account = {
               affiliateAmount = 0;
               tmpAddress = null;
             }
-            Airbitz.core.requestSpend2(Account.abWallet,
+            Airbitz.core.createSpendRequest2(Account.abWallet,
                     toAddr, amt, tmpAddress, affiliateAmount, 0, {
                         label: brand,
                         category: category,
@@ -802,7 +802,7 @@ function main() {
       Account.setLoadingCard();
 
 //      Account.logRefunds();
-      Airbitz.core.selectedWallet({
+      Airbitz.core.getSelectedWallet({
           success: function(wallet) {
             updateWallet(wallet);
             var withdrawal_address = Airbitz.core.readData("withdrawal-address");
