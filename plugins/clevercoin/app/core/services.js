@@ -354,7 +354,7 @@
 
     factory.getSelectedWallet = function() {
       return $q(function(resolve, reject) {
-        Airbitz.core.selectedWallet({
+        Airbitz.core.getSelectedWallet({
           success: resolve,
           error: reject
         });
@@ -543,7 +543,7 @@
       var wallet = Airbitz.currentWallet;
       var d = $q.defer();
 
-      Airbitz.core.requestSpend(wallet, linkOrCode, btcToSatoshi(amountBtc), amountFiat, {
+      Airbitz.core.createSpendRequest(wallet, linkOrCode, btcToSatoshi(amountBtc), {
           label: 'CleverCoin',
           category: 'Exchange:Sell Bitcoin',
           bizId: ExchangeFactory.bizId,
