@@ -31,7 +31,7 @@ $(function() {
     height: 128,
   });
   // If the user changes the wallet, we want to know about it
-  Airbitz.core.setWalletChangeListener(function(wallet) {
+  Airbitz.core.setupWalletChangeListener(function(wallet) {
     Airbitz.ui.showAlert("Wallet Changed", "Wallet Changed to " + wallet.name + ".");
     updateUi(wallet);
   });

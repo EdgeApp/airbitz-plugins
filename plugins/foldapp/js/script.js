@@ -756,7 +756,7 @@ Card.prototype.mockBal = function(bal) {
 // Main
 var user = Object.create(Account);
 
-Airbitz.core.setWalletChangeListener(updateWallet);
+Airbitz.core.setupWalletChangeListener(updateWallet);
 Account.username = Airbitz.core.readData("fold-username");
 Account.pass = Airbitz.core.readData("fold-pass");
 Airbitz.ui.showAlert('', 'Loading account...', {
