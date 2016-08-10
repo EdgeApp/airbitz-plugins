@@ -20,7 +20,7 @@ Airbitz.core.getSelectedWallet({
 });
 
 BitRefillWidget('#widget', {
-  key: '43eAxCKcEIEOU37rvAJqAl',
+  key: '2APYLLO1H3TRQAXXPQJMP6RE6',
   baseUrl: 'https://draper-staging-api.bitrefill.com/widget',
   showBTCAddress: false,
   paymentButtons: [{
