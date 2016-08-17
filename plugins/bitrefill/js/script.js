@@ -2,47 +2,65 @@
 
 var selectedWallet = null;
 
-Airbitz.ui.title('Bitrefill');
-
 function onWalletChange (wallet) {
   selectedWallet = wallet;
 }
 
-// If the user changes the wallet, we want to know about it
-Airbitz.core.setupWalletChangeListener(onWalletChange);
-
-// After loading, lets fetch the currently selected wallet
-Airbitz.core.getSelectedWallet({
-    success: onWalletChange,
+function showPaymentUI (order) {
+  Airbitz.core.createSpendRequest(selectedWallet, order.payment.address, order.satoshiPrice, {
+    label: "BitRefill",
+    notes: order.itemDesc,
+    success: function(response) {
+      if (response.back) {
+        console.log("User pressed back button. Funds not sent")
+      } else {
+        console.log("Bitcoin sent")
+      }
+    },
     error: function() {
-      Airbitz.ui.showAlert("Wallet Error", "Unable to load wallet!");
+      Airbitz.ui.showAlert("Payment Error", "Error sending funds");
     }
-});
+  });
+}
 
-BitRefillWidget('#widget', {
-  key: '2APYLLO1H3TRQAXXPQJMP6RE6',
-  baseUrl: 'https://draper-staging-api.bitrefill.com/widget',
-  showBTCAddress: false,
-  paymentButtons: [{
-    title: 'Pay With Account Balance',
-    callback: function (order) {
-      Airbitz.core.createSpendRequest(selectedWallet, order.payment.address, order.satoshiPrice, {
-        label: "BitRefill",
-        category: "",
-        notes: order.itemDesc,
-        success: function(response) {
-          if (response.back) {
-            console.log("User pressed back button. Funds not sent")
-          } else {
-            console.log("Bitcoin sent")
-          }
-        },
-        error: function() {
-          Airbitz.ui.showAlert("Payment Error", "Error sending funds");
-        }
-      });
-    }
-  }],
-  userEmail: 'test@testing.com',
-  sendBitrefillEmails: true
-});
+function initWidget (refundAddress) {
+  /* global BitRefillWidget */
+
+  BitRefillWidget('#widget', {
+    key: '2APYLLO1H3TRQAXXPQJMP6RE6',
+    refundAddress: refundAddress,
+    showBTCAddress: false,
+    sendBitrefillEmails: true,
+    paymentButtons: [{
+      title: 'Pay With Wallet',
+      callback: showPaymentUI
+    }]
+  });
+}
+
+function main () {
+  Airbitz.ui.title('Bitrefill');
+
+  // If the user changes the wallet, we want to know about it
+  Airbitz.core.setupWalletChangeListener(onWalletChange);
+
+  // After loading, lets fetch the currently selected wallet
+  Airbitz.core.getSelectedWallet({
+      success: onWalletChange,
+      error: function() {
+        Airbitz.ui.showAlert("Wallet Error", "Unable to load wallet!");
+      }
+  });
+
+  Airbitz.core.createReceiveRequest(selectedWallet, {
+    label: 'BitRefill',
+    notes: 'Automatic refund. There was an error processing your order.',
+    success: function (resp) {
+      initWidget(resp.address);
+      Airbitz.core.finalizeReceiveRequest(selectedWallet, resp.address);
+    },
+    error: function() { console.log("Error getting address") }
+  });
+}
+
+main();
