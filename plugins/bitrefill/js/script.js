@@ -46,20 +46,22 @@ function main () {
 
   // After loading, lets fetch the currently selected wallet
   Airbitz.core.getSelectedWallet({
-      success: onWalletChange,
+      success: function (wallet) {
+        onWalletChange(wallet);
+
+        Airbitz.core.createReceiveRequest(selectedWallet, {
+          label: 'BitRefill',
+          notes: 'Automatic refund. There was an error processing your order.',
+          success: function (resp) {
+            initWidget(resp.address);
+            Airbitz.core.finalizeReceiveRequest(selectedWallet, resp.address);
+          },
+          error: function() { console.log("Error getting address") }
+        });
+      },
       error: function() {
         Airbitz.ui.showAlert("Wallet Error", "Unable to load wallet!");
       }
-  });
-
-  Airbitz.core.createReceiveRequest(selectedWallet, {
-    label: 'BitRefill',
-    notes: 'Automatic refund. There was an error processing your order.',
-    success: function (resp) {
-      initWidget(resp.address);
-      Airbitz.core.finalizeReceiveRequest(selectedWallet, resp.address);
-    },
-    error: function() { console.log("Error getting address") }
   });
 }
 
