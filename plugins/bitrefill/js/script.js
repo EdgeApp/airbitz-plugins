@@ -34,6 +34,7 @@ function initWidget (refundAddress) {
     key: '2APYLLO1H3TRQAXXPQJMP6RE6',
     refundAddress: refundAddress,
     showBTCAddress: false,
+    showIntroduction: true,
     sendBitrefillEmails: true,
     paymentButtons: [{
       title: 'Pay With Wallet',
