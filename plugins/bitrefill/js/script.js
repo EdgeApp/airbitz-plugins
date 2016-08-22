@@ -1,6 +1,7 @@
 "use strict";
 
 var selectedWallet = null;
+var refundAddress = null;
 
 function onWalletChange (wallet) {
   selectedWallet = wallet;
@@ -9,12 +10,15 @@ function onWalletChange (wallet) {
 function showPaymentUI (order) {
   Airbitz.core.createSpendRequest(selectedWallet, order.payment.address, order.satoshiPrice, {
     label: "BitRefill",
+    category: 'Expense:Mobile Phone',
+    bizId: 8498, // Bizid of Bitrefill in the Airbitz directory. Used to show logo on transaction list and details
     notes: order.itemDesc,
     success: function(response) {
       if (response.back) {
         console.log("User pressed back button. Funds not sent")
       } else {
         console.log("Bitcoin sent")
+        Airbitz.core.finalizeReceiveRequest(selectedWallet, resp.address);
       }
     },
     error: function() {
@@ -51,10 +55,12 @@ function main () {
 
         Airbitz.core.createReceiveRequest(selectedWallet, {
           label: 'BitRefill',
+          category: 'Expense:Mobile Phone',
           notes: 'Automatic refund. There was an error processing your order.',
+          bizId: 8498, // Bizid of Bitrefill in the Airbitz directory. Used to show logo on transaction list and details
           success: function (resp) {
+            refundAddress = resp.address;
             initWidget(resp.address);
-            Airbitz.core.finalizeReceiveRequest(selectedWallet, resp.address);
           },
           error: function() { console.log("Error getting address") }
         });
