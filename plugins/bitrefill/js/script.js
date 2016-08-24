@@ -9,7 +9,7 @@ function onWalletChange (wallet) {
 
 function showPaymentUI (order) {
   Airbitz.core.createSpendRequest(selectedWallet, order.payment.address, order.satoshiPrice, {
-    label: "BitRefill",
+    label: "Bitrefill",
     category: 'Expense:Mobile Phone',
     bizId: 8498, // Bizid of Bitrefill in the Airbitz directory. Used to show logo on transaction list and details
     notes: order.itemDesc,
@@ -37,7 +37,7 @@ function initWidget (refundAddress) {
     showIntroduction: true,
     sendBitrefillEmails: true,
     paymentButtons: [{
-      title: 'Pay With Wallet',
+      title: 'Send Payment',
       callback: showPaymentUI
     }]
   });
@@ -55,7 +55,7 @@ function main () {
         onWalletChange(wallet);
 
         Airbitz.core.createReceiveRequest(selectedWallet, {
-          label: 'BitRefill',
+          label: 'Bitrefill',
           category: 'Expense:Mobile Phone',
           notes: 'Automatic refund. There was an error processing your order.',
           bizId: 8498, // Bizid of Bitrefill in the Airbitz directory. Used to show logo on transaction list and details
