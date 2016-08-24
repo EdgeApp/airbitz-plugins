@@ -37,7 +37,7 @@ function initWidget (refundAddress) {
     showIntroduction: true,
     sendBitrefillEmails: true,
     paymentButtons: [{
-      title: 'Pay With Wallet',
+      title: 'Send Payment',
       callback: showPaymentUI
     }]
   });
