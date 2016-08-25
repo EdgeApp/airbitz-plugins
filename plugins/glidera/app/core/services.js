@@ -222,7 +222,7 @@
 
     factory.getSelectedWallet = function() {
       return $q(function(resolve, reject) {
-        Airbitz.core.selectedWallet({
+        Airbitz.core.getSelectedWallet({
           success: resolve,
           error: reject
         });
@@ -329,7 +329,7 @@
           if (r == 200) {
             factory.getOrder(false).details = b;
             StatsFactory.recordEvent('buy', b, qty);
-            Airbitz.core.finalizeRequest(wallet, requestId);
+            Airbitz.core.finalizeReceiveRequest(wallet, requestId);
             deferred.resolve(b);
           } else {
             deferred.reject(b);

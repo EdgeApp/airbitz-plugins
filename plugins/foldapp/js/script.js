@@ -18,7 +18,6 @@ var first_load = 1;
 var force_refresh = 1;
 var min_price_rate = 1;
 var refund_enabled = 0;
-var new_account = false;
 var affiliate_address = null;
 var affiliate_fee_percent = 0;
 
@@ -101,7 +100,7 @@ var createAddress = function(wallet, label, amountSatoshi, amountFiat,
         amountFiat: amountFiat,
         bizId: parseInt(bizId),
         success: function(data) {
-            Airbitz.core.finalizeRequest(wallet, data["requestId"]);
+            Airbitz.core.finalizeReceiveRequest(wallet, data["requestId"]);
             resolve(data);
         },
         error: reject
@@ -663,7 +662,7 @@ var Account = {
               affiliateAmount = 0;
               tmpAddress = null;
             }
-            Airbitz.core.requestSpend2(Account.abWallet,
+            Airbitz.core.createSpendRequest2(Account.abWallet,
                     toAddr, amt, tmpAddress, affiliateAmount, 0, {
                         label: brand,
                         category: category,
@@ -757,7 +756,7 @@ Card.prototype.mockBal = function(bal) {
 // Main
 var user = Object.create(Account);
 
-Airbitz.core.setWalletChangeListener(updateWallet);
+Airbitz.core.setupWalletChangeListener(updateWallet);
 Account.username = Airbitz.core.readData("fold-username");
 Account.pass = Airbitz.core.readData("fold-pass");
 Airbitz.ui.showAlert('', 'Loading account...', {
@@ -774,7 +773,6 @@ function main() {
       user.exists.resolve();
   } else {
       user.create();
-      new_account = true;
   }
   $.when(user.exists).done(function(data) {
       user.login();
@@ -804,26 +802,33 @@ function main() {
       Account.setLoadingCard();
 
 //      Account.logRefunds();
-      Airbitz.core.selectedWallet({
-          success: updateWallet,
+      Airbitz.core.getSelectedWallet({
+          success: function(wallet) {
+            updateWallet(wallet);
+            var withdrawal_address = Airbitz.core.readData("withdrawal-address");
+
+            // If this is a new account. Set an initial refund address in case any purchases get botched
+            if (!withdrawal_address || withdrawal_address.length < 20) {
+                createAddress(Account.abWallet, brand, 0, 0, category, "Refunded " + brand + " gift card.", function(data) {
+                    Account.updateWAddr(data["address"], function() {
+                        Airbitz.ui.debugLevel(1,"Setting withdrawal address:" + data["address"]);
+                        Airbitz.core.writeData("withdrawal-address", data["address"]);
+                    }, function() {
+                        Airbitz.ui.debugLevel(1,"WARNING: could not set withdrawal address");
+                        Airbitz.ui.debugLevel(1,data);
+                    });
+                }, function(data) {
+                    Airbitz.ui.debugLevel(1,data);
+                });
+            } else {
+                Airbitz.ui.debugLevel(1,"Withdrawal address already set:" + withdrawal_address);
+            }
+          },
           error: function() {
               Airbitz.ui.debugLevel(1,"Could not get selected wallet");
               Airbitz.ui.showAlert("Wallet Error", "Error could not select wallet.");
           }
       });
-
-      // If this is a new account. Set an initial refund address in case any purchases get botched
-      if (new_account) {
-          createAddress(Account.abWallet, brand, 0, 0, category, "Refunded " + brand + " gift card.",
-              function(data) {
-                  Account.updateWAddr(data["address"], function() {
-                  }, function() {
-                  });
-              }, function(data) {
-                  Airbitz.ui.debugLevel(1,data);
-              });
-      }
-
 
       Airbitz.ui.debugLevel(1,"Updating UI");
       Airbitz.ui.hideAlert();

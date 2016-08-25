@@ -1,0 +1,47 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  background-color: rgba(255,255,255,0.5);
+  display: flex;
+  flex-direction: column;
+  font-family: -apple-system, ".SFNSText-Regular", "Helvetica Neue",
+    "Roboto", "Segoe UI", sans-serif !important;
+}
+
+.app-header {
+  padding: 8px;
+  margin: 0;
+  height: 32px;
+  box-shadow: 0 0 4px rgba(0,0,0,0.16);
+  background: #fff linear-gradient(80deg, #FF7679 0%, #55C4F7 94%, #4BC8FF 100%);
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+}
+
+.app-header img {
+  height: 32px;
+  background-color: #fff;
+  display: block;
+  margin: 0 auto;
+  padding: 0 0 0 4px;
+}
+
+#widget {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.widget-placeholder {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-self: center;
+
+  text-transform: uppercase;
+  font-size: 11px;
+  color: #777;
+}

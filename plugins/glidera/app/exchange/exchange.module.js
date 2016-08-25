@@ -28,8 +28,8 @@
     Limits.fetchLimits().then(function(limits) {
       $scope.limits = limits;
     }).then(function() {
-      return Prices.setBuyQty(scope.order.orderBtcInput || 1, $scope.order.orderFiatInput, $scope.order.orderMode).then(function() {
-        Prices.setSellQty(scope.order.orderBtcInput || 1, $scope.order.orderFiatInput, $scope.order.orderMode);
+      return Prices.setBuyQty($scope.order.orderBtcInput || 1, $scope.order.orderFiatInput, $scope.order.orderMode).then(function() {
+        Prices.setSellQty($scope.order.orderBtcInput || 1, $scope.order.orderFiatInput, $scope.order.orderMode);
       });
     });
 
