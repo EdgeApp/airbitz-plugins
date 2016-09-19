@@ -71,6 +71,17 @@ function main () {
       }
   });
 
+  // Capture clicks on external links
+  document.addEventListener('click', function (evt) {
+    if (evt.target.nodeName === 'A') {
+      var href = evt.target.getAttribute('href');
+      if (href && href.indexOf('http') === 0) {
+        window.open(href, '_system');
+        evt.preventDefault();
+      }
+    }
+  }, false);
+
   // Enable FastClick if loaded
   if (FastClick) {
     FastClick.attach(document.body);
