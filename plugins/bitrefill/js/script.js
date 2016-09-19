@@ -70,6 +70,11 @@ function main () {
         Airbitz.ui.showAlert("Wallet Error", "Unable to load wallet!");
       }
   });
+
+  // Enable FastClick if loaded
+  if (FastClick) {
+    FastClick.attach(document.body);
+  }
 }
 
 main();
