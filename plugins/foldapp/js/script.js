@@ -663,7 +663,7 @@ var Account = {
               tmpAddress = null;
             }
             Airbitz.core.createSpendRequest2(Account.abWallet,
-                    toAddr, amt, tmpAddress, affiliateAmount, 0, {
+                    toAddr, amt, tmpAddress, affiliateAmount, {
                         label: brand,
                         category: category,
                         notes: brand + " $" + String(denomination) + " gift card.",
