@@ -1,4 +1,5 @@
-const uuid: any = require('uuid/v4');
+const uuidV4: any = require('uuid/v4');
+const uuidV1: any = require('uuid/v1');
 
 angular.module('libertyx')
     .factory('user', ['$rootScope', ($rootScope) => ({
@@ -15,13 +16,13 @@ angular.module('libertyx')
             deviceId() {
                 let deviceId = Airbitz.core.readData('deviceId');
                 if (!deviceId) {
-                    deviceId = uuid();
+                    deviceId = uuidV4() || uuidV1();
                     Airbitz.core.writeData('deviceId', deviceId);
                 }
                 return deviceId;
             },
             logout() {
-                this.setSessionToken(undefined);
+                this.setSessionToken(false);
             },
             notifyAuthenticated() {
                 console.log('user:authenticated', this.authenticated());
