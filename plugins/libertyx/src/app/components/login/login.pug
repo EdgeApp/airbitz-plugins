@@ -1,0 +1,23 @@
+h1 Verify Phone
+.row
+    .col-xs-12.fadedColor
+        | By using LibertyX you agree to our&nbsp;
+        a(href='#' ng-click="launchExternal($event, 'https://libertyx.com/docs/tos')")
+            | Terms of Service
+        | .
+
+form.row.double-top-margin(name='loginForm', ng-submit='submitLogin()', autocomplete='off', novalidate='')
+    form-field(label='Phone Number', type='text', ng-model='formData.phone_number', required='')
+    form-field(ng-if="state == 'sms_successful' || state == 'code_sending'", label='Security Code', type='text', ng-model='formData.security_code', required='')
+    .col-xs-12
+        submit-button(ng-disabled='loading || loginForm.$invalid') {{ state == 'initial' ? 'Send SMS' : 'Submit'}}
+
+.row.quad-top-margin
+    .col-xs-12.fadedColor.support-phone
+        | Questions / Issues:
+        br
+        a(href='#', ng-click="launchExternal($event, 'mailto:support@libertyx.com')")
+            | support@libertyx.com
+        br
+        a(href='#', ng-click="launchExternal($event, 'tel:+18442606678')")
+            | +1 (844) 260-6678

@@ -1,0 +1,82 @@
+// SpinKit
+// https://github.com/tobiasahlin/SpinKit
+
+// The MIT License (MIT)
+//
+// Copyright (c) 2015 Tobias Ahlin
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy of
+// this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to
+// use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+// the Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+// FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+// COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+// IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+// CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+@import 'color';
+
+/*
+ *  Usage:
+ *
+      <div class="sk-three-bounce">
+        <div class="sk-child sk-bounce1"></div>
+        <div class="sk-child sk-bounce2"></div>
+        <div class="sk-child sk-bounce3"></div>
+      </div>
+ *
+ */
+.sk-three-bounce {
+  text-align: center;
+}
+
+.sk-three-bounce .sk-child {
+  width: 0.5em;
+  height: 0.5em;
+  background-color: hsl(0, 0%, 100%);
+  border-radius: 100%;
+  display: inline-block;
+  animation: sk-three-bounce 1.2s ease-in-out 0s infinite both;
+}
+
+.sk-three-bounce.dark .sk-child {
+  background-color: $colorPrimary;
+}
+
+.sk-child + .sk-child {
+  margin-left: 0.5em;
+}
+
+.sk-three-bounce .sk-bounce1 {
+  animation-delay: -0.32s;
+}
+
+.sk-three-bounce .sk-bounce2 {
+  animation-delay: -0.16s;
+}
+
+@-webkit-keyframes sk-three-bounce {
+  0%, 80%, 100% {
+    transform: scale(0);
+  }
+  40% {
+    transform: scale(1);
+  }
+}
+
+@keyframes sk-three-bounce {
+  0%, 80%, 100% {
+    transform: scale(0);
+  }
+  40% {
+    transform: scale(1);
+  }
+}

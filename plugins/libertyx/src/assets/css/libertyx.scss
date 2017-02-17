@@ -1,0 +1,302 @@
+@import 'color';
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: hsl(204, 26%, 93%);
+}
+
+.container {
+  box-shadow: 0 0 2em hsla(0, 0%, 0%, 0.075);
+  background-color: hsl(0, 0%, 100%);
+  padding-bottom: 1em;
+  max-width: 768px;
+}
+
+.container.wide {
+  max-width: none;
+}
+
+@media (min-width: 768px) {
+  .container {
+    margin: 2em auto;
+  }
+}
+
+.primaryColor {
+  color: $colorPrimary;
+}
+
+.warningColor {
+  color: $colorWarning;
+}
+
+.fadedColor {
+  color: hsla(0, 0%, 0%, $colorLabelOpacity)
+}
+
+/* form starting stylings ------------------------------- */
+div.hovering {
+  position: relative;
+  margin-bottom: 1.5em;
+}
+
+/* button ----------------------------------------------- */
+.btn {
+  display: inline-block;
+  font-size: medium;
+  cursor: pointer;
+  background-image: none;
+  border: 1px solid hsla(0, 0%, 0%, 0);
+  border-radius: 0.25em;
+  padding: 0.5em 1.5em;
+}
+
+.btn:active, .btn.active {
+  box-shadow: none;
+  outline: 0;
+}
+
+.btn-primary:disabled {
+  opacity: 0.25;
+}
+
+.btn-primary {
+  background-color: $colorPrimary;
+  color: hsl(0, 0%, 100%);
+}
+
+.btn-primary:hover, .btn-primary:focus {
+  color: hsl(0, 0%, 100%);
+  background-color: hsl(204, 89%, 28%);
+  border-color: hsl(204, 89%, 28%);
+}
+
+.btn-primary:active, .btn-primary.active {
+  color: hsl(0, 0%, 100%);
+  background-color: hsl(204, 89%, 25%);
+  border-color: hsl(204, 89%, 25%);
+}
+
+.btn-primary.loading {
+  color: hsla(0, 0%, 0%, 0);
+}
+
+a {
+  color: $colorPrimary;
+  text-decoration: none;
+}
+
+/* Input [text / password] ----------------------------------------------- */
+input[type="text"],
+input[type="password"] {
+  font-size: large;
+  padding: 0.6em 0 0.35em 0;
+  display: block;
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid $colorInputLine;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+  outline: none;
+}
+
+.form-group + .btn {
+  margin-top: 0.75em;
+}
+
+/* active state */
+input[type="text"]:focus ~ label,
+input[type="text"].ng-not-empty ~ label,
+input[type="password"]:focus ~ label,
+input[type="password"].ng-not-empty ~ label,
+input[type="text"]:disabled ~ label,
+input[type="password"]:disabled ~ label {
+  opacity: 1;
+  top: -0.5em;
+  font-size: small;
+  color: $colorPrimary;
+}
+
+/* error state */
+.ng-invalid > input[type="text"].ng-touched ~ label,
+.ng-invalid > input[type="password"].ng-touched ~ label {
+  color: $colorError;
+}
+
+input[type="text"]:disabled,
+input[type="password"]:disabled {
+  cursor: not-allowed;
+}
+
+/* ---- bottom bars ----- */
+.form-control-line {
+  position: relative;
+  display: block;
+  width: 100%;
+}
+
+.form-control-line:before,
+.form-control-line:after {
+  content: '';
+  height: 2px;
+  width: 0;
+  bottom: 0;
+  position: absolute;
+  background: $colorPrimary;
+  transition: 0.2s ease all;
+}
+
+.form-control-line:before {
+  left: 50%;
+}
+
+.form-control-line:after {
+  right: 50%;
+}
+
+/* active state */
+input[type="text"]:focus ~ .form-control-line:before,
+input[type="text"]:focus ~ .form-control-line:after,
+input[type="password"]:focus ~ .form-control-line:before,
+input[type="password"]:focus ~ .form-control-line:after {
+  width: 50%;
+}
+
+/* error state */
+.ng-invalid > input[type="text"].ng-touched ~ .form-control-line:before,
+.ng-invalid > input[type="text"].ng-touched ~ .form-control-line:after,
+.ng-invalid > input[type="password"].ng-touched ~ .form-control-line:before,
+.ng-invalid > input[type="password"].ng-touched ~ .form-control-line:after {
+  width: 50%;
+  background: $colorError;
+  height: 1px;
+}
+
+/* error state [focused] */
+.ng-invalid > input[type="text"]:focus.ng-touched ~ .form-control-line:before,
+.ng-invalid > input[type="text"]:focus.ng-touched ~ .form-control-line:after,
+.ng-invalid > input[type="password"]:focus.ng-touched ~ .form-control-line:before,
+.ng-invalid > input[type="password"]:focus.ng-touched ~ .form-control-line:after {
+  height: 2px;
+}
+
+/* ------- placeholders --------- */
+input[type="text"]::placeholder {
+  color: transparent;
+  transition: 240ms;
+}
+
+input[type="text"]:focus::placeholder {
+  transition: none;
+  color: hsla(0, 0%, 0%, $colorLabelOpacity);
+}
+
+/* radio buttons ------------------------------- */
+input[type="radio"] {
+  margin-right: 0.5em;
+}
+
+label.radio {
+  cursor: pointer;
+}
+
+input[type="radio"] + label {
+  opacity: $colorLabelOpacity;
+}
+
+input[type="radio"] + label:hover,
+input[type="radio"]:checked + label {
+  color: $colorPrimary;
+  opacity: 1;
+}
+
+.radio-group {
+  margin-top: 0;
+  margin-bottom: 1.5em;
+  font-size: large;
+  line-height: 1.66em;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  border: 1px solid $colorInputLine;
+}
+
+/* LABEL ======================================= */
+label.hovering {
+  opacity: $colorLabelOpacity;
+  font-size: large;
+  font-weight: normal;
+  position: absolute;
+  pointer-events: none;
+
+  top: 0.6em;
+  transition: 0.2s ease all;
+}
+
+div.label {
+  font-size: small;
+  margin-bottom: 1em;
+  margin-top: 1em;
+}
+
+/* --------------------------------- */
+.tall-rows {
+  div + div {
+    margin-top: 0.66em;
+  }
+}
+
+.store-instructions {
+  ol {
+    padding: 0 0 0 1em;
+  }
+  li {
+    line-height: 1.43em;
+  }
+  li + li {
+    margin-top: 1.16em;
+  }
+}
+
+.support-phone {
+  line-height: 1.43em;
+}
+
+.double-top-margin {
+  margin-top: 1.33em;
+}
+
+.triple-top-margin {
+  margin-top: 2em;
+}
+
+.quad-top-margin {
+  margin-top: 2em;
+}
+
+/* general animations ------------- */
+.animate-hide {
+  transition: all linear 0.5s;
+  opacity: 1;
+}
+
+.animate-hide.ng-hide {
+  opacity: 0;
+}
+
+.preformatted {
+  font-family: monospace;
+  white-space: pre;
+}
+
+/* MAIN ===========================================*/
+main {
+  padding: 1em;
+}
