@@ -1,0 +1,17 @@
+@import 'color';
+
+.header {
+  padding: 1em;
+  background: linear-gradient(to bottom right, $colorHeaderStart, $colorPrimary);
+  border-bottom: 2px solid hsla(0, 0%, 0%, 0.25);
+
+  img {
+    padding-top: 0.25em;
+    margin: auto;
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+  }
+}
