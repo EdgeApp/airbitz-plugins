@@ -1,0 +1,27 @@
+h1 Find a location
+
+form.row(name='searchForm', ng-submit='submitSearch()', autocomplete='off', novalidate='')
+    form-field(label='Address or ZIP', placeholder='02111', type='text', ng-model='query', required='')
+    .col-xs-12
+        submit-button(ng-disabled='loading || searchForm.$invalid') Search
+
+.row(ng-show='nearbyLocations.length > 0')
+    h1.col-xs-12.double-top-margin Search Results
+    ul.autocomplete.col-xs-12.col-sm-6(ng-show='nearbyLocations')
+        li(ng-repeat='l in nearbyLocations', ng-click='onLocationChosen(l)')
+            span.primaryColor {{l.name}}
+            div {{l.distance}} &mdash; {{l.fee_string}} &mdash; {{l.address}}
+
+.row
+    .col-xs-12.double-top-margin.fadedColor
+        | We will ask you to verify your phone number before completing a purchase
+
+.row.quad-top-margin
+    .col-xs-12.fadedColor.support-phone
+        | Questions / Issues:
+        br
+        a(href='#', ng-click="launchExternal($event, 'mailto:support@libertyx.com')")
+            | support@libertyx.com
+        br
+        a(href='#', ng-click="launchExternal($event, 'tel:+18442606678')")
+            | +1 (844) 260-6678

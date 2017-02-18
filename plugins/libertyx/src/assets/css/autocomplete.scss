@@ -1,0 +1,53 @@
+@import 'color';
+
+$borderWidth: 1px;
+$cornerRadius: 0.5em;
+
+ul.autocomplete {
+  user-select: none;
+
+  li {
+    border: $borderWidth solid $colorInputLine;
+    border-bottom-width: 0;
+    list-style-type: none;
+    padding: 0.75em;
+    background-clip: border-box;
+    color: hsla(0, 0%, 0%, 0.625);
+    box-shadow: hsla(0, 0%, 0%, 0.0375) 0px 1px 10px 0px;
+    cursor: pointer;
+
+    div {
+      line-height: 1.5em;
+    }
+  }
+
+  li:hover {
+    color: hsla(0, 0%, 0%, 0.7);
+    background-color: hsl(0, 0%, 98%);
+  }
+
+  li:first-child {
+    border-top-width: 0;
+  }
+
+  li:last-child {
+    border-bottom-left-radius: $cornerRadius;
+    border-bottom-right-radius: $cornerRadius;
+    border-bottom-width: $borderWidth;
+  }
+
+}
+
+ul.autocomplete + div.hovering {
+  margin-top: 1.5em;
+}
+
+h1 + ul.autocomplete {
+  margin-bottom: 1.5em;
+
+  li:first-child {
+    border-top-width: $borderWidth;
+    border-top-left-radius: $cornerRadius;
+    border-top-right-radius: $cornerRadius;
+  }
+}
