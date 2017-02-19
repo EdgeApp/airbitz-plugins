@@ -14,6 +14,7 @@ angular.module('libertyx')
 
         const label = Airbitz.config.get('LIBERTYX_LABEL');
         const category = Airbitz.config.get('LIBERTYX_CATEGORY');
+        const bizIdStr = Airbitz.config.get('BIZID');
 
         Airbitz.core.setupWalletChangeListener(wallet => $rootScope.$emit('airbitz:wallet', {wallet}));
 
@@ -35,6 +36,7 @@ angular.module('libertyx')
                     Airbitz.core.createReceiveRequest(wallet, {
                         label,
                         category,
+                        bizId: parseInt(bizIdStr),
                         success: request => {
                             Airbitz.core.finalizeReceiveRequest(wallet, request.address);
                             resolve(request.address);
