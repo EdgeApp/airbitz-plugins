@@ -18,6 +18,11 @@ angular.module('libertyx')
 
         Airbitz.core.setupWalletChangeListener(wallet => $rootScope.$emit('airbitz:wallet', {wallet}));
 
+        Airbitz._bridge.back = function() {
+            history.go(-1);
+            Airbitz.ui.navStackPop();
+        };
+
         const airbitz = {
 
             getSelectedWallet: () =>

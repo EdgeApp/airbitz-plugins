@@ -38,8 +38,6 @@ angular.module('libertyx')
 
         $transitions.onSuccess({to: '*'}, transition => {
             console.log(transition);
-            airbitz.navStackClear();
-            airbitz.navStackPush($state.href('locations'));
             const to = transition.$to();
             if (to.name != 'locations')
                 airbitz.navStackPush($state.href(to.name));
