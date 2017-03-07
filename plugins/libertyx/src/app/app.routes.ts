@@ -34,10 +34,9 @@ angular.module('libertyx')
     }])
     .run(['$transitions', '$state', 'airbitz', ($transitions, $state, airbitz) => {
 
-        // NOTE: Might be using navStack incorrectly. Does not behave as expected.
-
         $transitions.onSuccess({to: '*'}, transition => {
             console.log(transition);
+            airbitz.navStackClear();
             const to = transition.$to();
             if (to.name != 'locations')
                 airbitz.navStackPush($state.href(to.name));
