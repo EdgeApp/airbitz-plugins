@@ -1,0 +1,3 @@
+[submodule "plugins/bity"]
+	path = plugins/bity
+	url = https://github.com/BitySA/airbitz-bity-plugin.git
