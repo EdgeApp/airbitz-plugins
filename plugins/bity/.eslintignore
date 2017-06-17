@@ -1,0 +1,9 @@
+node_modules/
+
+dist/
+build/
+src/3rd-party/
+
+maintenance/
+
+client/assets/
