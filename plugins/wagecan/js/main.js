@@ -28,7 +28,7 @@ function initizeAirbitz() {
           notes: airbitzWalletId,
           success: function(data) {
             if (data['back'] === 'true' || data['back'] === true) {
-              //TODO: user pressed back, don't clean screen
+              // user pressed back, don't clean screen
             }
             else {
                 hideContentToggle()
@@ -113,7 +113,8 @@ $(function(){
       },
       error:function () {
         airbitzWalletId = ''
-        //TODO: display fail message Msg_UnableCreateSpendRequest
+        hideContentToggle()
+        $("#page").append( "<span class='send-result'><img src='https://wagecan.com/Images/airbitz/wagecan-unableSelectWallet.png'><p class='col-md-8'>Unable get the selected wallet. Please try again later.</p></span>" );
       }
     })
 });
