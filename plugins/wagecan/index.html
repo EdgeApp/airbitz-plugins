@@ -113,9 +113,9 @@
 							<input id="topup-button" type="submit" class="btn btn-primary btn-block" value="Top Up" onclick="initizeAirbitz()" disabled>
 						</div>
 						<div class="col-xs-12 margin-bottom text-center">
-							<p>
+							<p id='ref-code' class="hidden">
 								Don't have a WageCan Bitcoin debit card?
-								<br>Use Airbitz's <a href="https://wagecan.com/s/AIRBITZ9487" onclick="displayURL();return false;">referral code</a> to get 20% off
+								<br>Click <a href="#" onclick="openRefCodeURL();return false;">here</a> to get 20% off
 							</p>
 						</div>
 					</div>
@@ -138,6 +138,10 @@
 	<!-- Main -->
 	<script src="js/main.js" type="text/javascript"></script>
 	<!-- Titanic -->
+	<script type="text/javascript">
+  // after abc.js loaded, display ref code area
+		$('#ref-code').removeClass('hidden')
+	</script>
 </body>
 
 </html>
