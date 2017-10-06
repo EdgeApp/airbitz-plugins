@@ -4,7 +4,7 @@ const Title_LoadCard = 'Load WageCan Card'
 const Title_Loading = 'Loading...'
 // Call Airbitz when user click top-up button
 function initizeAirbitz() {
-  let lastNumber = $('#card-number1').val() + $('#card-number2').val() || ''
+  var lastNumber = $('#card-number1').val() + $('#card-number2').val() || ''
   if(lastNumber.length !== 8) {
     return
   }
@@ -125,7 +125,7 @@ var address = ''
 var prices = null
 
 function getAddressInfo(){
-    let lastNumber = $('#card-number1').val() + $('#card-number2').val() || ''
+    var lastNumber = $('#card-number1').val() + $('#card-number2').val() || ''
     if(lastNumber.length !== 8) {
       $('#result-non-exist').addClass('hidden')
     }
@@ -148,7 +148,7 @@ function getAddressInfo(){
                 currency = data.currency
                 address = data.address
                 if(prices && currency){
-                    let rate = prices[currency]
+                    var rate = prices[currency]
                     updateRateLabel(rate[0].dollar)
                 }
                 $('#result-non-exist').addClass('hidden')
@@ -172,7 +172,7 @@ function getAddressInfo(){
 }
 
 function updateRates(){
-    let lastNumber = $('#card-number1').val() + $('#card-number2').val() || ''
+    var lastNumber = $('#card-number1').val() + $('#card-number2').val() || ''
     if (lastNumber.length === 8) {
       $('#rate').text(Title_Loading)
     }
@@ -210,15 +210,15 @@ function getTopupVal(){
       }
       return
     }
-    let amount = parseFloat(btcAmountString)
+    var amount = parseFloat(btcAmountString)
 
     //console.log("btcAmount: " + btcAmountString + ",bitsAmount: " + bitsAmount);
 
     if(address && currency && prices && amount){
-        let price = prices[currency]
-        let rate = null
-        let eq_lower = true
-        for(let p of price){
+        var price = prices[currency]
+        var rate = null
+        var eq_lower = true
+        for(var p of price){
             if(eq_lower && amount >= p.bound[0] && amount <= p.bound[1]){
                 rate = p.dollar
                 break
@@ -230,7 +230,7 @@ function getTopupVal(){
         }
         if(rate){
             updateRateLabel(rate)
-            let value = Math.floor(amount*rate)
+            var value = Math.floor(amount*rate)
             updateTopupVal(value)
             $('#top-up-error').addClass('hidden')
         }else{
@@ -263,13 +263,13 @@ function updateTopupVal(val){
 }
 
 function toSatoshi(val){
-    let str = val.toString()
-    let dotIndex = str.indexOf('.')
-    let paddingNum = 8
+    var str = val.toString()
+    var dotIndex = str.indexOf('.')
+    var paddingNum = 8
     if(dotIndex !== -1){
         paddingNum = 8 - (str.length - dotIndex - 1)
     }
-    for(let i = 0; i < paddingNum; i+= 1){
+    for(var i = 0; i < paddingNum; i+= 1){
         str += '0'
     }
     str = str.replace(/\./g,'').replace(/^0+/,'')
