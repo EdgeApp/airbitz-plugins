@@ -282,12 +282,12 @@ function toSatoshi(val){
 
 function displayURL() {
   hideContentToggle()
-  $("#page").append( "<span class='send-result'><img src='https://wagecan.com/Images/airbitz/wagecan-sent-success.png'><p>Please copy and open it in your browser:<br><a href='https://wagecan.com/s/AIRBITZ9487' onclick='return false;'>https://wagecan.com/s/AIRBITZ9487</p></span>" );
+  $("#page").append( "<span class='send-result'><img src='https://wagecan.com/Images/airbitz/wagecan-sent-success.png'><p>Please copy and open it in your browser:<br><a href='https://wagecan.com/s/AIRBITZ' onclick='return false;'>https://wagecan.com/s/AIRBITZ</p></span>" );
 }
 
 function openRefCodeURL() {
   if (Airbitz.ui.launchExternal) {
-    Airbitz.ui.launchExternal('https://wagecan.com/s/AIRBITZ9487')
+    Airbitz.ui.launchExternal('https://wagecan.com/s/AIRBITZ')
   }
   else {
     displayURL();
