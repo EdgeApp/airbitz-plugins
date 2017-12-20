@@ -110,7 +110,7 @@
 							</p>
 						</div>
 						<div class="col-xs-12 margin-bottom">
-							<input id="topup-button" type="submit" class="btn btn-primary btn-block" value="Top Up" onclick="initizeAirbitz()" disabled>
+							<input id="topup-button" type="submit" class="btn btn-primary btn-block" value="Top Up" disabled>
 						</div>
 						<div class="col-xs-12 margin-bottom text-center">
 							<p id='ref-code' class="hidden">
@@ -141,6 +141,11 @@
 	<script type="text/javascript">
   // after abc.js loaded, display ref code area
 		$('#ref-code').removeClass('hidden')
+
+		$('#topup-form').submit(function (evt) {
+        evt.preventDefault();
+        initizeAirbitz();
+    });
 	</script>
 </body>
 
