@@ -32,13 +32,13 @@ function initizeAirbitz() {
             }
             else {
                 hideContentToggle()
-                $("#page").append( "<span class='send-result'><img src='https://wagecan.com/Images/airbitz/wagecan-sent-success.png'><p>Sent Successfully!</p></span>" );
+                $("#page").append( "<span class='send-result'><img src='https://wagecan.com/img/airbitz/wagecan-sent-success.png'><p>Sent Successfully!</p></span>" );
             }
             // console.log(data);
           },
           error: function() {
             hideContentToggle()
-            $("#page").append( "<span class='send-result'><img src='https://wagecan.com/Images/airbitz/wagecan-sent-error.png'><p>Failed to send! Please try again later.</p></span>" );
+            $("#page").append( "<span class='send-result'><img src='https://wagecan.com/img/airbitz/wagecan-sent-error.png'><p>Failed to send! Please try again later.</p></span>" );
           }
         })
         // end of createSpendRequest block
@@ -47,7 +47,7 @@ function initizeAirbitz() {
     error:function () {
       airbitzWalletId = ''
       hideContentToggle()
-      $("#page").append( "<span class='send-result'><img src='https://wagecan.com/Images/airbitz/wagecan-unableSelectWallet.png'><p class='col-md-8'>Unable get the selected wallet. Please try again later.</p></span>" );
+      $("#page").append( "<span class='send-result'><img src='https://wagecan.com/img/airbitz/wagecan-unableSelectWallet.png'><p class='col-md-8'>Unable get the selected wallet. Please try again later.</p></span>" );
     }
   })
 }
@@ -114,7 +114,7 @@ $(function(){
       error:function () {
         airbitzWalletId = ''
         hideContentToggle()
-        $("#page").append( "<span class='send-result'><img src='https://wagecan.com/Images/airbitz/wagecan-unableSelectWallet.png'><p class='col-md-8'>Unable get the selected wallet. Please try again later.</p></span>" );
+        $("#page").append( "<span class='send-result'><img src='https://wagecan.com/img/airbitz/wagecan-unableSelectWallet.png'><p class='col-md-8'>Unable get the selected wallet. Please try again later.</p></span>" );
       }
     })
 });
@@ -282,7 +282,7 @@ function toSatoshi(val){
 
 function displayURL() {
   hideContentToggle()
-  $("#page").append( "<span class='send-result'><img src='https://wagecan.com/Images/airbitz/wagecan-sent-success.png'><p>Please copy and open it in your browser:<br><a href='https://wagecan.com/s/AIRBITZ' onclick='return false;'>https://wagecan.com/s/AIRBITZ</p></span>" );
+  $("#page").append( "<span class='send-result'><img src='https://wagecan.com/img/airbitz/wagecan-sent-success.png'><p>Please copy and open it in your browser:<br><a href='https://wagecan.com/s/AIRBITZ' onclick='return false;'>https://wagecan.com/s/AIRBITZ</p></span>" );
 }
 
 function openRefCodeURL() {
