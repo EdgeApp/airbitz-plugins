@@ -3,7 +3,7 @@ const Msg_UnableCreateSpendRequest = 'Unable to creat the spend request. Please 
 const Title_LoadCard = 'Load WageCan Card'
 const Title_Loading = 'Loading...'
 // Call Airbitz when user click top-up button
-function initizeAirbitz() {
+function initAirbitz() {
   var lastNumber = $('#card-number1').val() + $('#card-number2').val() || ''
   if(lastNumber.length !== 8) {
     return
@@ -32,13 +32,13 @@ function initizeAirbitz() {
             }
             else {
                 hideContentToggle()
-                $("#page").append( "<span class='send-result'><img src='https://wagecan.com/img/airbitz/wagecan-sent-success.png'><p>Sent Successfully!</p></span>" );
+                $("#page").append( "<span class='send-result'><img src='https://wagecan.com/app/airbitz/img/wagecan-sent-success.png'><p>Sent Successfully!</p></span>" );
             }
             // console.log(data);
           },
           error: function() {
             hideContentToggle()
-            $("#page").append( "<span class='send-result'><img src='https://wagecan.com/img/airbitz/wagecan-sent-error.png'><p>Failed to send! Please try again later.</p></span>" );
+            $("#page").append( "<span class='send-result'><img src='https://wagecan.com/app/airbitz/img/wagecan-sent-error.png'><p>Failed to send! Please try again later.</p></span>" );
           }
         })
         // end of createSpendRequest block
@@ -47,7 +47,7 @@ function initizeAirbitz() {
     error:function () {
       airbitzWalletId = ''
       hideContentToggle()
-      $("#page").append( "<span class='send-result'><img src='https://wagecan.com/img/airbitz/wagecan-unableSelectWallet.png'><p class='col-md-8'>Unable get the selected wallet. Please try again later.</p></span>" );
+      $("#page").append( "<span class='send-result'><img src='https://wagecan.com/app/airbitz/img/wagecan-unableSelectWallet.png'><p class='col-md-8'>Unable get the selected wallet. Please try again later.</p></span>" );
     }
   })
 }
@@ -114,7 +114,7 @@ $(function(){
       error:function () {
         airbitzWalletId = ''
         hideContentToggle()
-        $("#page").append( "<span class='send-result'><img src='https://wagecan.com/img/airbitz/wagecan-unableSelectWallet.png'><p class='col-md-8'>Unable get the selected wallet. Please try again later.</p></span>" );
+        $("#page").append( "<span class='send-result'><img src='https://wagecan.com/app/airbitz/img/wagecan-unableSelectWallet.png'><p class='col-md-8'>Unable get the selected wallet. Please try again later.</p></span>" );
       }
     })
 });
@@ -134,7 +134,7 @@ function getAddressInfo(){
         currency = ''
         address = ''
         $.ajax({
-            url: 'https://wagecan.com/airbitz/topup/address',
+            url: 'https://wagecan.com/app/airbitz/topup/address',
             dataType: 'json',
             type: 'post',
             data: {
@@ -180,7 +180,7 @@ function updateRates(){
       $('#rate').text('N/A')
     }
     $.ajax({
-        url: 'https://wagecan.com/airbitz/topup/rate',
+        url: 'https://wagecan.com/app/airbitz/topup/rate',
         type: 'get',
         dataType: 'JSON',
         cache: false,
@@ -282,7 +282,7 @@ function toSatoshi(val){
 
 function displayURL() {
   hideContentToggle()
-  $("#page").append( "<span class='send-result'><img src='https://wagecan.com/img/airbitz/wagecan-sent-success.png'><p>Please copy and open it in your browser:<br><a href='https://wagecan.com/s/AIRBITZ' onclick='return false;'>https://wagecan.com/s/AIRBITZ</p></span>" );
+  $("#page").append( "<span class='send-result'><img src='https://wagecan.com/app/airbitz/img/wagecan-sent-success.png'><p>Please copy and open it in your browser:<br><a href='https://wagecan.com/s/AIRBITZ' onclick='return false;'>https://wagecan.com/s/AIRBITZ</p></span>" );
 }
 
 function openRefCodeURL() {
