@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>WageCan Card Bitcoin Debit Card</title>
+	<title>WageCan Prepaid Card</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
 	<!--<link rel="shortcut icon" href="favicon.ico">-->
 	<link href="https://fonts.googleapis.com/css?family=Montserrat|Hind+Madurai" rel="stylesheet">
@@ -67,12 +67,12 @@
 	<div id="page">
 		<a href="https://wagecan.com/?utm_source=airbitz&utm_medium=app-header">
 			<div class="header">
-				<img src="https://wagecan.com/Images/logo.png">
+				<img src="https://wagecan.com/app/airbitz/img/logo.png">
 			</div>
 		</a>
 		<!-- END header-->
-		<p class="col-md-8 animate-box text-center description">WageCan card makes it easier for you to use Bitcoin in daily life</p>
-		<form action="#" class="tabulation animate-box col-sm-push-3 col-sm-6 col-md-push-3 col-md-6">
+		<p class="col-md-8 animate-box text-center description">Use your Bitcoin in daily life, by converting to fiat currencies on your Wagecan prepaid card</p>
+		<form id="topup-form" action="#" class="tabulation animate-box col-sm-push-3 col-sm-6 col-md-push-3 col-md-6">
 			<!-- Tab panes -->
 			<div class="tab-content">
 				<div role="tabpanel" class="tab-pane active" id="login">
@@ -86,7 +86,7 @@
 								<div class="pull-left">-</div>
 								<input id="card-number2" type="number" min="0" inputmode="numeric" pattern="[0-9]*" class="text-center form-control input-card-numbers" maxlength="4" oninput="limitInput(this);" placeholder="xxxx" onchange="getAddressInfo()"/>
 							</div>
-							<span id="result-non-exist" class="card-result pull-left hidden"><img src="https://wagecan.com/Images/airbitz/wagecan-error.png"><p id="non-exist" ><small> Oops! This card number doesn't exist</small></p></span>
+							<span id="result-non-exist" class="card-result pull-left hidden"><img src="https://wagecan.com/app/airbitz/img/wagecan-error.png"><p id="non-exist" ><small> Oops! This card number doesn't exist</small></p></span>
 							<span class="card-result pull-left"></span>
 						</div>
 						<div class="col-xs-12 margin-bottom">
@@ -94,7 +94,7 @@
 								<label for="">Top Up Amount (BTC)</label>
 								<input id="amount" type="number" step="0.000001" class="form-control top-up-amount" onchange="getTopupVal()"/>
 							</div>
-							<span id="top-up-error" class="card-result pull-left hidden"><img src="https://wagecan.com/Images/airbitz/wagecan-error.png"><p id="non-exist" ><small> Oops! Amount is invalid.</small></p></span>
+							<span id="top-up-error" class="card-result pull-left hidden"><img src="https://wagecan.com/app/airbitz/img/wagecan-error.png"><p id="non-exist" ><small> Oops! Amount is invalid.</small></p></span>
 						</div>
 						<div class="col-xs-12 margin-bottom">
 							<div class="input-field">
@@ -110,11 +110,11 @@
 							</p>
 						</div>
 						<div class="col-xs-12 margin-bottom">
-							<input id="topup-button" type="submit" class="btn btn-primary btn-block" value="Top Up" onclick="initizeAirbitz()" disabled>
+							<input id="topup-button" type="submit" class="btn btn-primary btn-block" value="Top Up" disabled>
 						</div>
 						<div class="col-xs-12 margin-bottom text-center">
 							<p id='ref-code' class="hidden">
-								Don't have a WageCan Bitcoin debit card?
+								Don't have a WageCan prepaid card?
 								<br>Click <a href="#" onclick="openRefCodeURL();return false;">here</a> to get 20% off
 							</p>
 						</div>
@@ -141,6 +141,11 @@
 	<script type="text/javascript">
   // after abc.js loaded, display ref code area
 		$('#ref-code').removeClass('hidden')
+
+		$('#topup-form').submit(function (evt) {
+        evt.preventDefault();
+        initAirbitz();
+    });
 	</script>
 </body>
 
