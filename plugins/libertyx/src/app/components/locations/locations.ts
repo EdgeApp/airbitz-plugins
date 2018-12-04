@@ -1,5 +1,5 @@
 angular.module('libertyx')
-    .controller('LocationSearchController', ['$scope', '$http', '$q', '$state', 'api', 'notice', 'user', ($scope, $http, $q, $state, api, notice, user) => {
+    .controller('LocationSearchController', ['$scope', '$http', '$q', '$state', 'api', 'notice', 'user', 'airbitz', ($scope, $http, $q, $state, api, notice, user, airbitz) => {
         $scope.nearbyLocations = user.searchResults || [];
         $scope.submitSearch = () => {
 
@@ -24,7 +24,10 @@ angular.module('libertyx')
                     method: 'GET',
                     headers: {'X-Requested-With': undefined},
                     url: 'https://maps.googleapis.com/maps/api/geocode/json',
-                    params: {address}
+                    params: {
+                        address,
+                        key: airbitz.GOOGLE_API_KEY
+                    }
                 })
             }
 

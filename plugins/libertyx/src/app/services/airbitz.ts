@@ -1,12 +1,12 @@
 if (DEVELOPMENT) {
 
-    const bridge: any = require('exports?_bridge=_bridge!/usr/src/app/lib/js/airbitz-bridge-dev.js');
+    const bridge: any = require('exports-loader?_bridge=_bridge!/usr/src/app/lib/js/airbitz-bridge-dev.js');
     window._bridge = bridge._bridge;
 
     const airbitz: any = require('/usr/src/app/lib/js/airbitz-core.js');
     window.Airbitz = airbitz.Airbitz;
 
-    require('exports?LIBERTYX_LABEL,LIBERTYX_CATEGORY,LIBERTYX_API_KEY!/usr/src/app/lib/js/config.js');
+    require('exports-loader?LIBERTYX_LABEL,LIBERTYX_CATEGORY,LIBERTYX_API_KEY,LIBERTYX_GOOGLE_API_KEY!/usr/src/app/lib/js/config.js');
 }
 
 angular.module('libertyx')
@@ -62,7 +62,8 @@ angular.module('libertyx')
                 Airbitz.ui.navStackClear();
             },
 
-            API_KEY: Airbitz.config.get('LIBERTYX_API_KEY')
+            API_KEY: Airbitz.config.get('LIBERTYX_API_KEY'),
+            GOOGLE_API_KEY: Airbitz.config.get('LIBERTYX_GOOGLE_API_KEY'),
         };
 
         $rootScope.launchExternal = (event, uri, queryParam) => {

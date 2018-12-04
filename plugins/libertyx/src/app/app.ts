@@ -5,7 +5,7 @@ function requireAll(r) {
 
 
 // --- jQuery ---
-require('script!jquery');
+require('script-loader!jquery');
 
 
 // --- Angular ---
