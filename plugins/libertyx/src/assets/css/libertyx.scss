@@ -300,3 +300,14 @@ div.label {
 main {
   padding: 1em;
 }
+
+.tag {
+  padding: 0.25em 0.5em;
+  border-radius: 0.25em;
+  margin: 0.25em 0;
+  display: inline-block;
+}
+
+.tag + .tag {
+  margin-left: 0.25em;
+}

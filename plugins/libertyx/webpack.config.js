@@ -1,12 +1,11 @@
 // webpack.config.js
 const path = require('path');
 const webpack = require('webpack');
-const autoprefixer = require('autoprefixer');
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const indexHtml = path.join(__dirname, "src", "index.html");
-const DEVELOPMENT = process.env.NODE_ENV == 'development';
+const DEVELOPMENT = process.env.NODE_ENV === 'development';
 
 module.exports = {
     entry: ['./src/app/app.ts'],
@@ -15,7 +14,7 @@ module.exports = {
         filename: DEVELOPMENT ? '[name].js' : '[name].[chunkhash].js'
     },
     resolve: {
-        extensions: ['', '.ts', '.tsx', '.js', '.jsx']
+        extensions: ['.ts', '.tsx', '.js', '.jsx']
     },
     devtool: 'source-map',
     module: {
@@ -24,22 +23,22 @@ module.exports = {
             loader: DEVELOPMENT ? 'awesome-typescript-loader' : 'strip-loader?strip[]=console.log!awesome-typescript-loader'
         }, {
             test: /\.scss$/,
-            loaders: ['style', 'css', 'postcss', 'sass']
+            loaders: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader']
         }, {
             test: /\.css$/,
-            loaders: ['style', 'css']
+            loaders: ['style-loader', 'css-loader']
         }, {
             test: /\.(png|jpg|jpeg|gif|svg|eot|woff|woff2|ttf)$/,
-            loader: "url"
+            loader: "url-loader"
         }, {
             test: indexHtml,
-            loader: "html?" + JSON.stringify({
+            loader: "html-loader?" + JSON.stringify({
                 attrs: ["img:src", "link:href"],
                 minimize: false
             })
         }, {
             test: /\.pug$/,
-            loader: "ngtemplate!html!pug-html?exports=false"
+            loader: "ngtemplate-loader!html-loader!pug-html-loader?exports=false"
         }]
     },
     devServer: {
@@ -60,8 +59,5 @@ module.exports = {
             inject: 'head',
             minify: false
         })
-    ],
-    postcss: function () {
-        return [autoprefixer];
-    }
+    ]
 };
