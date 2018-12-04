@@ -11,6 +11,7 @@ form.row(name='searchForm', ng-submit='submitSearch()', autocomplete='off', nova
         li(ng-repeat='l in nearbyLocations', ng-click='onLocationChosen(l)')
             span.primaryColor {{l.name}}
             div {{l.distance}} &mdash; {{l.fee_string}} &mdash; {{l.address}}
+            span.tag(ng-repeat='tag in l.store_tags' ng-style="{'color': tag.color, 'background-color': tag['background-color']}") {{ tag['text'] }}
 
 .row
     .col-xs-12.double-top-margin.fadedColor
